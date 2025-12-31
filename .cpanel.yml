@@ -2,7 +2,7 @@
 deployment:
   tasks:
     # Replace 'username' with your cPanel username and 'public_html' with your target directory
-    - export DEPLOYPATH=/home/grillpar/public_html/whatsapporder/
+    - export DEPLOYPATH=/home/grillpar/public_html/test/
     
     # Install dependencies and build
     # Ensure Node.js is installed and configured in cPanel
