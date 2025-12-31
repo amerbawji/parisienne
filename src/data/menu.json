@@ -1,0 +1,671 @@
+{
+  "categories": [
+    {
+      "id": "chicken",
+      "name_en": "Chicken",
+      "name_ar": "دجاج",
+      "items": [
+        {
+          "id": "chicken-escalope",
+          "name_en": "Chicken Escalope",
+          "name_ar": "اسكالوب",
+          "price": 1,
+          "description_en": "Served with fries, coleslaw, and garlic dip",
+          "description_ar": "تقدم مع بطاطا، سلطة ملفوف، وثوم",
+          "image": "/images/chicken-escalope.jpg",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-tawook-white",
+          "name_en": "Marinated Chicken White Tawook",
+          "name_ar": "طاووق ابيض",
+          "price": 1,
+          "description_en": "Marinated white chicken skewers served with garlic and pickles",
+          "description_ar": "شيش طاووق أبيض متبل يقدم مع ثوم وكبيس",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-tawook-red",
+          "name_en": "Marinated Chicken Red Tawook",
+          "name_ar": "طاووق احمر",
+          "price": 1,
+          "description_en": "Marinated red chicken skewers served with garlic and pickles",
+          "description_ar": "شيش طاووق أحمر متبل يقدم مع ثوم وكبيس",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-fajita",
+          "name_en": "Chicken Fajita",
+          "name_ar": "فاهيتا",
+          "price": 1,
+          "description_en": "Chicken strips with bell peppers, onions, and cheese, served with fries",
+          "description_ar": "شرائح دجاج مع فليفلة، بصل، وجبنة، تقدم مع بطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-burger",
+          "name_en": "Chicken Burger",
+          "name_ar": "تشكن برغر",
+          "price": 1,
+          "description_en": "Chicken patty with coleslaw, fries, and garlic",
+          "description_ar": "برغر دجاج مع سلطة ملفوف، بطاطا، وثوم",
+          "unit": "piece"
+        },
+        {
+          "id": "chicken-stroganof",
+          "name_en": "Chicken Stroganof",
+          "name_ar": "ستروغنوف",
+          "price": 1,
+          "description_en": "Creamy chicken stroganoff served with rice",
+          "description_ar": "ستروغونوف دجاج بالكريمة يقدم مع رز",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-shawarma",
+          "name_en": "Chicken Shawarma",
+          "name_ar": "شاورما",
+          "price": 1,
+          "description_en": "Chicken shawarma with garlic, pickles, and fries",
+          "description_ar": "شاورما دجاج مع ثوم، كبيس، وبطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-nuggets",
+          "name_en": "Chicken Nuggets",
+          "name_ar": "ناغتس",
+          "price": 1,
+          "description_en": "Crispy chicken nuggets served with fries",
+          "description_ar": "ناغتس دجاج مقرمش يقدم مع بطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-crispy",
+          "name_en": "Crispy Chicken",
+          "name_ar": "كريسبي",
+          "price": 1,
+          "description_en": "Crispy fried chicken strips served with fries",
+          "description_ar": "شرائح دجاج مقرمشة تقدم مع بطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "chicken-wings-marinated",
+          "name_en": "Marinated Chicken Wings",
+          "name_ar": "جوانح متبل",
+          "price": 1,
+          "description_en": "Grilled marinated chicken wings served with garlic",
+          "description_ar": "جوانح دجاج متبلة مشوية تقدم مع ثوم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-whole",
+          "name_en": "Whole Chicken",
+          "name_ar": "فروج كامل",
+          "price": 1,
+          "description_en": "Grilled whole chicken served with garlic and pickles",
+          "description_ar": "فروج كامل مشوي يقدم مع ثوم وكبيس",
+          "unit": "piece"
+        },
+        {
+          "id": "chicken-half",
+          "name_en": "Half Chicken",
+          "name_ar": "نصف فروج",
+          "price": 1,
+          "description_en": "Grilled half chicken served with garlic and pickles",
+          "description_ar": "نصف فروج مشوي يقدم مع ثوم وكبيس",
+          "unit": "piece"
+        },
+        {
+          "id": "chicken-legs",
+          "name_en": "Chicken Legs",
+          "name_ar": "فخذ مع فخمة",
+          "price": 1,
+          "description_en": "Chicken legs served with garlic",
+          "description_ar": "أفخاذ دجاج تقدم مع ثوم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-breast-deboned",
+          "name_en": "Chicken Deboned Breast (Skinless)",
+          "name_ar": "صدر مسحب",
+          "price": 1,
+          "description_en": "Grilled skinless deboned chicken breast",
+          "description_ar": "صدر دجاج مسحب مشوي بدون جلد",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-breast-bone",
+          "name_en": "Chicken Breast with Bones",
+          "name_ar": "صدر بعظمة",
+          "price": 1,
+          "description_en": "Grilled chicken breast with bones",
+          "description_ar": "صدر دجاج مشوي مع العظم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-wings",
+          "name_en": "Chicken Wings",
+          "name_ar": "جوانح",
+          "price": 1,
+          "description_en": "Fried chicken wings",
+          "description_ar": "جوانح دجاج مقلية",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-drumsticks",
+          "name_en": "Chicken Drumsticks",
+          "name_ar": "دبوس",
+          "price": 1,
+          "description_en": "Fried chicken drumsticks",
+          "description_ar": "دبوس دجاج مقلي",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "chicken-deboned-legs",
+          "name_en": "Chicken Deboned Legs",
+          "name_ar": "فخذ مسحب",
+          "price": 1,
+          "description_en": "Grilled deboned chicken legs",
+          "description_ar": "فخذ دجاج مسحب مشوي",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "eggs",
+          "name_en": "Eggs",
+          "name_ar": "كرتونة بيض",
+          "price": 1,
+          "description_en": "Fresh eggs carton",
+          "description_ar": "كرتونة بيض طازج",
+          "unit": "box"
+        }
+      ]
+    },
+    {
+      "id": "lamb",
+      "name_en": "Lamb",
+      "name_ar": "غنم",
+      "items": [
+        {
+          "id": "lamb-minced-coarse",
+          "name_en": "Minced Lamb (Coarse)",
+          "name_ar": "مفرومة خشنة",
+          "price": 1,
+          "description_en": "Coarsely minced fresh lamb meat",
+          "description_ar": "لحم غنم مفروم خشن طازج",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "lamb-minced-fine",
+          "name_en": "Minced Lamb (Fine)",
+          "name_ar": "مفرومة ناعمة",
+          "price": 1,
+          "description_en": "Finely minced fresh lamb meat",
+          "description_ar": "لحم غنم مفروم ناعم طازج",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "lamb-cubes",
+          "name_en": "Lamb Cubes",
+          "name_ar": "شقف",
+          "price": 1,
+          "description_en": "Tender lamb cubes for grilling",
+          "description_ar": "شقف لحم غنم طري للشوي",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "lamb-kafta",
+          "name_en": "Lamb Kafta",
+          "name_ar": "كفتة",
+          "price": 1,
+          "description_en": "Seasoned lamb kafta with parsley and onions",
+          "description_ar": "كفتة غنم متبلة مع بقدونس وبصل",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "lamb-kibbeh",
+          "name_en": "Lamb Kibbeh",
+          "name_ar": "كبة",
+          "price": 1,
+          "description_en": "Traditional lamb kibbeh",
+          "description_ar": "كبة غنم تقليدية",
+          "unit": "piece"
+        },
+        {
+          "id": "lamb-thigh",
+          "name_en": "Lamb Thigh",
+          "name_ar": "فخذ غنم",
+          "price": 1,
+          "description_en": "Whole lamb thigh cut",
+          "description_ar": "فخذ غنم كامل",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Bone-in",
+                "Boneless"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "lamb-liver",
+          "name_en": "Lamb Liver",
+          "name_ar": "سودة غنم",
+          "price": 1,
+          "description_en": "Fresh lamb liver",
+          "description_ar": "سودة غنم طازجة",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "kebbeh-nayyeh-200",
+          "name_en": "Kebbeh Nayyeh (200g)",
+          "name_ar": "صحن كبة لبنية",
+          "price": 1,
+          "description_en": "Raw meat with cracked wheat, served with mint and olive oil (200g)",
+          "description_ar": "لحم ني مع برغل، يقدم مع نعنع وزيت زيتون (200غ)",
+          "unit": "plate"
+        },
+        {
+          "id": "habra-nayyeh-200",
+          "name_en": "Habra Nayyeh (200g)",
+          "name_ar": "صحن هبرة لبنية",
+          "price": 1,
+          "description_en": "Raw lean meat served with garlic and olive oil (200g)",
+          "description_ar": "هبرة نية تقدم مع ثوم وزيت زيتون (200غ)",
+          "unit": "plate"
+        },
+        {
+          "id": "malseh-nayyeh-200",
+          "name_en": "Malseh Nayyeh (200g)",
+          "name_ar": "صحن ملسة لبنية",
+          "price": 1,
+          "description_en": "Smooth raw meat mix served with vegetables (200g)",
+          "description_ar": "ملسة نية تقدم مع خضار (200غ)",
+          "unit": "plate"
+        },
+        {
+          "id": "frakeh-nayyeh-200",
+          "name_en": "Frakeh Nayyeh (200g)",
+          "name_ar": "صحن فراكة لبنية",
+          "price": 1,
+          "description_en": "Special raw meat mix with spices (200g)",
+          "description_ar": "فراكة نية مع بهارات (200غ)",
+          "unit": "plate"
+        },
+        {
+          "id": "kebbeh-nayyeh",
+          "name_en": "Kebbeh Nayyeh",
+          "name_ar": "كبة لبنية",
+          "price": 1,
+          "description_en": "Raw meat with cracked wheat, served with mint and olive oil",
+          "description_ar": "لحم ني مع برغل، يقدم مع نعنع وزيت زيتون",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "habra-nayyeh",
+          "name_en": "Habra Nayyeh",
+          "name_ar": "هبرة لبنية",
+          "price": 1,
+          "description_en": "Raw lean meat served with garlic and olive oil",
+          "description_ar": "هبرة نية تقدم مع ثوم وزيت زيتون",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "malseh-nayyeh",
+          "name_en": "Malseh Nayyeh",
+          "name_ar": "ملسة لبنية",
+          "price": 1,
+          "description_en": "Smooth raw meat mix served with vegetables",
+          "description_ar": "ملسة نية تقدم مع خضار",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "frakeh-nayyeh",
+          "name_en": "Frakeh Nayyeh",
+          "name_ar": "فراكة لبنية",
+          "price": 1,
+          "description_en": "Special raw meat mix with spices",
+          "description_ar": "فراكة نية مع بهارات",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "kastaleta",
+          "name_en": "Kastaleta",
+          "name_ar": "كستاليتا",
+          "price": 1,
+          "description_en": "Grilled lamb chops",
+          "description_ar": "ريش غنم مشوية",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        }
+      ]
+    },
+    {
+      "id": "mixed",
+      "name_en": "Mixed (Beef & Lamb)",
+      "name_ar": "بقر و غنم",
+      "items": [
+        {
+          "id": "mixed-minced-coarse",
+          "name_en": "Mixed Minced (Coarse)",
+          "name_ar": "مفرومة خشنة",
+          "price": 1,
+          "description_en": "Mixed beef and lamb coarsely minced meat",
+          "description_ar": "لحم بقر وغنم مفروم خشن",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "mixed-minced-fine",
+          "name_en": "Mixed Minced (Fine)",
+          "name_ar": "مفرومة ناعمة",
+          "price": 1,
+          "description_en": "Mixed beef and lamb finely minced meat",
+          "description_ar": "لحم بقر وغنم مفروم ناعم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "mixed-kafta",
+          "name_en": "Mixed Kafta",
+          "name_ar": "كفتة",
+          "price": 1,
+          "description_en": "Mixed beef and lamb kafta with herbs",
+          "description_ar": "كفتة بقر وغنم مع أعشاب",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "mixed-kibbeh",
+          "name_en": "Mixed Kibbeh",
+          "name_ar": "كبة",
+          "price": 1,
+          "description_en": "Mixed beef and lamb kibbeh",
+          "description_ar": "كبة بقر وغنم",
+          "unit": "piece"
+        }
+      ]
+    },
+    {
+      "id": "beef",
+      "name_en": "Beef",
+      "name_ar": "بقر",
+      "items": [
+        {
+          "id": "beef-minced-coarse",
+          "name_en": "Minced Beef (Coarse)",
+          "name_ar": "مفرومة خشنة",
+          "price": 1,
+          "description_en": "Coarsely minced fresh beef",
+          "description_ar": "لحم بقر مفروم خشن",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-minced-fine",
+          "name_en": "Minced Beef (Fine)",
+          "name_ar": "مفرومة ناعمة",
+          "price": 1,
+          "description_en": "Finely minced fresh beef",
+          "description_ar": "لحم بقر مفروم ناعم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-cubes",
+          "name_en": "Beef Cubes",
+          "name_ar": "شقف",
+          "price": 1,
+          "description_en": "Tender beef cubes for grilling or cooking",
+          "description_ar": "شقف لحم بقر طري للشوي أو الطبخ",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-shawarma",
+          "name_en": "Beef Shawarma",
+          "name_ar": "شاورما",
+          "price": 1,
+          "description_en": "Beef shawarma served with tahini, parsley, and onions",
+          "description_ar": "شاورما لحمة تقدم مع طحينة، بقدونس، وبصل",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-stroganof",
+          "name_en": "Beef Stroganof",
+          "name_ar": "ستروغنوف",
+          "price": 1,
+          "description_en": "Creamy beef stroganoff served with rice",
+          "description_ar": "ستروغونوف لحمة بالكريمة يقدم مع رز",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-roasto",
+          "name_en": "Roasto",
+          "name_ar": "روستو",
+          "price": 1,
+          "description_en": "Roast beef slices with sauce",
+          "description_ar": "شرائح روستو مع صوص",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-kafta",
+          "name_en": "Beef Kafta",
+          "name_ar": "كفتة",
+          "price": 1,
+          "description_en": "Grilled beef kafta with spices",
+          "description_ar": "كفتة بقر مشوية مع بهارات",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-fillet-steak",
+          "name_en": "Fillet Beef Steak",
+          "name_ar": "ستيك فيليه",
+          "price": 1,
+          "description_en": "Premium beef fillet steak",
+          "description_ar": "ستيك فيليه بقر فاخر",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Thickness",
+              "choices": [
+                "Thin",
+                "Medium",
+                "Thick"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-faux-fillet",
+          "name_en": "Faux Fillet Beef Steak",
+          "name_ar": "ستيك فوفليه",
+          "price": 1,
+          "description_en": "Tender faux fillet beef steak",
+          "description_ar": "ستيك فوفليه بقر طري",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Thickness",
+              "choices": [
+                "Thin",
+                "Medium",
+                "Thick"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-escalope",
+          "name_en": "Beef Escalope",
+          "name_ar": "اسكالوب",
+          "price": 1,
+          "description_en": "Breaded beef escalope served with fries",
+          "description_ar": "اسكالوب لحمة مقلية تقدم مع بطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-makaneh",
+          "name_en": "Makaneh",
+          "name_ar": "مقانق",
+          "price": 1,
+          "description_en": "Lebanese sausages fried with lemon or pomegranate molasses",
+          "description_ar": "مقانق مقلية مع حامض أو دبس رمان",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-soujouk",
+          "name_en": "Soujouk",
+          "name_ar": "سجق",
+          "price": 1,
+          "description_en": "Spicy sausages fried with tomatoes",
+          "description_ar": "سجق حار مقلي مع بندورة",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-burger",
+          "name_en": "Beef Burger",
+          "name_ar": "همبرغر",
+          "price": 1,
+          "description_en": "Juicy beef patty with coleslaw and fries",
+          "description_ar": "برغر لحمة مع سلطة ملفوف وبطاطا",
+          "unit": "piece"
+        },
+        {
+          "id": "beef-kibbeh",
+          "name_en": "Beef Kibbeh",
+          "name_ar": "كبة",
+          "price": 1,
+          "description_en": "Fried beef kibbeh balls",
+          "description_ar": "أقراص كبة بقر مقلية",
+          "unit": "piece"
+        }
+      ]
+    }
+  ]
+}
