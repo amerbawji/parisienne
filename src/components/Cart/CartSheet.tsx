@@ -2,10 +2,12 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../../store/cartStore';
+import { useLanguageStore } from '../../store/languageStore';
 import { CartContent } from './CartContent';
 
 export const CartSheet = () => {
   const { isCartOpen, setCartOpen } = useCartStore();
+  const { t } = useLanguageStore();
 
   return (
     <Transition.Root show={isCartOpen} as={Fragment}>
@@ -36,7 +38,7 @@ export const CartSheet = () => {
               >
                 <Dialog.Panel className="pointer-events-auto w-full bg-white shadow-xl rounded-t-2xl sm:rounded-2xl sm:max-w-md sm:h-[80vh] h-full flex flex-col">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
-                    <Dialog.Title className="text-lg font-medium text-gray-900">Cart</Dialog.Title>
+                    <Dialog.Title className="text-lg font-medium text-gray-900">{t('cart_title')}</Dialog.Title>
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"

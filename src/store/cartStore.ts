@@ -5,6 +5,8 @@ export interface CartItem {
   instanceId: string;
   id: string;
   name: string;
+  name_en?: string;
+  name_ar?: string;
   price: number;
   quantity: number;
   instructions: string;
@@ -20,7 +22,9 @@ interface CartState {
   setCartOpen: (isOpen: boolean) => void;
   addItem: (item: { 
     id: string; 
-    name: string; 
+    name: string;
+    name_en?: string;
+    name_ar?: string; 
     price: number; 
     selectedOptions?: Record<string, string>;
     quantity?: number;
@@ -55,7 +59,9 @@ export const useCartStore = create<CartState>()(
               instructions: newItem.instructions || '', 
               selectedOptions: newItem.selectedOptions || {},
               step: newItem.step,
-              minQuantity: newItem.minQuantity
+              minQuantity: newItem.minQuantity,
+              name_en: newItem.name_en,
+              name_ar: newItem.name_ar
             }],
           };
         });

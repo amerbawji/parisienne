@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBagIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../../store/cartStore';
+import { useLanguageStore } from '../../store/languageStore';
 import { CartItemRow } from './CartItemRow';
 import { Button } from '../UI/Button';
 import { generateWhatsAppLink } from '../../utils/whatsapp';
@@ -31,11 +32,14 @@ const OptionButton = ({
 
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
+  const { t, language } = useLanguageStore();
   const navigate = useNavigate();
   const totalItems = getTotalItems();
-  const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const [serviceType, setServiceType] = useState<'takeaway' | 'delivery'>('takeaway');
+  const itemsTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const deliveryFee = serviceType === 'delivery' ? 1.5 : 0;
+  const totalPrice = itemsTotal + deliveryFee;
   const [timing, setTiming] = useState<'now' | 'scheduled'>('now');
   const [scheduledTime, setScheduledTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
@@ -45,7 +49,7 @@ export const CartContent = () => {
     if (items.length === 0) return;
 
     if (timing === 'scheduled' && !scheduledTime) {
-      setError('Please select a date and time for your order');
+      setError(t('error_schedule'));
       return;
     }
     
@@ -56,7 +60,7 @@ export const CartContent = () => {
       paymentMethod
     };
 
-    const link = generateWhatsAppLink(items, details);
+    const link = generateWhatsAppLink(items, language, details);
     
     window.open(link, '_blank');
     clearCart();
@@ -68,9 +72,9 @@ export const CartContent = () => {
     return (
       <div className="flex flex-col items-center justify-center p-8 h-full">
         <ShoppingBagIcon className="h-16 w-16 text-gray-300 mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
-        <p className="text-gray-500 mb-8 text-center">Looks like you haven't added anything yet.</p>
-        <Button onClick={() => setCartOpen(false)}>Start Ordering</Button>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">{t('cart_empty')}</h2>
+        <p className="text-gray-500 mb-8 text-center">{t('cart_empty_desc')}</p>
+        <Button onClick={() => setCartOpen(false)}>{t('start_shopping')}</Button>
       </div>
     );
   }
@@ -81,14 +85,14 @@ export const CartContent = () => {
         <div className="flex justify-end mb-2">
           <button 
             onClick={() => {
-              if (window.confirm('Are you sure you want to clear your cart?')) {
+              if (window.confirm(t('confirm_clear'))) {
                 clearCart();
               }
             }}
             className="text-xs text-red-500 hover:text-red-600 font-medium flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50 transition-colors"
           >
             <TrashIcon className="h-4 w-4" />
-            Clear All
+            {t('clear_all')}
           </button>
         </div>
 
@@ -103,25 +107,25 @@ export const CartContent = () => {
         {/* Order Options */}
         <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Service Type</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('service_type')}</label>
             <div className="flex gap-2">
               <OptionButton 
                 selected={serviceType === 'takeaway'} 
                 onClick={() => setServiceType('takeaway')}
               >
-                🥡 Takeaway
+                🥡 {t('takeaway')}
               </OptionButton>
               <OptionButton 
                 selected={serviceType === 'delivery'} 
                 onClick={() => setServiceType('delivery')}
               >
-                🛵 Delivery
+                🛵 {t('delivery')}
               </OptionButton>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Timing</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('timing')}</label>
             <div className="flex gap-2 mb-2">
               <OptionButton 
                 selected={timing === 'now'} 
@@ -130,13 +134,13 @@ export const CartContent = () => {
                   setError('');
                 }}
               >
-                🕒 Now
+                🕒 {t('now')}
               </OptionButton>
               <OptionButton 
                 selected={timing === 'scheduled'} 
                 onClick={() => setTiming('scheduled')}
               >
-                📅 Schedule
+                📅 {t('schedule')}
               </OptionButton>
             </div>
             
@@ -157,19 +161,19 @@ export const CartContent = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Payment Method</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('payment_method')}</label>
             <div className="flex gap-2">
               <OptionButton 
                 selected={paymentMethod === 'cash'} 
                 onClick={() => setPaymentMethod('cash')}
               >
-                💵 Cash
+                💵 {t('cash')}
               </OptionButton>
               <OptionButton 
                 selected={paymentMethod === 'card'} 
                 onClick={() => setPaymentMethod('card')}
               >
-                💳 Card
+                💳 {t('card')}
               </OptionButton>
             </div>
           </div>
@@ -185,23 +189,34 @@ export const CartContent = () => {
         )}
         
         <div className="flex justify-between text-base font-medium text-gray-500 mb-2">
-          <span>Total Items</span>
+          <span>{t('total_items')}</span>
           <span>{totalItems}</span>
         </div>
+        {serviceType === 'delivery' && (
+          <div className="flex justify-between text-base font-medium text-gray-500 mb-2">
+            <span>{t('delivery_charge')}</span>
+            <span>${deliveryFee.toFixed(2)}</span>
+          </div>
+        )}
         <div className="flex justify-between text-xl font-bold text-gray-900 mb-6">
-          <span>Total Amount</span>
+          <span>{t('total_amount')}</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
 
         <div className="mb-4 text-xs text-gray-500">
-          <span className="font-semibold text-gray-600">Order Disclaimer:</span> Final weight and price may vary slightly
+          <span className="font-semibold text-gray-600">{t('disclaimer_title')}</span> {t('disclaimer_text')}
+          {paymentMethod === 'card' && (
+             <div className="mt-1 text-primary-600 font-medium">
+               {t('card_disclaimer')}
+             </div>
+          )}
         </div>
         
         <Button
           onClick={handleCheckout}
           className="w-full flex items-center justify-center gap-2 py-4 text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
         >
-          Confirm Order via WhatsApp
+          {t('confirm_whatsapp')}
         </Button>
       </div>
     </div>

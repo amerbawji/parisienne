@@ -3,21 +3,22 @@ import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outlin
 import menuData from '../data/menu.json';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
+import { useLanguageStore } from '../store/languageStore';
 import { Button } from '../components/UI/Button';
 import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
+import { LanguageToggle } from '../components/UI/LanguageToggle';
 
 export const Home = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const { getTotalItems, toggleCart } = useCartStore();
+  const { language, t } = useLanguageStore();
   const totalItems = getTotalItems();
 
   const categories = menuData.categories;
   const filteredCategories = categories
     .map((category) => {
-      // If we are searching, we ignore the active category unless the user wants to filter within it?
-      // Usually, searching should search everything. If user specifically selected a category, we can respect that.
       if (activeCategory !== 'all' && category.id !== activeCategory) return null;
 
       const matchingItems = category.items.filter((item) => {
@@ -44,17 +45,18 @@ export const Home = () => {
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold tracking-tight text-primary-900">Parisienne</h1>
+              <LanguageToggle className="ml-2" />
             </div>
           </div>
 
           <div className="relative w-full sm:max-w-md">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none rtl:right-0 rtl:left-auto rtl:pr-3">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
             <input
               type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
-              placeholder="Search items..."
+              className="block w-full pl-10 rtl:pr-10 rtl:pl-3 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out text-start"
+              placeholder={t('search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -64,7 +66,7 @@ export const Home = () => {
             variant="ghost"
             className="relative hidden sm:flex"
             onClick={toggleCart}
-            aria-label="Open cart"
+            aria-label={t('view_cart')}
           >
             <ShoppingBagIcon className="h-6 w-6 text-gray-700" />
             {totalItems > 0 && (
@@ -87,7 +89,7 @@ export const Home = () => {
                   : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
               )}
             >
-              All Items
+              {t('all_items')}
             </button>
             {categories.map((cat) => (
               <button
@@ -100,7 +102,7 @@ export const Home = () => {
                     : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
                 )}
               >
-                {cat.name_en}
+                {language === 'ar' ? cat.name_ar : cat.name_en}
               </button>
             ))}
           </div>
@@ -112,8 +114,7 @@ export const Home = () => {
           filteredCategories.map((category) => (
             <section key={category.id} className="mb-12 scroll-mt-32 animate-in fade-in slide-in-from-bottom-4 duration-500" id={category.id}>
               <div className="flex items-baseline justify-between mb-6 border-b border-gray-100 pb-2">
-                <h2 className="text-2xl font-bold text-gray-900">{category.name_en}</h2>
-                <span className="text-xl text-gray-400 font-arabic" dir="rtl">{category.name_ar}</span>
+                <h2 className="text-2xl font-bold text-gray-900">{language === 'ar' ? category.name_ar : category.name_en}</h2>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -125,7 +126,7 @@ export const Home = () => {
           ))
         ) : (
           <div className="text-center py-20 text-gray-500">
-            No items found in this category.
+            {t('no_items_found')}
           </div>
         )}
       </main>

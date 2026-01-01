@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useCartStore } from '../../store/cartStore';
+import { useLanguageStore } from '../../store/languageStore';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button } from '../UI/Button';
 import { QuantitySelector } from '../UI/QuantitySelector';
+import { type TranslationKey } from '../../data/translations';
 
 export interface MenuItem {
   id: string;
@@ -22,19 +24,25 @@ interface MenuCardProps {
   item: MenuItem;
 }
 
+const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string) => {
+  // A helper to try translating a constructed key, falling back to original text if translation key doesn't exist
+  // Since our t() implementation returns the key if missing, we need to check if the returned value is different from key
+  // BUT: if the key is "Fat", and translation is missing, it returns "Fat".
+  // If we pass "option_fat", and missing, it returns "option_fat".
+  // So we check if result starts with "option_" or "choice_" or "preset_" (assuming we construct keys that way)
+  // This is a bit hacky but works for now without complex existence checks.
+  const translated = t(key as TranslationKey);
+  if (translated === key) return fallback;
+  return translated;
+};
+
 export const MenuCard = ({ item }: MenuCardProps) => {
+  const { language, t } = useLanguageStore();
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
 
   const cartInstances = cartItems.filter((i) => i.id === item.id);
-  const totalQuantity = cartInstances.reduce((acc, i) => {
-    // For weight items (step < 1), count instances?
-    // User said "show 1 as quantity" for badge.
-    // Here on the card, we want to show meaningful "You have X".
-    // If weight based, summing weight is fine (e.g. 1.5 kg).
-    // If piece based, summing count is fine.
-    return acc + i.quantity;
-  }, 0);
+  const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
 
   const [pendingOptions, setPendingOptions] = useState<Record<string, string>>(() => {
     const defaults: Record<string, string> = {};
@@ -56,7 +64,9 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   const handleAddToCart = () => {
     addItem({
       id: item.id,
-      name: `${item.name_en} - ${item.name_ar}`,
+      name: language === 'ar' ? item.name_ar : item.name_en, // Current display name
+      name_en: item.name_en,
+      name_ar: item.name_ar,
       price: item.price,
       selectedOptions: pendingOptions,
       instructions: pendingInstructions,
@@ -73,8 +83,16 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   };
 
   const togglePreset = (preset: string) => {
+    // We toggle the ENGLISH preset name in the state, but display translated
+    // Or we should handle localization in the logic.
+    // For simplicity, let's keep logic using English strings (so duplicates don't happen across langs)
+    // but display translated.
     const current = pendingInstructions;
     let newInstructions = current;
+    
+    // Note: If user switches lang, the existing instructions might be in mixed langs if we appended translated text.
+    // But here we're appending the preset string itself (which is English from the array).
+    // So logic holds.
     if (current.includes(preset)) {
       newInstructions = current.replace(preset, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
     } else {
@@ -85,34 +103,36 @@ export const MenuCard = ({ item }: MenuCardProps) => {
 
   const presets = ["Extra fresh", "For BBQ", "Vacuum packed"];
   const imageUrl = item.image || `https://placehold.co/400x300?text=${encodeURIComponent(item.name_en)}`;
+  
+  const displayName = language === 'ar' ? item.name_ar : item.name_en;
+  const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow group">
       <div className="relative h-48 overflow-hidden bg-gray-200">
         <img
           src={imageUrl}
-          alt={item.name_en}
+          alt={displayName}
           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
         {totalQuantity > 0 && (
-          <div className="absolute top-2 right-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
-            {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')} {item.unit || 'in cart'}
+          <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
+             {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')} {item.unit ? safeT(t, `unit_${item.unit}`, item.unit) : t('in_cart')}
           </div>
         )}
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-start gap-2 mb-1">
-          <h3 className="font-bold text-lg text-gray-900">{item.name_en}</h3>
+          <h3 className="font-bold text-lg text-gray-900">{displayName}</h3>
           <span className="font-bold text-primary-600 shrink-0">
             ${item.price.toFixed(2)}
-            {item.unit && <span className="text-sm text-gray-500 font-normal"> / {item.unit}</span>}
+            {item.unit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit)}</span>}
           </span>
         </div>
-        <p className="text-gray-500 text-sm mb-1 font-arabic text-right" dir="rtl">{item.name_ar}</p>
         
-        {item.description_en && (
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">{item.description_en}</p>
+        {displayDesc && (
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">{displayDesc}</p>
         )}
 
         <div className="mt-auto space-y-3">
@@ -120,7 +140,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
             <div className="space-y-2">
               {item.options.map((opt) => (
                 <div key={opt.name} className="text-xs">
-                  <span className="font-medium text-gray-700 block mb-1">{opt.name}:</span>
+                  <span className="font-medium text-gray-700 block mb-1">{safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:</span>
                   <div className="flex flex-wrap gap-1">
                     {opt.choices.map((choice) => (
                       <button
@@ -132,7 +152,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
                             : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
                         }`}
                       >
-                        {choice}
+                        {safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
                       </button>
                     ))}
                   </div>
@@ -153,12 +173,12 @@ export const MenuCard = ({ item }: MenuCardProps) => {
                       : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                   }`}
                 >
-                  {preset}
+                  {safeT(t, `preset_${preset.toLowerCase().replace(/ /g, '_')}`, preset)}
                 </button>
               ))}
             </div>
             <textarea
-              placeholder="Special instructions..."
+              placeholder={t('special_instructions')}
               value={pendingInstructions}
               onChange={(e) => setPendingInstructions(e.target.value)}
               className="w-full text-xs p-2 border border-primary-200 rounded focus:ring-1 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-white placeholder:text-gray-400"
@@ -180,10 +200,10 @@ export const MenuCard = ({ item }: MenuCardProps) => {
             <Button 
               onClick={handleAddToCart} 
               className="flex-1 flex items-center justify-center gap-2"
-              aria-label="Add to cart"
+              aria-label={t('add')}
             >
               <PlusIcon className="h-5 w-5" />
-              Add
+              {t('add')}
             </Button>
           </div>
         </div>
