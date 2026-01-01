@@ -418,10 +418,10 @@
           "weight_step": 0.1,
           "options": [
             {
-              "name": "Fat",
+              "name": "naw3a",
               "choices": [
-                "With Fat",
-                "Without Fat"
+                "baalbakiye",
+                "bayroutie"
               ]
             }
           ],
