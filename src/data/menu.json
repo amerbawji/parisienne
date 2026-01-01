@@ -403,6 +403,33 @@
       ]
     },
     {
+      "id": "Lahm b Ajeen",
+      "name_en": "Lahm b Ajeen",
+      "name_ar": "لحم بعجين",
+      "items": [
+        {
+          "id": "lamb-minced-coarse",
+          "name_en": "Minced Lamb (Coarse)",
+          "name_ar": "مفرومة خشنة",
+          "price": 1,
+          "description_en": "Coarsely minced fresh lamb meat",
+          "description_ar": "لحم غنم مفروم خشن طازج",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        }
+      ]
+    },
+    {
       "id": "sandwiches",
       "name_en": "Sandwiches",
       "name_ar": "ساندويشات",
