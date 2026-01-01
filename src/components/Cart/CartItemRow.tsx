@@ -18,7 +18,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
       <div className="flex justify-between items-start mb-2">
         <div className="flex-1 pr-2">
           <h4 className="font-medium text-gray-900 text-sm">{item.name}</h4>
-          <p className="text-sm text-emerald-600 font-medium mt-1">${(item.price * item.quantity).toFixed(2)}</p>
+          <p className="text-sm text-primary-600 font-medium mt-1">${(item.price * item.quantity).toFixed(2)}</p>
         </div>
         <Button 
             variant="ghost" 
@@ -48,7 +48,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
           placeholder="Special instructions (optional)..."
           value={item.instructions || ''}
           onChange={(e) => updateInstructions(item.instanceId, e.target.value)}
-          className="w-full text-sm p-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none resize-none bg-gray-50 placeholder:text-gray-400"
+          className="w-full text-sm p-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-gray-50 placeholder:text-gray-400"
           rows={2}
         />
       </div>

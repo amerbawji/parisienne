@@ -21,8 +21,8 @@ const OptionButton = ({
     className={cn(
       "flex-1 py-2 px-3 text-sm font-medium rounded-lg border transition-all duration-200",
       selected 
-        ? "bg-emerald-600 text-white border-emerald-600 shadow-sm" 
-        : "bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50"
+        ? "bg-primary-500 text-white border-primary-500 shadow-sm" 
+        : "bg-white text-gray-600 border-gray-200 hover:border-primary-300 hover:bg-primary-50"
     )}
   >
     {children}
@@ -149,7 +149,7 @@ export const CartContent = () => {
                     setScheduledTime(e.target.value);
                     setError('');
                   }}
-                  className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none"
+                  className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
                   min={new Date().toISOString().slice(0, 16)}
                 />
               </div>
@@ -192,10 +192,14 @@ export const CartContent = () => {
           <span>Total Amount</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
+
+        <div className="mb-4 text-xs text-gray-500">
+          <span className="font-semibold text-gray-600">Order Disclaimer:</span> Final weight and price may vary slightly
+        </div>
         
         <Button
           onClick={handleCheckout}
-          className="w-full flex items-center justify-center gap-2 py-4 text-lg shadow-lg shadow-emerald-600/20 hover:shadow-emerald-600/30 transition-shadow"
+          className="w-full flex items-center justify-center gap-2 py-4 text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
         >
           Confirm Order via WhatsApp
         </Button>

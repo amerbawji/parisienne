@@ -96,7 +96,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
           loading="lazy"
         />
         {totalQuantity > 0 && (
-          <div className="absolute top-2 right-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
+          <div className="absolute top-2 right-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
             {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')} {item.unit || 'in cart'}
           </div>
         )}
@@ -104,7 +104,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-start gap-2 mb-1">
           <h3 className="font-bold text-lg text-gray-900">{item.name_en}</h3>
-          <span className="font-bold text-emerald-600 shrink-0">
+          <span className="font-bold text-primary-600 shrink-0">
             ${item.price.toFixed(2)}
             {item.unit && <span className="text-sm text-gray-500 font-normal"> / {item.unit}</span>}
           </span>
@@ -128,8 +128,8 @@ export const MenuCard = ({ item }: MenuCardProps) => {
                         onClick={() => handleOptionChange(opt.name, choice)}
                         className={`px-2 py-1 rounded border transition-colors ${
                           pendingOptions[opt.name] === choice
-                            ? 'bg-emerald-600 text-white border-emerald-600'
-                            : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-300'
+                            ? 'bg-primary-500 text-white border-primary-500'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
                         }`}
                       >
                         {choice}
@@ -149,7 +149,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
                   onClick={() => togglePreset(preset)}
                   className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
                     pendingInstructions.includes(preset)
-                      ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                      ? 'bg-primary-100 text-primary-700 border-primary-200'
                       : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                   }`}
                 >
@@ -161,7 +161,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
               placeholder="Special instructions..."
               value={pendingInstructions}
               onChange={(e) => setPendingInstructions(e.target.value)}
-              className="w-full text-xs p-2 border border-emerald-200 rounded focus:ring-1 focus:ring-emerald-500 focus:border-transparent outline-none resize-none bg-white placeholder:text-gray-400"
+              className="w-full text-xs p-2 border border-primary-200 rounded focus:ring-1 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-white placeholder:text-gray-400"
               rows={2}
             />
           </div>
