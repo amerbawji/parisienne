@@ -266,7 +266,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Beef"
     },
     {
       "id": "chicken",
@@ -554,7 +555,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Chicken"
     },
     {
       "id": "lamb",
@@ -843,7 +845,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Lamb"
     },
     {
       "id": "Lahm b Ajeen",
@@ -875,7 +878,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Lahm%20b%20Ajeen"
     },
     {
       "id": "Grill",
@@ -907,7 +911,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Grill"
     },
     {
       "id": "mixed",
@@ -994,7 +999,8 @@
             "Vacuum packed"
           ]
         }
-      ]
+      ],
+      "image": "https://placehold.co/600x200?text=Mixed%20(Beef%20%26%20Lamb)"
     }
   ]
 }

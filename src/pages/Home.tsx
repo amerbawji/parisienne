@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
@@ -32,18 +32,24 @@ export const Home = () => {
 
       if (matchingItems.length === 0) return null;
 
-      return { ...category, items: matchingItems };
+      // Use the image from JSON or a fallback if not present (though we ran a script to add it)
+      const cat = category as typeof category & { image?: string };
+      const image = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(category.name_en)}`;
+
+      return { ...category, items: matchingItems, image };
     })
-    .filter((category): category is typeof categories[0] => category !== null);
+    .filter((category): category is typeof categories[0] & { image: string } => category !== null);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
       <header className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className={cn(
+          "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4",
+          language === 'ar' && "sm:flex-row-reverse"
+        )}>
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold tracking-tight text-primary-900">Parisienne</h1>
-              <LanguageToggle className="ml-2" />
             </div>
           </div>
 
@@ -60,53 +66,56 @@ export const Home = () => {
             />
           </div>
 
-          <Button
-            variant="ghost"
-            className="relative hidden sm:flex"
-            onClick={toggleCart}
-            aria-label={t('view_cart')}
-          >
-            <ShoppingBagIcon className="h-6 w-6 text-gray-700" />
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-in zoom-in">
-                {totalItems}
-              </span>
-            )}
-          </Button>
+          <div className={cn("flex items-center gap-2", language === 'ar' && "flex-row-reverse")}>
+             <Button
+              variant="ghost"
+              className="relative hidden sm:flex"
+              onClick={toggleCart}
+              aria-label={t('view_cart')}
+            >
+              <ShoppingBagIcon className="h-6 w-6 text-gray-700" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-in zoom-in">
+                  {totalItems}
+                </span>
+              )}
+            </Button>
+            <LanguageToggle />
+          </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
-        <div className="space-y-4">
+        <div className="space-y-6">
           {filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
               const isOpen = expandedCategory === category.id || searchQuery.length > 0;
               
               return (
-                <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group">
                   <button
                     onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
-                    className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+                    className="w-full text-left block transition-all hover:shadow-md"
                     aria-expanded={isOpen}
                   >
-                    <div className="flex items-center gap-3">
-                      <h2 className="text-xl font-bold text-gray-900">
-                        {language === 'ar' ? category.name_ar : category.name_en}
-                      </h2>
-                      <span className="text-sm text-gray-500 font-normal">
-                        ({category.items.length})
-                      </span>
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <img 
+                        src={category.image} 
+                        alt={language === 'ar' ? category.name_ar : category.name_en}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                        <h2 className="text-3xl font-bold text-white drop-shadow-md">
+                          {language === 'ar' ? category.name_ar : category.name_en}
+                        </h2>
+                      </div>
                     </div>
-                    <ChevronDownIcon 
-                      className={cn("h-6 w-6 text-gray-400 transition-transform duration-200", 
-                        isOpen ? "transform rotate-180" : ""
-                      )} 
-                    />
+                    {/* Optional bar if needed, but text on image is nice for "cards" */}
                   </button>
                   
                   {isOpen && (
-                    <div className="animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="p-6 pt-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 border-t border-gray-50 mt-2 pt-6">
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
+                      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {category.items.map((item) => (
                           <MenuCard key={item.id} item={item as MenuItem} />
                         ))}
