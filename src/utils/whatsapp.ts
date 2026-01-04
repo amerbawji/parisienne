@@ -44,7 +44,7 @@ const formatDate = (dateString?: string): string => {
 };
 
 export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', details?: OrderDetails): string => {
-  const number = '96176730370';
+  const number = '9613502022';
   const isAr = language === 'ar';
 
   // Translations

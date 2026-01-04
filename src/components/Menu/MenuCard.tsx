@@ -195,7 +195,9 @@ export const MenuCard = ({ item }: MenuCardProps) => {
                   setPendingQuantity(round(pendingQuantity - step));
                 }
               }}
+              onChange={(val) => setPendingQuantity(round(val))}
               min={minQuantity}
+              step={step}
             />
             <Button 
               onClick={handleAddToCart} 

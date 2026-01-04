@@ -50,7 +50,9 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
           quantity={item.quantity}
           onDecrease={() => updateQuantity(item.instanceId, round(item.quantity - step))}
           onIncrease={() => updateQuantity(item.instanceId, round(item.quantity + step))}
+          onChange={(val) => updateQuantity(item.instanceId, round(val))}
           min={minQuantity}
+          step={step}
           size="sm"
         />
       </div>
