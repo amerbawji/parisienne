@@ -35,6 +35,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const cartInstances = cartItems.filter((i) => i.id === item.id);
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
@@ -71,6 +72,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
     });
     setPendingInstructions('');
     setPendingQuantity(minQuantity);
+    setIsExpanded(false);
   };
 
   const handleOptionChange = (optionName: string, choice: string) => {
@@ -96,7 +98,10 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group">
+    <div 
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group ${!isExpanded ? 'cursor-pointer' : ''}`}
+      onClick={() => !isExpanded && setIsExpanded(true)}
+    >
       {/* Image Side */}
       <div className="relative w-32 sm:w-48 shrink-0 bg-gray-200">
         <img
@@ -126,82 +131,91 @@ export const MenuCard = ({ item }: MenuCardProps) => {
           <p className="text-gray-600 text-sm mb-4 line-clamp-2">{displayDesc}</p>
         )}
 
-        <div className="mt-auto space-y-3">
-          {item.options && item.options.length > 0 && (
-            <div className="space-y-2">
-              {item.options.map((opt) => (
-                <div key={opt.name} className="text-xs">
-                  <span className="font-medium text-gray-700 block mb-1">{safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:</span>
-                  <div className="flex flex-wrap gap-1">
-                    {opt.choices.map((choice) => (
-                      <button
-                        key={choice}
-                        onClick={() => handleOptionChange(opt.name, choice)}
-                        className={`px-2 py-1 rounded border transition-colors ${
-                          pendingOptions[opt.name] === choice
-                            ? 'bg-primary-500 text-white border-primary-500'
-                            : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
-                        }`}
-                      >
-                        {safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
-                      </button>
-                    ))}
+        {isExpanded ? (
+          <div className="mt-auto space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+            {item.options && item.options.length > 0 && (
+              <div className="space-y-2">
+                {item.options.map((opt) => (
+                  <div key={opt.name} className="text-xs">
+                    <span className="font-medium text-gray-700 block mb-1">{safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {opt.choices.map((choice) => (
+                        <button
+                          key={choice}
+                          onClick={(e) => { e.stopPropagation(); handleOptionChange(opt.name, choice); }}
+                          className={`px-2 py-1 rounded border transition-colors ${
+                            pendingOptions[opt.name] === choice
+                              ? 'bg-primary-500 text-white border-primary-500'
+                              : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
+                          }`}
+                        >
+                          {safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
 
-          <div className="space-y-2">
-            <div className="flex flex-wrap gap-1">
-              {presets.map((preset) => (
-                <button
-                  key={preset}
-                  onClick={() => togglePreset(preset)}
-                  className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
-                    pendingInstructions.includes(preset)
-                      ? 'bg-primary-100 text-primary-700 border-primary-200'
-                      : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
-                  }`}
-                >
-                  {safeT(t, `preset_${preset.toLowerCase().replace(/ /g, '_')}`, preset)}
-                </button>
-              ))}
-            </div>
-            <textarea
-              placeholder={t('special_instructions')}
-              value={pendingInstructions}
-              onChange={(e) => setPendingInstructions(e.target.value)}
-              className="w-full text-xs p-2 border border-primary-200 rounded focus:ring-1 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-white placeholder:text-gray-400"
-              rows={2}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2 pt-2">
-            <div className="w-full">
-              <QuantitySelector
-                quantity={pendingQuantity}
-                onIncrease={() => setPendingQuantity(round(pendingQuantity + step))}
-                onDecrease={() => {
-                  if (pendingQuantity - step >= minQuantity - 0.001) {
-                    setPendingQuantity(round(pendingQuantity - step));
-                  }
-                }}
-                onChange={(val) => setPendingQuantity(round(val))}
-                min={minQuantity}
-                step={step}
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-1">
+                {presets.map((preset) => (
+                  <button
+                    key={preset}
+                    onClick={(e) => { e.stopPropagation(); togglePreset(preset); }}
+                    className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
+                      pendingInstructions.includes(preset)
+                        ? 'bg-primary-100 text-primary-700 border-primary-200'
+                        : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
+                    }`}
+                  >
+                    {safeT(t, `preset_${preset.toLowerCase().replace(/ /g, '_')}`, preset)}
+                  </button>
+                ))}
+              </div>
+              <textarea
+                placeholder={t('special_instructions')}
+                value={pendingInstructions}
+                onChange={(e) => setPendingInstructions(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full text-xs p-2 border border-primary-200 rounded focus:ring-1 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-white placeholder:text-gray-400"
+                rows={2}
               />
             </div>
-            <Button 
-              onClick={handleAddToCart} 
-              className="w-full flex items-center justify-center gap-2"
-              aria-label={t('add')}
-            >
-              <PlusIcon className="h-5 w-5" />
-              {t('add')}
-            </Button>
+
+            <div className="flex flex-col gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
+              <div className="w-full">
+                <QuantitySelector
+                  quantity={pendingQuantity}
+                  onIncrease={() => setPendingQuantity(round(pendingQuantity + step))}
+                  onDecrease={() => {
+                    if (pendingQuantity - step >= minQuantity - 0.001) {
+                      setPendingQuantity(round(pendingQuantity - step));
+                    }
+                  }}
+                  onChange={(val) => setPendingQuantity(round(val))}
+                  min={minQuantity}
+                  step={step}
+                />
+              </div>
+              <Button 
+                onClick={handleAddToCart} 
+                className="w-full flex items-center justify-center gap-2"
+                aria-label={t('add')}
+              >
+                <PlusIcon className="h-5 w-5" />
+                {t('add')}
+              </Button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mt-auto">
+             <span className="text-xs text-primary-600 font-medium underline">
+               {t('add') || 'Customize & Add'}
+             </span>
+          </div>
+        )}
       </div>
     </div>
   );
