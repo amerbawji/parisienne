@@ -43,7 +43,7 @@ export const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
       <header className="bg-white shadow-sm sticky top-0 z-40" dir="ltr">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold tracking-tight text-primary-900">Parisienne</h1>
@@ -69,7 +69,7 @@ export const Home = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="absolute top-4 right-4 sm:static flex items-center gap-2">
              <Button
               variant="ghost"
               className="relative hidden sm:flex"
