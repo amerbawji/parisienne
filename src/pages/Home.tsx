@@ -42,31 +42,34 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
-      <header className="bg-white shadow-sm sticky top-0 z-40">
-        <div className={cn(
-          "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4",
-          language === 'ar' && "sm:flex-row-reverse"
-        )}>
+      <header className="bg-white shadow-sm sticky top-0 z-40" dir="ltr">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold tracking-tight text-primary-900">Parisienne</h1>
             </div>
           </div>
 
-          <div className="relative w-full sm:max-w-md">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none rtl:right-0 rtl:left-auto rtl:pr-3">
+          <div className="relative w-full sm:max-w-md" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            <div className={cn(
+              "absolute inset-y-0 flex items-center pointer-events-none",
+              language === 'ar' ? "right-0 pr-3" : "left-0 pl-3"
+            )}>
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
             <input
               type="text"
-              className="block w-full pl-10 rtl:pr-10 rtl:pl-3 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out text-start"
+              className={cn(
+                "block w-full py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out text-start",
+                language === 'ar' ? "pr-10 pl-3" : "pl-10 pr-3"
+              )}
               placeholder={t('search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <div className={cn("flex items-center gap-2", language === 'ar' && "flex-row-reverse")}>
+          <div className="flex items-center gap-2">
              <Button
               variant="ghost"
               className="relative hidden sm:flex"
