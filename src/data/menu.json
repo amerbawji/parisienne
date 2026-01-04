@@ -1,6 +1,204 @@
 {
   "categories": [
     {
+      "id": "beef",
+      "name_en": "Beef",
+      "name_ar": "بقر",
+      "items": [
+        {
+          "id": "beef-minced-coarse",
+          "name_en": "Minced Beef (Coarse)",
+          "name_ar": "مفرومة خشنة",
+          "price": 1,
+          "description_en": "Coarsely minced fresh beef",
+          "description_ar": "لحم بقر مفروم خشن",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-minced-fine",
+          "name_en": "Minced Beef (Fine)",
+          "name_ar": "مفرومة ناعمة",
+          "price": 1,
+          "description_en": "Finely minced fresh beef",
+          "description_ar": "لحم بقر مفروم ناعم",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-cubes",
+          "name_en": "Beef Cubes",
+          "name_ar": "شقف",
+          "price": 1,
+          "description_en": "Tender beef cubes for grilling or cooking",
+          "description_ar": "شقف لحم بقر طري للشوي أو الطبخ",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Fat",
+              "choices": [
+                "With Fat",
+                "Without Fat"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-shawarma",
+          "name_en": "Beef Shawarma",
+          "name_ar": "شاورما",
+          "price": 1,
+          "description_en": "Beef shawarma served with tahini, parsley, and onions",
+          "description_ar": "شاورما لحمة تقدم مع طحينة، بقدونس، وبصل",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-stroganof",
+          "name_en": "Beef Stroganof",
+          "name_ar": "ستروغنوف",
+          "price": 1,
+          "description_en": "Creamy beef stroganoff served with rice",
+          "description_ar": "ستروغونوف لحمة بالكريمة يقدم مع رز",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-roasto",
+          "name_en": "Roasto",
+          "name_ar": "روستو",
+          "price": 1,
+          "description_en": "Roast beef slices with sauce",
+          "description_ar": "شرائح روستو مع صوص",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-kafta",
+          "name_en": "Beef Kafta",
+          "name_ar": "كفتة",
+          "price": 1,
+          "description_en": "Grilled beef kafta with spices",
+          "description_ar": "كفتة بقر مشوية مع بهارات",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-fillet-steak",
+          "name_en": "Fillet Beef Steak",
+          "name_ar": "ستيك فيليه",
+          "price": 1,
+          "description_en": "Premium beef fillet steak",
+          "description_ar": "ستيك فيليه بقر فاخر",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Thickness",
+              "choices": [
+                "Thin",
+                "Medium",
+                "Thick"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-faux-fillet",
+          "name_en": "Faux Fillet Beef Steak",
+          "name_ar": "ستيك فوفليه",
+          "price": 1,
+          "description_en": "Tender faux fillet beef steak",
+          "description_ar": "ستيك فوفليه بقر طري",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "options": [
+            {
+              "name": "Thickness",
+              "choices": [
+                "Thin",
+                "Medium",
+                "Thick"
+              ]
+            }
+          ],
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-escalope",
+          "name_en": "Beef Escalope",
+          "name_ar": "اسكالوب",
+          "price": 1,
+          "description_en": "Breaded beef escalope served with fries",
+          "description_ar": "اسكالوب لحمة مقلية تقدم مع بطاطا",
+          "unit": "plate"
+        },
+        {
+          "id": "beef-makaneh",
+          "name_en": "Makaneh",
+          "name_ar": "مقانق",
+          "price": 1,
+          "description_en": "Lebanese sausages fried with lemon or pomegranate molasses",
+          "description_ar": "مقانق مقلية مع حامض أو دبس رمان",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-soujouk",
+          "name_en": "Soujouk",
+          "name_ar": "سجق",
+          "price": 1,
+          "description_en": "Spicy sausages fried with tomatoes",
+          "description_ar": "سجق حار مقلي مع بندورة",
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0.2
+        },
+        {
+          "id": "beef-burger",
+          "name_en": "Beef Burger",
+          "name_ar": "همبرغر",
+          "price": 1,
+          "description_en": "Juicy beef patty with coleslaw and fries",
+          "description_ar": "برغر لحمة مع سلطة ملفوف وبطاطا",
+          "unit": "piece"
+        },
+        {
+          "id": "beef-kibbeh",
+          "name_en": "Beef Kibbeh",
+          "name_ar": "كبة",
+          "price": 1,
+          "description_en": "Fried beef kibbeh balls",
+          "description_ar": "أقراص كبة بقر مقلية",
+          "unit": "piece"
+        }
+      ]
+    },
+    {
       "id": "chicken",
       "name_en": "Chicken",
       "name_ar": "دجاج",
@@ -430,9 +628,9 @@
       ]
     },
     {
-      "id": "sandwiches",
-      "name_en": "Sandwiches",
-      "name_ar": "ساندويشات",
+      "id": "Grill",
+      "name_en": "Grill",
+      "name_ar": "مشاوي",
       "items": [
         {
           "id": "lamb-minced-coarse",
@@ -519,204 +717,6 @@
           "price": 1,
           "description_en": "Mixed beef and lamb kibbeh",
           "description_ar": "كبة بقر وغنم",
-          "unit": "piece"
-        }
-      ]
-    },
-    {
-      "id": "beef",
-      "name_en": "Beef",
-      "name_ar": "بقر",
-      "items": [
-        {
-          "id": "beef-minced-coarse",
-          "name_en": "Minced Beef (Coarse)",
-          "name_ar": "مفرومة خشنة",
-          "price": 1,
-          "description_en": "Coarsely minced fresh beef",
-          "description_ar": "لحم بقر مفروم خشن",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "options": [
-            {
-              "name": "Fat",
-              "choices": [
-                "With Fat",
-                "Without Fat"
-              ]
-            }
-          ],
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-minced-fine",
-          "name_en": "Minced Beef (Fine)",
-          "name_ar": "مفرومة ناعمة",
-          "price": 1,
-          "description_en": "Finely minced fresh beef",
-          "description_ar": "لحم بقر مفروم ناعم",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "options": [
-            {
-              "name": "Fat",
-              "choices": [
-                "With Fat",
-                "Without Fat"
-              ]
-            }
-          ],
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-cubes",
-          "name_en": "Beef Cubes",
-          "name_ar": "شقف",
-          "price": 1,
-          "description_en": "Tender beef cubes for grilling or cooking",
-          "description_ar": "شقف لحم بقر طري للشوي أو الطبخ",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "options": [
-            {
-              "name": "Fat",
-              "choices": [
-                "With Fat",
-                "Without Fat"
-              ]
-            }
-          ],
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-shawarma",
-          "name_en": "Beef Shawarma",
-          "name_ar": "شاورما",
-          "price": 1,
-          "description_en": "Beef shawarma served with tahini, parsley, and onions",
-          "description_ar": "شاورما لحمة تقدم مع طحينة، بقدونس، وبصل",
-          "unit": "plate"
-        },
-        {
-          "id": "beef-stroganof",
-          "name_en": "Beef Stroganof",
-          "name_ar": "ستروغنوف",
-          "price": 1,
-          "description_en": "Creamy beef stroganoff served with rice",
-          "description_ar": "ستروغونوف لحمة بالكريمة يقدم مع رز",
-          "unit": "plate"
-        },
-        {
-          "id": "beef-roasto",
-          "name_en": "Roasto",
-          "name_ar": "روستو",
-          "price": 1,
-          "description_en": "Roast beef slices with sauce",
-          "description_ar": "شرائح روستو مع صوص",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-kafta",
-          "name_en": "Beef Kafta",
-          "name_ar": "كفتة",
-          "price": 1,
-          "description_en": "Grilled beef kafta with spices",
-          "description_ar": "كفتة بقر مشوية مع بهارات",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-fillet-steak",
-          "name_en": "Fillet Beef Steak",
-          "name_ar": "ستيك فيليه",
-          "price": 1,
-          "description_en": "Premium beef fillet steak",
-          "description_ar": "ستيك فيليه بقر فاخر",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "options": [
-            {
-              "name": "Thickness",
-              "choices": [
-                "Thin",
-                "Medium",
-                "Thick"
-              ]
-            }
-          ],
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-faux-fillet",
-          "name_en": "Faux Fillet Beef Steak",
-          "name_ar": "ستيك فوفليه",
-          "price": 1,
-          "description_en": "Tender faux fillet beef steak",
-          "description_ar": "ستيك فوفليه بقر طري",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "options": [
-            {
-              "name": "Thickness",
-              "choices": [
-                "Thin",
-                "Medium",
-                "Thick"
-              ]
-            }
-          ],
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-escalope",
-          "name_en": "Beef Escalope",
-          "name_ar": "اسكالوب",
-          "price": 1,
-          "description_en": "Breaded beef escalope served with fries",
-          "description_ar": "اسكالوب لحمة مقلية تقدم مع بطاطا",
-          "unit": "plate"
-        },
-        {
-          "id": "beef-makaneh",
-          "name_en": "Makaneh",
-          "name_ar": "مقانق",
-          "price": 1,
-          "description_en": "Lebanese sausages fried with lemon or pomegranate molasses",
-          "description_ar": "مقانق مقلية مع حامض أو دبس رمان",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-soujouk",
-          "name_en": "Soujouk",
-          "name_ar": "سجق",
-          "price": 1,
-          "description_en": "Spicy sausages fried with tomatoes",
-          "description_ar": "سجق حار مقلي مع بندورة",
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0.2
-        },
-        {
-          "id": "beef-burger",
-          "name_en": "Beef Burger",
-          "name_ar": "همبرغر",
-          "price": 1,
-          "description_en": "Juicy beef patty with coleslaw and fries",
-          "description_ar": "برغر لحمة مع سلطة ملفوف وبطاطا",
-          "unit": "piece"
-        },
-        {
-          "id": "beef-kibbeh",
-          "name_en": "Beef Kibbeh",
-          "name_ar": "كبة",
-          "price": 1,
-          "description_en": "Fried beef kibbeh balls",
-          "description_ar": "أقراص كبة بقر مقلية",
           "unit": "piece"
         }
       ]
