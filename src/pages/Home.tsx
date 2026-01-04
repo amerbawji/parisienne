@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
@@ -10,7 +10,7 @@ import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 
 export const Home = () => {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { getTotalItems, toggleCart } = useCartStore();
   const { language, t } = useLanguageStore();
@@ -19,8 +19,6 @@ export const Home = () => {
   const categories = menuData.categories;
   const filteredCategories = categories
     .map((category) => {
-      if (activeCategory !== 'all' && category.id !== activeCategory) return null;
-
       const matchingItems = category.items.filter((item) => {
         if (!searchQuery) return true;
         const query = searchQuery.toLowerCase();
@@ -76,59 +74,54 @@ export const Home = () => {
             )}
           </Button>
         </div>
-
-        {/* Category Filter Bar */}
-        <div className="border-t border-gray-100 overflow-x-auto scrollbar-hide">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-2 py-3 min-w-max">
-            <button
-              onClick={() => setActiveCategory('all')}
-              className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap border",
-                activeCategory === 'all' 
-                  ? "bg-primary-600 text-white border-primary-600" 
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-              )}
-            >
-              {t('all_items')}
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap border",
-                  activeCategory === cat.id 
-                    ? "bg-primary-600 text-white border-primary-600" 
-                    : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                )}
-              >
-                {language === 'ar' ? cat.name_ar : cat.name_en}
-              </button>
-            ))}
-          </div>
-        </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
-        {filteredCategories.length > 0 ? (
-          filteredCategories.map((category) => (
-            <section key={category.id} className="mb-12 scroll-mt-32 animate-in fade-in slide-in-from-bottom-4 duration-500" id={category.id}>
-              <div className="flex items-baseline justify-between mb-6 border-b border-gray-100 pb-2">
-                <h2 className="text-2xl font-bold text-gray-900">{language === 'ar' ? category.name_ar : category.name_en}</h2>
-              </div>
+        <div className="space-y-4">
+          {filteredCategories.length > 0 ? (
+            filteredCategories.map((category) => {
+              const isOpen = expandedCategory === category.id || searchQuery.length > 0;
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {category.items.map((item) => (
-                  <MenuCard key={item.id} item={item as MenuItem} />
-                ))}
-              </div>
-            </section>
-          ))
-        ) : (
-          <div className="text-center py-20 text-gray-500">
-            {t('no_items_found')}
-          </div>
-        )}
+              return (
+                <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                  <button
+                    onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                    className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-center gap-3">
+                      <h2 className="text-xl font-bold text-gray-900">
+                        {language === 'ar' ? category.name_ar : category.name_en}
+                      </h2>
+                      <span className="text-sm text-gray-500 font-normal">
+                        ({category.items.length})
+                      </span>
+                    </div>
+                    <ChevronDownIcon 
+                      className={cn("h-6 w-6 text-gray-400 transition-transform duration-200", 
+                        isOpen ? "transform rotate-180" : ""
+                      )} 
+                    />
+                  </button>
+                  
+                  {isOpen && (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="p-6 pt-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 border-t border-gray-50 mt-2 pt-6">
+                        {category.items.map((item) => (
+                          <MenuCard key={item.id} item={item as MenuItem} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-20 text-gray-500">
+              {t('no_items_found')}
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Floating Cart Button (Mobile) */}
