@@ -177,22 +177,24 @@ export const MenuCard = ({ item }: MenuCardProps) => {
             />
           </div>
 
-          <div className="flex items-center justify-between gap-3 pt-2">
-            <QuantitySelector
-              quantity={pendingQuantity}
-              onIncrease={() => setPendingQuantity(round(pendingQuantity + step))}
-              onDecrease={() => {
-                if (pendingQuantity - step >= minQuantity - 0.001) {
-                  setPendingQuantity(round(pendingQuantity - step));
-                }
-              }}
-              onChange={(val) => setPendingQuantity(round(val))}
-              min={minQuantity}
-              step={step}
-            />
+          <div className="flex flex-col gap-2 pt-2">
+            <div className="w-full">
+              <QuantitySelector
+                quantity={pendingQuantity}
+                onIncrease={() => setPendingQuantity(round(pendingQuantity + step))}
+                onDecrease={() => {
+                  if (pendingQuantity - step >= minQuantity - 0.001) {
+                    setPendingQuantity(round(pendingQuantity - step));
+                  }
+                }}
+                onChange={(val) => setPendingQuantity(round(val))}
+                min={minQuantity}
+                step={step}
+              />
+            </div>
             <Button 
               onClick={handleAddToCart} 
-              className="flex-1 flex items-center justify-center gap-2"
+              className="w-full flex items-center justify-center gap-2"
               aria-label={t('add')}
             >
               <PlusIcon className="h-5 w-5" />
