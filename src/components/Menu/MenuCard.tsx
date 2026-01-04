@@ -201,7 +201,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
               </div>
               <Button 
                 onClick={handleAddToCart} 
-                className="w-full flex items-center justify-center gap-2"
+                className="self-end px-8 flex items-center justify-center gap-2"
                 aria-label={t('add')}
               >
                 <PlusIcon className="h-5 w-5" />
