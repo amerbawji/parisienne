@@ -86,13 +86,19 @@ export const Home = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
               const isOpen = expandedCategory === category.id || searchQuery.length > 0;
               
               return (
-                <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group">
+                <div 
+                  key={category.id} 
+                  className={cn(
+                    "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
+                    isOpen && "md:col-span-2 lg:col-span-3"
+                  )}
+                >
                   <button
                     onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
                     className="w-full text-left block transition-all hover:shadow-md"
