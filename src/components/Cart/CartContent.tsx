@@ -36,7 +36,7 @@ export const CartContent = () => {
   const navigate = useNavigate();
   const totalItems = getTotalItems();
 
-  const [serviceType, setServiceType] = useState<'takeaway' | 'delivery'>('takeaway');
+  const [serviceType, setServiceType] = useState<'takeaway' | 'delivery'>('delivery');
   const itemsTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryFee = serviceType === 'delivery' ? 1.5 : 0;
   const totalPrice = itemsTotal + deliveryFee;
