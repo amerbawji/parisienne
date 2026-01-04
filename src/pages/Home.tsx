@@ -112,7 +112,7 @@ export const Home = () => {
                       <img 
                         src={category.image} 
                         alt={language === 'ar' ? category.name_ar : category.name_en}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                         <h2 className="text-3xl font-bold text-white drop-shadow-md">

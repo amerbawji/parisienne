@@ -100,15 +100,15 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
 
   return (
     <div 
-      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group ${!expanded ? 'cursor-pointer' : ''}`}
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col' : 'flex-row h-full hover:shadow-md cursor-pointer'}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
-      <div className="relative w-32 sm:w-48 shrink-0 bg-gray-200">
+      <div className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64' : 'w-32 sm:w-48'}`}>
         <img
           src={imageUrl}
           alt={displayName}
-          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+          className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
         {totalQuantity > 0 && (
