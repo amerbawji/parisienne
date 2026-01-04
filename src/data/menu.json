@@ -23,7 +23,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-minced-fine",
@@ -43,7 +48,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-cubes",
@@ -63,7 +73,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-shawarma",
@@ -72,7 +87,12 @@
           "price": 1,
           "description_en": "Beef shawarma served with tahini, parsley, and onions",
           "description_ar": "شاورما لحمة تقدم مع طحينة، بقدونس، وبصل",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-stroganof",
@@ -81,7 +101,12 @@
           "price": 1,
           "description_en": "Creamy beef stroganoff served with rice",
           "description_ar": "ستروغونوف لحمة بالكريمة يقدم مع رز",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-roasto",
@@ -92,7 +117,12 @@
           "description_ar": "شرائح روستو مع صوص",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-kafta",
@@ -103,7 +133,12 @@
           "description_ar": "كفتة بقر مشوية مع بهارات",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-fillet-steak",
@@ -124,7 +159,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-faux-fillet",
@@ -145,7 +185,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-escalope",
@@ -154,7 +199,12 @@
           "price": 1,
           "description_en": "Breaded beef escalope served with fries",
           "description_ar": "اسكالوب لحمة مقلية تقدم مع بطاطا",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-makaneh",
@@ -165,7 +215,12 @@
           "description_ar": "مقانق مقلية مع حامض أو دبس رمان",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-soujouk",
@@ -176,7 +231,12 @@
           "description_ar": "سجق حار مقلي مع بندورة",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-burger",
@@ -185,7 +245,12 @@
           "price": 1,
           "description_en": "Juicy beef patty with coleslaw and fries",
           "description_ar": "برغر لحمة مع سلطة ملفوف وبطاطا",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "beef-kibbeh",
@@ -194,7 +259,12 @@
           "price": 1,
           "description_en": "Fried beef kibbeh balls",
           "description_ar": "أقراص كبة بقر مقلية",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     },
@@ -211,7 +281,12 @@
           "description_en": "Served with fries, coleslaw, and garlic dip",
           "description_ar": "تقدم مع بطاطا، سلطة ملفوف، وثوم",
           "image": "/images/chicken-escalope.jpg",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-tawook-white",
@@ -220,7 +295,12 @@
           "price": 1,
           "description_en": "Marinated white chicken skewers served with garlic and pickles",
           "description_ar": "شيش طاووق أبيض متبل يقدم مع ثوم وكبيس",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-tawook-red",
@@ -229,7 +309,12 @@
           "price": 1,
           "description_en": "Marinated red chicken skewers served with garlic and pickles",
           "description_ar": "شيش طاووق أحمر متبل يقدم مع ثوم وكبيس",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-fajita",
@@ -238,7 +323,12 @@
           "price": 1,
           "description_en": "Chicken strips with bell peppers, onions, and cheese, served with fries",
           "description_ar": "شرائح دجاج مع فليفلة، بصل، وجبنة، تقدم مع بطاطا",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-burger",
@@ -247,7 +337,12 @@
           "price": 1,
           "description_en": "Chicken patty with coleslaw, fries, and garlic",
           "description_ar": "برغر دجاج مع سلطة ملفوف، بطاطا، وثوم",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-stroganof",
@@ -256,7 +351,12 @@
           "price": 1,
           "description_en": "Creamy chicken stroganoff served with rice",
           "description_ar": "ستروغونوف دجاج بالكريمة يقدم مع رز",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-shawarma",
@@ -265,7 +365,12 @@
           "price": 1,
           "description_en": "Chicken shawarma with garlic, pickles, and fries",
           "description_ar": "شاورما دجاج مع ثوم، كبيس، وبطاطا",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-nuggets",
@@ -274,7 +379,12 @@
           "price": 1,
           "description_en": "Crispy chicken nuggets served with fries",
           "description_ar": "ناغتس دجاج مقرمش يقدم مع بطاطا",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-crispy",
@@ -283,7 +393,12 @@
           "price": 1,
           "description_en": "Crispy fried chicken strips served with fries",
           "description_ar": "شرائح دجاج مقرمشة تقدم مع بطاطا",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-wings-marinated",
@@ -294,7 +409,12 @@
           "description_ar": "جوانح دجاج متبلة مشوية تقدم مع ثوم",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-whole",
@@ -303,7 +423,12 @@
           "price": 1,
           "description_en": "Grilled whole chicken served with garlic and pickles",
           "description_ar": "فروج كامل مشوي يقدم مع ثوم وكبيس",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-half",
@@ -312,7 +437,12 @@
           "price": 1,
           "description_en": "Grilled half chicken served with garlic and pickles",
           "description_ar": "نصف فروج مشوي يقدم مع ثوم وكبيس",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-legs",
@@ -323,7 +453,12 @@
           "description_ar": "أفخاذ دجاج تقدم مع ثوم",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-breast-deboned",
@@ -334,7 +469,12 @@
           "description_ar": "صدر دجاج مسحب مشوي بدون جلد",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-breast-bone",
@@ -345,7 +485,12 @@
           "description_ar": "صدر دجاج مشوي مع العظم",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-wings",
@@ -356,7 +501,12 @@
           "description_ar": "جوانح دجاج مقلية",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-drumsticks",
@@ -367,7 +517,12 @@
           "description_ar": "دبوس دجاج مقلي",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "chicken-deboned-legs",
@@ -378,7 +533,12 @@
           "description_ar": "فخذ دجاج مسحب مشوي",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "eggs",
@@ -387,7 +547,12 @@
           "price": 1,
           "description_en": "Fresh eggs carton",
           "description_ar": "كرتونة بيض طازج",
-          "unit": "box"
+          "unit": "box",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     },
@@ -414,7 +579,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-minced-fine",
@@ -434,7 +604,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-cubes",
@@ -454,7 +629,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-kafta",
@@ -465,7 +645,12 @@
           "description_ar": "كفتة غنم متبلة مع بقدونس وبصل",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-kibbeh",
@@ -474,7 +659,12 @@
           "price": 1,
           "description_en": "Traditional lamb kibbeh",
           "description_ar": "كبة غنم تقليدية",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-thigh",
@@ -494,7 +684,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "lamb-liver",
@@ -505,7 +700,12 @@
           "description_ar": "سودة غنم طازجة",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "kebbeh-nayyeh-200",
@@ -514,7 +714,12 @@
           "price": 1,
           "description_en": "Raw meat with cracked wheat, served with mint and olive oil (200g)",
           "description_ar": "لحم ني مع برغل، يقدم مع نعنع وزيت زيتون (200غ)",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "habra-nayyeh-200",
@@ -523,7 +728,12 @@
           "price": 1,
           "description_en": "Raw lean meat served with garlic and olive oil (200g)",
           "description_ar": "هبرة نية تقدم مع ثوم وزيت زيتون (200غ)",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "malseh-nayyeh-200",
@@ -532,7 +742,12 @@
           "price": 1,
           "description_en": "Smooth raw meat mix served with vegetables (200g)",
           "description_ar": "ملسة نية تقدم مع خضار (200غ)",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "frakeh-nayyeh-200",
@@ -541,7 +756,12 @@
           "price": 1,
           "description_en": "Special raw meat mix with spices (200g)",
           "description_ar": "فراكة نية مع بهارات (200غ)",
-          "unit": "plate"
+          "unit": "plate",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "kebbeh-nayyeh",
@@ -552,7 +772,12 @@
           "description_ar": "لحم ني مع برغل، يقدم مع نعنع وزيت زيتون",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "habra-nayyeh",
@@ -563,7 +788,12 @@
           "description_ar": "هبرة نية تقدم مع ثوم وزيت زيتون",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "malseh-nayyeh",
@@ -574,7 +804,12 @@
           "description_ar": "ملسة نية تقدم مع خضار",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "frakeh-nayyeh",
@@ -585,7 +820,12 @@
           "description_ar": "فراكة نية مع بهارات",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "kastaleta",
@@ -596,7 +836,12 @@
           "description_ar": "ريش غنم مشوية",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     },
@@ -623,7 +868,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     },
@@ -650,7 +900,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     },
@@ -677,7 +932,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "mixed-minced-fine",
@@ -697,7 +957,12 @@
               ]
             }
           ],
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "mixed-kafta",
@@ -708,7 +973,12 @@
           "description_ar": "كفتة بقر وغنم مع أعشاب",
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2
+          "min_quantity": 0.2,
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         },
         {
           "id": "mixed-kibbeh",
@@ -717,7 +987,12 @@
           "price": 1,
           "description_en": "Mixed beef and lamb kibbeh",
           "description_ar": "كبة بقر وغنم",
-          "unit": "piece"
+          "unit": "piece",
+          "presets": [
+            "Extra fresh",
+            "For BBQ",
+            "Vacuum packed"
+          ]
         }
       ]
     }

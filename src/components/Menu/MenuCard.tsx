@@ -18,6 +18,7 @@ export interface MenuItem {
   weight_step?: number;
   min_quantity?: number;
   options?: { name: string; choices: string[] }[];
+  presets?: string[];
 }
 
 interface MenuCardProps {
@@ -101,7 +102,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
     setPendingInstructions(newInstructions);
   };
 
-  const presets = ["Extra fresh", "For BBQ", "Vacuum packed"];
+  const presets = item.presets || [];
   const imageUrl = item.image || `https://placehold.co/400x300?text=${encodeURIComponent(item.name_en)}`;
   
   const displayName = language === 'ar' ? item.name_ar : item.name_en;
