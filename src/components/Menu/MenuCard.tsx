@@ -23,6 +23,8 @@ export interface MenuItem {
 
 interface MenuCardProps {
   item: MenuItem;
+  expanded: boolean;
+  onToggle: () => void;
 }
 
 const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string) => {
@@ -31,11 +33,10 @@ const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string
   return translated;
 };
 
-export const MenuCard = ({ item }: MenuCardProps) => {
+export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const cartInstances = cartItems.filter((i) => i.id === item.id);
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
@@ -72,7 +73,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
     });
     setPendingInstructions('');
     setPendingQuantity(minQuantity);
-    setIsExpanded(false);
+    if (expanded) onToggle();
   };
 
   const handleOptionChange = (optionName: string, choice: string) => {
@@ -99,8 +100,8 @@ export const MenuCard = ({ item }: MenuCardProps) => {
 
   return (
     <div 
-      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group ${!isExpanded ? 'cursor-pointer' : ''}`}
-      onClick={() => !isExpanded && setIsExpanded(true)}
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group ${!expanded ? 'cursor-pointer' : ''}`}
+      onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
       <div className="relative w-32 sm:w-48 shrink-0 bg-gray-200">
@@ -131,7 +132,7 @@ export const MenuCard = ({ item }: MenuCardProps) => {
           <p className="text-gray-600 text-sm mb-4 line-clamp-2">{displayDesc}</p>
         )}
 
-        {isExpanded ? (
+        {expanded ? (
           <div className="mt-auto space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             {item.options && item.options.length > 0 && (
               <div className="space-y-2">

@@ -11,6 +11,7 @@ import { LanguageToggle } from '../components/UI/LanguageToggle';
 
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { getTotalItems, toggleCart } = useCartStore();
   const { language, t } = useLanguageStore();
@@ -126,7 +127,12 @@ export const Home = () => {
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
                       <div className="p-4 sm:p-6 grid grid-cols-1 gap-4">
                         {category.items.map((item) => (
-                          <MenuCard key={item.id} item={item as MenuItem} />
+                          <MenuCard 
+                            key={item.id} 
+                            item={item as MenuItem} 
+                            expanded={expandedItemId === item.id}
+                            onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                          />
                         ))}
                       </div>
                     </div>
