@@ -124,7 +124,7 @@ export const Home = () => {
                   
                   {isOpen && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      <div className="p-4 sm:p-6 grid grid-cols-1 gap-4">
                         {category.items.map((item) => (
                           <MenuCard key={item.id} item={item as MenuItem} />
                         ))}

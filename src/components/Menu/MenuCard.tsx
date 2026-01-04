@@ -26,12 +26,6 @@ interface MenuCardProps {
 }
 
 const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string) => {
-  // A helper to try translating a constructed key, falling back to original text if translation key doesn't exist
-  // Since our t() implementation returns the key if missing, we need to check if the returned value is different from key
-  // BUT: if the key is "Fat", and translation is missing, it returns "Fat".
-  // If we pass "option_fat", and missing, it returns "option_fat".
-  // So we check if result starts with "option_" or "choice_" or "preset_" (assuming we construct keys that way)
-  // This is a bit hacky but works for now without complex existence checks.
   const translated = t(key as TranslationKey);
   if (translated === key) return fallback;
   return translated;
@@ -84,16 +78,9 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   };
 
   const togglePreset = (preset: string) => {
-    // We toggle the ENGLISH preset name in the state, but display translated
-    // Or we should handle localization in the logic.
-    // For simplicity, let's keep logic using English strings (so duplicates don't happen across langs)
-    // but display translated.
     const current = pendingInstructions;
     let newInstructions = current;
     
-    // Note: If user switches lang, the existing instructions might be in mixed langs if we appended translated text.
-    // But here we're appending the preset string itself (which is English from the array).
-    // So logic holds.
     if (current.includes(preset)) {
       newInstructions = current.replace(preset, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
     } else {
@@ -109,8 +96,9 @@ export const MenuCard = ({ item }: MenuCardProps) => {
   const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow group">
-      <div className="relative h-48 overflow-hidden bg-gray-200">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-row h-full hover:shadow-md transition-shadow group">
+      {/* Image Side */}
+      <div className="relative w-32 sm:w-48 shrink-0 bg-gray-200">
         <img
           src={imageUrl}
           alt={displayName}
@@ -118,14 +106,16 @@ export const MenuCard = ({ item }: MenuCardProps) => {
           loading="lazy"
         />
         {totalQuantity > 0 && (
-          <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
+          <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
              {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')} {item.unit ? safeT(t, `unit_${item.unit}`, item.unit) : t('in_cart')}
           </div>
         )}
       </div>
-      <div className="p-4 flex flex-col flex-grow">
+
+      {/* Content Side */}
+      <div className="p-4 flex flex-col flex-grow min-w-0">
         <div className="flex justify-between items-start gap-2 mb-1">
-          <h3 className="font-bold text-lg text-gray-900">{displayName}</h3>
+          <h3 className="font-bold text-lg text-gray-900 line-clamp-2">{displayName}</h3>
           <span className="font-bold text-primary-600 shrink-0">
             ${item.price.toFixed(2)}
             {item.unit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit)}</span>}
