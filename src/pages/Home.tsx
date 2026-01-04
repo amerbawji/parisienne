@@ -105,26 +105,17 @@ export const Home = () => {
                 >
                   <button
                     onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
-                    className={cn(
-                      "w-full text-left block transition-all hover:shadow-md bg-white z-30",
-                      isOpen ? "sticky top-32 md:top-20 shadow-md" : "relative"
-                    )}
+                    className="w-full text-left block transition-all hover:shadow-md"
                     aria-expanded={isOpen}
                   >
-                    <div className={cn(
-                      "relative w-full overflow-hidden transition-all duration-500",
-                      isOpen ? "h-24 md:h-32" : "h-48"
-                    )}>
+                    <div className="relative h-48 w-full overflow-hidden">
                       <img 
                         src={category.image} 
                         alt={language === 'ar' ? category.name_ar : category.name_en}
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                        <h2 className={cn(
-                          "font-bold text-white drop-shadow-md transition-all duration-300",
-                          isOpen ? "text-2xl" : "text-3xl"
-                        )}>
+                        <h2 className="text-3xl font-bold text-white drop-shadow-md">
                           {language === 'ar' ? category.name_ar : category.name_en}
                         </h2>
                       </div>
