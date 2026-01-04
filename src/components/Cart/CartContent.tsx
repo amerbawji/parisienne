@@ -110,16 +110,16 @@ export const CartContent = () => {
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('service_type')}</label>
             <div className="flex gap-2">
               <OptionButton 
-                selected={serviceType === 'takeaway'} 
-                onClick={() => setServiceType('takeaway')}
-              >
-                🥡 {t('takeaway')}
-              </OptionButton>
-              <OptionButton 
                 selected={serviceType === 'delivery'} 
                 onClick={() => setServiceType('delivery')}
               >
                 🛵 {t('delivery')}
+              </OptionButton>
+              <OptionButton 
+                selected={serviceType === 'takeaway'} 
+                onClick={() => setServiceType('takeaway')}
+              >
+                🥡 {t('takeaway')}
               </OptionButton>
             </div>
           </div>
