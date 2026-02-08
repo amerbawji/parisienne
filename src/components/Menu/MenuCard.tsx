@@ -97,6 +97,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
   
   const displayName = language === 'ar' ? item.name_ar : item.name_en;
   const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
+  const shouldShowUnit = Boolean(item.unit && item.unit !== 'piece');
 
   return (
     <div 
@@ -113,7 +114,8 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
         />
         {totalQuantity > 0 && (
           <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
-             {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')} {item.unit ? safeT(t, `unit_${item.unit}`, item.unit) : t('in_cart')}
+             {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')}
+             {shouldShowUnit && ` ${safeT(t, `unit_${item.unit}`, item.unit!)}`}
           </div>
         )}
       </div>
@@ -125,7 +127,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
           <div className="mt-1">
             <span className="font-bold text-primary-600">
               ${item.price.toFixed(2)}
-              {item.unit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit)}</span>}
+              {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
             </span>
           </div>
         </div>
