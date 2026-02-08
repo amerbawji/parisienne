@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
@@ -13,6 +13,7 @@ export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const { getTotalItems, toggleCart } = useCartStore();
   const { language, t } = useLanguageStore();
   const totalItems = getTotalItems();
@@ -40,6 +41,12 @@ export const Home = () => {
       return { ...category, items: matchingItems, image };
     })
     .filter((category): category is typeof categories[0] & { image: string } => category !== null);
+
+  const handleCategoryClick = (categoryId: string) => {
+    setExpandedCategory(categoryId);
+    setExpandedItemId(null);
+    categoryRefs.current[categoryId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
@@ -87,6 +94,35 @@ export const Home = () => {
             <LanguageToggle />
           </div>
         </div>
+
+        {filteredCategories.length > 0 && (
+          <div className="border-t border-gray-100">
+            <div
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto"
+              dir={language === 'ar' ? 'rtl' : 'ltr'}
+            >
+              <div className="flex gap-2 min-w-max">
+                {filteredCategories.map((category) => {
+                  const isActive = expandedCategory === category.id;
+                  return (
+                    <button
+                      key={`menu-${category.id}`}
+                      onClick={() => handleCategoryClick(category.id)}
+                      className={cn(
+                        'whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold border transition-colors',
+                        isActive
+                          ? 'bg-primary-600 text-white border-primary-600'
+                          : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300 hover:text-primary-700'
+                      )}
+                    >
+                      {language === 'ar' ? category.name_ar : category.name_en}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
@@ -98,8 +134,11 @@ export const Home = () => {
               return (
                 <div 
                   key={category.id} 
+                  ref={(el) => {
+                    categoryRefs.current[category.id] = el;
+                  }}
                   className={cn(
-                    "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
+                    "scroll-mt-28 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
                     isOpen && "md:col-span-2 lg:col-span-3"
                   )}
                 >
