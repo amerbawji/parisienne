@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
+import logo from '../assets/malhame-vertical-logo.svg';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
 import { useLanguageStore } from '../store/languageStore';
@@ -9,11 +10,18 @@ import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 
+// Splash promo configuration
+// Toggle on/off from here
+const SPLASH_PROMO_ENABLED = true;
+// Place your promo image at: public/promo-ramadan.png
+const SPLASH_PROMO_IMAGE = '/promo-ramadan.png';
+
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuSelectionMode, setMenuSelectionMode] = useState(false);
+  const [showSplashPromo, setShowSplashPromo] = useState(SPLASH_PROMO_ENABLED);
   const headerRef = useRef<HTMLElement | null>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const { getTotalItems, toggleCart } = useCartStore();
@@ -59,12 +67,41 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
+      {showSplashPromo && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[1px] flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md sm:max-w-lg rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
+            <button
+              onClick={() => setShowSplashPromo(false)}
+              className="absolute top-2 right-2 z-10 h-9 w-9 rounded-full bg-black/60 text-white hover:bg-black/75 transition-colors flex items-center justify-center"
+              aria-label="Close promo"
+            >
+              <XMarkIcon className="h-5 w-5" />
+            </button>
+
+            {SPLASH_PROMO_IMAGE ? (
+              <img
+                src={SPLASH_PROMO_IMAGE}
+                alt="Promotional offer"
+                className="w-full h-auto object-cover"
+              />
+            ) : (
+              <div className="aspect-[4/5] w-full bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-6">
+                <div className="text-center">
+                  <p className="text-xs font-semibold tracking-wider text-primary-700 uppercase mb-2">Promo Placeholder</p>
+                  <p className="text-lg font-bold text-primary-900">Upload promo image and set `SPLASH_PROMO_IMAGE` in `Home.tsx`</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <header ref={headerRef} className="bg-white shadow-sm sticky top-0 z-40" dir="ltr">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex justify-between items-center w-full sm:w-auto">
-            <div className="flex items-center gap-2">
-              <div className="h-12 w-40 rounded-lg border border-dashed border-gray-300 bg-gray-50 text-gray-400 text-xs font-semibold flex items-center justify-center">
-                Logo Placeholder
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="h-12 sm:h-14 lg:h-16">
+                <img src={logo} alt="Parisienne Logo" className="h-full w-auto object-contain" />
               </div>
             </div>
           </div>
@@ -112,10 +149,10 @@ export const Home = () => {
         {filteredCategories.length > 0 && (
           <div className="border-t border-gray-100">
             <div
-              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto"
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto lg:overflow-visible"
               dir={language === 'ar' ? 'rtl' : 'ltr'}
             >
-              <div className="flex gap-2 min-w-max">
+              <div className="flex gap-2 min-w-max lg:min-w-0 lg:flex-wrap">
                 {filteredCategories.map((category) => {
                   const isActive = expandedCategory === category.id;
                   return (
@@ -211,7 +248,7 @@ export const Home = () => {
                 href="tel:01814841"
                 className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
               >
-                <PhoneIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <PhoneIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
                   <span className="block text-xs text-gray-500">Phone</span>
                   <span className="font-semibold group-hover:text-primary-700">01814841</span>
@@ -224,7 +261,7 @@ export const Home = () => {
                 rel="noreferrer"
                 className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
               >
-                <MapPinIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <MapPinIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
                   <span className="block text-xs text-gray-500">Address</span>
                   <span className="font-semibold group-hover:text-primary-700">Sakyet l Janzir</span>
@@ -237,7 +274,7 @@ export const Home = () => {
                 rel="noreferrer"
                 className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
               >
-                <ClockIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <ClockIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
                   <span className="block text-xs text-gray-500">Operating Hours</span>
                   <span className="font-semibold group-hover:text-primary-700">7:30 am till 7 pm</span>
