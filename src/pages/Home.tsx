@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
@@ -63,7 +63,9 @@ export const Home = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-extrabold tracking-tight text-primary-900">Parisienne</h1>
+              <div className="h-12 w-40 rounded-lg border border-dashed border-gray-300 bg-gray-50 text-gray-400 text-xs font-semibold flex items-center justify-center">
+                Logo Placeholder
+              </div>
             </div>
           </div>
 
@@ -199,6 +201,52 @@ export const Home = () => {
           )}
         </div>
       </main>
+
+      <footer className="border-t border-gray-200 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 sm:p-5">
+            <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-3">Contact & Hours</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <a
+                href="tel:01814841"
+                className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
+              >
+                <PhoneIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <span className="text-sm text-gray-700">
+                  <span className="block text-xs text-gray-500">Phone</span>
+                  <span className="font-semibold group-hover:text-primary-700">01814841</span>
+                </span>
+              </a>
+
+              <a
+                href="https://google.com/maps/place/Boucherie+%26+Grill+Parisienne/@33.8858255,35.4891462,4310m/data=!3m1!1e3!4m6!3m5!1s0x151f17786b8ee11d:0xded4c94a0912910c!8m2!3d33.8886653!4d35.4793747!16s%2Fg%2F11h3qrvgdp?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
+              >
+                <MapPinIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <span className="text-sm text-gray-700">
+                  <span className="block text-xs text-gray-500">Address</span>
+                  <span className="font-semibold group-hover:text-primary-700">Sakyet l Janzir</span>
+                </span>
+              </a>
+
+              <a
+                href="https://www.google.com/search?q=Parisienne+Beirut+opening+hours"
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
+              >
+                <ClockIcon className="h-5 w-5 text-primary-700 mt-0.5" />
+                <span className="text-sm text-gray-700">
+                  <span className="block text-xs text-gray-500">Operating Hours</span>
+                  <span className="font-semibold group-hover:text-primary-700">7:30 am till 7 pm</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {/* Floating Cart Button (Mobile) */}
       <div className="fixed bottom-6 right-6 z-40 sm:hidden">
