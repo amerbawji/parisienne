@@ -1,28 +1,20 @@
 import type { CartItem } from '../store/cartStore';
 
-const getNumberEmoji = (num: number): string => {
-  const emojis = [
-    '\u0030\uFE0F\u20E3', // 0
-    '\u0031\uFE0F\u20E3', // 1
-    '\u0032\uFE0F\u20E3', // 2
-    '\u0033\uFE0F\u20E3', // 3
-    '\u0034\uFE0F\u20E3', // 4
-    '\u0035\uFE0F\u20E3', // 5
-    '\u0036\uFE0F\u20E3', // 6
-    '\u0037\uFE0F\u20E3', // 7
-    '\u0038\uFE0F\u20E3', // 8
-    '\u0039\uFE0F\u20E3', // 9
-    '\uD83D\uDD1F'        // 10
-  ];
-  if (num <= 10) return emojis[num];
-  return `${num}`;
-};
+const getItemIndexLabel = (num: number): string => `${num}.`;
 
 export interface OrderDetails {
   serviceType: 'takeaway' | 'delivery';
   timing: 'now' | 'scheduled';
   scheduledTime?: string;
   paymentMethod: 'cash' | 'card';
+  locationLabel?: string;
+  locationUrl?: string;
+  locationCoordinates?: string;
+  locationArea?: string;
+  locationStreet?: string;
+  locationBuilding?: string;
+  locationFloor?: string;
+  locationDetails?: string;
 }
 
 const formatDate = (dateString?: string): string => {
@@ -58,6 +50,14 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
     payment: isAr ? '*الدفع:*' : '*Payment:*',
     cash: isAr ? '💵 كاش' : '💵 Cash',
     card: isAr ? '💳 بطاقة' : '💳 Card',
+    location: isAr ? '*الموقع:*' : '*Location:*',
+    area: isAr ? '*المنطقة:*' : '*Area:*',
+    street: isAr ? '*الشارع:*' : '*Street:*',
+    building: isAr ? '*المبنى:*' : '*Building:*',
+    floor: isAr ? '*الطابق:*' : '*Floor:*',
+    details: isAr ? '*تفاصيل إضافية:*' : '*Address Details:*',
+    coordinates: isAr ? '*الإحداثيات:*' : '*Coordinates:*',
+    locationUnavailable: isAr ? 'غير متوفر' : 'Not provided',
     qty: isAr ? 'الكمية:' : 'Qty:',
     price: isAr ? 'السعر:' : 'Price:',
     instructions: isAr ? 'ملاحظات:' : 'Instructions:',
@@ -73,12 +73,38 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
     message += `${t.orderType} ${details.serviceType === 'delivery' ? t.delivery : t.takeaway}\n`;
     message += `${t.time} ${details.timing === 'now' ? t.asap : `📅 ${formatDate(details.scheduledTime)}`}\n`;
     message += `${t.payment} ${details.paymentMethod === 'cash' ? t.cash : t.card}\n`;
+    if (details.serviceType === 'delivery') {
+      if (details.locationUrl) {
+        message += `${t.location} ${details.locationLabel || details.locationUrl}\n`;
+        message += `${details.locationUrl}\n`;
+        if (details.locationArea) {
+          message += `${t.area} ${details.locationArea}\n`;
+        }
+        if (details.locationStreet) {
+          message += `${t.street} ${details.locationStreet}\n`;
+        }
+        if (details.locationBuilding) {
+          message += `${t.building} ${details.locationBuilding}\n`;
+        }
+        if (details.locationFloor) {
+          message += `${t.floor} ${details.locationFloor}\n`;
+        }
+        if (details.locationDetails) {
+          message += `${t.details} ${details.locationDetails}\n`;
+        }
+        if (details.locationCoordinates) {
+          message += `${t.coordinates} ${details.locationCoordinates}\n`;
+        }
+      } else {
+        message += `${t.location} ${t.locationUnavailable}\n`;
+      }
+    }
     message += '--------------------\n\n';
   }
   
   items.forEach((item, index) => {
     // Using index + 1 for the list number
-    const bullet = getNumberEmoji(index + 1);
+    const bullet = getItemIndexLabel(index + 1);
     const itemName = isAr ? (item.name_ar || item.name) : (item.name_en || item.name);
     
     message += `${bullet} ${itemName}\n`;

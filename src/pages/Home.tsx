@@ -12,7 +12,7 @@ import { LanguageToggle } from '../components/UI/LanguageToggle';
 
 // Splash promo configuration
 // Toggle on/off from here
-const SPLASH_PROMO_ENABLED = true;
+const SPLASH_PROMO_ENABLED = false;
 // Place your promo image at: public/promo-ramadan.png
 const SPLASH_PROMO_IMAGE = '/promo-ramadan.png';
 
