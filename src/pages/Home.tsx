@@ -13,6 +13,8 @@ export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [menuSelectionMode, setMenuSelectionMode] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const { getTotalItems, toggleCart } = useCartStore();
   const { language, t } = useLanguageStore();
@@ -43,14 +45,21 @@ export const Home = () => {
     .filter((category): category is typeof categories[0] & { image: string } => category !== null);
 
   const handleCategoryClick = (categoryId: string) => {
+    setMenuSelectionMode(true);
     setExpandedCategory(categoryId);
     setExpandedItemId(null);
-    categoryRefs.current[categoryId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    requestAnimationFrame(() => {
+      const target = categoryRefs.current[categoryId];
+      if (!target) return;
+      const headerHeight = headerRef.current?.offsetHeight ?? 0;
+      const targetTop = window.scrollY + target.getBoundingClientRect().top - headerHeight - 8;
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-0 font-sans">
-      <header className="bg-white shadow-sm sticky top-0 z-40" dir="ltr">
+      <header ref={headerRef} className="bg-white shadow-sm sticky top-0 z-40" dir="ltr">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div className="flex justify-between items-center w-full sm:w-auto">
             <div className="flex items-center gap-2">
@@ -73,7 +82,10 @@ export const Home = () => {
               )}
               placeholder={t('search_placeholder')}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setMenuSelectionMode(false);
+              }}
             />
           </div>
 
@@ -129,7 +141,9 @@ export const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
-              const isOpen = expandedCategory === category.id || searchQuery.length > 0;
+              const isOpen = menuSelectionMode
+                ? expandedCategory === category.id
+                : expandedCategory === category.id || searchQuery.length > 0;
               
               return (
                 <div 
@@ -138,7 +152,7 @@ export const Home = () => {
                     categoryRefs.current[category.id] = el;
                   }}
                   className={cn(
-                    "scroll-mt-28 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
+                    "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
                     isOpen && "md:col-span-2 lg:col-span-3"
                   )}
                 >

@@ -41,15 +41,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
   const cartInstances = cartItems.filter((i) => i.id === item.id);
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
 
-  const [pendingOptions, setPendingOptions] = useState<Record<string, string>>(() => {
-    const defaults: Record<string, string> = {};
-    if (item.options) {
-      item.options.forEach(opt => {
-        defaults[opt.name] = opt.choices[0];
-      });
-    }
-    return defaults;
-  });
+  const [pendingOptions, setPendingOptions] = useState<Record<string, string>>({});
   
   const step = item.weight_step || 1;
   const minQuantity = item.min_quantity || 1;
@@ -71,13 +63,21 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
       minQuantity,
       quantity: pendingQuantity,
     });
+    setPendingOptions({});
     setPendingInstructions('');
     setPendingQuantity(minQuantity);
     if (expanded) onToggle();
   };
 
   const handleOptionChange = (optionName: string, choice: string) => {
-    setPendingOptions(prev => ({ ...prev, [optionName]: choice }));
+    setPendingOptions((prev) => {
+      if (prev[optionName] === choice) {
+        const next = { ...prev };
+        delete next[optionName];
+        return next;
+      }
+      return { ...prev, [optionName]: choice };
+    });
   };
 
   const togglePreset = (preset: string) => {
@@ -120,12 +120,14 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
 
       {/* Content Side */}
       <div className="p-4 flex flex-col flex-grow min-w-0">
-        <div className="flex justify-between items-start gap-2 mb-1">
-          <h3 className="font-bold text-lg text-gray-900 line-clamp-2">{displayName}</h3>
-          <span className="font-bold text-primary-600 shrink-0">
-            ${item.price.toFixed(2)}
-            {item.unit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit)}</span>}
-          </span>
+        <div className="mb-1">
+          <h3 className="font-bold text-lg text-gray-900 break-words whitespace-normal">{displayName}</h3>
+          <div className="mt-1">
+            <span className="font-bold text-primary-600">
+              ${item.price.toFixed(2)}
+              {item.unit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit)}</span>}
+            </span>
+          </div>
         </div>
         
         {displayDesc && (
@@ -185,8 +187,8 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
               />
             </div>
 
-            <div className="flex flex-col gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
-              <div className="w-full">
+            <div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
+              <div className="flex-1">
                 <QuantitySelector
                   quantity={pendingQuantity}
                   onIncrease={() => setPendingQuantity(round(pendingQuantity + step))}
@@ -202,7 +204,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
               </div>
               <Button 
                 onClick={handleAddToCart} 
-                className="w-full flex items-center justify-center gap-2"
+                className="shrink-0 flex items-center justify-center gap-2 px-4"
                 aria-label={t('add')}
               >
                 <PlusIcon className="h-5 w-5" />

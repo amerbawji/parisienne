@@ -12,9 +12,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-385",
@@ -23,9 +64,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-461",
@@ -34,9 +116,50 @@
           "price": 19.55,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-488",
@@ -45,7 +168,49 @@
           "price": 6.15,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-397",
@@ -54,9 +219,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-371",
@@ -65,9 +271,50 @@
           "price": 41.9,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-445",
@@ -76,9 +323,50 @@
           "price": 40.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-485",
@@ -87,7 +375,50 @@
           "price": 8.38,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-508",
@@ -96,7 +427,49 @@
           "price": 5.55,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-377",
@@ -105,9 +478,50 @@
           "price": 30.55,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-356",
@@ -116,9 +530,50 @@
           "price": 33.52,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-355",
@@ -127,9 +582,50 @@
           "price": 58.1,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-514",
@@ -138,7 +634,49 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-513",
@@ -147,7 +685,49 @@
           "price": 14.53,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-486",
@@ -156,7 +736,49 @@
           "price": 14.53,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-523",
@@ -165,7 +787,49 @@
           "price": 12.29,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-522",
@@ -174,7 +838,49 @@
           "price": 47.49,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-423",
@@ -183,9 +889,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-375",
@@ -194,9 +941,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-358",
@@ -205,9 +993,50 @@
           "price": 39.11,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-357",
@@ -216,9 +1045,50 @@
           "price": 22.35,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-363",
@@ -227,9 +1097,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-359",
@@ -238,9 +1149,50 @@
           "price": 43.02,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-401",
@@ -249,9 +1201,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-543",
@@ -260,7 +1253,49 @@
           "price": 5.59,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-487",
@@ -269,7 +1304,49 @@
           "price": 8.38,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-403",
@@ -278,9 +1355,50 @@
           "price": 36.31,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         },
         {
           "id": "prod-459",
@@ -289,9 +1407,50 @@
           "price": 37.43,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Cooking Level",
+              "choices": [
+                "Medium",
+                "Well Done",
+                "Extra Well Done"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Eat-in Tray",
+                "Takeaway Box",
+                "Split Packaging"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No garlic",
+            "No pickles",
+            "Include bread"
+          ]
         }
       ]
     },
@@ -307,7 +1466,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -318,7 +1477,7 @@
           "price": 3.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -329,7 +1488,7 @@
           "price": 4.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -340,7 +1499,7 @@
           "price": 7.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -351,7 +1510,8 @@
           "price": 8.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-337",
@@ -360,7 +1520,7 @@
           "price": 13.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -371,7 +1531,7 @@
           "price": 6.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -382,7 +1542,7 @@
           "price": 7.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -393,7 +1553,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -404,7 +1564,7 @@
           "price": 10.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -415,7 +1575,7 @@
           "price": 13.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -426,7 +1586,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -437,7 +1597,7 @@
           "price": 10.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -448,7 +1608,7 @@
           "price": 3.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -459,7 +1619,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -470,7 +1630,7 @@
           "price": 5.25,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -481,7 +1641,7 @@
           "price": 5.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -492,7 +1652,8 @@
           "price": 7.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-373",
@@ -501,7 +1662,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -512,7 +1673,7 @@
           "price": 3.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -523,7 +1684,7 @@
           "price": 15.58,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -534,7 +1695,8 @@
           "price": 5.59,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-343",
@@ -543,7 +1705,7 @@
           "price": 12.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -554,7 +1716,8 @@
           "price": 12.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-350",
@@ -563,7 +1726,7 @@
           "price": 11.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -574,7 +1737,7 @@
           "price": 8.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -592,7 +1755,39 @@
           "price": 7.82,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-532",
@@ -601,7 +1796,39 @@
           "price": 10.06,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-512",
@@ -610,7 +1837,39 @@
           "price": 5.59,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-528",
@@ -619,7 +1878,39 @@
           "price": 7.82,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-524",
@@ -628,7 +1919,39 @@
           "price": 6.67,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-564",
@@ -637,7 +1960,39 @@
           "price": 7.78,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-515",
@@ -646,7 +2001,39 @@
           "price": 6.71,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-509",
@@ -655,7 +2042,39 @@
           "price": 7.82,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         },
         {
           "id": "prod-497",
@@ -664,7 +2083,39 @@
           "price": 13.41,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
         }
       ]
     },
@@ -680,7 +2131,66 @@
           "price": 1.4,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-544",
@@ -689,7 +2199,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-473",
@@ -698,7 +2267,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-496",
@@ -707,7 +2335,66 @@
           "price": 2.8,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-478",
@@ -716,7 +2403,66 @@
           "price": 5.59,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-453",
@@ -725,9 +2471,67 @@
           "price": 3.91,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-474",
@@ -736,7 +2540,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-481",
@@ -745,7 +2608,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-477",
@@ -754,7 +2676,66 @@
           "price": 4.75,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-545",
@@ -763,7 +2744,66 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-540",
@@ -772,7 +2812,66 @@
           "price": 5.31,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-471",
@@ -781,7 +2880,66 @@
           "price": 3.91,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-470",
@@ -790,7 +2948,66 @@
           "price": 6.15,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-476",
@@ -799,7 +3016,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-555",
@@ -808,7 +3084,66 @@
           "price": 4.75,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-472",
@@ -817,7 +3152,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-475",
@@ -826,7 +3220,66 @@
           "price": 2.8,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-480",
@@ -835,7 +3288,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-479",
@@ -844,7 +3356,66 @@
           "price": 5.59,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-516",
@@ -853,7 +3424,66 @@
           "price": 4.19,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         },
         {
           "id": "prod-537",
@@ -862,7 +3492,66 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Size",
+              "choices": [
+                "1 Pita Loaf",
+                "1.5 Pita Loaves",
+                "2 Pita Loaves"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Coleslaw",
+              "choices": [
+                "With Coleslaw",
+                "No Coleslaw",
+                "Extra Coleslaw"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Add-ons",
+              "choices": [
+                "No Add-on",
+                "Add Tabasco",
+                "Add Fries",
+                "Add Cheese"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "No garlic",
+            "No pickles",
+            "No coleslaw",
+            "Extra tabasco",
+            "Cut in half"
+          ]
         }
       ]
     },
@@ -878,9 +3567,51 @@
           "price": 7.82,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-565",
@@ -889,9 +3620,51 @@
           "price": 8.38,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-566",
@@ -900,9 +3673,51 @@
           "price": 7.78,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-534",
@@ -911,7 +3726,50 @@
           "price": 12.85,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-560",
@@ -920,7 +3778,50 @@
           "price": 8.94,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-546",
@@ -929,9 +3830,51 @@
           "price": 10.62,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-535",
@@ -940,7 +3883,50 @@
           "price": 7.83,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-549",
@@ -949,9 +3935,51 @@
           "price": 7.82,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-536",
@@ -960,7 +3988,50 @@
           "price": 8.38,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-563",
@@ -969,7 +4040,50 @@
           "price": 11.73,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-541",
@@ -978,7 +4092,50 @@
           "price": 11.39,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-552",
@@ -987,7 +4144,50 @@
           "price": 8.33,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         }
       ]
     },
@@ -1003,7 +4203,7 @@
           "price": 19.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1014,7 +4214,7 @@
           "price": 32.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1025,7 +4225,7 @@
           "price": 19.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1036,7 +4236,7 @@
           "price": 19.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1047,7 +4247,7 @@
           "price": 32.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1058,7 +4258,7 @@
           "price": 0.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1069,7 +4269,7 @@
           "price": 31.28,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1080,7 +4280,7 @@
           "price": 17.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1091,7 +4291,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1102,7 +4302,7 @@
           "price": 13.3,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1113,7 +4313,7 @@
           "price": 19.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1124,7 +4324,7 @@
           "price": 32.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1135,7 +4335,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1146,7 +4346,7 @@
           "price": 25.69,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1157,7 +4357,8 @@
           "price": 20.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-414",
@@ -1166,7 +4367,7 @@
           "price": 25.7,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1177,7 +4378,7 @@
           "price": 17.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1188,7 +4389,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1199,7 +4400,7 @@
           "price": 31.28,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1210,7 +4411,7 @@
           "price": 19.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1221,7 +4422,7 @@
           "price": 32.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1232,7 +4433,7 @@
           "price": 36.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1243,7 +4444,7 @@
           "price": 20.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1254,7 +4455,7 @@
           "price": 12.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1265,7 +4466,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1276,7 +4477,7 @@
           "price": 20.12,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1287,7 +4488,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1298,7 +4499,7 @@
           "price": 17.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1309,7 +4510,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1320,7 +4521,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1331,7 +4532,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1342,7 +4543,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1353,7 +4554,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1364,7 +4565,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1382,7 +4583,7 @@
           "price": 38.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1393,7 +4594,7 @@
           "price": 38.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1404,7 +4605,7 @@
           "price": 38.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1415,7 +4616,7 @@
           "price": 38.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1433,7 +4634,8 @@
           "price": 39.11,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-402",
@@ -1442,7 +4644,7 @@
           "price": 8.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1453,7 +4655,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1464,7 +4666,7 @@
           "price": 23.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1475,7 +4677,7 @@
           "price": 17.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1486,7 +4688,7 @@
           "price": 16.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1497,7 +4699,7 @@
           "price": 33.52,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1508,7 +4710,7 @@
           "price": 30.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1519,7 +4721,7 @@
           "price": 33.53,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1530,7 +4732,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1541,7 +4743,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1552,7 +4754,7 @@
           "price": 39.1,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1563,7 +4765,7 @@
           "price": 21.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1574,7 +4776,7 @@
           "price": 38.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1585,7 +4787,7 @@
           "price": 23.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1596,7 +4798,7 @@
           "price": 29.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1607,7 +4809,7 @@
           "price": 20.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1618,7 +4820,7 @@
           "price": 25.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1629,7 +4831,7 @@
           "price": 23.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1640,7 +4842,7 @@
           "price": 27.93,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1651,7 +4853,7 @@
           "price": 23.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1662,7 +4864,7 @@
           "price": 27.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1673,7 +4875,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1684,7 +4886,7 @@
           "price": 23.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1695,7 +4897,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1706,7 +4908,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1724,7 +4926,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1735,7 +4937,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1746,7 +4948,7 @@
           "price": 24.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1757,7 +4959,7 @@
           "price": 30.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1768,7 +4970,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1779,7 +4981,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1790,7 +4992,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1808,7 +5010,7 @@
           "price": 21.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1819,7 +5021,7 @@
           "price": 34.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1830,7 +5032,7 @@
           "price": 14.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1841,7 +5043,7 @@
           "price": 17.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1852,7 +5054,7 @@
           "price": 25.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1863,7 +5065,7 @@
           "price": 22.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1874,7 +5076,7 @@
           "price": 6.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1885,7 +5087,7 @@
           "price": 40.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1896,7 +5098,7 @@
           "price": 28.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1914,7 +5116,7 @@
           "price": 8.95,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1925,7 +5127,8 @@
           "price": 7.27,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-451",
@@ -1934,7 +5137,7 @@
           "price": 8.38,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1945,7 +5148,7 @@
           "price": 9.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -1963,7 +5166,7 @@
           "price": 35.76,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1974,7 +5177,7 @@
           "price": 18.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1985,7 +5188,7 @@
           "price": 22.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -1996,7 +5199,7 @@
           "price": 30.17,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2007,7 +5210,7 @@
           "price": 30.17,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2018,7 +5221,7 @@
           "price": 35.75,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2029,7 +5232,7 @@
           "price": 14.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2040,7 +5243,8 @@
           "price": 6.7,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-465",
@@ -2049,7 +5253,8 @@
           "price": 2.24,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-368",
@@ -2058,7 +5263,7 @@
           "price": 25.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2069,7 +5274,7 @@
           "price": 20.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2080,7 +5285,7 @@
           "price": 24.59,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2091,7 +5296,7 @@
           "price": 20.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2102,7 +5307,8 @@
           "price": 6.71,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-384",
@@ -2111,7 +5317,7 @@
           "price": 22.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2122,7 +5328,7 @@
           "price": 20.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2133,7 +5339,8 @@
           "price": 2.79,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-416",
@@ -2142,7 +5349,7 @@
           "price": 21.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2153,7 +5360,8 @@
           "price": 3.75,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-431",
@@ -2162,7 +5370,8 @@
           "price": 20.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         }
       ]
     },
@@ -2178,7 +5387,30 @@
           "price": 0.72,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-469",
@@ -2187,9 +5419,31 @@
           "price": 0.9,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Quantity",
+              "choices": [
+                "1 Loaf",
+                "1.5 Loaves",
+                "2 Loaves"
+              ]
+            },
+            {
+              "name": "Toasting",
+              "choices": [
+                "Soft",
+                "Light Toast",
+                "Toasted"
+              ]
+            }
+          ],
+          "presets": [
+            "Slice in half",
+            "Extra toasted"
+          ]
         },
         {
           "id": "prod-468",
@@ -2198,7 +5452,30 @@
           "price": 1.67,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Quantity",
+              "choices": [
+                "1 Loaf",
+                "1.5 Loaves",
+                "2 Loaves"
+              ]
+            },
+            {
+              "name": "Toasting",
+              "choices": [
+                "Soft",
+                "Light Toast",
+                "Toasted"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Slice in half",
+            "Extra toasted"
+          ]
         },
         {
           "id": "prod-498",
@@ -2207,7 +5484,30 @@
           "price": 0.72,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-520",
@@ -2216,7 +5516,30 @@
           "price": 0.72,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-538",
@@ -2225,9 +5548,22 @@
           "price": 0.9,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "presets": [
+            "Family pack"
+          ]
         },
         {
           "id": "prod-519",
@@ -2236,7 +5572,30 @@
           "price": 0.72,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-568",
@@ -2245,7 +5604,21 @@
           "price": 2.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
+          ]
         },
         {
           "id": "prod-542",
@@ -2254,7 +5627,21 @@
           "price": 5.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
+          ]
         },
         {
           "id": "prod-517",
@@ -2263,7 +5650,30 @@
           "price": 0.61,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-446",
@@ -2272,9 +5682,31 @@
           "price": 0.5,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 1,
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-507",
@@ -2283,7 +5715,30 @@
           "price": 2.17,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-518",
@@ -2292,7 +5747,30 @@
           "price": 3.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
         },
         {
           "id": "prod-510",
@@ -2301,7 +5779,21 @@
           "price": 0.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
+          ]
         }
       ]
     },
@@ -2317,7 +5809,7 @@
           "price": 15.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2328,7 +5820,8 @@
           "price": 26.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-420",
@@ -2337,7 +5830,8 @@
           "price": 26.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-529",
@@ -2346,7 +5840,8 @@
           "price": 28.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-417",
@@ -2355,7 +5850,8 @@
           "price": 26.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-421",
@@ -2364,7 +5860,8 @@
           "price": 26.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-419",
@@ -2373,7 +5870,8 @@
           "price": 27.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "min_quantity": 0
         },
         {
           "id": "prod-399",
@@ -2382,7 +5880,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         },
@@ -2393,7 +5891,7 @@
           "price": 26.0,
           "unit": "kg",
           "weight_step": 0.1,
-          "min_quantity": 0.2,
+          "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
         }
@@ -2411,7 +5909,41 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-490",
@@ -2420,7 +5952,41 @@
           "price": 3.91,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-492",
@@ -2429,7 +5995,41 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-554",
@@ -2438,7 +6038,41 @@
           "price": 1.68,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-493",
@@ -2447,7 +6081,50 @@
           "price": 3.63,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-557",
@@ -2456,7 +6133,50 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-531",
@@ -2465,7 +6185,50 @@
           "price": 5.03,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-526",
@@ -2474,7 +6237,50 @@
           "price": 3.64,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-533",
@@ -2483,7 +6289,50 @@
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Side",
+              "choices": [
+                "Fries",
+                "Fries + Coleslaw",
+                "Rice",
+                "No Side"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "Regular",
+                "No Garlic",
+                "Extra Garlic"
+              ]
+            },
+            {
+              "name": "Pickles",
+              "choices": [
+                "With Pickles",
+                "No Pickles",
+                "Extra Pickles"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra garlic",
+            "Extra pickles",
+            "No coleslaw",
+            "No fries",
+            "Add tabasco"
+          ]
         },
         {
           "id": "prod-502",
@@ -2492,7 +6341,41 @@
           "price": 3.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-405",
@@ -2501,7 +6384,41 @@
           "price": 0.56,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-521",
@@ -2510,7 +6427,41 @@
           "price": 1.68,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-495",
@@ -2519,7 +6470,41 @@
           "price": 0.84,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-489",
@@ -2528,7 +6513,41 @@
           "price": 1.96,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-527",
@@ -2537,7 +6556,41 @@
           "price": 1.4,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-491",
@@ -2546,7 +6599,41 @@
           "price": 2.23,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-525",
@@ -2555,7 +6642,41 @@
           "price": 3.07,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-447",
@@ -2564,7 +6685,41 @@
           "price": 2.8,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-550",
@@ -2573,7 +6728,41 @@
           "price": 2.51,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-567",
@@ -2582,7 +6771,41 @@
           "price": 1.12,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         },
         {
           "id": "prod-364",
@@ -2591,7 +6814,41 @@
           "price": 4.0,
           "unit": "piece",
           "description_en": "",
-          "description_ar": ""
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Size",
+              "choices": [
+                "Regular",
+                "Large",
+                "Family"
+              ]
+            },
+            {
+              "name": "Spice Level",
+              "choices": [
+                "Mild",
+                "Medium",
+                "Hot"
+              ]
+            },
+            {
+              "name": "Garlic Sauce",
+              "choices": [
+                "No Garlic",
+                "Regular",
+                "Extra Garlic"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Extra lemon",
+            "No onion",
+            "Extra olive oil",
+            "No chili",
+            "Add pickles"
+          ]
         }
       ]
     }
