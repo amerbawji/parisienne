@@ -4918,6 +4918,7 @@
       "id": "cat-184",
       "name_en": "Qarqour Meat",
       "name_ar": "لحم قرقور",
+      "hidden": false,
       "items": [
         {
           "id": "prod-695",

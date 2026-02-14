@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import logo from '../assets/malhame-vertical-logo.svg';
@@ -28,29 +28,36 @@ export const Home = () => {
   const { language, t } = useLanguageStore();
   const totalItems = getTotalItems();
 
-  const categories = menuData.categories;
-  const filteredCategories = categories
-    .map((category) => {
-      const matchingItems = category.items.filter((item) => {
-        if (!searchQuery) return true;
-        const query = searchQuery.toLowerCase();
-        return (
-          item.name_en.toLowerCase().includes(query) ||
-          item.name_ar.includes(query) ||
-          (item.description_en && item.description_en.toLowerCase().includes(query)) ||
-          (item.description_ar && item.description_ar.includes(query))
-        );
-      });
+  const categories = menuData.categories.filter((category) => {
+    const cat = category as typeof category & { hidden?: boolean };
+    return !cat.hidden;
+  });
+  const filteredCategories = useMemo(
+    () =>
+      categories
+        .map((category) => {
+          const matchingItems = category.items.filter((item) => {
+            if (!searchQuery) return true;
+            const query = searchQuery.toLowerCase();
+            return (
+              item.name_en.toLowerCase().includes(query) ||
+              item.name_ar.includes(query) ||
+              (item.description_en && item.description_en.toLowerCase().includes(query)) ||
+              (item.description_ar && item.description_ar.includes(query))
+            );
+          });
 
-      if (matchingItems.length === 0) return null;
+          if (matchingItems.length === 0) return null;
 
-      // Use the image from JSON or a fallback if not present (though we ran a script to add it)
-      const cat = category as typeof category & { image?: string };
-      const image = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(category.name_en)}`;
+          // Use the image from JSON or a fallback if not present (though we ran a script to add it)
+          const cat = category as typeof category & { image?: string };
+          const image = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(category.name_en)}`;
 
-      return { ...category, items: matchingItems, image };
-    })
-    .filter((category): category is typeof categories[0] & { image: string } => category !== null);
+          return { ...category, items: matchingItems, image };
+        })
+        .filter((category): category is typeof categories[0] & { image: string } => category !== null),
+    [categories, searchQuery]
+  );
 
   const handleCategoryClick = (categoryId: string) => {
     setMenuSelectionMode(true);
@@ -73,7 +80,7 @@ export const Home = () => {
             <button
               onClick={() => setShowSplashPromo(false)}
               className="absolute top-2 right-2 z-10 h-9 w-9 rounded-full bg-black/60 text-white hover:bg-black/75 transition-colors flex items-center justify-center"
-              aria-label="Close promo"
+              aria-label={t('close_promo')}
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -81,7 +88,7 @@ export const Home = () => {
             {SPLASH_PROMO_IMAGE ? (
               <img
                 src={SPLASH_PROMO_IMAGE}
-                alt="Promotional offer"
+                alt={t('promo_offer_alt')}
                 className="w-full h-auto object-cover"
               />
             ) : (
@@ -113,13 +120,18 @@ export const Home = () => {
             )}>
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
             </div>
+            <label htmlFor="menu-search" className="sr-only">
+              {t('search_placeholder')}
+            </label>
             <input
+              id="menu-search"
               type="text"
               className={cn(
                 "block w-full py-2 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out text-start",
                 language === 'ar' ? "pr-10 pl-3" : "pl-10 pr-3"
               )}
               placeholder={t('search_placeholder')}
+              aria-label={t('search_placeholder')}
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -154,7 +166,7 @@ export const Home = () => {
             >
               <div className="flex gap-2 min-w-max lg:min-w-0 lg:flex-wrap">
                 {filteredCategories.map((category) => {
-                  const isActive = expandedCategory === category.id;
+                  const isActive = menuSelectionMode && expandedCategory === category.id;
                   return (
                     <button
                       key={`menu-${category.id}`}
@@ -242,7 +254,7 @@ export const Home = () => {
       <footer className="border-t border-gray-200 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 sm:p-5">
-            <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-3">Contact & Hours</p>
+            <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-3">{t('contact_hours')}</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <a
                 href="tel:01814841"
@@ -250,7 +262,7 @@ export const Home = () => {
               >
                 <PhoneIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
-                  <span className="block text-xs text-gray-500">Phone</span>
+                  <span className="block text-xs text-gray-500">{t('phone')}</span>
                   <span className="font-semibold group-hover:text-primary-700">01814841</span>
                 </span>
               </a>
@@ -263,8 +275,8 @@ export const Home = () => {
               >
                 <MapPinIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
-                  <span className="block text-xs text-gray-500">Address</span>
-                  <span className="font-semibold group-hover:text-primary-700">Sakyet l Janzir</span>
+                  <span className="block text-xs text-gray-500">{t('address')}</span>
+                  <span className="font-semibold group-hover:text-primary-700">{t('store_location')}</span>
                 </span>
               </a>
 
@@ -276,7 +288,7 @@ export const Home = () => {
               >
                 <ClockIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
-                  <span className="block text-xs text-gray-500">Operating Hours</span>
+                  <span className="block text-xs text-gray-500">{t('operating_hours')}</span>
                   <span className="font-semibold group-hover:text-primary-700">7:30 am till 7 pm</span>
                 </span>
               </a>
@@ -290,7 +302,7 @@ export const Home = () => {
         <Button
           className="rounded-full w-14 h-14 p-0 flex items-center justify-center shadow-lg shadow-primary-600/30 bg-primary-600 hover:bg-primary-700 text-white relative"
           onClick={toggleCart}
-          aria-label="View Cart"
+          aria-label={t('view_cart')}
         >
           <ShoppingBagIcon className="h-6 w-6" />
           {totalItems > 0 && (

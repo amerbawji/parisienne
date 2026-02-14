@@ -76,6 +76,13 @@ export const translations = {
     delivery_building_placeholder: "Enter building",
     delivery_floor: "Floor",
     delivery_floor_placeholder: "Enter floor",
+    close_promo: "Close promo",
+    promo_offer_alt: "Promotional offer",
+    contact_hours: "Contact & Hours",
+    phone: "Phone",
+    address: "Address",
+    operating_hours: "Operating Hours",
+    store_location: "Sakyet l Janzir",
   },
   ar: {
     search_placeholder: "ابحث عن الأصناف...",
@@ -154,6 +161,13 @@ export const translations = {
     delivery_building_placeholder: "أدخل المبنى",
     delivery_floor: "الطابق",
     delivery_floor_placeholder: "أدخل الطابق",
+    close_promo: "إغلاق العرض",
+    promo_offer_alt: "عرض ترويجي",
+    contact_hours: "التواصل وساعات العمل",
+    phone: "الهاتف",
+    address: "العنوان",
+    operating_hours: "ساعات العمل",
+    store_location: "ساقية الجنزير",
   }
 };
 
