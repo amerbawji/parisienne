@@ -126,7 +126,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
       onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
-      <div className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64' : 'w-32 sm:w-48'}`}>
+      <div className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64' : 'w-32 h-24 sm:w-40 sm:h-28'}`}>
         <img
           src={imageUrl}
           alt={displayName}

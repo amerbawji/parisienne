@@ -4,7 +4,7 @@
       "id": "cat-8",
       "name_en": "Grilled",
       "name_ar": "مشوي",
-      "image": "/categories/grilled.JPG",
+      "image": "/categories/grilled.webp",
       "items": [
         {
           "id": "prod-434",
@@ -1150,7 +1150,7 @@
       "id": "cat-77",
       "name_en": "Sandwiches",
       "name_ar": "سندويشات",
-      "image": "/categories/sandwiches.JPG",
+      "image": "/categories/sandwiches.webp",
       "items": [
         {
           "id": "prod-544",
@@ -2247,7 +2247,7 @@
       "id": "cat-100",
       "name_en": "Plates",
       "name_ar": "صحون",
-      "image": "/categories/plates.JPG",
+      "image": "/categories/plates.webp",
       "items": [
         {
           "id": "prod-454",
@@ -2727,7 +2727,7 @@
       "id": "cat-261",
       "name_en": "Lahm B Aajin",
       "name_ar": "لحم بعجين",
-      "image": "/categories/lahm b aajin.JPG",
+      "image": "/categories/lahm b aajin.webp",
       "items": [
         {
           "id": "prod-410",
@@ -2819,7 +2819,7 @@
       "id": "cat-38",
       "name_en": "Chicken",
       "name_ar": "دجاج",
-      "image": "/categories/chicken.JPG",
+      "image": "/categories/chicken.webp",
       "items": [
         {
           "id": "prod-605",
@@ -3109,7 +3109,7 @@
       "id": "cat-66",
       "name_en": "Frozen Items",
       "name_ar": "مثلجات",
-      "image": "/categories/frozen items.JPG",
+      "image": "/categories/frozen items.webp",
       "items": [
         {
           "id": "prod-503",
@@ -3486,7 +3486,7 @@
       "id": "cat-260",
       "name_en": "Appetizers",
       "name_ar": "مقبلات",
-      "image": "/categories/appetizers.JPG",
+      "image": "/categories/appetizers.webp",
       "items": [
         {
           "id": "prod-494",
@@ -3768,6 +3768,7 @@
           "id": "prod-531",
           "name_en": "Plate Tabbouleh",
           "name_ar": "صحن تبوله",
+          "image": "/images/Plate Tabbouleh.JPG",
           "price": 5.03,
           "unit": "piece",
           "description_en": "",
@@ -3872,6 +3873,7 @@
           "id": "prod-533",
           "name_en": "Plate Fattoush",
           "name_ar": "صحن فتوش",
+          "image": "/images/Plate Fattoush.JPG",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
@@ -3918,49 +3920,6 @@
             "No coleslaw",
             "No fries",
             "Add tabasco"
-          ]
-        },
-        {
-          "id": "prod-502",
-          "name_en": "Boxes Plastic",
-          "name_ar": "علب بلاستيك",
-          "price": 3,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
           ]
         },
         {
@@ -5699,7 +5658,7 @@
       "id": "cat-233",
       "name_en": "Beverages",
       "name_ar": "مرطبات",
-      "image": "/categories/beverages.jpg",
+      "image": "/categories/beverages.webp",
       "items": [
         {
           "id": "prod-499",
