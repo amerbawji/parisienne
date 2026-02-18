@@ -18,6 +18,7 @@ export interface MenuItem {
   weight_step?: number;
   min_quantity?: number;
   options?: { name: string; choices: string[] }[];
+  option_price_overrides?: Record<string, Record<string, number>>;
   presets?: string[];
 }
 
@@ -50,13 +51,33 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
   const [pendingInstructions, setPendingInstructions] = useState('');
   const [pendingQuantity, setPendingQuantity] = useState(minQuantity);
 
+  const getUnitPrice = (): number | null => {
+    const overrides = item.option_price_overrides;
+    if (!overrides) return item.price;
+
+    let matchedPrice: number | null = null;
+
+    Object.entries(pendingOptions).forEach(([optionName, choice]) => {
+      const priceForChoice = overrides[optionName]?.[choice];
+      if (typeof priceForChoice === 'number') {
+        matchedPrice = priceForChoice;
+      }
+    });
+
+    return matchedPrice;
+  };
+
+  const unitPrice = getUnitPrice();
+
   const handleAddToCart = () => {
+    if (unitPrice === null) return;
+
     addItem({
       id: item.id,
       name: language === 'ar' ? item.name_ar : item.name_en, // Current display name
       name_en: item.name_en,
       name_ar: item.name_ar,
-      price: item.price,
+      price: unitPrice,
       selectedOptions: pendingOptions,
       instructions: pendingInstructions,
       step,
@@ -125,10 +146,16 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
         <div className="mb-1">
           <h3 className="font-bold text-lg text-gray-900 break-words whitespace-normal">{displayName}</h3>
           <div className="mt-1">
-            <span className="font-bold text-primary-600">
-              ${item.price.toFixed(2)}
-              {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
-            </span>
+            {unitPrice === null ? (
+              <span className="text-sm text-gray-500">
+                {language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}
+              </span>
+            ) : (
+              <span className="font-bold text-primary-600">
+                ${unitPrice.toFixed(2)}
+                {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
+              </span>
+            )}
           </div>
         </div>
         
@@ -208,6 +235,7 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
                 onClick={handleAddToCart} 
                 className="shrink-0 flex items-center justify-center gap-2 px-4"
                 aria-label={t('add')}
+                disabled={unitPrice === null}
               >
                 <PlusIcon className="h-5 w-5" />
                 {t('add')}

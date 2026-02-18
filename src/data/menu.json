@@ -2,8 +2,9 @@
   "categories": [
     {
       "id": "cat-8",
-      "name_en": "Grilled Tray",
-      "name_ar": "جاط مشوي",
+      "name_en": "Grilled",
+      "name_ar": "مشوي",
+      "image": "/categories/grilled.JPG",
       "items": [
         {
           "id": "prod-434",
@@ -317,58 +318,6 @@
           ]
         },
         {
-          "id": "prod-445",
-          "name_en": "Cubes Faux Fillet Grilled",
-          "name_ar": "شقف فوفيليه مشوي",
-          "price": 40.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        },
-        {
           "id": "prod-485",
           "name_en": "Plate Arayes",
           "name_ar": "صحن عرايس",
@@ -418,109 +367,6 @@
             "No coleslaw",
             "No fries",
             "Add tabasco"
-          ]
-        },
-        {
-          "id": "prod-508",
-          "name_en": "Grilled Bone-in Breast (each)",
-          "name_ar": "صدر بعضمه مشوي عدد",
-          "price": 5.55,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        },
-        {
-          "id": "prod-377",
-          "name_en": "Grilled Boneless Breast",
-          "name_ar": "صدر مسحب مشوي",
-          "price": 30.55,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
           ]
         },
         {
@@ -619,57 +465,6 @@
               ]
             }
           ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        },
-        {
-          "id": "prod-514",
-          "name_en": "Grilled Chicken Thigh (each)",
-          "name_ar": "فخد دجاج مشوي عدد",
-          "price": 4.47,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "min_quantity": 1,
           "presets": [
             "Extra garlic",
             "Extra pickles",
@@ -1247,57 +1042,6 @@
           ]
         },
         {
-          "id": "prod-543",
-          "name_en": "Marrow Lamb Grilled",
-          "name_ar": "نخاع غنم مشوي",
-          "price": 5.59,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        },
-        {
           "id": "prod-487",
           "name_en": "Half Grilled Chicken",
           "name_ar": "نصف فروج مشوي",
@@ -1399,723 +1143,6 @@
             "No pickles",
             "Include bread"
           ]
-        },
-        {
-          "id": "prod-459",
-          "name_en": "Hamburger Grilled",
-          "name_ar": "همبرغر مشوي",
-          "price": 37.43,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "cat-38",
-      "name_en": "Chicken",
-      "name_ar": "دجاج",
-      "items": [
-        {
-          "id": "prod-605",
-          "name_en": "Escalope Chicken",
-          "name_ar": "اسكلوب دجاج",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-349",
-          "name_en": "Wings",
-          "name_ar": "جوانح",
-          "price": 3.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-450",
-          "name_en": "Wings Marinated",
-          "name_ar": "جوانح متبله",
-          "price": 4.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-372",
-          "name_en": "Drumstick",
-          "name_ar": "دبوس",
-          "price": 7.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-505",
-          "name_en": "Zghloul",
-          "name_ar": "زغلول",
-          "price": 8.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-337",
-          "name_en": "Stroganoff Chicken",
-          "name_ar": "سترغنوف دجاج",
-          "price": 13.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-351",
-          "name_en": "Liver Chicken",
-          "name_ar": "سوده دجاج",
-          "price": 6.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-440",
-          "name_en": "Liver Chicken Cleaned",
-          "name_ar": "سوده دجاج منضفه",
-          "price": 7.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-360",
-          "name_en": "Shawarma Chicken",
-          "name_ar": "شاورما دجاج",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-340",
-          "name_en": "Breast Chicken Bone-in",
-          "name_ar": "صدر دجاج بعضمه",
-          "price": 10.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-342",
-          "name_en": "Breast Chicken Boneless",
-          "name_ar": "صدر دجاج مسحب",
-          "price": 13.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-344",
-          "name_en": "Tawook",
-          "name_ar": "طاووق",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-435",
-          "name_en": "Fajita",
-          "name_ar": "فاهيتا",
-          "price": 10.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-339",
-          "name_en": "Thigh Chicken Bone-in",
-          "name_ar": "فخد دجاج بعضمه",
-          "price": 3.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-441",
-          "name_en": "Boneless Chicken Thigh with Skin",
-          "name_ar": "فخد دجاج مسحب مع جلد",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-422",
-          "name_en": "Chicken Tanmiya",
-          "name_ar": "فروج تنميه",
-          "price": 5.25,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-336",
-          "name_en": "Chicken Whole",
-          "name_ar": "فروج كامل",
-          "price": 5.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-426",
-          "name_en": "Chicken Moutabal",
-          "name_ar": "فروج متبل",
-          "price": 7.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-373",
-          "name_en": "Chicken Boneless",
-          "name_ar": "فروج مسحب",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-412",
-          "name_en": "Gizzards",
-          "name_ar": "قوانص",
-          "price": 3.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-346",
-          "name_en": "Kibbeh Chicken",
-          "name_ar": "كبه دجاج",
-          "price": 15.58,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-467",
-          "name_en": "Carton Eggs",
-          "name_ar": "كرتونة بيض",
-          "price": 5.59,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-343",
-          "name_en": "Crispy",
-          "name_ar": "كريسبي",
-          "price": 12.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-551",
-          "name_en": "Crispy Tanmiya",
-          "name_ar": "كريسبي تنميه",
-          "price": 12.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-350",
-          "name_en": "Kafta Chicken",
-          "name_ar": "كفته دجاج",
-          "price": 11.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-348",
-          "name_en": "Nuggets",
-          "name_ar": "ناغتس",
-          "price": 8.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-66",
-      "name_en": "Fish and Frozen Items",
-      "name_ar": "سمك ومثلجات",
-      "items": [
-        {
-          "id": "prod-503",
-          "name_en": "Discs Kibbeh Beef",
-          "name_ar": "اقراص كبة بقر",
-          "price": 7.82,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-532",
-          "name_en": "Discs Kibbeh Fried",
-          "name_ar": "اقراص كبة مقلية",
-          "price": 10.06,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-512",
-          "name_en": "Ruqaqat with Cheese",
-          "name_ar": "رقاقات بجبنه",
-          "price": 5.59,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-528",
-          "name_en": "Ruqaqat Fried",
-          "name_ar": "رقاقات مقليه",
-          "price": 7.82,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-524",
-          "name_en": "Sambousek Meat",
-          "name_ar": "سمبوسك لحمه",
-          "price": 6.67,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-564",
-          "name_en": "Sambousek Meat Fried",
-          "name_ar": "سمبوسك لحمه مقليه",
-          "price": 7.78,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-515",
-          "name_en": "Shish Barak",
-          "name_ar": "شيشبرك",
-          "price": 6.71,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-509",
-          "name_en": "Tray Kibbeh Small",
-          "name_ar": "صنية كبة صغيره",
-          "price": 7.82,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-497",
-          "name_en": "Tray Kibbeh Large",
-          "name_ar": "صنية كبه كبيره",
-          "price": 13.41,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
         }
       ]
     },
@@ -2123,75 +1150,8 @@
       "id": "cat-77",
       "name_en": "Sandwiches",
       "name_ar": "سندويشات",
+      "image": "/categories/sandwiches.JPG",
       "items": [
-        {
-          "id": "prod-539",
-          "name_en": "Bread Garlic Bread",
-          "name_ar": "خبز متوم",
-          "price": 1.4,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Size",
-              "choices": [
-                "1 Pita Loaf",
-                "1.5 Pita Loaves",
-                "2 Pita Loaves"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Coleslaw",
-              "choices": [
-                "With Coleslaw",
-                "No Coleslaw",
-                "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Add-ons",
-              "choices": [
-                "No Add-on",
-                "Add Tabasco",
-                "Add Fries",
-                "Add Cheese"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "No garlic",
-            "No pickles",
-            "No coleslaw",
-            "Extra tabasco",
-            "Cut in half"
-          ]
-        },
         {
           "id": "prod-544",
           "name_en": "Sandwich Escalope",
@@ -2397,77 +1357,9 @@
           ]
         },
         {
-          "id": "prod-478",
-          "name_en": "Sandwich Eggs Lamb",
-          "name_ar": "سندويش بيض غنم",
-          "price": 5.59,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Size",
-              "choices": [
-                "1 Pita Loaf",
-                "1.5 Pita Loaves",
-                "2 Pita Loaves"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Coleslaw",
-              "choices": [
-                "With Coleslaw",
-                "No Coleslaw",
-                "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Add-ons",
-              "choices": [
-                "No Add-on",
-                "Add Tabasco",
-                "Add Fries",
-                "Add Cheese"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "No garlic",
-            "No pickles",
-            "No coleslaw",
-            "Extra tabasco",
-            "Cut in half"
-          ]
-        },
-        {
           "id": "prod-453",
-          "name_en": "Sandwich Chicken Burger",
-          "name_ar": "سندويش تشيكن برغر",
+          "name_en": "Chicken Burger",
+          "name_ar": "تشيكن برغر",
           "price": 3.91,
           "unit": "kg",
           "weight_step": 0.1,
@@ -2674,74 +1566,6 @@
           "name_en": "Sandwich Liver",
           "name_ar": "سندويش سوده",
           "price": 4.75,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Size",
-              "choices": [
-                "1 Pita Loaf",
-                "1.5 Pita Loaves",
-                "2 Pita Loaves"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Coleslaw",
-              "choices": [
-                "With Coleslaw",
-                "No Coleslaw",
-                "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Add-ons",
-              "choices": [
-                "No Add-on",
-                "Add Tabasco",
-                "Add Fries",
-                "Add Cheese"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "No garlic",
-            "No pickles",
-            "No coleslaw",
-            "Extra tabasco",
-            "Cut in half"
-          ]
-        },
-        {
-          "id": "prod-545",
-          "name_en": "Sandwich Cubes Faux Fillet",
-          "name_ar": "سندويش شقف فوفيليه",
-          "price": 4.47,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
@@ -3350,142 +2174,6 @@
           ]
         },
         {
-          "id": "prod-479",
-          "name_en": "Sandwich Marrow",
-          "name_ar": "سندويش نخاعات",
-          "price": 5.59,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Size",
-              "choices": [
-                "1 Pita Loaf",
-                "1.5 Pita Loaves",
-                "2 Pita Loaves"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Coleslaw",
-              "choices": [
-                "With Coleslaw",
-                "No Coleslaw",
-                "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Add-ons",
-              "choices": [
-                "No Add-on",
-                "Add Tabasco",
-                "Add Fries",
-                "Add Cheese"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "No garlic",
-            "No pickles",
-            "No coleslaw",
-            "Extra tabasco",
-            "Cut in half"
-          ]
-        },
-        {
-          "id": "prod-516",
-          "name_en": "Sandwich Lean Meat",
-          "name_ar": "سندويش هبره",
-          "price": 4.19,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Size",
-              "choices": [
-                "1 Pita Loaf",
-                "1.5 Pita Loaves",
-                "2 Pita Loaves"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Coleslaw",
-              "choices": [
-                "With Coleslaw",
-                "No Coleslaw",
-                "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Add-ons",
-              "choices": [
-                "No Add-on",
-                "Add Tabasco",
-                "Add Fries",
-                "Add Cheese"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "No garlic",
-            "No pickles",
-            "No coleslaw",
-            "Extra tabasco",
-            "Cut in half"
-          ]
-        },
-        {
           "id": "prod-537",
           "name_en": "Sandwich Hamburger",
           "name_ar": "سندويش همبرغر",
@@ -3559,6 +2247,7 @@
       "id": "cat-100",
       "name_en": "Plates",
       "name_ar": "صحون",
+      "image": "/categories/plates.JPG",
       "items": [
         {
           "id": "prod-454",
@@ -3772,111 +2461,6 @@
           ]
         },
         {
-          "id": "prod-560",
-          "name_en": "Plate Cubes Faux Fillet",
-          "name_ar": "صحن شقف فوفيليه",
-          "price": 8.94,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
-        },
-        {
-          "id": "prod-546",
-          "name_en": "Plate Cubes Fillet",
-          "name_ar": "صحن شقف فيليه",
-          "price": 10.62,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
-        },
-        {
           "id": "prod-535",
           "name_en": "Plate Tawook",
           "name_ar": "صحن طاووق",
@@ -4034,61 +2618,9 @@
           ]
         },
         {
-          "id": "prod-563",
+          "id": "prod-541",
           "name_en": "Mixed Plate",
           "name_ar": "صحن مشكل",
-          "price": 11.73,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
-        },
-        {
-          "id": "prod-541",
-          "name_en": "Mixed Plate - Lamb Strips",
-          "name_ar": "صحن مشكل - فتايل",
           "price": 11.39,
           "unit": "piece",
           "description_en": "",
@@ -4192,990 +2724,108 @@
       ]
     },
     {
-      "id": "cat-114",
-      "name_en": "Beef",
-      "name_ar": "لحم بقر",
+      "id": "cat-261",
+      "name_en": "Lahm B Aajin",
+      "name_ar": "لحم بعجين",
+      "image": "/categories/lahm b aajin.JPG",
       "items": [
         {
-          "id": "prod-448",
-          "name_en": "Escalope Meat",
-          "name_ar": "اسكلوب لحمه",
-          "price": 19.0,
+          "id": "prod-410",
+          "name_en": "Sfiha Baalbekiyeh",
+          "name_ar": "سفيحة بعلبكية",
+          "price": 30.17,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-300",
-          "name_en": "Escalope Meat Fillet",
-          "name_ar": "اسكلوب لحمه فييل",
-          "price": 32.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-376",
-          "name_en": "Entrecote",
-          "name_ar": "انتركوت",
-          "price": 19.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-301",
-          "name_en": "Beef Steak Beef",
-          "name_ar": "بفتاك بقر",
-          "price": 19.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-307",
-          "name_en": "Beef Steak Fillet",
-          "name_ar": "بفتاك فيليه",
-          "price": 32.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-575",
-          "name_en": "Parsley Extra",
-          "name_ar": "بقدونس زياده",
-          "price": 0.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-437",
-          "name_en": "Beiruti Veal",
-          "name_ar": "بيروتيه عجل",
-          "price": 31.28,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-316",
-          "name_en": "Dawood Basha",
-          "name_ar": "داوودباشا",
-          "price": 17.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-306",
-          "name_en": "Roasto",
-          "name_ar": "روستو",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-406",
-          "name_en": "Rib Beef",
-          "name_ar": "زور بقر",
-          "price": 13.3,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-312",
-          "name_en": "Stroganoff Beef",
-          "name_ar": "سترغنوف بقر",
-          "price": 19.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-297",
-          "name_en": "Stroganoff Fillet",
-          "name_ar": "سترغنوف فيليه",
-          "price": 32.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-305",
-          "name_en": "Sujuk",
-          "name_ar": "سجق",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-335",
-          "name_en": "Sfiha Baalbekiyeh Beef",
-          "name_ar": "سفيحة بعلبكية بقر",
-          "price": 25.69,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-424",
-          "name_en": "Liver Beef",
-          "name_ar": "سوده بقر",
-          "price": 20.0,
-          "unit": "piece",
           "description_en": "",
           "description_ar": "",
-          "min_quantity": 0
+          "options": [
+            {
+              "name": "Meat Type",
+              "choices": [
+                "Beef (بقر)",
+                "Lamb (غنم)",
+                "Lamb and Veal (غنم وعجل)"
+              ]
+            }
+          ],
+          "option_price_overrides": {
+            "Meat Type": {
+              "Beef (بقر)": 25.69,
+              "Lamb (غنم)": 33.52,
+              "Lamb and Veal (غنم وعجل)": 30.17
+            }
+          }
         },
         {
-          "id": "prod-414",
-          "name_en": "Shamiyeh Veal",
-          "name_ar": "شاميه عجل",
-          "price": 25.7,
+          "id": "prod-693",
+          "name_en": "Lahm b Aajin Shamiyeh",
+          "name_ar": "لحم بعجين شاميه",
+          "price": 30.17,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-313",
-          "name_en": "Shawarma Meat",
-          "name_ar": "شاورما لحمه",
-          "price": 17.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-302",
-          "name_en": "Cubes Veal",
-          "name_ar": "شقف عجل",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-690",
-          "name_en": "Tripoli Style Veal",
-          "name_ar": "طرابلسية عجل",
-          "price": 31.28,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-310",
-          "name_en": "Faux Fillet",
-          "name_ar": "فوفيليه",
-          "price": 19.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-317",
-          "name_en": "Fillet",
-          "name_ar": "فيليه",
-          "price": 32.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-430",
-          "name_en": "Fillet Baladi",
-          "name_ar": "فيليه بلدي",
-          "price": 36.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-309",
-          "name_en": "Kibbeh Veal with Bulgur",
-          "name_ar": "كبه عجل مع برغل",
-          "price": 20.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-443",
-          "name_en": "Shoulder and Cutlets Veal",
-          "name_ar": "كتف وكستلاته عجل",
-          "price": 12.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-308",
-          "name_en": "Kafta Beef",
-          "name_ar": "كفته بقر",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-311",
-          "name_en": "Meat Bi Ajeen Beef",
-          "name_ar": "لحم بعجين بقر",
-          "price": 20.12,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-413",
-          "name_en": "Meat Veal",
-          "name_ar": "لحم عجل",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-298",
-          "name_en": "Pounded Beef",
-          "name_ar": "مدقوقة بقر",
-          "price": 17.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-299",
-          "name_en": "Minced Beef",
-          "name_ar": "مفرومه بقر",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-314",
-          "name_en": "Minced Veal Lean Meat",
-          "name_ar": "مفرومه عجل هبره",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-304",
-          "name_en": "Makanek",
-          "name_ar": "مقانق",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-315",
-          "name_en": "Shanks Beef",
-          "name_ar": "موزات بقر",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-379",
-          "name_en": "Lean Meat Beef",
-          "name_ar": "هبره بقر",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-303",
-          "name_en": "Hamburger",
-          "name_ar": "همبرغر",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-150",
-      "name_en": "White Veal",
-      "name_ar": "لحم عجل ابيض",
-      "items": [
-        {
-          "id": "prod-442",
-          "name_en": "Beef Steak White",
-          "name_ar": ".بفتاك ابيض",
-          "price": 38.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-674",
-          "name_en": "Meat Veal White",
-          "name_ar": ".لحم عجل ابيض",
-          "price": 38.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-383",
-          "name_en": "Beef Steak White",
-          "name_ar": "بفتاك ابيض",
-          "price": 38.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-391",
-          "name_en": "Meat Veal White",
-          "name_ar": "لحم عجل ابيض",
-          "price": 38.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-156",
-      "name_en": "Lamb",
-      "name_ar": "لحم غنم",
-      "items": [
-        {
-          "id": "prod-432",
-          "name_en": "Beiruti Lamb",
-          "name_ar": "بيروتيه غنم",
-          "price": 39.11,
-          "unit": "piece",
           "description_en": "",
           "description_ar": "",
-          "min_quantity": 0
+          "options": [
+            {
+              "name": "Meat Type",
+              "choices": [
+                "Beef (بقر)",
+                "Lamb (غنم)",
+                "Lamb and Veal (غنم وعجل)"
+              ]
+            }
+          ],
+          "option_price_overrides": {
+            "Meat Type": {
+              "Beef (بقر)": 25.7,
+              "Lamb (غنم)": 33.53,
+              "Lamb and Veal (غنم وعجل)": 30.17
+            }
+          }
         },
         {
-          "id": "prod-402",
-          "name_en": "Lamb",
-          "name_ar": "خاروف",
-          "price": 8.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-331",
-          "name_en": "Fat",
-          "name_ar": "دهنة",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-382",
-          "name_en": "Neck Lamb",
-          "name_ar": "رقبة غنم",
-          "price": 23.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-433",
-          "name_en": "Neck Lamb Bone-in",
-          "name_ar": "رقبة غنم بعضمه",
-          "price": 17.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-374",
-          "name_en": "Rib Lamb",
-          "name_ar": "زور غنم",
-          "price": 16.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-334",
-          "name_en": "Sfiha Baalbekiyeh Lamb",
-          "name_ar": "سفيحة بعلبكية غنم",
-          "price": 33.52,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-332",
-          "name_en": "Liver Lamb",
-          "name_ar": "سوده غنم",
-          "price": 30.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-408",
-          "name_en": "Shamiyeh Lamb",
-          "name_ar": "شاميه غنم",
-          "price": 33.53,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-320",
-          "name_en": "Cubes Lamb",
-          "name_ar": "شقف غنم",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-409",
-          "name_en": "Shahbaiyeh Lamb",
-          "name_ar": "شهبايه غنم",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-691",
-          "name_en": "Tripoli Style Lamb",
-          "name_ar": "طرابلسية غنم",
-          "price": 39.1,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-362",
-          "name_en": "Lamb Bone-in",
-          "name_ar": "غنم بعضمه",
-          "price": 21.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-319",
-          "name_en": "Strips",
-          "name_ar": "فتايل",
-          "price": 38.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-330",
-          "name_en": "Thigh Lamb Bone-in",
-          "name_ar": "فخد غنم بعضمه",
-          "price": 23.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-322",
-          "name_en": "Kibbeh Lamb with Bulgur",
-          "name_ar": "كبه غنم مع برغل",
-          "price": 29.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-328",
-          "name_en": "Shoulder Lamb Bone-in",
-          "name_ar": "كتف غنم بعضمه",
-          "price": 20.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-318",
-          "name_en": "Cutlets Lamb",
-          "name_ar": "كستلاته غنم",
-          "price": 25.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-323",
-          "name_en": "Kafta Lamb",
-          "name_ar": "كفته غنم",
-          "price": 23.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-333",
-          "name_en": "Meat Bi Ajeen Lamb",
-          "name_ar": "لحم بعجين غنم",
-          "price": 27.93,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-361",
-          "name_en": "Meat Lamb",
-          "name_ar": "لحم غنم",
-          "price": 23.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-352",
-          "name_en": "Leg Lamb",
-          "name_ar": "لعبة غنم",
-          "price": 27.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-321",
-          "name_en": "Pounded Lamb",
-          "name_ar": "مدقوقه غنم",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-324",
-          "name_en": "Minced Lamb",
-          "name_ar": "مفرومه غنم",
-          "price": 23.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-326",
-          "name_en": "Shanks Lamb",
-          "name_ar": "موزات غنم",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-380",
-          "name_en": "Lean Meat Lamb",
-          "name_ar": "هبره غنم",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-184",
-      "name_en": "Qarqour Meat",
-      "name_ar": "لحم قرقور",
-      "hidden": false,
-      "items": [
-        {
-          "id": "prod-695",
-          "name_en": "Meat Qarqour",
-          "name_ar": ".لحم قرقور",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-389",
-          "name_en": "Cubes Qarqour",
-          "name_ar": "شقف قرقور",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-392",
-          "name_en": "Thigh Qarqour Bone-in",
-          "name_ar": "فخد قرقور بعضمه",
-          "price": 24.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-386",
-          "name_en": "Cutlets Qarqour",
-          "name_ar": "كستلاته قرقور",
-          "price": 30.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-378",
-          "name_en": "Meat Qarqour",
-          "name_ar": "لحم قرقور",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-387",
-          "name_en": "Minced Qarqour",
-          "name_ar": "مفرومه قرقور",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-388",
-          "name_en": "Shanks Qarqour",
-          "name_ar": "موزات قرقور",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-193",
-      "name_en": "Skewered Meat",
-      "name_ar": "لحم مشكوك",
-      "items": [
-        {
-          "id": "prod-582",
-          "name_en": "Cubes Faux Fillet Skewered",
-          "name_ar": "شقف فوفيلية مشكوك",
-          "price": 21.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-583",
-          "name_en": "Cubes Fillet Skewered",
-          "name_ar": "شقف فيليه مشكوك",
-          "price": 34.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-581",
-          "name_en": "Tawook Skewered",
-          "name_ar": "طاووق مشكوك",
-          "price": 14.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-585",
-          "name_en": "Kafta Beef Skewered",
-          "name_ar": "كفته بقر مشكوك",
-          "price": 17.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-584",
-          "name_en": "Kafta Lamb Skewered",
-          "name_ar": "كفته غنم مشكوك",
-          "price": 25.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-586",
-          "name_en": "Kafta Lamb and Veal Skewered",
-          "name_ar": "كفته غنم وعجل مشكوك",
-          "price": 22.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-589",
-          "name_en": "Kilo Wings Skewered",
-          "name_ar": "كيلو جوانح مشكوك",
-          "price": 6.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-587",
-          "name_en": "Kilo Cubes Strips Skewered",
-          "name_ar": "كيلو شقف فتايل مشكوك",
-          "price": 40.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-588",
-          "name_en": "Kilo Lean Meat Lamb Skewered",
-          "name_ar": "كيلو هبره غنم مشكوك",
-          "price": 28.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-204",
-      "name_en": "Meat for Ovens",
-      "name_ar": "لحوم للأفران",
-      "items": [
-        {
-          "id": "prod-458",
-          "name_en": "Shamiyeh for Ovens",
-          "name_ar": "شامية للأفران",
-          "price": 8.95,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-559",
-          "name_en": "Kafta for Ovens",
-          "name_ar": "كفته للأفران",
-          "price": 7.27,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-451",
-          "name_en": "Meat Bi Ajeen for Ovens",
-          "name_ar": "لحم بعجين للأفران",
-          "price": 8.38,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-603",
-          "name_en": "Meat for Pastries",
-          "name_ar": "لحم للمعجنات",
-          "price": 9.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        }
-      ]
-    },
-    {
-      "id": "cat-211",
-      "name_en": "Mixed Lamb and Veal",
-      "name_ar": "متفرقات غنم وعجل",
-      "items": [
-        {
-          "id": "prod-438",
-          "name_en": "Beiruti Lamb and Veal",
-          "name_ar": "بيروتيه غنم وعجل",
+          "id": "prod-694",
+          "name_en": "Lahm b Aajin Beirutiyeh",
+          "name_ar": "لحم بعجين بيروتيه",
           "price": 35.76,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
           "description_en": "",
-          "description_ar": ""
-        },
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Meat Type",
+              "choices": [
+                "Beef (بقر)",
+                "Lamb (غنم)",
+                "Lamb and Veal (غنم وعجل)"
+              ]
+            }
+          ],
+          "option_price_overrides": {
+            "Meat Type": {
+              "Beef (بقر)": 31.28,
+              "Lamb (غنم)": 39.11,
+              "Lamb and Veal (غنم وعجل)": 35.76
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "cat-38",
+      "name_en": "Chicken",
+      "name_ar": "دجاج",
+      "image": "/categories/chicken.JPG",
+      "items": [
         {
-          "id": "prod-329",
-          "name_en": "Eggs Lamb",
-          "name_ar": "بيض غنم",
-          "price": 18.0,
+          "id": "prod-605",
+          "name_en": "Escalope Chicken",
+          "name_ar": "اسكلوب دجاج",
+          "price": 11,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5183,10 +2833,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-429",
-          "name_en": "Dawood Basha Lamb and Veal",
-          "name_ar": "داوود باشا غنم وعجل",
-          "price": 22.0,
+          "id": "prod-349",
+          "name_en": "Wings",
+          "name_ar": "جوانح",
+          "price": 3.5,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5194,10 +2844,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-410",
-          "name_en": "Sfiha Baalbekiyeh Lamb and Veal",
-          "name_ar": "سفيحه بعلبكيه غنم وعجل",
-          "price": 30.17,
+          "id": "prod-450",
+          "name_en": "Wings Marinated",
+          "name_ar": "جوانح متبله",
+          "price": 4,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5205,10 +2855,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-407",
-          "name_en": "Shamiyeh Lamb and Veal",
-          "name_ar": "شاميه غنم وعجل",
-          "price": 30.17,
+          "id": "prod-372",
+          "name_en": "Drumstick",
+          "name_ar": "دبوس",
+          "price": 7,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5216,52 +2866,162 @@
           "description_ar": ""
         },
         {
-          "id": "prod-692",
-          "name_en": "Tripoli Style Lamb and Veal",
-          "name_ar": "طرابلسية غنم وعجل",
-          "price": 35.75,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-398",
-          "name_en": "Oxtail Veal",
-          "name_ar": "عصعوص عجل",
-          "price": 14.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-464",
-          "name_en": "Casing",
-          "name_ar": "فارغ",
-          "price": 6.7,
+          "id": "prod-505",
+          "name_en": "Zghloul",
+          "name_ar": "زغلول",
+          "price": 8,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
           "min_quantity": 0
         },
         {
-          "id": "prod-465",
-          "name_en": "Qubawat",
-          "name_ar": "قبوات",
-          "price": 2.24,
+          "id": "prod-337",
+          "name_en": "Stroganoff Chicken",
+          "name_ar": "سترغنوف دجاج",
+          "price": 13.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-351",
+          "name_en": "Liver Chicken",
+          "name_ar": "سوده دجاج",
+          "price": 6,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-440",
+          "name_en": "Liver Chicken Cleaned",
+          "name_ar": "سوده دجاج منضفه",
+          "price": 7,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-360",
+          "name_en": "Shawarma Chicken",
+          "name_ar": "شاورما دجاج",
+          "price": 11,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-340",
+          "name_en": "Breast Chicken Bone-in",
+          "name_ar": "صدر دجاج بعضمه",
+          "price": 10.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-342",
+          "name_en": "Breast Chicken Boneless",
+          "name_ar": "صدر دجاج مسحب",
+          "price": 13.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-344",
+          "name_en": "Tawook",
+          "name_ar": "طاووق",
+          "price": 11,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-435",
+          "name_en": "Fajita",
+          "name_ar": "فاهيتا",
+          "price": 10,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-339",
+          "name_en": "Thigh Chicken Bone-in",
+          "name_ar": "فخد دجاج بعضمه",
+          "price": 3,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-441",
+          "name_en": "Boneless Chicken Thigh with Skin",
+          "name_ar": "فخد دجاج مسحب مع جلد",
+          "price": 11,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-422",
+          "name_en": "Chicken Tanmiya",
+          "name_ar": "فروج تنميه",
+          "price": 5.25,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-336",
+          "name_en": "Chicken Whole",
+          "name_ar": "فروج كامل",
+          "price": 5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-426",
+          "name_en": "Chicken Moutabal",
+          "name_ar": "فروج متبل",
+          "price": 7,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
           "min_quantity": 0
         },
         {
-          "id": "prod-368",
-          "name_en": "Kibbeh with Bulgur Lamb and Veal",
-          "name_ar": "كبه مع برغل غنم وعجل",
-          "price": 25.0,
+          "id": "prod-373",
+          "name_en": "Chicken Boneless",
+          "name_ar": "فروج مسحب",
+          "price": 11,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5269,10 +3029,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-369",
-          "name_en": "Kafta Lamb and Veal",
-          "name_ar": "كفته غنم وعجل",
-          "price": 20.0,
+          "id": "prod-412",
+          "name_en": "Gizzards",
+          "name_ar": "قوانص",
+          "price": 3.5,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5280,10 +3040,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-370",
-          "name_en": "Meat Bi Ajeen Lamb and Veal",
-          "name_ar": "لحم بعجين غنم وعجل",
-          "price": 24.59,
+          "id": "prod-346",
+          "name_en": "Kibbeh Chicken",
+          "name_ar": "كبه دجاج",
+          "price": 15.58,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5291,10 +3051,20 @@
           "description_ar": ""
         },
         {
-          "id": "prod-325",
-          "name_en": "Meat Veal and Lamb",
-          "name_ar": "لحم عجل وغنم",
-          "price": 20.0,
+          "id": "prod-467",
+          "name_en": "Carton Eggs",
+          "name_ar": "كرتونة بيض",
+          "price": 5.59,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-343",
+          "name_en": "Crispy",
+          "name_ar": "كريسبي",
+          "price": 12,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5302,599 +3072,413 @@
           "description_ar": ""
         },
         {
-          "id": "prod-463",
-          "name_en": "Tongue Lamb",
-          "name_ar": "لسان غنم",
+          "id": "prod-551",
+          "name_en": "Crispy Tanmiya",
+          "name_ar": "كريسبي تنميه",
+          "price": 12,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-350",
+          "name_en": "Kafta Chicken",
+          "name_ar": "كفته دجاج",
+          "price": 11,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-348",
+          "name_en": "Nuggets",
+          "name_ar": "ناغتس",
+          "price": 8,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-66",
+      "name_en": "Frozen Items",
+      "name_ar": "مثلجات",
+      "image": "/categories/frozen items.JPG",
+      "items": [
+        {
+          "id": "prod-503",
+          "name_en": "Discs Kibbeh Beef",
+          "name_ar": "اقراص كبة بقر",
+          "price": 7.82,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-532",
+          "name_en": "Discs Kibbeh Fried",
+          "name_ar": "اقراص كبة مقلية",
+          "price": 10.06,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-512",
+          "name_en": "Ruqaqat with Cheese",
+          "name_ar": "رقاقات بجبنه",
+          "price": 5.59,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-528",
+          "name_en": "Ruqaqat Fried",
+          "name_ar": "رقاقات مقليه",
+          "price": 7.82,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-524",
+          "name_en": "Sambousek Meat",
+          "name_ar": "سمبوسك لحمه",
+          "price": 6.67,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-564",
+          "name_en": "Sambousek Meat Fried",
+          "name_ar": "سمبوسك لحمه مقليه",
+          "price": 7.78,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
+              "name": "Packaging",
+              "choices": [
+                "Regular Pack",
+                "Vacuum Packed",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Ready to fry",
+            "Ready to bake",
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-515",
+          "name_en": "Shish Barak",
+          "name_ar": "شيشبرك",
           "price": 6.71,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-384",
-          "name_en": "Pounded Lamb and Veal",
-          "name_ar": "مدقوقه غنم وعجل",
-          "price": 22.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-381",
-          "name_en": "Minced Lamb and Veal",
-          "name_ar": "مفرومه غنم وعجل",
-          "price": 20.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-511",
-          "name_en": "Trotters",
-          "name_ar": "مقادم",
-          "price": 2.79,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-416",
-          "name_en": "Makanek Lamb and Veal",
-          "name_ar": "مقانق غنم وعجل",
-          "price": 21.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-462",
-          "name_en": "Marrow Lamb",
-          "name_ar": "نخاع غنم",
-          "price": 3.75,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-431",
-          "name_en": "Hamburger Lamb and Veal",
-          "name_ar": "همبرغر غنم وعجل",
-          "price": 20.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        }
-      ]
-    },
-    {
-      "id": "cat-233",
-      "name_en": "Beverages and Bread",
-      "name_ar": "مرطبات وخبز",
-      "items": [
-        {
-          "id": "prod-499",
-          "name_en": "Pepsi Can",
-          "name_ar": "بيبسي تنك",
-          "price": 0.72,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
           "options": [
             {
-              "name": "Serving Temperature",
+              "name": "Preparation",
               "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
               ]
             },
             {
-              "name": "Ice",
+              "name": "Cooking Method",
               "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-469",
-          "name_en": "Bread Arabic",
-          "name_ar": "خبز عربي",
-          "price": 0.9,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Quantity",
-              "choices": [
-                "1 Loaf",
-                "1.5 Loaves",
-                "2 Loaves"
+                "Fry",
+                "Bake",
+                "Air Fry"
               ]
             },
-            {
-              "name": "Toasting",
-              "choices": [
-                "Soft",
-                "Light Toast",
-                "Toasted"
-              ]
-            }
-          ],
-          "presets": [
-            "Slice in half",
-            "Extra toasted"
-          ]
-        },
-        {
-          "id": "prod-468",
-          "name_en": "Bread Hamburger",
-          "name_ar": "خبز همبرغر",
-          "price": 1.67,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Quantity",
-              "choices": [
-                "1 Loaf",
-                "1.5 Loaves",
-                "2 Loaves"
-              ]
-            },
-            {
-              "name": "Toasting",
-              "choices": [
-                "Soft",
-                "Light Toast",
-                "Toasted"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Slice in half",
-            "Extra toasted"
-          ]
-        },
-        {
-          "id": "prod-498",
-          "name_en": "Diet Pepsi",
-          "name_ar": "دايت بيبسي",
-          "price": 0.72,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-520",
-          "name_en": "Diet 7up",
-          "name_ar": "دايت سفن",
-          "price": 0.72,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-538",
-          "name_en": "Delivery",
-          "name_ar": "دليفري",
-          "price": 0.9,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
             {
               "name": "Packaging",
               "choices": [
-                "Single",
-                "2 Pieces",
-                "Family Pack"
-              ]
-            }
-          ],
-          "presets": [
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-519",
-          "name_en": "7up Ab",
-          "name_ar": "سفن اب",
-          "price": 0.72,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-568",
-          "name_en": "Dough",
-          "name_ar": "عجين",
-          "price": 2.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Packaging",
-              "choices": [
-                "Single",
-                "2 Pieces",
+                "Regular Pack",
+                "Vacuum Packed",
                 "Family Pack"
               ]
             }
           ],
           "min_quantity": 1,
           "presets": [
+            "Ready to fry",
+            "Ready to bake",
             "Family pack"
           ]
         },
         {
-          "id": "prod-542",
-          "name_en": "Box Foam",
-          "name_ar": "علبة فلين",
-          "price": 5.0,
+          "id": "prod-509",
+          "name_en": "Tray Kibbeh Small",
+          "name_ar": "صنية كبة صغيره",
+          "price": 7.82,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
           "options": [
             {
+              "name": "Preparation",
+              "choices": [
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
+              ]
+            },
+            {
+              "name": "Cooking Method",
+              "choices": [
+                "Fry",
+                "Bake",
+                "Air Fry"
+              ]
+            },
+            {
               "name": "Packaging",
               "choices": [
-                "Single",
-                "2 Pieces",
+                "Regular Pack",
+                "Vacuum Packed",
                 "Family Pack"
               ]
             }
           ],
           "min_quantity": 1,
           "presets": [
+            "Ready to fry",
+            "Ready to bake",
             "Family pack"
           ]
         },
         {
-          "id": "prod-517",
-          "name_en": "Ayran",
-          "name_ar": "عيران",
-          "price": 0.61,
+          "id": "prod-497",
+          "name_en": "Tray Kibbeh Large",
+          "name_ar": "صنية كبه كبيره",
+          "price": 13.41,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
           "options": [
             {
-              "name": "Serving Temperature",
+              "name": "Preparation",
               "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
+                "Frozen",
+                "Half Fried",
+                "Fully Fried"
               ]
             },
             {
-              "name": "Ice",
+              "name": "Cooking Method",
               "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-446",
-          "name_en": "Bottle Water Small",
-          "name_ar": "قنينه ماء صغيره",
-          "price": 0.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
+                "Fry",
+                "Bake",
+                "Air Fry"
               ]
             },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-507",
-          "name_en": "Yogurt 1kg",
-          "name_ar": "لبن 1ك",
-          "price": 2.17,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-518",
-          "name_en": "Yogurt 2kg",
-          "name_ar": "لبن 2ك",
-          "price": 3.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-510",
-          "name_en": "Miscellaneous",
-          "name_ar": "متفرقات",
-          "price": 0.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
             {
               "name": "Packaging",
               "choices": [
-                "Single",
-                "2 Pieces",
+                "Regular Pack",
+                "Vacuum Packed",
                 "Family Pack"
               ]
             }
           ],
           "min_quantity": 1,
           "presets": [
+            "Ready to fry",
+            "Ready to bake",
             "Family pack"
           ]
-        }
-      ]
-    },
-    {
-      "id": "cat-249",
-      "name_en": "Goat",
-      "name_ar": "معزي",
-      "items": [
-        {
-          "id": "prod-404",
-          "name_en": "Osso Buco",
-          "name_ar": "اسوبوكو",
-          "price": 15.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-418",
-          "name_en": "Neck Goat Bone-in",
-          "name_ar": "رقبه معزي بعضمه",
-          "price": 26.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-420",
-          "name_en": "Cubes Goat",
-          "name_ar": "شقف معزي",
-          "price": 26.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-529",
-          "name_en": "Kibbeh Goat with Bulgur",
-          "name_ar": "كبه معزي مع برغل",
-          "price": 28.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-417",
-          "name_en": "Cutlets Goat",
-          "name_ar": "كستلاته معزي",
-          "price": 26.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-421",
-          "name_en": "Kafta Goat",
-          "name_ar": "كفته معزي",
-          "price": 26.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-419",
-          "name_en": "Pounded Goat",
-          "name_ar": "مدقوقه معزي",
-          "price": 27.0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-399",
-          "name_en": "Goat",
-          "name_ar": "معزي",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-425",
-          "name_en": "Minced Goat",
-          "name_ar": "مفرومه معزي",
-          "price": 26.0,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
         }
       ]
     },
@@ -5902,6 +3486,7 @@
       "id": "cat-260",
       "name_en": "Appetizers",
       "name_ar": "مقبلات",
+      "image": "/categories/appetizers.JPG",
       "items": [
         {
           "id": "prod-494",
@@ -6339,7 +3924,7 @@
           "id": "prod-502",
           "name_en": "Boxes Plastic",
           "name_ar": "علب بلاستيك",
-          "price": 3.0,
+          "price": 3,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
@@ -6812,7 +4397,7 @@
           "id": "prod-364",
           "name_en": "With Pine Nuts",
           "name_ar": "مع صنوبر",
-          "price": 4.0,
+          "price": 4,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
@@ -6849,6 +4434,1686 @@
             "Extra olive oil",
             "No chili",
             "Add pickles"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cat-156",
+      "name_en": "Lamb",
+      "name_ar": "لحم غنم",
+      "items": [
+        {
+          "id": "prod-432",
+          "name_en": "Beiruti Lamb",
+          "name_ar": "بيروتيه غنم",
+          "price": 39.11,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-402",
+          "name_en": "Lamb",
+          "name_ar": "خاروف",
+          "price": 8,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-331",
+          "name_en": "Fat",
+          "name_ar": "دهنة",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-382",
+          "name_en": "Neck Lamb",
+          "name_ar": "رقبة غنم",
+          "price": 23,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-433",
+          "name_en": "Neck Lamb Bone-in",
+          "name_ar": "رقبة غنم بعضمه",
+          "price": 17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-374",
+          "name_en": "Rib Lamb",
+          "name_ar": "زور غنم",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-332",
+          "name_en": "Liver Lamb",
+          "name_ar": "سوده غنم",
+          "price": 30,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-408",
+          "name_en": "Shamiyeh Lamb",
+          "name_ar": "شاميه غنم",
+          "price": 33.53,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-320",
+          "name_en": "Cubes Lamb",
+          "name_ar": "شقف غنم",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-409",
+          "name_en": "Shahbaiyeh Lamb",
+          "name_ar": "شهبايه غنم",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-691",
+          "name_en": "Tripoli Style Lamb",
+          "name_ar": "طرابلسية غنم",
+          "price": 39.1,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-362",
+          "name_en": "Lamb Bone-in",
+          "name_ar": "غنم بعضمه",
+          "price": 21,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-319",
+          "name_en": "Strips",
+          "name_ar": "فتايل",
+          "price": 38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-330",
+          "name_en": "Thigh Lamb Bone-in",
+          "name_ar": "فخد غنم بعضمه",
+          "price": 23,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-322",
+          "name_en": "Kibbeh Lamb with Bulgur",
+          "name_ar": "كبه غنم مع برغل",
+          "price": 29,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-328",
+          "name_en": "Shoulder Lamb Bone-in",
+          "name_ar": "كتف غنم بعضمه",
+          "price": 20,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-318",
+          "name_en": "Cutlets Lamb",
+          "name_ar": "كستلاته غنم",
+          "price": 25,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-323",
+          "name_en": "Kafta Lamb",
+          "name_ar": "كفته غنم",
+          "price": 23,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-333",
+          "name_en": "Meat Bi Ajeen Lamb",
+          "name_ar": "لحم بعجين غنم",
+          "price": 27.93,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-361",
+          "name_en": "Meat Lamb",
+          "name_ar": "لحم غنم",
+          "price": 23,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-352",
+          "name_en": "Leg Lamb",
+          "name_ar": "لعبة غنم",
+          "price": 27,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-321",
+          "name_en": "Pounded Lamb",
+          "name_ar": "مدقوقه غنم",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-324",
+          "name_en": "Minced Lamb",
+          "name_ar": "مفرومه غنم",
+          "price": 23,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-326",
+          "name_en": "Shanks Lamb",
+          "name_ar": "موزات غنم",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-380",
+          "name_en": "Lean Meat Lamb",
+          "name_ar": "هبره غنم",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-211",
+      "name_en": "Lamb and Veal",
+      "name_ar": "غنم وعجل",
+      "items": [
+        {
+          "id": "prod-438",
+          "name_en": "Beiruti Lamb and Veal",
+          "name_ar": "بيروتيه غنم وعجل",
+          "price": 35.76,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-329",
+          "name_en": "Eggs Lamb",
+          "name_ar": "بيض غنم",
+          "price": 18,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-429",
+          "name_en": "Dawood Basha Lamb and Veal",
+          "name_ar": "داوود باشا غنم وعجل",
+          "price": 22,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-407",
+          "name_en": "Shamiyeh Lamb and Veal",
+          "name_ar": "شاميه غنم وعجل",
+          "price": 30.17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-692",
+          "name_en": "Tripoli Style Lamb and Veal",
+          "name_ar": "طرابلسية غنم وعجل",
+          "price": 35.75,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-398",
+          "name_en": "Oxtail Veal",
+          "name_ar": "عصعوص عجل",
+          "price": 14,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-464",
+          "name_en": "Casing",
+          "name_ar": "فارغ",
+          "price": 6.7,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-465",
+          "name_en": "Qubawat",
+          "name_ar": "قبوات",
+          "price": 2.24,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-368",
+          "name_en": "Kibbeh with Bulgur Lamb and Veal",
+          "name_ar": "كبه مع برغل غنم وعجل",
+          "price": 25,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-369",
+          "name_en": "Kafta Lamb and Veal",
+          "name_ar": "كفته غنم وعجل",
+          "price": 20,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-370",
+          "name_en": "Meat Bi Ajeen Lamb and Veal",
+          "name_ar": "لحم بعجين غنم وعجل",
+          "price": 24.59,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-325",
+          "name_en": "Meat Veal and Lamb",
+          "name_ar": "لحم عجل وغنم",
+          "price": 20,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-463",
+          "name_en": "Tongue Lamb",
+          "name_ar": "لسان غنم",
+          "price": 6.71,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-384",
+          "name_en": "Pounded Lamb and Veal",
+          "name_ar": "مدقوقه غنم وعجل",
+          "price": 22,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-381",
+          "name_en": "Minced Lamb and Veal",
+          "name_ar": "مفرومه غنم وعجل",
+          "price": 20,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-511",
+          "name_en": "Trotters",
+          "name_ar": "مقادم",
+          "price": 2.79,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-416",
+          "name_en": "Makanek Lamb and Veal",
+          "name_ar": "مقانق غنم وعجل",
+          "price": 21,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-462",
+          "name_en": "Marrow Lamb",
+          "name_ar": "نخاع غنم",
+          "price": 3.75,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-431",
+          "name_en": "Hamburger Lamb and Veal",
+          "name_ar": "همبرغر غنم وعجل",
+          "price": 20,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        }
+      ]
+    },
+    {
+      "id": "cat-114",
+      "name_en": "Beef",
+      "name_ar": "لحم بقر",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-448",
+          "name_en": "Escalope Meat",
+          "name_ar": "اسكلوب لحمه",
+          "price": 19,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-300",
+          "name_en": "Escalope Meat Fillet",
+          "name_ar": "اسكلوب لحمه فييل",
+          "price": 32,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-376",
+          "name_en": "Entrecote",
+          "name_ar": "انتركوت",
+          "price": 19,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-301",
+          "name_en": "Beef Steak Beef",
+          "name_ar": "بفتاك بقر",
+          "price": 19,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-307",
+          "name_en": "Beef Steak Fillet",
+          "name_ar": "بفتاك فيليه",
+          "price": 32,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-575",
+          "name_en": "Parsley Extra",
+          "name_ar": "بقدونس زياده",
+          "price": 0,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-437",
+          "name_en": "Beiruti Veal",
+          "name_ar": "بيروتيه عجل",
+          "price": 31.28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-316",
+          "name_en": "Dawood Basha",
+          "name_ar": "داوودباشا",
+          "price": 17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-306",
+          "name_en": "Roasto",
+          "name_ar": "روستو",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-406",
+          "name_en": "Rib Beef",
+          "name_ar": "زور بقر",
+          "price": 13.3,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-312",
+          "name_en": "Stroganoff Beef",
+          "name_ar": "سترغنوف بقر",
+          "price": 19,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-297",
+          "name_en": "Stroganoff Fillet",
+          "name_ar": "سترغنوف فيليه",
+          "price": 32,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-305",
+          "name_en": "Sujuk",
+          "name_ar": "سجق",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-424",
+          "name_en": "Liver Beef",
+          "name_ar": "سوده بقر",
+          "price": 20,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-414",
+          "name_en": "Shamiyeh Veal",
+          "name_ar": "شاميه عجل",
+          "price": 25.7,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-313",
+          "name_en": "Shawarma Meat",
+          "name_ar": "شاورما لحمه",
+          "price": 17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-302",
+          "name_en": "Cubes Veal",
+          "name_ar": "شقف عجل",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-690",
+          "name_en": "Tripoli Style Veal",
+          "name_ar": "طرابلسية عجل",
+          "price": 31.28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-310",
+          "name_en": "Faux Fillet",
+          "name_ar": "فوفيليه",
+          "price": 19,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-317",
+          "name_en": "Fillet",
+          "name_ar": "فيليه",
+          "price": 32,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-430",
+          "name_en": "Fillet Baladi",
+          "name_ar": "فيليه بلدي",
+          "price": 36,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-309",
+          "name_en": "Kibbeh Veal with Bulgur",
+          "name_ar": "كبه عجل مع برغل",
+          "price": 20,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-443",
+          "name_en": "Shoulder and Cutlets Veal",
+          "name_ar": "كتف وكستلاته عجل",
+          "price": 12.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-308",
+          "name_en": "Kafta Beef",
+          "name_ar": "كفته بقر",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-311",
+          "name_en": "Meat Bi Ajeen Beef",
+          "name_ar": "لحم بعجين بقر",
+          "price": 20.12,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-413",
+          "name_en": "Meat Veal",
+          "name_ar": "لحم عجل",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-298",
+          "name_en": "Pounded Beef",
+          "name_ar": "مدقوقة بقر",
+          "price": 17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-299",
+          "name_en": "Minced Beef",
+          "name_ar": "مفرومه بقر",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-314",
+          "name_en": "Minced Veal Lean Meat",
+          "name_ar": "مفرومه عجل هبره",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-304",
+          "name_en": "Makanek",
+          "name_ar": "مقانق",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-315",
+          "name_en": "Shanks Beef",
+          "name_ar": "موزات بقر",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-379",
+          "name_en": "Lean Meat Beef",
+          "name_ar": "هبره بقر",
+          "price": 16,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-303",
+          "name_en": "Hamburger",
+          "name_ar": "همبرغر",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-150",
+      "name_en": "White Veal",
+      "name_ar": "لحم عجل ابيض",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-442",
+          "name_en": "Beef Steak White",
+          "name_ar": ".بفتاك ابيض",
+          "price": 38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-674",
+          "name_en": "Meat Veal White",
+          "name_ar": ".لحم عجل ابيض",
+          "price": 38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-383",
+          "name_en": "Beef Steak White",
+          "name_ar": "بفتاك ابيض",
+          "price": 38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-391",
+          "name_en": "Meat Veal White",
+          "name_ar": "لحم عجل ابيض",
+          "price": 38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-184",
+      "name_en": "Qarqour Meat",
+      "name_ar": "لحم قرقور",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-695",
+          "name_en": "Meat Qarqour",
+          "name_ar": ".لحم قرقور",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-389",
+          "name_en": "Cubes Qarqour",
+          "name_ar": "شقف قرقور",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-392",
+          "name_en": "Thigh Qarqour Bone-in",
+          "name_ar": "فخد قرقور بعضمه",
+          "price": 24,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-386",
+          "name_en": "Cutlets Qarqour",
+          "name_ar": "كستلاته قرقور",
+          "price": 30,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-378",
+          "name_en": "Meat Qarqour",
+          "name_ar": "لحم قرقور",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-387",
+          "name_en": "Minced Qarqour",
+          "name_ar": "مفرومه قرقور",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-388",
+          "name_en": "Shanks Qarqour",
+          "name_ar": "موزات قرقور",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-193",
+      "name_en": "Skewered Meat",
+      "name_ar": "لحم مشكوك",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-582",
+          "name_en": "Cubes Faux Fillet Skewered",
+          "name_ar": "شقف فوفيلية مشكوك",
+          "price": 21,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-583",
+          "name_en": "Cubes Fillet Skewered",
+          "name_ar": "شقف فيليه مشكوك",
+          "price": 34,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-581",
+          "name_en": "Tawook Skewered",
+          "name_ar": "طاووق مشكوك",
+          "price": 14,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-585",
+          "name_en": "Kafta Beef Skewered",
+          "name_ar": "كفته بقر مشكوك",
+          "price": 17,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-584",
+          "name_en": "Kafta Lamb Skewered",
+          "name_ar": "كفته غنم مشكوك",
+          "price": 25,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-586",
+          "name_en": "Kafta Lamb and Veal Skewered",
+          "name_ar": "كفته غنم وعجل مشكوك",
+          "price": 22,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-589",
+          "name_en": "Kilo Wings Skewered",
+          "name_ar": "كيلو جوانح مشكوك",
+          "price": 6,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-587",
+          "name_en": "Kilo Cubes Strips Skewered",
+          "name_ar": "كيلو شقف فتايل مشكوك",
+          "price": 40,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-588",
+          "name_en": "Kilo Lean Meat Lamb Skewered",
+          "name_ar": "كيلو هبره غنم مشكوك",
+          "price": 28,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-204",
+      "name_en": "Meat for Ovens",
+      "name_ar": "لحوم للأفران",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-458",
+          "name_en": "Shamiyeh for Ovens",
+          "name_ar": "شامية للأفران",
+          "price": 8.95,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-559",
+          "name_en": "Kafta for Ovens",
+          "name_ar": "كفته للأفران",
+          "price": 7.27,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-451",
+          "name_en": "Meat Bi Ajeen for Ovens",
+          "name_ar": "لحم بعجين للأفران",
+          "price": 8.38,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-603",
+          "name_en": "Meat for Pastries",
+          "name_ar": "لحم للمعجنات",
+          "price": 9.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-249",
+      "name_en": "Goat",
+      "name_ar": "معزي",
+      "hidden": true,
+      "items": [
+        {
+          "id": "prod-404",
+          "name_en": "Osso Buco",
+          "name_ar": "اسوبوكو",
+          "price": 15,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-418",
+          "name_en": "Neck Goat Bone-in",
+          "name_ar": "رقبه معزي بعضمه",
+          "price": 26,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-420",
+          "name_en": "Cubes Goat",
+          "name_ar": "شقف معزي",
+          "price": 26,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-529",
+          "name_en": "Kibbeh Goat with Bulgur",
+          "name_ar": "كبه معزي مع برغل",
+          "price": 28,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-417",
+          "name_en": "Cutlets Goat",
+          "name_ar": "كستلاته معزي",
+          "price": 26,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-421",
+          "name_en": "Kafta Goat",
+          "name_ar": "كفته معزي",
+          "price": 26,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-419",
+          "name_en": "Pounded Goat",
+          "name_ar": "مدقوقه معزي",
+          "price": 27,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 0
+        },
+        {
+          "id": "prod-399",
+          "name_en": "Goat",
+          "name_ar": "معزي",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        },
+        {
+          "id": "prod-425",
+          "name_en": "Minced Goat",
+          "name_ar": "مفرومه معزي",
+          "price": 26,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 0,
+          "description_en": "",
+          "description_ar": ""
+        }
+      ]
+    },
+    {
+      "id": "cat-233",
+      "name_en": "Beverages",
+      "name_ar": "مرطبات",
+      "image": "/categories/beverages.jpg",
+      "items": [
+        {
+          "id": "prod-499",
+          "name_en": "Pepsi Can",
+          "name_ar": "بيبسي تنك",
+          "price": 0.72,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-469",
+          "name_en": "Bread Arabic",
+          "name_ar": "خبز عربي",
+          "price": 0.9,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 1,
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Quantity",
+              "choices": [
+                "1 Loaf",
+                "1.5 Loaves",
+                "2 Loaves"
+              ]
+            },
+            {
+              "name": "Toasting",
+              "choices": [
+                "Soft",
+                "Light Toast",
+                "Toasted"
+              ]
+            }
+          ],
+          "presets": [
+            "Slice in half",
+            "Extra toasted"
+          ]
+        },
+        {
+          "id": "prod-468",
+          "name_en": "Bread Hamburger",
+          "name_ar": "خبز همبرغر",
+          "price": 1.67,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Bread Quantity",
+              "choices": [
+                "1 Loaf",
+                "1.5 Loaves",
+                "2 Loaves"
+              ]
+            },
+            {
+              "name": "Toasting",
+              "choices": [
+                "Soft",
+                "Light Toast",
+                "Toasted"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Slice in half",
+            "Extra toasted"
+          ]
+        },
+        {
+          "id": "prod-498",
+          "name_en": "Diet Pepsi",
+          "name_ar": "دايت بيبسي",
+          "price": 0.72,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-520",
+          "name_en": "Diet 7up",
+          "name_ar": "دايت سفن",
+          "price": 0.72,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-538",
+          "name_en": "Delivery",
+          "name_ar": "دليفري",
+          "price": 0.9,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 1,
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "presets": [
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-519",
+          "name_en": "7up Ab",
+          "name_ar": "سفن اب",
+          "price": 0.72,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-568",
+          "name_en": "Dough",
+          "name_ar": "عجين",
+          "price": 2,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-542",
+          "name_en": "Box Foam",
+          "name_ar": "علبة فلين",
+          "price": 5,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
+          ]
+        },
+        {
+          "id": "prod-517",
+          "name_en": "Ayran",
+          "name_ar": "عيران",
+          "price": 0.61,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-446",
+          "name_en": "Bottle Water Small",
+          "name_ar": "قنينه ماء صغيره",
+          "price": 0.5,
+          "unit": "kg",
+          "weight_step": 0.1,
+          "min_quantity": 1,
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-507",
+          "name_en": "Yogurt 1kg",
+          "name_ar": "لبن 1ك",
+          "price": 2.17,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-518",
+          "name_en": "Yogurt 2kg",
+          "name_ar": "لبن 2ك",
+          "price": 3,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Serving Temperature",
+              "choices": [
+                "Cold",
+                "Room Temperature",
+                "With Ice"
+              ]
+            },
+            {
+              "name": "Ice",
+              "choices": [
+                "No Ice",
+                "Regular Ice",
+                "Extra Ice"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Very cold",
+            "No ice"
+          ]
+        },
+        {
+          "id": "prod-510",
+          "name_en": "Miscellaneous",
+          "name_ar": "متفرقات",
+          "price": 0,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "options": [
+            {
+              "name": "Packaging",
+              "choices": [
+                "Single",
+                "2 Pieces",
+                "Family Pack"
+              ]
+            }
+          ],
+          "min_quantity": 1,
+          "presets": [
+            "Family pack"
           ]
         }
       ]

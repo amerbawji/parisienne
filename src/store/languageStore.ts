@@ -14,8 +14,8 @@ interface LanguageStore {
 export const useLanguageStore = create<LanguageStore>()(
   persist(
     (set, get) => ({
-      language: 'ar',
-      direction: 'rtl',
+      language: 'en',
+      direction: 'ltr',
       setLanguage: (language) => {
         const direction = language === 'ar' ? 'rtl' : 'ltr';
         document.documentElement.dir = direction;
