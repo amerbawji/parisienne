@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useDeferredValue, useMemo, useRef, useState } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import menuData from '../data/menu.json';
 import logo from '../assets/malhame-vertical-logo.svg';
@@ -27,18 +27,23 @@ export const Home = () => {
   const { getTotalItems, toggleCart } = useCartStore();
   const { language, t } = useLanguageStore();
   const totalItems = getTotalItems();
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
-  const categories = menuData.categories.filter((category) => {
-    const cat = category as typeof category & { hidden?: boolean };
-    return !cat.hidden;
-  });
-  const filteredCategories = useMemo(
+  const categories = useMemo(
     () =>
-      categories
+      menuData.categories.filter((category) => {
+        const cat = category as typeof category & { hidden?: boolean };
+        return !cat.hidden;
+      }),
+    []
+  );
+  const filteredCategories = useMemo(
+    () => {
+      const query = deferredSearchQuery.trim().toLowerCase();
+      return categories
         .map((category) => {
           const matchingItems = category.items.filter((item) => {
-            if (!searchQuery) return true;
-            const query = searchQuery.toLowerCase();
+            if (!query) return true;
             return (
               item.name_en.toLowerCase().includes(query) ||
               item.name_ar.includes(query) ||
@@ -55,8 +60,9 @@ export const Home = () => {
 
           return { ...category, items: matchingItems, image };
         })
-        .filter((category): category is typeof categories[0] & { image: string } => category !== null),
-    [categories, searchQuery]
+        .filter((category): category is typeof categories[0] & { image: string } => category !== null);
+    },
+    [categories, deferredSearchQuery]
   );
 
   const handleCategoryClick = (categoryId: string) => {
@@ -140,7 +146,7 @@ export const Home = () => {
             />
           </div>
 
-          <div className="absolute top-4 right-4 sm:static flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
              <Button
               variant="ghost"
               className="relative hidden sm:flex"
@@ -203,9 +209,9 @@ export const Home = () => {
                     categoryRefs.current[category.id] = el;
                   }}
                   className={cn(
-                    "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
-                    isOpen && "md:col-span-2 lg:col-span-3"
-                  )}
+                "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300 [content-visibility:auto]",
+                isOpen && "md:col-span-2 lg:col-span-3"
+              )}
                 >
                   <button
                     onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
@@ -217,6 +223,8 @@ export const Home = () => {
                         src={category.image} 
                         alt={language === 'ar' ? category.name_ar : category.name_en}
                         className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                         <h2 className="text-3xl font-bold text-white drop-shadow-md">
@@ -228,14 +236,18 @@ export const Home = () => {
                   
                   {isOpen && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                      <div className="p-4 sm:p-6 grid grid-cols-1 gap-4">
+                      <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                         {category.items.map((item) => (
-                          <MenuCard 
-                            key={item.id} 
-                            item={item as MenuItem} 
-                            expanded={expandedItemId === item.id}
-                            onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
-                          />
+                          <div
+                            key={item.id}
+                            className={cn(expandedItemId === item.id && "col-span-full")}
+                          >
+                            <MenuCard 
+                              item={item as MenuItem} 
+                              expanded={expandedItemId === item.id}
+                              onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                            />
+                          </div>
                         ))}
                       </div>
                     </div>

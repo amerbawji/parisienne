@@ -40,14 +40,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -92,66 +84,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
-            }
-          ],
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No garlic",
-            "No pickles",
-            "Include bread"
-          ]
-        },
-        {
-          "id": "prod-461",
-          "name_en": "Drumstick Grilled",
-          "name_ar": "دبوس مشوي",
-          "price": 19.55,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Cooking Level",
-              "choices": [
-                "Medium",
-                "Well Done",
-                "Extra Well Done"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -193,14 +125,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -247,14 +171,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -299,14 +215,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -331,7 +239,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -349,14 +256,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -403,14 +302,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -423,7 +314,7 @@
         },
         {
           "id": "prod-355",
-          "name_en": "Strips Grilled",
+          "name_en": "Cutlet Grilled",
           "name_ar": "فتايل مشوي",
           "price": 58.1,
           "unit": "kg",
@@ -454,14 +345,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -504,14 +387,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -556,14 +431,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -607,14 +474,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -657,14 +516,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -711,14 +562,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -762,14 +605,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -815,14 +650,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -866,14 +693,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -919,14 +738,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -970,14 +781,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -1023,14 +826,6 @@
                 "No Pickles",
                 "Extra Pickles"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
-              ]
             }
           ],
           "presets": [
@@ -1072,14 +867,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -1125,14 +912,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Eat-in Tray",
-                "Takeaway Box",
-                "Split Packaging"
               ]
             }
           ],
@@ -1191,14 +970,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1262,14 +1033,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -1327,14 +1090,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1400,14 +1155,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -1464,14 +1211,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1535,14 +1274,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -1600,14 +1331,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1671,14 +1394,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -1736,14 +1451,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1807,14 +1514,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -1872,14 +1571,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -1943,14 +1634,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -2008,14 +1691,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -2079,14 +1754,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -2147,14 +1814,6 @@
               ]
             },
             {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
               "name": "Add-ons",
               "choices": [
                 "No Add-on",
@@ -2175,8 +1834,8 @@
         },
         {
           "id": "prod-537",
-          "name_en": "Sandwich Hamburger",
-          "name_ar": "سندويش همبرغر",
+          "name_en": "Hamburger",
+          "name_ar": "همبرغر",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
@@ -2212,14 +1871,6 @@
                 "With Coleslaw",
                 "No Coleslaw",
                 "Extra Coleslaw"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             },
             {
@@ -2265,7 +1916,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2283,14 +1933,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2318,7 +1960,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2336,14 +1977,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2371,7 +2004,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2389,14 +2021,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2422,7 +2046,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2440,14 +2063,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2474,7 +2089,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2492,14 +2106,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2528,7 +2134,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2546,14 +2151,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2579,7 +2176,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2597,14 +2193,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2631,7 +2219,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2649,14 +2236,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2683,7 +2262,6 @@
               "choices": [
                 "Fries",
                 "Fries + Coleslaw",
-                "Rice",
                 "No Side"
               ]
             },
@@ -2701,14 +2279,6 @@
                 "With Pickles",
                 "No Pickles",
                 "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
               ]
             }
           ],
@@ -2747,6 +2317,13 @@
                 "Lamb (غنم)",
                 "Lamb and Veal (غنم وعجل)"
               ]
+            },
+            {
+              "name": "Pomegranate Molasses",
+              "choices": [
+                "Regular",
+                "Without Pomegranate"
+              ]
             }
           ],
           "option_price_overrides": {
@@ -2775,6 +2352,13 @@
                 "Lamb (غنم)",
                 "Lamb and Veal (غنم وعجل)"
               ]
+            },
+            {
+              "name": "Pomegranate Molasses",
+              "choices": [
+                "Regular",
+                "Without Pomegranate"
+              ]
             }
           ],
           "option_price_overrides": {
@@ -2802,6 +2386,13 @@
                 "Beef (بقر)",
                 "Lamb (غنم)",
                 "Lamb and Veal (غنم وعجل)"
+              ]
+            },
+            {
+              "name": "Pomegranate Molasses",
+              "choices": [
+                "Regular",
+                "Without Pomegranate"
               ]
             }
           ],
@@ -2866,16 +2457,6 @@
           "description_ar": ""
         },
         {
-          "id": "prod-505",
-          "name_en": "Zghloul",
-          "name_ar": "زغلول",
-          "price": 8,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
           "id": "prod-337",
           "name_en": "Stroganoff Chicken",
           "name_ar": "سترغنوف دجاج",
@@ -2891,17 +2472,6 @@
           "name_en": "Liver Chicken",
           "name_ar": "سوده دجاج",
           "price": 6,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-440",
-          "name_en": "Liver Chicken Cleaned",
-          "name_ar": "سوده دجاج منضفه",
-          "price": 7,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -2975,17 +2545,6 @@
           "description_ar": ""
         },
         {
-          "id": "prod-441",
-          "name_en": "Boneless Chicken Thigh with Skin",
-          "name_ar": "فخد دجاج مسحب مع جلد",
-          "price": 11,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-422",
           "name_en": "Chicken Tanmiya",
           "name_ar": "فروج تنميه",
@@ -3029,17 +2588,6 @@
           "description_ar": ""
         },
         {
-          "id": "prod-412",
-          "name_en": "Gizzards",
-          "name_ar": "قوانص",
-          "price": 3.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-346",
           "name_en": "Kibbeh Chicken",
           "name_ar": "كبه دجاج",
@@ -3070,16 +2618,6 @@
           "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
-        },
-        {
-          "id": "prod-551",
-          "name_en": "Crispy Tanmiya",
-          "name_ar": "كريسبي تنميه",
-          "price": 12,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
         },
         {
           "id": "prod-350",
@@ -3135,55 +2673,6 @@
                 "Bake",
                 "Air Fry"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-532",
-          "name_en": "Discs Kibbeh Fried",
-          "name_ar": "اقراص كبة مقلية",
-          "price": 10.06,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -3216,55 +2705,6 @@
                 "Fry",
                 "Bake",
                 "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-528",
-          "name_en": "Ruqaqat Fried",
-          "name_ar": "رقاقات مقليه",
-          "price": 7.82,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
               ]
             }
           ],
@@ -3299,55 +2739,6 @@
                 "Bake",
                 "Air Fry"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Ready to fry",
-            "Ready to bake",
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-564",
-          "name_en": "Sambousek Meat Fried",
-          "name_ar": "سمبوسك لحمه مقليه",
-          "price": 7.78,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Preparation",
-              "choices": [
-                "Frozen",
-                "Half Fried",
-                "Fully Fried"
-              ]
-            },
-            {
-              "name": "Cooking Method",
-              "choices": [
-                "Fry",
-                "Bake",
-                "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -3380,14 +2771,6 @@
                 "Fry",
                 "Bake",
                 "Air Fry"
-              ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
               ]
             }
           ],
@@ -3422,14 +2805,6 @@
                 "Bake",
                 "Air Fry"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -3463,14 +2838,6 @@
                 "Bake",
                 "Air Fry"
               ]
-            },
-            {
-              "name": "Packaging",
-              "choices": [
-                "Regular Pack",
-                "Vacuum Packed",
-                "Family Pack"
-              ]
             }
           ],
           "min_quantity": 1,
@@ -3489,9 +2856,39 @@
       "image": "/categories/appetizers.webp",
       "items": [
         {
+          "id": "prod-532",
+          "name_en": "Kibbeh Fried",
+          "name_ar": "كبة مقلية",
+          "price": 10.06,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 1
+        },
+        {
+          "id": "prod-528",
+          "name_en": "Cheese Rolls",
+          "name_ar": "رقاقات جبنة",
+          "price": 7.82,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 1
+        },
+        {
+          "id": "prod-564",
+          "name_en": "Sambusek",
+          "name_ar": "سمبوسك",
+          "price": 7.78,
+          "unit": "piece",
+          "description_en": "",
+          "description_ar": "",
+          "min_quantity": 1
+        },
+        {
           "id": "prod-494",
-          "name_en": "Tray Potato",
-          "name_ar": "جاط بطاطا",
+          "name_en": "Fries",
+          "name_ar": "بطاطا",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
@@ -3500,41 +2897,18 @@
             {
               "name": "Serving Size",
               "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
+                "Small",
                 "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
+                "Large"
               ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-490",
-          "name_en": "Tray Hummus",
-          "name_ar": "جاط حمص",
+          "name_en": "Hummus",
+          "name_ar": "حمص",
           "price": 3.91,
           "unit": "piece",
           "description_en": "",
@@ -3547,37 +2921,14 @@
                 "Large",
                 "Family"
               ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-492",
-          "name_en": "Tray Moutabal",
-          "name_ar": "جاط متبل",
+          "name_en": "Moutabal",
+          "name_ar": "متبل",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
@@ -3590,32 +2941,9 @@
                 "Large",
                 "Family"
               ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-554",
@@ -3633,141 +2961,24 @@
                 "Large",
                 "Family"
               ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-493",
-          "name_en": "Plate Potato",
-          "name_ar": "صحن بطاطا",
-          "price": 3.63,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-557",
-          "name_en": "Plate Potato Grilled",
-          "name_ar": "صحن بطاطا مشويه",
+          "name_en": "Potato Grilled",
+          "name_ar": "بطاطا مشويه",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
           "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-531",
-          "name_en": "Plate Tabbouleh",
-          "name_ar": "صحن تبوله",
+          "name_en": "Tabbouleh",
+          "name_ar": "تبوله",
           "image": "/images/Plate Tabbouleh.JPG",
           "price": 5.03,
           "unit": "piece",
@@ -3775,104 +2986,20 @@
           "description_ar": "",
           "options": [
             {
-              "name": "Side",
+              "name": "Serving Size",
               "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
+                "Small",
                 "Medium",
-                "Hot"
+                "Large"
               ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
-        },
-        {
-          "id": "prod-526",
-          "name_en": "Plate Salad",
-          "name_ar": "صحن سلطه",
-          "price": 3.64,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Side",
-              "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-533",
-          "name_en": "Plate Fattoush",
-          "name_ar": "صحن فتوش",
+          "name_en": "Fattoush",
+          "name_ar": "فتوش",
           "image": "/images/Plate Fattoush.JPG",
           "price": 4.47,
           "unit": "piece",
@@ -3880,52 +3007,20 @@
           "description_ar": "",
           "options": [
             {
-              "name": "Side",
+              "name": "Serving Size",
               "choices": [
-                "Fries",
-                "Fries + Coleslaw",
-                "Rice",
-                "No Side"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "Regular",
-                "No Garlic",
-                "Extra Garlic"
-              ]
-            },
-            {
-              "name": "Pickles",
-              "choices": [
-                "With Pickles",
-                "No Pickles",
-                "Extra Pickles"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
+                "Small",
                 "Medium",
-                "Hot"
+                "Large"
               ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra garlic",
-            "Extra pickles",
-            "No coleslaw",
-            "No fries",
-            "Add tabasco"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-405",
-          "name_en": "Box Garlic Small",
-          "name_ar": "علبة ثوم صغيره",
+          "name_en": "Garlic",
+          "name_ar": "ثوم",
           "price": 0.56,
           "unit": "piece",
           "description_en": "",
@@ -3934,170 +3029,25 @@
             {
               "name": "Serving Size",
               "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
+                "Small",
                 "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
+                "Large"
               ]
             }
           ],
           "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-521",
-          "name_en": "Box Garlic Large",
-          "name_ar": "علبة ثوم كبيره",
-          "price": 1.68,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
+          "option_price_overrides": {
+            "Serving Size": {
+              "Small": 0.56,
+              "Medium": 0.84,
+              "Large": 1.68
             }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-495",
-          "name_en": "Box Garlic Medium",
-          "name_ar": "علبة ثوم وسط",
-          "price": 0.84,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-489",
-          "name_en": "Box Hummus",
-          "name_ar": "علبة حمص",
-          "price": 1.96,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          }
         },
         {
           "id": "prod-527",
-          "name_en": "Box Salad Coleslaw",
-          "name_ar": "علبة سلطة ملفوف",
+          "name_en": "Coleslaw",
+          "name_ar": "سلطة ملفوف",
           "price": 1.4,
           "unit": "piece",
           "description_en": "",
@@ -4106,208 +3056,13 @@
             {
               "name": "Serving Size",
               "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
+                "Small",
                 "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
+                "Large"
               ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-491",
-          "name_en": "Box Moutabal",
-          "name_ar": "علبة متبل",
-          "price": 2.23,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-525",
-          "name_en": "Box Potato",
-          "name_ar": "علبه بطاطا",
-          "price": 3.07,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-447",
-          "name_en": "Box Tabbouleh Small",
-          "name_ar": "علبه تبوله صغيره",
-          "price": 2.8,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-550",
-          "name_en": "Box Fattoush Small",
-          "name_ar": "علبه فتوش صغيره",
-          "price": 2.51,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          "min_quantity": 1
         },
         {
           "id": "prod-567",
@@ -4325,75 +3080,9 @@
                 "Large",
                 "Family"
               ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
             }
           ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
-        },
-        {
-          "id": "prod-364",
-          "name_en": "With Pine Nuts",
-          "name_ar": "مع صنوبر",
-          "price": 4,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Size",
-              "choices": [
-                "Regular",
-                "Large",
-                "Family"
-              ]
-            },
-            {
-              "name": "Spice Level",
-              "choices": [
-                "Mild",
-                "Medium",
-                "Hot"
-              ]
-            },
-            {
-              "name": "Garlic Sauce",
-              "choices": [
-                "No Garlic",
-                "Regular",
-                "Extra Garlic"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Extra lemon",
-            "No onion",
-            "Extra olive oil",
-            "No chili",
-            "Add pickles"
-          ]
+          "min_quantity": 1
         }
       ]
     },
@@ -4402,38 +3091,6 @@
       "name_en": "Lamb",
       "name_ar": "لحم غنم",
       "items": [
-        {
-          "id": "prod-432",
-          "name_en": "Beiruti Lamb",
-          "name_ar": "بيروتيه غنم",
-          "price": 39.11,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "min_quantity": 0
-        },
-        {
-          "id": "prod-402",
-          "name_en": "Lamb",
-          "name_ar": "خاروف",
-          "price": 8,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-331",
-          "name_en": "Fat",
-          "name_ar": "دهنة",
-          "price": 16,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
         {
           "id": "prod-382",
           "name_en": "Neck Lamb",
@@ -4479,17 +3136,6 @@
           "description_ar": ""
         },
         {
-          "id": "prod-408",
-          "name_en": "Shamiyeh Lamb",
-          "name_ar": "شاميه غنم",
-          "price": 33.53,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-320",
           "name_en": "Cubes Lamb",
           "name_ar": "شقف غنم",
@@ -4501,41 +3147,8 @@
           "description_ar": ""
         },
         {
-          "id": "prod-409",
-          "name_en": "Shahbaiyeh Lamb",
-          "name_ar": "شهبايه غنم",
-          "price": 26,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-691",
-          "name_en": "Tripoli Style Lamb",
-          "name_ar": "طرابلسية غنم",
-          "price": 39.1,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-362",
-          "name_en": "Lamb Bone-in",
-          "name_ar": "غنم بعضمه",
-          "price": 21,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-319",
-          "name_en": "Strips",
+          "name_en": "Cutlet",
           "name_ar": "فتايل",
           "price": 38,
           "unit": "kg",
@@ -4557,7 +3170,7 @@
         },
         {
           "id": "prod-322",
-          "name_en": "Kibbeh Lamb with Bulgur",
+          "name_en": "Kibbeh Lamb",
           "name_ar": "كبه غنم مع برغل",
           "price": 29,
           "unit": "kg",
@@ -4600,17 +3213,6 @@
           "description_ar": ""
         },
         {
-          "id": "prod-333",
-          "name_en": "Meat Bi Ajeen Lamb",
-          "name_ar": "لحم بعجين غنم",
-          "price": 27.93,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-361",
           "name_en": "Meat Lamb",
           "name_ar": "لحم غنم",
@@ -4642,39 +3244,6 @@
           "min_quantity": 0,
           "description_en": "",
           "description_ar": ""
-        },
-        {
-          "id": "prod-324",
-          "name_en": "Minced Lamb",
-          "name_ar": "مفرومه غنم",
-          "price": 23,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-326",
-          "name_en": "Shanks Lamb",
-          "name_ar": "موزات غنم",
-          "price": 26,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-380",
-          "name_en": "Lean Meat Lamb",
-          "name_ar": "هبره غنم",
-          "price": 26,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
         }
       ]
     },
@@ -4684,54 +3253,10 @@
       "name_ar": "غنم وعجل",
       "items": [
         {
-          "id": "prod-438",
-          "name_en": "Beiruti Lamb and Veal",
-          "name_ar": "بيروتيه غنم وعجل",
-          "price": 35.76,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-329",
-          "name_en": "Eggs Lamb",
-          "name_ar": "بيض غنم",
-          "price": 18,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-429",
           "name_en": "Dawood Basha Lamb and Veal",
           "name_ar": "داوود باشا غنم وعجل",
           "price": 22,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-407",
-          "name_en": "Shamiyeh Lamb and Veal",
-          "name_ar": "شاميه غنم وعجل",
-          "price": 30.17,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-692",
-          "name_en": "Tripoli Style Lamb and Veal",
-          "name_ar": "طرابلسية غنم وعجل",
-          "price": 35.75,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -4751,7 +3276,7 @@
         },
         {
           "id": "prod-464",
-          "name_en": "Casing",
+          "name_en": "Fwerigh",
           "name_ar": "فارغ",
           "price": 6.7,
           "unit": "piece",
@@ -4771,7 +3296,7 @@
         },
         {
           "id": "prod-368",
-          "name_en": "Kibbeh with Bulgur Lamb and Veal",
+          "name_en": "Kibbeh Lamb and Veal",
           "name_ar": "كبه مع برغل غنم وعجل",
           "price": 25,
           "unit": "kg",
@@ -4784,28 +3309,6 @@
           "id": "prod-369",
           "name_en": "Kafta Lamb and Veal",
           "name_ar": "كفته غنم وعجل",
-          "price": 20,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-370",
-          "name_en": "Meat Bi Ajeen Lamb and Veal",
-          "name_ar": "لحم بعجين غنم وعجل",
-          "price": 24.59,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-325",
-          "name_en": "Meat Veal and Lamb",
-          "name_ar": "لحم عجل وغنم",
           "price": 20,
           "unit": "kg",
           "weight_step": 0.1,
@@ -4847,7 +3350,7 @@
         },
         {
           "id": "prod-511",
-          "name_en": "Trotters",
+          "name_en": "Makadem",
           "name_ar": "مقادم",
           "price": 2.79,
           "unit": "piece",
@@ -5136,32 +3639,10 @@
           "description_ar": ""
         },
         {
-          "id": "prod-443",
-          "name_en": "Shoulder and Cutlets Veal",
-          "name_ar": "كتف وكستلاته عجل",
-          "price": 12.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-308",
           "name_en": "Kafta Beef",
           "name_ar": "كفته بقر",
           "price": 15,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
-          "id": "prod-311",
-          "name_en": "Meat Bi Ajeen Beef",
-          "name_ar": "لحم بعجين بقر",
-          "price": 20.12,
           "unit": "kg",
           "weight_step": 0.1,
           "min_quantity": 0,
@@ -5530,17 +4011,6 @@
           "min_quantity": 0
         },
         {
-          "id": "prod-451",
-          "name_en": "Meat Bi Ajeen for Ovens",
-          "name_ar": "لحم بعجين للأفران",
-          "price": 8.38,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 0,
-          "description_en": "",
-          "description_ar": ""
-        },
-        {
           "id": "prod-603",
           "name_en": "Meat for Pastries",
           "name_ar": "لحم للمعجنات",
@@ -5662,7 +4132,7 @@
       "items": [
         {
           "id": "prod-499",
-          "name_en": "Pepsi Can",
+          "name_en": "Pepsi",
           "name_ar": "بيبسي تنك",
           "price": 0.72,
           "unit": "piece",
@@ -5690,71 +4160,6 @@
           "presets": [
             "Very cold",
             "No ice"
-          ]
-        },
-        {
-          "id": "prod-469",
-          "name_en": "Bread Arabic",
-          "name_ar": "خبز عربي",
-          "price": 0.9,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Quantity",
-              "choices": [
-                "1 Loaf",
-                "1.5 Loaves",
-                "2 Loaves"
-              ]
-            },
-            {
-              "name": "Toasting",
-              "choices": [
-                "Soft",
-                "Light Toast",
-                "Toasted"
-              ]
-            }
-          ],
-          "presets": [
-            "Slice in half",
-            "Extra toasted"
-          ]
-        },
-        {
-          "id": "prod-468",
-          "name_en": "Bread Hamburger",
-          "name_ar": "خبز همبرغر",
-          "price": 1.67,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Bread Quantity",
-              "choices": [
-                "1 Loaf",
-                "1.5 Loaves",
-                "2 Loaves"
-              ]
-            },
-            {
-              "name": "Toasting",
-              "choices": [
-                "Soft",
-                "Light Toast",
-                "Toasted"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Slice in half",
-            "Extra toasted"
           ]
         },
         {
@@ -5822,32 +4227,8 @@
           ]
         },
         {
-          "id": "prod-538",
-          "name_en": "Delivery",
-          "name_ar": "دليفري",
-          "price": 0.9,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Packaging",
-              "choices": [
-                "Single",
-                "2 Pieces",
-                "Family Pack"
-              ]
-            }
-          ],
-          "presets": [
-            "Family pack"
-          ]
-        },
-        {
           "id": "prod-519",
-          "name_en": "7up Ab",
+          "name_en": "7up",
           "name_ar": "سفن اب",
           "price": 0.72,
           "unit": "piece",
@@ -5875,204 +4256,6 @@
           "presets": [
             "Very cold",
             "No ice"
-          ]
-        },
-        {
-          "id": "prod-568",
-          "name_en": "Dough",
-          "name_ar": "عجين",
-          "price": 2,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Packaging",
-              "choices": [
-                "Single",
-                "2 Pieces",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-542",
-          "name_en": "Box Foam",
-          "name_ar": "علبة فلين",
-          "price": 5,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Packaging",
-              "choices": [
-                "Single",
-                "2 Pieces",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Family pack"
-          ]
-        },
-        {
-          "id": "prod-517",
-          "name_en": "Ayran",
-          "name_ar": "عيران",
-          "price": 0.61,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-446",
-          "name_en": "Bottle Water Small",
-          "name_ar": "قنينه ماء صغيره",
-          "price": 0.5,
-          "unit": "kg",
-          "weight_step": 0.1,
-          "min_quantity": 1,
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-507",
-          "name_en": "Yogurt 1kg",
-          "name_ar": "لبن 1ك",
-          "price": 2.17,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-518",
-          "name_en": "Yogurt 2kg",
-          "name_ar": "لبن 2ك",
-          "price": 3,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Serving Temperature",
-              "choices": [
-                "Cold",
-                "Room Temperature",
-                "With Ice"
-              ]
-            },
-            {
-              "name": "Ice",
-              "choices": [
-                "No Ice",
-                "Regular Ice",
-                "Extra Ice"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Very cold",
-            "No ice"
-          ]
-        },
-        {
-          "id": "prod-510",
-          "name_en": "Miscellaneous",
-          "name_ar": "متفرقات",
-          "price": 0,
-          "unit": "piece",
-          "description_en": "",
-          "description_ar": "",
-          "options": [
-            {
-              "name": "Packaging",
-              "choices": [
-                "Single",
-                "2 Pieces",
-                "Family Pack"
-              ]
-            }
-          ],
-          "min_quantity": 1,
-          "presets": [
-            "Family pack"
           ]
         }
       ]

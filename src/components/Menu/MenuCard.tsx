@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useCartStore } from '../../store/cartStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { PlusIcon } from '@heroicons/react/24/solid';
@@ -34,12 +34,12 @@ const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string
   return translated;
 };
 
-export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
+const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
 
-  const cartInstances = cartItems.filter((i) => i.id === item.id);
+  const cartInstances = useMemo(() => cartItems.filter((i) => i.id === item.id), [cartItems, item.id]);
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
 
   const [pendingOptions, setPendingOptions] = useState<Record<string, string>>({});
@@ -126,7 +126,14 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
       onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
-      <div className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64' : 'w-32 h-24 sm:w-40 sm:h-28'}`}>
+      <div
+        className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64 cursor-pointer' : 'w-32 h-24 sm:w-40 sm:h-28'}`}
+        onClick={(e) => {
+          if (!expanded) return;
+          e.stopPropagation();
+          onToggle();
+        }}
+      >
         <img
           src={imageUrl}
           alt={displayName}
@@ -253,3 +260,5 @@ export const MenuCard = ({ item, expanded, onToggle }: MenuCardProps) => {
     </div>
   );
 };
+
+export const MenuCard = memo(MenuCardComponent);
