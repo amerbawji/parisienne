@@ -250,9 +250,9 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
             </div>
           </div>
         ) : (
-          <div className="mt-auto">
-             <span className="text-xs text-primary-600 font-medium underline">
-               {t('add') || 'Customize & Add'}
+          <div className="mt-auto flex justify-end">
+             <span className="text-sm text-primary-600 font-semibold">
+               + {t('add') || 'Add'}
              </span>
           </div>
         )}
