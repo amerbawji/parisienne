@@ -4892,7 +4892,7 @@
       "id": "cat-114",
       "name_en": "Beef",
       "name_ar": "لحم بقر",
-      "hidden": true,
+      "hidden": false,
       "items": [
         {
           "id": "prod-448",
