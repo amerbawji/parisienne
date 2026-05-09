@@ -192,7 +192,7 @@ export const CartContent = () => {
         name_ar: item.name_ar || item.name,
         quantity: item.quantity,
         price: item.price,
-        unit: (item as Record<string, unknown>).step && ((item as Record<string, unknown>).step as number) < 1 ? 'kg' : 'piece',
+        unit: (item as unknown as Record<string, unknown>).step && ((item as unknown as Record<string, unknown>).step as number) < 1 ? 'kg' : 'piece',
         selected_options: item.selectedOptions || {},
       })),
       total: totalPrice,
