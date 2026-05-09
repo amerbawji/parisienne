@@ -8,6 +8,11 @@ export interface MenuOption {
   price_additions?: Record<string, number>;
 }
 
+export interface Preset {
+  en: string;
+  ar: string;
+}
+
 export interface MenuItem {
   id: string;
   name_en: string;
@@ -20,7 +25,7 @@ export interface MenuItem {
   description_ar?: string;
   image?: string;
   options?: MenuOption[];
-  presets?: string[];
+  presets?: Preset[];
   active?: boolean;
   in_stock?: boolean;
 }
@@ -50,7 +55,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number; active: boolean; in_stock: boolean };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; sort_order: number; active: boolean; in_stock: boolean };
 type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -76,7 +81,9 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           description_en: item.description_en,
           description_ar: item.description_ar,
           image: item.image_url || undefined,
-          presets: item.presets?.length ? item.presets : undefined,
+          presets: item.presets?.length
+            ? item.presets.map((p) => (typeof p === 'string' ? { en: p, ar: p } : p))
+            : undefined,
           active: item.active,
           in_stock: item.in_stock,
           options: opts

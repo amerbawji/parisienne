@@ -25,6 +25,8 @@ export const Home = () => {
   const fetchPromo = usePromoStore((state) => state.fetchPromo);
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
   const fetchConfig = useStoreConfigStore((state) => state.fetchConfig);
+  const open_time = useStoreConfigStore((state) => state.open_time);
+  const close_time = useStoreConfigStore((state) => state.close_time);
   const menuLoading = useMenuStore((state) => state.loading);
   const [showSplashPromo, setShowSplashPromo] = useState(false);
   const [lastAdded, setLastAdded] = useState<{ instanceId: string; itemName: string } | null>(null);
@@ -362,7 +364,7 @@ export const Home = () => {
                 <ClockIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
                   <span className="block text-xs text-gray-500">{t('operating_hours')}</span>
-                  <span className="font-semibold group-hover:text-primary-700">7:30 am till 7 pm</span>
+                  <span className="font-semibold group-hover:text-primary-700">{open_time} – {close_time}</span>
                 </span>
               </a>
             </div>

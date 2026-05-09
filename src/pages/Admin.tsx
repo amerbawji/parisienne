@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, createContext, useContext, type ChangeEvent } from 'react';
-import { useMenuStore, type Category, type MenuItem, type MenuOption } from '../store/menuStore';
+import { useMenuStore, type Category, type MenuItem, type MenuOption, type Preset } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
 import { uploadImage, supabase } from '../lib/supabase';
@@ -85,7 +85,9 @@ const adminDict = {
     option_placeholder: 'Option name (e.g. Cooking Level)',
     remove_btn: 'Remove', add_choice: '+ Add Choice',
     choice_placeholder: 'Choice', price_placeholder: '+price',
-    presets_label: 'Presets', add_btn: 'Add', preset_placeholder: 'e.g. No pickles',
+    presets_label: 'Presets', add_btn: 'Add',
+    preset_en_placeholder: 'English (e.g. No pickles)', preset_ar_placeholder: 'Arabic (e.g. بدون كبيس)',
+    preset_missing_ar: 'Arabic translation required',
     out_of_stock: 'Out of stock', in_stock: 'In stock',
     active_item_title: 'Active — click to hide', hidden_item_title: 'Hidden — click to show',
     option_count: (n: number) => `${n} option(s)`,
@@ -151,7 +153,9 @@ const adminDict = {
     option_placeholder: 'اسم الخيار (مثلاً: درجة الاستواء)',
     remove_btn: 'حذف', add_choice: '+ إضافة اختيار',
     choice_placeholder: 'اختيار', price_placeholder: '+سعر',
-    presets_label: 'اختصارات', add_btn: 'إضافة', preset_placeholder: 'مثلاً: بدون كبيس',
+    presets_label: 'اختصارات', add_btn: 'إضافة',
+    preset_en_placeholder: 'إنجليزي (e.g. No pickles)', preset_ar_placeholder: 'عربي (مثلاً: بدون كبيس)',
+    preset_missing_ar: 'الترجمة العربية مطلوبة',
     out_of_stock: 'غير متوفر', in_stock: 'متوفر',
     active_item_title: 'نشط — انقر للإخفاء', hidden_item_title: 'مخفي — انقر للإظهار',
     option_count: (n: number) => `${n} خيار`,
@@ -477,17 +481,23 @@ function PresetsEditor({
   presets,
   onChange,
 }: {
-  presets: string[];
-  onChange: (p: string[]) => void;
+  presets: Preset[];
+  onChange: (p: Preset[]) => void;
 }) {
-  const [draft, setDraft] = useState('');
+  const [draftEn, setDraftEn] = useState('');
+  const [draftAr, setDraftAr] = useState('');
+  const [missingAr, setMissingAr] = useState(false);
   const { t } = useAdminT();
 
   const add = () => {
-    const trimmed = draft.trim();
-    if (!trimmed) return;
-    onChange([...presets, trimmed]);
-    setDraft('');
+    const en = draftEn.trim();
+    const ar = draftAr.trim();
+    if (!en) return;
+    if (!ar) { setMissingAr(true); return; }
+    setMissingAr(false);
+    onChange([...presets, { en, ar }]);
+    setDraftEn('');
+    setDraftAr('');
   };
 
   return (
@@ -499,33 +509,48 @@ function PresetsEditor({
             key={i}
             className="flex items-center gap-1 bg-secondary-100 text-secondary-800 text-xs px-2 py-1 rounded-full"
           >
-            {p}
+            <span dir="ltr">{p.en}</span>
+            <span className="text-secondary-500 mx-0.5">/</span>
+            <span dir="rtl">{p.ar}</span>
             <button
               type="button"
               onClick={() => onChange(presets.filter((_, idx) => idx !== i))}
-              className="text-secondary-600 hover:text-red-600 leading-none"
+              className="text-secondary-600 hover:text-red-600 leading-none ml-1"
             >
               ✕
             </button>
           </span>
         ))}
       </div>
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
-          placeholder={t('preset_placeholder') as string}
-          className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
-        />
-        <button
-          type="button"
-          onClick={add}
-          className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition"
-        >
-          {t('add_btn') as string}
-        </button>
+      <div className="flex flex-col gap-1.5">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={draftEn}
+            onChange={(e) => setDraftEn(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
+            placeholder={t('preset_en_placeholder') as string}
+            dir="ltr"
+            className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+          />
+          <input
+            type="text"
+            value={draftAr}
+            onChange={(e) => { setDraftAr(e.target.value); setMissingAr(false); }}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
+            placeholder={t('preset_ar_placeholder') as string}
+            dir="rtl"
+            className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingAr ? 'border-red-400' : 'border-gray-200'}`}
+          />
+          <button
+            type="button"
+            onClick={add}
+            className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition shrink-0"
+          >
+            {t('add_btn') as string}
+          </button>
+        </div>
+        {missingAr && <p className="text-xs text-red-500">{t('preset_missing_ar') as string}</p>}
       </div>
     </div>
   );
@@ -815,7 +840,7 @@ function SettingsTab() {
         <h2 className="text-base font-bold text-gray-800">{t('promo_popup') as string}</h2>
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-700">{t('enable_promo') as string}</span>
-          <button type="button" onClick={() => setEnabled(!enabled).then(() => toast(enabled ? t('toast_promo_disabled') as string : t('toast_promo_enabled') as string))}
+          <button type="button" dir="ltr" onClick={() => setEnabled(!enabled).then(() => toast(enabled ? t('toast_promo_disabled') as string : t('toast_promo_enabled') as string))}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-primary-600' : 'bg-gray-300'}`}
             aria-pressed={enabled}>
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -1063,6 +1088,7 @@ function CategoriesTab() {
                   </div>
                   <button
                     type="button"
+                    dir="ltr"
                     onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
                     title={cat.active ? t('active_title') as string : t('inactive_title') as string}
@@ -1276,6 +1302,7 @@ function ItemsTab() {
                 </button>
                 <button
                   type="button"
+                  dir="ltr"
                   onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
                   title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}
@@ -1428,17 +1455,17 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus }
               {order.customer_phone && <span><span className="text-gray-500">{t('phone_label') as string} </span><span className="font-medium">{order.customer_phone}</span></span>}
             </div>
           )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
+          <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
             {order.service_type === 'delivery' && (<>
-              {order.delivery_area    && <><span className="text-gray-500">{t('area_label') as string}</span><span className="font-medium">{order.delivery_area}</span></>}
-              {order.delivery_street  && <><span className="text-gray-500">{t('street_label') as string}</span><span className="font-medium">{order.delivery_street}</span></>}
-              {order.delivery_building && <><span className="text-gray-500">{t('building_label') as string}</span><span className="font-medium">{order.delivery_building}</span></>}
-              {order.delivery_floor   && <><span className="text-gray-500">{t('floor_label') as string}</span><span className="font-medium">{order.delivery_floor}</span></>}
-              {order.delivery_details && <><span className="text-gray-500">{t('details_label') as string}</span><span className="font-medium">{order.delivery_details}</span></>}
-              {order.location_url     && <><span className="text-gray-500">{t('location_label') as string}</span><a href={order.location_url} target="_blank" rel="noreferrer" className="text-primary-600 underline font-medium">{t('open_map') as string}</a></>}
+              {order.delivery_area    && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('area_label') as string}</span><span className="font-medium">{order.delivery_area}</span></div>}
+              {order.delivery_street  && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('street_label') as string}</span><span className="font-medium">{order.delivery_street}</span></div>}
+              {order.delivery_building && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('building_label') as string}</span><span className="font-medium">{order.delivery_building}</span></div>}
+              {order.delivery_floor   && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('floor_label') as string}</span><span className="font-medium">{order.delivery_floor}</span></div>}
+              {order.delivery_details && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('details_label') as string}</span><span className="font-medium">{order.delivery_details}</span></div>}
+              {order.location_url     && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('location_label') as string}</span><a href={order.location_url} target="_blank" rel="noreferrer" className="text-primary-600 underline font-medium">{t('open_map') as string}</a></div>}
             </>)}
-            {order.timing === 'scheduled' && order.scheduled_time && <><span className="text-gray-500">{t('scheduled_label') as string}</span><span className="font-medium">{order.scheduled_time}</span></>}
-            {order.payment_method && <><span className="text-gray-500">{t('payment_label') as string}</span><span className="font-medium capitalize">{order.payment_method}</span></>}
+            {order.timing === 'scheduled' && order.scheduled_time && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('scheduled_label') as string}</span><span className="font-medium">{order.scheduled_time}</span></div>}
+            {order.payment_method && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('payment_label') as string}</span><span className="font-medium capitalize">{order.payment_method}</span></div>}
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('items_label') as string}</p>

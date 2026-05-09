@@ -5,6 +5,7 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button } from '../UI/Button';
 import { QuantitySelector } from '../UI/QuantitySelector';
 import { type TranslationKey } from '../../data/translations';
+import { type Preset } from '../../store/menuStore';
 
 export interface MenuItem {
   id: string;
@@ -19,7 +20,7 @@ export interface MenuItem {
   min_quantity?: number;
   options?: { name: string; choices: string[] }[];
   option_price_overrides?: Record<string, Record<string, number>>;
-  presets?: string[];
+  presets?: Preset[];
   in_stock?: boolean;
 }
 
@@ -109,14 +110,15 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
     });
   };
 
-  const togglePreset = (preset: string) => {
+  const togglePreset = (preset: Preset) => {
+    const text = preset.en;
     const current = pendingInstructions;
     let newInstructions = current;
-    
-    if (current.includes(preset)) {
-      newInstructions = current.replace(preset, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
+
+    if (current.includes(text)) {
+      newInstructions = current.replace(text, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
     } else {
-      newInstructions = current ? `${current}, ${preset}` : preset;
+      newInstructions = current ? `${current}, ${text}` : text;
     }
     setPendingInstructions(newInstructions);
   };
@@ -257,17 +259,17 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
 
             <div className="space-y-2">
               <div className="flex flex-wrap gap-1">
-                {presets.map((preset) => (
+                {presets.map((preset, i) => (
                   <button
-                    key={preset}
+                    key={i}
                     onClick={(e) => { e.stopPropagation(); togglePreset(preset); }}
                     className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
-                      pendingInstructions.includes(preset)
+                      pendingInstructions.includes(preset.en)
                         ? 'bg-primary-100 text-primary-700 border-primary-200'
                         : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                     }`}
                   >
-                    {safeT(t, `preset_${preset.toLowerCase().replace(/ /g, '_')}`, preset)}
+                    {language === 'ar' ? preset.ar : preset.en}
                   </button>
                 ))}
               </div>
