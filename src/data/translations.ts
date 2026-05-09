@@ -159,7 +159,7 @@ export const translations = {
     save_details: "Save my details for future orders",
     your_name: "Your Name",
     your_phone: "Your Phone Number",
-    your_name_placeholder: "e.g. Ali Hassan",
+    your_name_placeholder: "Name",
     your_phone_placeholder: "e.g. 03 123 456",
   },
   ar: {
@@ -322,7 +322,7 @@ export const translations = {
     save_details: "احفظ بياناتي للطلبات الجاية",
     your_name: "اسمك",
     your_phone: "رقم هاتفك",
-    your_name_placeholder: "مثلاً: علي حسن",
+    your_name_placeholder: "الاسم",
     your_phone_placeholder: "مثلاً: 03 123 456",
   }
 };
