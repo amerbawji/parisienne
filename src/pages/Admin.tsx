@@ -1,8 +1,45 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react';
+import { useState, useRef, useEffect, useCallback, createContext, useContext, type ChangeEvent } from 'react';
 import { useMenuStore, type Category, type MenuItem, type MenuOption } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
 import { uploadImage, supabase } from '../lib/supabase';
+
+// ─── Toast ───────────────────────────────────────────────────────────────────
+
+interface ToastItem { id: string; message: string; type: 'success' | 'error' }
+type ShowToast = (message: string, type?: 'success' | 'error') => void;
+const ToastContext = createContext<ShowToast>(() => {});
+const useToast = () => useContext(ToastContext);
+
+function ToastProvider({ children }: { children: React.ReactNode }) {
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  const showToast = useCallback<ShowToast>((message, type = 'success') => {
+    const id = Math.random().toString(36).slice(2);
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 3000);
+  }, []);
+
+  return (
+    <ToastContext.Provider value={showToast}>
+      {children}
+      <div className="fixed top-4 right-4 z-[60] flex flex-col gap-2 items-end pointer-events-none">
+        {toasts.map((t) => (
+          <div key={t.id}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium text-white animate-in slide-in-from-right-4 fade-in duration-200 ${
+              t.type === 'success' ? 'bg-emerald-600' : 'bg-red-600'
+            }`}>
+            {t.type === 'success'
+              ? <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+              : <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+            }
+            {t.message}
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
+}
 
 const ADMIN_PASSWORD = 'parisienne2025';
 const SESSION_KEY = 'parisienne_admin_auth';
@@ -495,6 +532,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
   const { open_time, close_time, closed_days, whatsapp_number, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const toast = useToast();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [hoursSaving, setHoursSaving] = useState(false);
@@ -524,6 +562,9 @@ function SettingsTab() {
       const path = `promo/${Date.now()}-${file.name}`;
       const url = await uploadImage(file, path);
       await setImage(url);
+      toast('Promo image updated');
+    } catch {
+      toast('Upload failed', 'error');
     } finally {
       setUploading(false);
       e.target.value = '';
@@ -538,8 +579,10 @@ function SettingsTab() {
     setHoursSaving(true); setHoursError('');
     try {
       await updateConfig({ open_time: openTime, close_time: closeTime, closed_days: closedDays });
+      toast('Opening hours saved');
     } catch {
       setHoursError('Failed to save. Please try again.');
+      toast('Failed to save', 'error');
     } finally {
       setHoursSaving(false);
     }
@@ -601,7 +644,7 @@ function SettingsTab() {
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <button type="button" disabled={waSaving}
-            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); } catch { setWaError('Failed to save.'); } finally { setWaSaving(false); } }}
+            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); toast('WhatsApp number saved'); } catch { setWaError('Failed to save.'); toast('Failed to save', 'error'); } finally { setWaSaving(false); } }}
             className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
             {waSaving ? 'Saving…' : 'Save'}
           </button>
@@ -614,7 +657,7 @@ function SettingsTab() {
         <h2 className="text-base font-bold text-gray-800">Promo Popup</h2>
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-700">Enable promo popup</span>
-          <button type="button" onClick={() => setEnabled(!enabled)}
+          <button type="button" onClick={() => setEnabled(!enabled).then(() => toast(enabled ? 'Promo disabled' : 'Promo enabled'))}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-primary-600' : 'bg-gray-300'}`}
             aria-pressed={enabled}>
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -652,6 +695,7 @@ interface CategoryFormState {
 
 function CategoriesTab() {
   const { categories, addCategory, updateCategory, deleteCategory, reorderCategory } = useMenuStore();
+  const toast = useToast();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -675,7 +719,8 @@ function CategoriesTab() {
       });
       setAddForm(emptyForm());
       setShowAddForm(false);
-    } catch { setError('Failed to save. Please try again.'); }
+      toast('Category added');
+    } catch { setError('Failed to save. Please try again.'); toast('Failed to save', 'error'); }
     finally { setSaving(false); }
   };
 
@@ -696,7 +741,8 @@ function CategoriesTab() {
         image: editForm.image,
       });
       setEditingId(null);
-    } catch { setError('Failed to save. Please try again.'); }
+      toast('Category saved');
+    } catch { setError('Failed to save. Please try again.'); toast('Failed to save', 'error'); }
     finally { setSaving(false); }
   };
 
@@ -858,7 +904,7 @@ function CategoriesTab() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => updateCategory(cat.id, { active: !cat.active })}
+                    onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? 'Category hidden' : 'Category visible'))}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
                     title={cat.active ? 'Active — click to deactivate' : 'Inactive — click to activate'}
                   >
@@ -941,6 +987,7 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
 
 function ItemsTab() {
   const { categories, addItem, updateItem, deleteItem, reorderItem } = useMenuStore();
+  const toast = useToast();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     categories[0]?.id ?? ''
   );
@@ -954,11 +1001,13 @@ function ItemsTab() {
     const newItem: MenuItem = { ...item, id: item.id || `prod-${Date.now()}` };
     await addItem(selectedCategoryId, newItem);
     setShowAddForm(false);
+    toast('Item added');
   };
 
   const handleUpdateItem = async (item: MenuItem) => {
     await updateItem(selectedCategoryId, item.id, item);
     setEditingItemId(null);
+    toast('Item saved');
   };
 
   const handleDelete = async (item: MenuItem) => {
@@ -1027,7 +1076,7 @@ function ItemsTab() {
             >
               <QuickImageChange
                 image={item.image ?? ''}
-                onImage={(url) => updateItem(selectedCategoryId, item.id, { image: url })}
+                onImage={(url) => updateItem(selectedCategoryId, item.id, { image: url }).then(() => toast('Image updated'))}
               />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
@@ -1058,7 +1107,7 @@ function ItemsTab() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => updateItem(selectedCategoryId, item.id, { in_stock: item.in_stock === false ? true : false })}
+                  onClick={() => updateItem(selectedCategoryId, item.id, { in_stock: item.in_stock === false ? true : false }).then(() => toast(item.in_stock === false ? 'Marked in stock' : 'Marked out of stock'))}
                   className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                   title={item.in_stock === false ? 'Out of stock — click to mark in stock' : 'In stock — click to mark out of stock'}
                 >
@@ -1066,7 +1115,7 @@ function ItemsTab() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false })}
+                  onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false }).then(() => toast(item.active === false ? 'Item visible' : 'Item hidden'))}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
                   title={item.active !== false ? 'Active — click to hide' : 'Hidden — click to show'}
                 >
@@ -1262,17 +1311,24 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus }
   );
 }
 
-function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
+function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
   orders: Order[];
   loading: boolean;
   onUpdateStatus: (id: string, status: string) => void;
   onRefresh: () => void;
+  toast: ShowToast;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(1);
   const carouselRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const [selectedDate, setSelectedDate] = useState(todayIso);
+
+  const visibleOrders = selectedDate
+    ? orders.filter(o => o.created_at.slice(0, 10) === selectedDate)
+    : orders;
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -1287,6 +1343,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
     await supabase.from('orders').update({ status }).eq('id', id);
     onUpdateStatus(id, status);
     setUpdatingStatus(null);
+    toast(`Order marked ${STATUS_LABELS[status]?.label ?? status}`);
   };
 
   const goToTab = (index: number) => {
@@ -1331,8 +1388,27 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
   return (
     <div className="flex flex-col gap-3">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-bold text-gray-800">Orders</h2>
+      <div className="flex items-center gap-2 flex-wrap">
+        <h2 className="text-base font-bold text-gray-800 mr-auto">Orders</h2>
+        <div className="flex items-center gap-1.5">
+          <button type="button" onClick={() => setSelectedDate(prev => { const d = new Date(prev); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10); })}
+            className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition text-gray-500">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}
+            className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white" />
+          <button type="button" onClick={() => setSelectedDate(prev => { const d = new Date(prev); d.setDate(d.getDate() + 1); return d.toISOString().slice(0, 10); })}
+            disabled={selectedDate >= todayIso}
+            className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition text-gray-500">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </button>
+          {selectedDate !== todayIso && (
+            <button type="button" onClick={() => setSelectedDate(todayIso)}
+              className="text-xs px-2 py-1.5 rounded-lg border border-primary-200 text-primary-600 hover:bg-primary-50 transition font-medium">
+              Today
+            </button>
+          )}
+        </div>
         <button type="button" onClick={onRefresh} disabled={loading}
           className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition">
           <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -1403,7 +1479,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
       {/* Tab bar */}
       <div className="flex border-b border-gray-200">
         {statusTabs.map((t, i) => {
-          const count = t.key === 'all' ? orders.length : orders.filter(o => o.status === t.key).length;
+          const count = t.key === 'all' ? visibleOrders.length : visibleOrders.filter(o => o.status === t.key).length;
           return (
             <button key={t.key} type="button" onClick={() => goToTab(i)}
               className={`flex-1 flex flex-col items-center gap-0.5 px-1 py-2 text-xs font-semibold border-b-2 transition -mb-px ${
@@ -1421,7 +1497,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
         style={{ scrollSnapType: 'x mandatory' }}>
         {statusTabs.map((t) => {
-          const list = t.key === 'all' ? orders : orders.filter(o => o.status === t.key);
+          const list = t.key === 'all' ? visibleOrders : visibleOrders.filter(o => o.status === t.key);
           return (
             <div key={t.key} className="flex-shrink-0 w-full snap-start space-y-3 pr-0.5">
               {list.length === 0
@@ -1475,6 +1551,7 @@ type Tab = 'orders' | 'settings' | 'categories' | 'items';
 
 function AdminShell() {
   const [tab, setTab] = useState<Tab>('orders');
+  const toast = useToast();
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
@@ -1584,7 +1661,7 @@ function AdminShell() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
         {tab === 'settings' && <SettingsTab />}
@@ -1608,5 +1685,5 @@ export const Admin = () => {
   );
 
   if (!authed) return <PasswordGate onSuccess={() => setAuthed(true)} />;
-  return <AdminShell />;
+  return <ToastProvider><AdminShell /></ToastProvider>;
 };
