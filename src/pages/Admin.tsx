@@ -1195,16 +1195,16 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
       </div>
 
       {/* Tab bar */}
-      <div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide">
+      <div className="flex border-b border-gray-200">
         {statusTabs.map((t, i) => {
           const count = t.key === 'all' ? orders.length : orders.filter(o => o.status === t.key).length;
           return (
             <button key={t.key} type="button" onClick={() => goToTab(i)}
-              className={`flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-sm font-semibold whitespace-nowrap border-b-2 transition -mb-px ${
+              className={`flex-1 flex flex-col items-center gap-0.5 px-1 py-2 text-xs font-semibold border-b-2 transition -mb-px ${
                 activeTab === i ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}>
-              {t.label}
-              {count > 0 && <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${activeTab === i ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-500'}`}>{count}</span>}
+              <span>{t.label}</span>
+              {count > 0 && <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold leading-none ${activeTab === i ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-500'}`}>{count}</span>}
             </button>
           );
         })}
