@@ -1,32 +1,33 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import menuData from '../data/menu.json';
 import logo from '../assets/malhame-vertical-logo.svg';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
 import { useLanguageStore } from '../store/languageStore';
+import { useMenuStore } from '../store/menuStore';
+import { usePromoStore } from '../store/promoStore';
 import { Button } from '../components/UI/Button';
 import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
-
-// Splash promo configuration
-// Toggle on/off from here
-const SPLASH_PROMO_ENABLED = true;
-// Place your promo image at: public/promo-ramadan.jpg
-const SPLASH_PROMO_IMAGE = '/promo-ramadan.jpg';
 
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuSelectionMode, setMenuSelectionMode] = useState(false);
-  const [showSplashPromo, setShowSplashPromo] = useState(SPLASH_PROMO_ENABLED);
+  const promoEnabled = usePromoStore((state) => state.enabled);
+  const promoImage = usePromoStore((state) => state.image);
+  const fetchPromo = usePromoStore((state) => state.fetchPromo);
+  const fetchMenu = useMenuStore((state) => state.fetchMenu);
+  const menuLoading = useMenuStore((state) => state.loading);
+  const [showSplashPromo, setShowSplashPromo] = useState(false);
   const [lastAdded, setLastAdded] = useState<{ instanceId: string; itemName: string } | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const cartItems = useCartStore((state) => state.items);
+  const storeCategories = useMenuStore((state) => state.categories);
   const toggleCart = useCartStore((state) => state.toggleCart);
   const removeItem = useCartStore((state) => state.removeItem);
   const { language, t } = useLanguageStore();
@@ -47,12 +48,8 @@ export const Home = () => {
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const categories = useMemo(
-    () =>
-      menuData.categories.filter((category) => {
-        const cat = category as typeof category & { hidden?: boolean };
-        return !cat.hidden;
-      }),
-    []
+    () => storeCategories.filter((category) => !(category as typeof category & { hidden?: boolean }).hidden),
+    [storeCategories]
   );
   const filteredCategories = useMemo(
     () => {
@@ -71,9 +68,7 @@ export const Home = () => {
 
           if (matchingItems.length === 0) return null;
 
-          // Use the image from JSON or a fallback if not present (though we ran a script to add it)
-          const cat = category as typeof category & { image?: string };
-          const image = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(category.name_en)}`;
+          const image = category.image || `https://placehold.co/600x200?text=${encodeURIComponent(category.name_en)}`;
 
           return { ...category, items: matchingItems, image };
         })
@@ -81,6 +76,14 @@ export const Home = () => {
     },
     [categories, deferredSearchQuery]
   );
+  useEffect(() => {
+    Promise.all([fetchMenu(), fetchPromo()]);
+  }, []);
+
+  useEffect(() => {
+    if (!menuLoading) setShowSplashPromo(promoEnabled);
+  }, [menuLoading, promoEnabled]);
+
   useEffect(() => {
     if (!lastAdded) return;
     const timeout = window.setTimeout(() => {
@@ -119,9 +122,9 @@ export const Home = () => {
               <XMarkIcon className="h-5 w-5" />
             </button>
 
-            {SPLASH_PROMO_IMAGE ? (
+            {promoImage ? (
               <img
-                src={SPLASH_PROMO_IMAGE}
+                src={promoImage}
                 alt={t('promo_offer_alt')}
                 className="w-full h-auto object-cover"
               />
@@ -240,8 +243,13 @@ export const Home = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
+        {menuLoading && (
+          <div className="flex items-center justify-center py-24">
+            <div className="h-8 w-8 rounded-full border-4 border-primary-200 border-t-primary-600 animate-spin" />
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-          {filteredCategories.length > 0 ? (
+          {!menuLoading && filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
               const isOpen = menuSelectionMode
                 ? expandedCategory === category.id
@@ -302,9 +310,11 @@ export const Home = () => {
               );
             })
           ) : (
-            <div className="text-center py-20 text-gray-500">
-              {t('no_items_found')}
-            </div>
+            !menuLoading && (
+              <div className="text-center py-20 text-gray-500">
+                {t('no_items_found')}
+              </div>
+            )
           )}
         </div>
       </main>
