@@ -605,6 +605,7 @@ function CategoriesTab() {
         name_en: addForm.name_en.trim(),
         name_ar: addForm.name_ar.trim(),
         image: addForm.image,
+        active: true,
       });
       setAddForm(emptyForm());
       setShowAddForm(false);
