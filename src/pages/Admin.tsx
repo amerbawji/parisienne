@@ -1055,6 +1055,92 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
 };
 
+function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus }: {
+  order: Order;
+  expanded: boolean;
+  onToggle: () => void;
+  onUpdateStatus: (id: string, status: string) => void;
+  updatingStatus: string | null;
+}) {
+  const date = new Date(order.created_at);
+  const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+      <button type="button" onClick={onToggle} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-semibold text-gray-900">
+              {date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {' '}<span className="text-gray-500 font-normal">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
+            </span>
+            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badge.color}`}>{badge.label}</span>
+            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
+          </div>
+          <p className="text-xs text-gray-500 mt-0.5">
+            {[order.customer_name, order.customer_phone, `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`, `$${Number(order.total).toFixed(2)}`].filter(Boolean).join(' · ')}
+          </p>
+        </div>
+        <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-gray-100 px-4 py-4 space-y-4">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Status:</span>
+            {Object.entries(STATUS_LABELS).map(([key, val]) => (
+              <button key={key} type="button" disabled={updatingStatus === order.id} onClick={() => onUpdateStatus(order.id, key)}
+                className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}>
+                {val.label}
+              </button>
+            ))}
+          </div>
+          {(order.customer_name || order.customer_phone) && (
+            <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+              {order.customer_name  && <span><span className="text-gray-500">Name: </span><span className="font-medium">{order.customer_name}</span></span>}
+              {order.customer_phone && <span><span className="text-gray-500">Phone: </span><span className="font-medium">{order.customer_phone}</span></span>}
+            </div>
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
+            {order.service_type === 'delivery' && (<>
+              {order.delivery_area    && <><span className="text-gray-500">Area</span><span className="font-medium">{order.delivery_area}</span></>}
+              {order.delivery_street  && <><span className="text-gray-500">Street</span><span className="font-medium">{order.delivery_street}</span></>}
+              {order.delivery_building && <><span className="text-gray-500">Building</span><span className="font-medium">{order.delivery_building}</span></>}
+              {order.delivery_floor   && <><span className="text-gray-500">Floor</span><span className="font-medium">{order.delivery_floor}</span></>}
+              {order.delivery_details && <><span className="text-gray-500">Details</span><span className="font-medium">{order.delivery_details}</span></>}
+              {order.location_url     && <><span className="text-gray-500">Location</span><a href={order.location_url} target="_blank" rel="noreferrer" className="text-primary-600 underline font-medium">Open map</a></>}
+            </>)}
+            {order.timing === 'scheduled' && order.scheduled_time && <><span className="text-gray-500">Scheduled</span><span className="font-medium">{order.scheduled_time}</span></>}
+            {order.payment_method && <><span className="text-gray-500">Payment</span><span className="font-medium capitalize">{order.payment_method}</span></>}
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Items</p>
+            <div className="space-y-2">
+              {order.items.map((item, i) => (
+                <div key={i} className="flex items-start justify-between gap-2 text-sm">
+                  <div className="flex-1 min-w-0">
+                    <span className="font-medium text-gray-900">{item.name_en}</span>
+                    {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
+                    {item.selected_options && Object.keys(item.selected_options).length > 0 && (
+                      <div className="text-xs text-gray-500 mt-0.5">{Object.entries(item.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}</div>
+                    )}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="text-gray-500">×{item.quantity}</span>
+                    <span className="ml-2 font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
+              <span>Total</span><span>${Number(order.total).toFixed(2)}</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
   orders: Order[];
   loading: boolean;
@@ -1063,198 +1149,91 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterService, setFilterService] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useRef(false);
 
-  const filtered = orders.filter((o) =>
-    (filterStatus === 'all' || o.status === filterStatus) &&
-    (filterService === 'all' || o.service_type === filterService)
-  );
+  const statusTabs = [{ key: 'all', label: 'All' }, ...Object.entries(STATUS_LABELS).map(([k, v]) => ({ key: k, label: v.label }))];
 
-  const updateStatus = async (id: string, status: string) => {
+  const handleUpdateStatus = async (id: string, status: string) => {
     setUpdatingStatus(id);
     await supabase.from('orders').update({ status }).eq('id', id);
     onUpdateStatus(id, status);
     setUpdatingStatus(null);
   };
 
-  const statusTabs = [{ key: 'all', label: 'All' }, ...Object.entries(STATUS_LABELS).map(([k, v]) => ({ key: k, label: v.label }))];
-  const serviceTabs = [{ key: 'all', label: 'All' }, { key: 'delivery', label: 'Delivery' }, { key: 'takeaway', label: 'Takeaway' }];
+  const goToTab = (index: number) => {
+    setActiveTab(index);
+    setExpanded(null);
+    if (carouselRef.current) {
+      isScrolling.current = true;
+      carouselRef.current.scrollTo({ left: index * carouselRef.current.offsetWidth, behavior: 'smooth' });
+      setTimeout(() => { isScrolling.current = false; }, 400);
+    }
+  };
 
-  const header = (
-    <div className="flex flex-col gap-2 mb-4">
+  const handleCarouselScroll = () => {
+    if (isScrolling.current || !carouselRef.current) return;
+    const index = Math.round(carouselRef.current.scrollLeft / carouselRef.current.offsetWidth);
+    if (index !== activeTab) { setActiveTab(index); setExpanded(null); }
+  };
+
+  if (loading) return (
+    <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
+  );
+
+  return (
+    <div className="flex flex-col gap-3">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold text-gray-800">Orders</h2>
-        <button
-          type="button"
-          onClick={onRefresh}
-          disabled={loading}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition"
-        >
+        <button type="button" onClick={onRefresh} disabled={loading}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition">
           <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
           Refresh
         </button>
       </div>
-      {/* Status filter */}
-      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
-        {statusTabs.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setFilterStatus(t.key)}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition border ${
-              filterStatus === t.key
-                ? 'bg-primary-600 text-white border-primary-600'
-                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-      {/* Service type filter */}
-      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
-        {serviceTabs.map((t) => (
-          <button
-            key={t.key}
-            type="button"
-            onClick={() => setFilterService(t.key)}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition border ${
-              filterService === t.key
-                ? 'bg-primary-600 text-white border-primary-600'
-                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
-            }`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
 
-  if (loading) return <>{header}<div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div></>;
-
-  if (orders.length === 0) return (
-    <>
-      {header}
-      <div className="text-center py-16 text-gray-400">
-        <p className="text-lg font-semibold">No orders yet</p>
-        <p className="text-sm mt-1">Orders will appear here once customers place them.</p>
-      </div>
-    </>
-  );
-
-  return (
-    <div>
-      {header}
-      <div className="space-y-3">
-      {filtered.length === 0 && <p className="text-center py-12 text-gray-400 text-sm">No orders match the selected filters.</p>}
-      {filtered.map((order) => {
-        const date = new Date(order.created_at);
-        const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
-        const isOpen = expanded === order.id;
-        return (
-          <div key={order.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-            {/* Header row */}
-            <button
-              type="button"
-              onClick={() => setExpanded(isOpen ? null : order.id)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold text-gray-900">
-                    {date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    {' '}
-                    <span className="text-gray-500 font-normal">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
-                  </span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badge.color}`}>{badge.label}</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  {[order.customer_name, order.customer_phone, `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`, `$${Number(order.total).toFixed(2)}`].filter(Boolean).join(' · ')}
-                </p>
-              </div>
-              <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      {/* Tab bar */}
+      <div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide">
+        {statusTabs.map((t, i) => {
+          const count = t.key === 'all' ? orders.length : orders.filter(o => o.status === t.key).length;
+          return (
+            <button key={t.key} type="button" onClick={() => goToTab(i)}
+              className={`flex items-center gap-1.5 px-3 sm:px-4 py-2.5 text-sm font-semibold whitespace-nowrap border-b-2 transition -mb-px ${
+                activeTab === i ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}>
+              {t.label}
+              {count > 0 && <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${activeTab === i ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-500'}`}>{count}</span>}
             </button>
+          );
+        })}
+      </div>
 
-            {/* Expanded details */}
-            {isOpen && (
-              <div className="border-t border-gray-100 px-4 py-4 space-y-4">
-                {/* Status changer */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Status:</span>
-                  {Object.entries(STATUS_LABELS).map(([key, val]) => (
-                    <button
-                      key={key}
-                      type="button"
-                      disabled={updatingStatus === order.id}
-                      onClick={() => updateStatus(order.id, key)}
-                      className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}
-                    >
-                      {val.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Customer info */}
-                {(order.customer_name || order.customer_phone) && (
-                  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-                    {order.customer_name  && <span><span className="text-gray-500">Name: </span><span className="font-medium">{order.customer_name}</span></span>}
-                    {order.customer_phone && <span><span className="text-gray-500">Phone: </span><span className="font-medium">{order.customer_phone}</span></span>}
-                  </div>
-                )}
-
-                {/* Delivery / Order info */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
-                  {order.service_type === 'delivery' && (<>
-                    {order.delivery_area    && <><span className="text-gray-500">Area</span><span className="col-span-1 font-medium">{order.delivery_area}</span></>}
-                    {order.delivery_street  && <><span className="text-gray-500">Street</span><span className="col-span-1 font-medium">{order.delivery_street}</span></>}
-                    {order.delivery_building && <><span className="text-gray-500">Building</span><span className="col-span-1 font-medium">{order.delivery_building}</span></>}
-                    {order.delivery_floor   && <><span className="text-gray-500">Floor</span><span className="col-span-1 font-medium">{order.delivery_floor}</span></>}
-                    {order.delivery_details && <><span className="text-gray-500">Details</span><span className="col-span-1 font-medium">{order.delivery_details}</span></>}
-                    {order.location_url     && <><span className="text-gray-500">Location</span><a href={order.location_url} target="_blank" rel="noreferrer" className="col-span-1 text-primary-600 underline font-medium">Open map</a></>}
-                  </>)}
-                  {order.timing === 'scheduled' && order.scheduled_time && <><span className="text-gray-500">Scheduled</span><span className="col-span-1 font-medium">{order.scheduled_time}</span></>}
-                  {order.payment_method && <><span className="text-gray-500">Payment</span><span className="col-span-1 font-medium capitalize">{order.payment_method}</span></>}
-                </div>
-
-                {/* Items */}
-                <div>
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Items</p>
-                  <div className="space-y-2">
-                    {order.items.map((item, i) => (
-                      <div key={i} className="flex items-start justify-between gap-2 text-sm">
-                        <div className="flex-1 min-w-0">
-                          <span className="font-medium text-gray-900">{item.name_en}</span>
-                          {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
-                          {item.selected_options && Object.keys(item.selected_options).length > 0 && (
-                            <div className="text-xs text-gray-500 mt-0.5">
-                              {Object.entries(item.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
-                            </div>
-                          )}
-                        </div>
-                        <div className="text-right shrink-0">
-                          <span className="text-gray-500">×{item.quantity}</span>
-                          <span className="ml-2 font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
-                    <span>Total</span>
-                    <span>${Number(order.total).toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      })}
+      {/* Carousel */}
+      <div ref={carouselRef} onScroll={handleCarouselScroll}
+        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+        style={{ scrollSnapType: 'x mandatory' }}>
+        {statusTabs.map((t) => {
+          const list = t.key === 'all' ? orders : orders.filter(o => o.status === t.key);
+          return (
+            <div key={t.key} className="flex-shrink-0 w-full snap-start space-y-3 pr-0.5">
+              {list.length === 0
+                ? <p className="text-center py-16 text-gray-400 text-sm">No {t.key === 'all' ? '' : t.label.toLowerCase()} orders.</p>
+                : list.map((order) => (
+                    <OrderCard key={order.id} order={order} expanded={expanded === order.id}
+                      onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
+                      onUpdateStatus={handleUpdateStatus} updatingStatus={updatingStatus} />
+                  ))
+              }
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
+
 
 // ─── Order Notification Toast ─────────────────────────────────────────────────
 
