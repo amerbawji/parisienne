@@ -57,6 +57,8 @@ CREATE POLICY "public_all" ON promo_config FOR ALL USING (true) WITH CHECK (true
 CREATE TABLE orders (
   id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+  customer_name    TEXT,
+  customer_phone   TEXT,
   service_type     TEXT NOT NULL,
   timing           TEXT,
   scheduled_time   TEXT,

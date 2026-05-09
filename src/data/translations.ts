@@ -154,6 +154,10 @@ export const translations = {
     added_to_cart: "Added to cart",
     undo: "Undo",
     save_details: "Save my details for future orders",
+    your_name: "Your Name",
+    your_phone: "Your Phone Number",
+    your_name_placeholder: "e.g. Ali Hassan",
+    your_phone_placeholder: "e.g. 03 123 456",
   },
   ar: {
     search_placeholder: "ابحث عن الأصناف...",
@@ -310,6 +314,10 @@ export const translations = {
     added_to_cart: "انضافت عالعرباية",
     undo: "رجوع",
     save_details: "احفظ بياناتي للطلبات الجاية",
+    your_name: "اسمك",
+    your_phone: "رقم هاتفك",
+    your_name_placeholder: "مثلاً: علي حسن",
+    your_phone_placeholder: "مثلاً: 03 123 456",
   }
 };
 

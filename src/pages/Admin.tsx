@@ -1031,6 +1031,8 @@ interface OrderItem { name_en: string; name_ar: string; quantity: number; price:
 interface Order {
   id: string;
   created_at: string;
+  customer_name: string | null;
+  customer_phone: string | null;
   service_type: string;
   timing: string | null;
   scheduled_time: string | null;
@@ -1061,6 +1063,13 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterService, setFilterService] = useState<string>('all');
+
+  const filtered = orders.filter((o) =>
+    (filterStatus === 'all' || o.status === filterStatus) &&
+    (filterService === 'all' || o.service_type === filterService)
+  );
 
   const updateStatus = async (id: string, status: string) => {
     setUpdatingStatus(id);
@@ -1070,8 +1079,18 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
   };
 
   const header = (
-    <div className="flex items-center justify-between mb-4">
-      <h2 className="text-base font-bold text-gray-800">Orders</h2>
+    <div className="flex flex-wrap items-center gap-3 mb-4">
+      <h2 className="text-base font-bold text-gray-800 mr-auto">Orders</h2>
+      {/* Filters */}
+      <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-600">
+        <option value="all">All statuses</option>
+        {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
+      </select>
+      <select value={filterService} onChange={(e) => setFilterService(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-600">
+        <option value="all">All types</option>
+        <option value="delivery">Delivery</option>
+        <option value="takeaway">Takeaway</option>
+      </select>
       <button
         type="button"
         onClick={onRefresh}
@@ -1100,7 +1119,8 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
     <div>
       {header}
       <div className="space-y-3">
-      {orders.map((order) => {
+      {filtered.length === 0 && <p className="text-center py-12 text-gray-400 text-sm">No orders match the selected filters.</p>}
+      {filtered.map((order) => {
         const date = new Date(order.created_at);
         const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
         const isOpen = expanded === order.id;
@@ -1122,7 +1142,13 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
                   <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badge.color}`}>{badge.label}</span>
                   <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">{order.items.length} item{order.items.length !== 1 ? 's' : ''} · ${Number(order.total).toFixed(2)}</p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {order.customer_name && <span className="font-medium text-gray-700">{order.customer_name}</span>}
+                  {order.customer_name && order.customer_phone && <span> · </span>}
+                  {order.customer_phone && <span>{order.customer_phone}</span>}
+                  {(order.customer_name || order.customer_phone) && <span> · </span>}
+                  {order.items.length} item{order.items.length !== 1 ? 's' : ''} · ${Number(order.total).toFixed(2)}
+                </p>
               </div>
               <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
             </button>
@@ -1145,6 +1171,14 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
                     </button>
                   ))}
                 </div>
+
+                {/* Customer info */}
+                {(order.customer_name || order.customer_phone) && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
+                    {order.customer_name  && <><span className="text-gray-500">Name</span><span className="font-medium">{order.customer_name}</span></>}
+                    {order.customer_phone && <><span className="text-gray-500">Phone</span><span className="font-medium">{order.customer_phone}</span></>}
+                  </div>
+                )}
 
                 {/* Delivery / Order info */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
@@ -1255,10 +1289,10 @@ function AdminShell() {
     const channel = supabase
       .channel('orders-realtime')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, (payload) => {
+        console.log('[Realtime] new order:', payload.new);
         const order = payload.new as Order;
         setOrders((prev) => [order, ...prev]);
         setNotifications((prev) => [...prev, order]);
-        // play a subtle beep
         try {
           const ctx = new AudioContext();
           const osc = ctx.createOscillator();
@@ -1270,7 +1304,7 @@ function AdminShell() {
           osc.start(); osc.stop(ctx.currentTime + 0.4);
         } catch { /* audio blocked */ }
       })
-      .subscribe();
+      .subscribe((status) => console.log('[Realtime] subscription status:', status));
 
     return () => { supabase.removeChannel(channel); };
   }, []);

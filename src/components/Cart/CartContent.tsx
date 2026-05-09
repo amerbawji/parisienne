@@ -60,12 +60,16 @@ export const CartContent = () => {
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [error, setError] = useState('');
   const [saveDetails, setSaveDetails] = useState(false);
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
 
   useEffect(() => {
     const saved = localStorage.getItem(SAVED_DETAILS_KEY);
     if (!saved) return;
     try {
       const d = JSON.parse(saved);
+      if (d.customerName) setCustomerName(d.customerName);
+      if (d.customerPhone) setCustomerPhone(d.customerPhone);
       if (d.deliveryArea) setDeliveryArea(d.deliveryArea);
       if (d.deliveryStreet) setDeliveryStreet(d.deliveryStreet);
       if (d.deliveryBuilding) setDeliveryBuilding(d.deliveryBuilding);
@@ -166,6 +170,8 @@ export const CartContent = () => {
 
     if (saveDetails) {
       localStorage.setItem(SAVED_DETAILS_KEY, JSON.stringify({
+        customerName,
+        customerPhone,
         deliveryArea,
         deliveryStreet,
         deliveryBuilding,
@@ -177,6 +183,8 @@ export const CartContent = () => {
     const link = generateWhatsAppLink(items, language, details);
 
     const { error: orderError } = await supabase.from('orders').insert({
+      customer_name: customerName || null,
+      customer_phone: customerPhone || null,
       service_type: serviceType,
       timing,
       scheduled_time: scheduledTime || null,
@@ -240,6 +248,30 @@ export const CartContent = () => {
             </li>
           ))}
         </ul>
+
+        {/* Customer Info */}
+        <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('your_name')}</label>
+            <input
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder={t('your_name_placeholder')}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600 bg-white"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('your_phone')}</label>
+            <input
+              type="tel"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              placeholder={t('your_phone_placeholder')}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-600 bg-white"
+            />
+          </div>
+        </div>
 
         {/* Order Options */}
         <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
