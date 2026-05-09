@@ -7,10 +7,12 @@ import { useCartStore } from '../store/cartStore';
 import { useLanguageStore } from '../store/languageStore';
 import { useMenuStore } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
+import { useStoreConfigStore } from '../store/storeConfigStore';
 import { Button } from '../components/UI/Button';
 import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
+import { InstallPrompt } from '../components/UI/InstallPrompt';
 
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -22,6 +24,7 @@ export const Home = () => {
   const promoLoading = usePromoStore((state) => state.loading);
   const fetchPromo = usePromoStore((state) => state.fetchPromo);
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
+  const fetchConfig = useStoreConfigStore((state) => state.fetchConfig);
   const menuLoading = useMenuStore((state) => state.loading);
   const [showSplashPromo, setShowSplashPromo] = useState(false);
   const [lastAdded, setLastAdded] = useState<{ instanceId: string; itemName: string } | null>(null);
@@ -58,6 +61,7 @@ export const Home = () => {
       return categories
         .map((category) => {
           const matchingItems = category.items.filter((item) => {
+            if (item.active === false) return false;
             if (!query) return true;
             return (
               item.name_en.toLowerCase().includes(query) ||
@@ -78,7 +82,7 @@ export const Home = () => {
     [categories, deferredSearchQuery]
   );
   useEffect(() => {
-    Promise.all([fetchMenu(), fetchPromo()]);
+    Promise.all([fetchMenu(), fetchPromo(), fetchConfig()]);
   }, []);
 
   useEffect(() => {
@@ -442,6 +446,7 @@ export const Home = () => {
       </div>
 
       <CartSheet />
+      <InstallPrompt />
     </div>
   );
 };

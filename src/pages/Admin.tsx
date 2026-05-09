@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type ChangeEvent } from 'react';
 import { useMenuStore, type Category, type MenuItem, type MenuOption } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
+import { useStoreConfigStore } from '../store/storeConfigStore';
 import { uploadImage, supabase } from '../lib/supabase';
 
 const ADMIN_PASSWORD = 'parisienne2025';
@@ -489,12 +490,29 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
   );
 }
 
-// ─── Tab: Promo ──────────────────────────────────────────────────────────────
+// ─── Tab: Settings (Promo + Opening Hours) ───────────────────────────────────
 
-function PromoTab() {
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
+  const { open_time, close_time, closed_days, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [hoursSaving, setHoursSaving] = useState(false);
+  const [hoursError, setHoursError] = useState('');
+  const [openTime, setOpenTime] = useState(open_time);
+  const [closeTime, setCloseTime] = useState(close_time);
+  const [closedDays, setClosedDays] = useState<number[]>(closed_days);
+
+  useEffect(() => {
+    fetchConfig().then(() => {
+      const s = useStoreConfigStore.getState();
+      setOpenTime(s.open_time);
+      setCloseTime(s.close_time);
+      setClosedDays(s.closed_days);
+    });
+  }, [fetchConfig]);
 
   const handleFile = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -510,67 +528,93 @@ function PromoTab() {
     }
   };
 
+  const toggleClosedDay = (day: number) => {
+    setClosedDays((prev) => prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]);
+  };
+
+  const handleSaveHours = async () => {
+    setHoursSaving(true); setHoursError('');
+    try {
+      await updateConfig({ open_time: openTime, close_time: closeTime, closed_days: closedDays });
+    } catch {
+      setHoursError('Failed to save. Please try again.');
+    } finally {
+      setHoursSaving(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6 max-w-lg">
+      {/* Opening Hours */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
+        <h2 className="text-base font-bold text-gray-800">Opening Hours</h2>
+        {configLoading ? (
+          <div className="flex justify-center py-4"><div className="w-6 h-6 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Opens</label>
+                <input type="time" value={openTime} onChange={(e) => setOpenTime(e.target.value)}
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Closes</label>
+                <input type="time" value={closeTime} onChange={(e) => setCloseTime(e.target.value)}
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Closed On</label>
+              <div className="flex gap-1.5 flex-wrap">
+                {DAY_NAMES.map((name, i) => (
+                  <button key={i} type="button" onClick={() => toggleClosedDay(i)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition ${
+                      closedDays.includes(i) ? 'bg-red-100 text-red-700 border-red-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`}>
+                    {name}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400">Selected days are closed — customers can only schedule orders on these days.</p>
+            </div>
+            {hoursError && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{hoursError}</p>}
+            <button type="button" onClick={handleSaveHours} disabled={hoursSaving}
+              className="self-start px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+              {hoursSaving ? 'Saving…' : 'Save Hours'}
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Promo Popup */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-base font-bold text-gray-800">Promo Popup</h2>
-
-        {/* Toggle */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-gray-700">Enable promo popup</span>
-          <button
-            type="button"
-            onClick={() => setEnabled(!enabled)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-              enabled ? 'bg-primary-600' : 'bg-gray-300'
-            }`}
-            aria-pressed={enabled}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
-                enabled ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
+          <button type="button" onClick={() => setEnabled(!enabled)}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-primary-600' : 'bg-gray-300'}`}
+            aria-pressed={enabled}>
+            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
           </button>
         </div>
-
-        {/* Current image */}
         {image && (
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Current Image</span>
-            <img
-              src={image}
-              alt="Promo"
-              className="w-full max-h-64 object-contain rounded-lg border border-gray-200 bg-gray-50"
-            />
+            <img src={image} alt="Promo" className="w-full max-h-64 object-contain rounded-lg border border-gray-200 bg-gray-50" />
           </div>
         )}
-
-        {/* Upload */}
         <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            disabled={uploading}
-            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-          >
+          <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
             {uploading ? 'Uploading…' : 'Upload New Image'}
           </button>
-          <button
-            type="button"
-            onClick={() => setImage('/promo-ramadan.jpg')}
-            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition"
-          >
+          <button type="button" onClick={() => setImage('/promo-ramadan.jpg')}
+            className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition">
             Reset to Default
           </button>
         </div>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileRef}
-          onChange={handleFile}
-          className="hidden"
-        />
+        <input type="file" accept="image/*" ref={fileRef} onChange={handleFile} className="hidden" />
       </div>
     </div>
   );
@@ -943,7 +987,7 @@ function ItemsTab() {
           ) : (
             <div
               key={item.id}
-              className="border border-gray-200 rounded-xl bg-white p-3 sm:p-4 flex items-center gap-3"
+              className={`border border-gray-200 rounded-xl bg-white p-3 sm:p-4 flex items-center gap-3 ${item.active === false ? 'opacity-50' : ''}`}
             >
               <QuickImageChange
                 image={item.image ?? ''}
@@ -957,9 +1001,18 @@ function ItemsTab() {
                   {item.options && item.options.length > 0 && (
                     <span className="ml-2 text-primary-500">{item.options.length} option(s)</span>
                   )}
+                  {item.active === false && <span className="ml-2 text-orange-500 font-medium">Hidden</span>}
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-1.5 shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false })}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
+                  title={item.active !== false ? 'Active — click to hide' : 'Hidden — click to show'}
+                >
+                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
                 <button
                   type="button"
                   onClick={() => { setEditingItemId(item.id); setShowAddForm(false); }}
@@ -1158,9 +1211,15 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const carouselRef = useRef<HTMLDivElement>(null);
   const isScrolling = useRef(false);
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollLeft = carouselRef.current.offsetWidth;
+    }
+  }, []);
 
   const statusTabs = [{ key: 'all', label: 'All' }, ...Object.entries(STATUS_LABELS).map(([k, v]) => ({ key: k, label: v.label }))];
 
@@ -1274,19 +1333,20 @@ function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () =
 
 // ─── Admin Shell ──────────────────────────────────────────────────────────────
 
-type Tab = 'orders' | 'promo' | 'categories' | 'items';
+type Tab = 'orders' | 'settings' | 'categories' | 'items';
 
 function AdminShell() {
   const [tab, setTab] = useState<Tab>('orders');
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
+  const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [notifications, setNotifications] = useState<Order[]>([]);
 
-  useState(() => { Promise.all([fetchMenu(), fetchPromo()]); });
+  useState(() => { Promise.all([fetchMenu(), fetchPromo(), fetchConfig()]); });
 
   const refreshOrders = async () => {
     setOrdersLoading(true);
@@ -1335,9 +1395,9 @@ function AdminShell() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'orders', label: 'Orders' },
-    { key: 'promo', label: 'Promo' },
     { key: 'categories', label: 'Categories' },
     { key: 'items', label: 'Items' },
+    { key: 'settings', label: 'Settings' },
   ];
 
   return (
@@ -1387,9 +1447,9 @@ function AdminShell() {
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} />}
-        {tab === 'promo' && <PromoTab />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
+        {tab === 'settings' && <SettingsTab />}
       </main>
 
       {/* Live order notifications — bottom right */}

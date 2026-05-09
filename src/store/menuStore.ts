@@ -21,6 +21,7 @@ export interface MenuItem {
   image?: string;
   options?: MenuOption[];
   presets?: string[];
+  active?: boolean;
 }
 
 export interface Category {
@@ -46,7 +47,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number; active: boolean };
 type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -73,6 +74,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           description_ar: item.description_ar,
           image: item.image_url || undefined,
           presets: item.presets?.length ? item.presets : undefined,
+          active: item.active,
           options: opts
             .filter((o) => o.item_id === item.id)
             .sort((a, b) => a.sort_order - b.sort_order)
@@ -134,7 +136,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       price: item.price, unit: item.unit, weight_step: item.weight_step ?? null,
       min_quantity: item.min_quantity ?? null, description_en: item.description_en ?? '',
       description_ar: item.description_ar ?? '', image_url: item.image ?? '',
-      presets: item.presets ?? [], sort_order,
+      presets: item.presets ?? [], sort_order, active: true,
     });
     if (ie) throw ie;
     if (item.options?.length) {
@@ -159,6 +161,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       ...(rest.description_ar !== undefined && { description_ar: rest.description_ar }),
       ...(image              !== undefined && { image_url: image ?? '' }),
       ...(rest.presets       !== undefined && { presets: rest.presets }),
+      ...(rest.active        !== undefined && { active: rest.active }),
     }).eq('id', itemId);
     if (ie) throw ie;
     if (options !== undefined) {

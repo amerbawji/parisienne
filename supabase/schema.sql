@@ -22,7 +22,8 @@ CREATE TABLE items (
   description_ar  TEXT NOT NULL DEFAULT '',
   image_url       TEXT NOT NULL DEFAULT '',
   presets         JSONB NOT NULL DEFAULT '[]',
-  sort_order      INTEGER NOT NULL DEFAULT 0
+  sort_order      INTEGER NOT NULL DEFAULT 0,
+  active          BOOLEAN NOT NULL DEFAULT true
 );
 
 CREATE TABLE item_options (
@@ -77,6 +78,18 @@ CREATE TABLE orders (
 
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public_all" ON orders FOR ALL USING (true) WITH CHECK (true);
+
+CREATE TABLE store_config (
+  id          INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  open_time   TEXT NOT NULL DEFAULT '08:00',
+  close_time  TEXT NOT NULL DEFAULT '23:00',
+  closed_days JSONB NOT NULL DEFAULT '[]'
+);
+
+INSERT INTO store_config (id, open_time, close_time, closed_days) VALUES (1, '08:00', '23:00', '[]');
+
+ALTER TABLE store_config ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true);
 
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON

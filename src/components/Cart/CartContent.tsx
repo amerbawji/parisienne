@@ -10,6 +10,7 @@ import { Button } from '../UI/Button';
 import { generateWhatsAppLink } from '../../utils/whatsapp';
 import { cn } from '../../utils/cn';
 import { supabase } from '../../lib/supabase';
+import { useStoreConfigStore } from '../../store/storeConfigStore';
 
 const OptionButton = ({ 
   selected, 
@@ -36,6 +37,7 @@ const OptionButton = ({
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
   const { t, language } = useLanguageStore();
+  const storeIsOpen = useStoreConfigStore((s) => s.isOpen)();
   const navigate = useNavigate();
   const totalItems = getTotalItems();
   const hasWeightBasedItem = items.some((item) => (item.step ?? 1) < 1 || (item.minQuantity ?? 1) < 1);
@@ -44,7 +46,7 @@ export const CartContent = () => {
   const itemsTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryFee = serviceType === 'delivery' ? 1.5 : 0;
   const totalPrice = itemsTotal + deliveryFee;
-  const [timing, setTiming] = useState<'now' | 'scheduled'>('now');
+  const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
   const [scheduledTime, setScheduledTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
   const [locationUrl, setLocationUrl] = useState('');
@@ -444,15 +446,20 @@ export const CartContent = () => {
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('timing')}</label>
             <div className="flex gap-2 mb-2">
-              <OptionButton 
-                selected={timing === 'now'} 
-                onClick={() => {
-                  setTiming('now');
-                  setError('');
-                }}
+              <button
+                onClick={() => { if (storeIsOpen) { setTiming('now'); setError(''); } }}
+                disabled={!storeIsOpen}
+                className={cn(
+                  "flex-1 py-2 px-3 text-sm font-medium rounded-lg border transition-all duration-200",
+                  timing === 'now' && storeIsOpen
+                    ? "bg-primary-500 text-white border-primary-500 shadow-sm"
+                    : !storeIsOpen
+                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-primary-300 hover:bg-primary-50"
+                )}
               >
-                🕒 {t('now')}
-              </OptionButton>
+                🕒 {t('now')}{!storeIsOpen && <span className="ml-1 text-xs">(closed)</span>}
+              </button>
               <OptionButton 
                 selected={timing === 'scheduled'} 
                 onClick={() => setTiming('scheduled')}
