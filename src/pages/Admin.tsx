@@ -1053,23 +1053,18 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
 };
 
-function OrdersTab() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+function OrdersTab({ orders, loading, onUpdateStatus }: {
+  orders: Order[];
+  loading: boolean;
+  onUpdateStatus: (id: string, status: string) => void;
+}) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.from('orders').select('*').order('created_at', { ascending: false }).then(({ data }) => {
-      if (data) setOrders(data as Order[]);
-      setLoading(false);
-    });
-  }, []);
 
   const updateStatus = async (id: string, status: string) => {
     setUpdatingStatus(id);
     await supabase.from('orders').update({ status }).eq('id', id);
-    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
+    onUpdateStatus(id, status);
     setUpdatingStatus(null);
   };
 
@@ -1180,6 +1175,34 @@ function OrdersTab() {
   );
 }
 
+// ─── Order Notification Toast ─────────────────────────────────────────────────
+
+function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onDismiss, 8000);
+    return () => clearTimeout(t);
+  }, [onDismiss]);
+
+  const date = new Date(order.created_at);
+  return (
+    <div className="w-72 bg-white border border-primary-200 rounded-xl shadow-lg p-4 flex gap-3 animate-in slide-in-from-right-4 fade-in duration-300">
+      <div className="shrink-0 w-9 h-9 rounded-full bg-primary-600 flex items-center justify-center">
+        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-bold text-gray-900">New Order!</p>
+        <p className="text-xs text-gray-500 mt-0.5">
+          {order.items.length} item{order.items.length !== 1 ? 's' : ''} · ${Number(order.total).toFixed(2)} · <span className="capitalize">{order.service_type}</span>
+        </p>
+        <p className="text-xs text-gray-400">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</p>
+      </div>
+      <button type="button" onClick={onDismiss} className="shrink-0 text-gray-400 hover:text-gray-600 mt-0.5">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+  );
+}
+
 // ─── Admin Shell ──────────────────────────────────────────────────────────────
 
 type Tab = 'orders' | 'promo' | 'categories' | 'items';
@@ -1189,7 +1212,47 @@ function AdminShell() {
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
 
+  // ── Orders state (lives here so realtime persists across tab switches) ──
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [notifications, setNotifications] = useState<Order[]>([]);
+
   useState(() => { Promise.all([fetchMenu(), fetchPromo()]); });
+
+  useEffect(() => {
+    supabase.from('orders').select('*').order('created_at', { ascending: false }).then(({ data }) => {
+      if (data) setOrders(data as Order[]);
+      setOrdersLoading(false);
+    });
+
+    const channel = supabase
+      .channel('orders-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'orders' }, (payload) => {
+        const order = payload.new as Order;
+        setOrders((prev) => [order, ...prev]);
+        setNotifications((prev) => [...prev, order]);
+        // play a subtle beep
+        try {
+          const ctx = new AudioContext();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.frequency.value = 880;
+          gain.gain.setValueAtTime(0.3, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          osc.start(); osc.stop(ctx.currentTime + 0.4);
+        } catch { /* audio blocked */ }
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, []);
+
+  const handleUpdateStatus = (id: string, status: string) => {
+    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
+  };
+
+  const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
   const handleLogout = () => {
     sessionStorage.removeItem(SESSION_KEY);
@@ -1249,11 +1312,18 @@ function AdminShell() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        {tab === 'orders' && <OrdersTab />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} />}
         {tab === 'promo' && <PromoTab />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
       </main>
+
+      {/* Live order notifications — bottom right */}
+      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 items-end">
+        {notifications.map((n) => (
+          <OrderNotification key={n.id} order={n} onDismiss={() => dismissNotification(n.id)} />
+        ))}
+      </div>
     </div>
   );
 }
