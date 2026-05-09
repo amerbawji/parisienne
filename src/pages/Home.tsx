@@ -27,6 +27,8 @@ export const Home = () => {
   const fetchConfig = useStoreConfigStore((state) => state.fetchConfig);
   const open_time = useStoreConfigStore((state) => state.open_time);
   const close_time = useStoreConfigStore((state) => state.close_time);
+  const isOpen = useStoreConfigStore((state) => state.isOpen)();
+  const configLoading = useStoreConfigStore((state) => state.loading);
   const menuLoading = useMenuStore((state) => state.loading);
   const [showSplashPromo, setShowSplashPromo] = useState(false);
   const [lastAdded, setLastAdded] = useState<{ instanceId: string; itemName: string } | null>(null);
@@ -248,6 +250,21 @@ export const Home = () => {
           </div>
         )}
       </header>
+
+      {!configLoading && !isOpen && (
+        <div className="bg-amber-50 border-b border-amber-200" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-2.5">
+            <svg className="h-4 w-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-sm text-amber-800 font-medium">
+              {language === 'ar'
+                ? `المتجر مغلق حالياً (${open_time} – ${close_time}) — نقبل الطلبات المجدولة فقط`
+                : `We're currently closed (${open_time} – ${close_time}) — accepting scheduled orders only`}
+            </p>
+          </div>
+        </div>
+      )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
         {menuLoading && (
