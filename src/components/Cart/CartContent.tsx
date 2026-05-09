@@ -59,7 +59,7 @@ export const CartContent = () => {
   const [locationStatus, setLocationStatus] = useState('');
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [error, setError] = useState('');
-  const [saveDetails, setSaveDetails] = useState(false);
+  const [saveDetails, setSaveDetails] = useState(true);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
 
@@ -148,6 +148,11 @@ export const CartContent = () => {
   const handleCheckout = async () => {
     if (items.length === 0) return;
 
+    if (!customerName.trim()) { setError(t('error_name_required')); return; }
+    if (!customerPhone.trim()) { setError(t('error_phone_required')); return; }
+    if (serviceType === 'delivery' && !deliveryArea.trim() && !deliveryStreet.trim() && !locationUrl) {
+      setError(t('error_address_required')); return;
+    }
     if (timing === 'scheduled' && !scheduledTime) {
       setError(t('error_schedule'));
       return;

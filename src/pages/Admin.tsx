@@ -1143,11 +1143,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
                   <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {order.customer_name && <span className="font-medium text-gray-700">{order.customer_name}</span>}
-                  {order.customer_name && order.customer_phone && <span> · </span>}
-                  {order.customer_phone && <span>{order.customer_phone}</span>}
-                  {(order.customer_name || order.customer_phone) && <span> · </span>}
-                  {order.items.length} item{order.items.length !== 1 ? 's' : ''} · ${Number(order.total).toFixed(2)}
+                  {[order.customer_name, order.customer_phone, `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`, `$${Number(order.total).toFixed(2)}`].filter(Boolean).join(' · ')}
                 </p>
               </div>
               <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -1174,9 +1170,9 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
 
                 {/* Customer info */}
                 {(order.customer_name || order.customer_phone) && (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
-                    {order.customer_name  && <><span className="text-gray-500">Name</span><span className="font-medium">{order.customer_name}</span></>}
-                    {order.customer_phone && <><span className="text-gray-500">Phone</span><span className="font-medium">{order.customer_phone}</span></>}
+                  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                    {order.customer_name  && <span><span className="text-gray-500">Name: </span><span className="font-medium">{order.customer_name}</span></span>}
+                    {order.customer_phone && <span><span className="text-gray-500">Phone: </span><span className="font-medium">{order.customer_phone}</span></span>}
                   </div>
                 )}
 
