@@ -416,15 +416,13 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
             />
           )}
         </div>
-        {form.unit === 'kg' && (
-          <InputField
-            label="Weight Step (kg)"
+        <InputField
+            label="Step / Increment"
             value={form.weight_step ?? ''}
             onChange={(v) => set('weight_step', v ? parseFloat(v) : undefined)}
             type="number"
-            placeholder="e.g. 0.1"
+            placeholder="e.g. 0.25"
           />
-        )}
         <InputField
           label="Min Quantity"
           value={form.min_quantity ?? ''}
@@ -1246,6 +1244,25 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
     if (index !== activeTab) { setActiveTab(index); setExpanded(null); }
   };
 
+  const todayStr = new Date().toDateString();
+  const todayOrders = orders.filter(o => new Date(o.created_at).toDateString() === todayStr);
+  const todayRevenue = todayOrders.reduce((s, o) => s + Number(o.total), 0);
+  const pending = orders.filter(o => o.status === 'new' || o.status === 'confirmed').length;
+  const deliveredToday = todayOrders.filter(o => o.status === 'delivered').length;
+
+  const last7 = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6 - i));
+    const ds = d.toDateString();
+    const label = d.toLocaleDateString('en-GB', { weekday: 'short' });
+    const count = orders.filter(o => new Date(o.created_at).toDateString() === ds).length;
+    const isToday = ds === todayStr;
+    return { label, count, isToday };
+  });
+  const maxDay = Math.max(...last7.map(d => d.count), 1);
+
+  const statusTotals = Object.keys(STATUS_LABELS).map(k => ({ key: k, count: orders.filter(o => o.status === k).length }));
+  const totalOrders = orders.length || 1;
+
   if (loading) return (
     <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
   );
@@ -1260,6 +1277,66 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
           <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
           Refresh
         </button>
+      </div>
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {[
+          { label: "Today's Orders", value: todayOrders.length, sub: 'orders placed today', color: 'text-primary-600' },
+          { label: "Today's Revenue", value: `$${todayRevenue.toFixed(2)}`, sub: 'from today\'s orders', color: 'text-green-600' },
+          { label: 'Needs Attention', value: pending, sub: 'new + confirmed', color: pending > 0 ? 'text-amber-600' : 'text-gray-400' },
+          { label: 'Delivered Today', value: deliveredToday, sub: 'completed today', color: 'text-emerald-600' },
+        ].map(({ label, value, sub, color }) => (
+          <div key={label} className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 flex flex-col gap-0.5">
+            <span className="text-xs text-gray-500 font-medium">{label}</span>
+            <span className={`text-2xl font-bold ${color}`}>{value}</span>
+            <span className="text-xs text-gray-400">{sub}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {/* Status breakdown */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">All-time by Status</span>
+          <div className="flex h-2.5 rounded-full overflow-hidden gap-px">
+            {statusTotals.map(({ key, count }) => {
+              const pct = (count / totalOrders) * 100;
+              const bg = { new: 'bg-blue-400', confirmed: 'bg-yellow-400', delivered: 'bg-green-400', cancelled: 'bg-red-400' }[key] ?? 'bg-gray-300';
+              return pct > 0 ? <div key={key} className={`${bg} transition-all`} style={{ width: `${pct}%` }} /> : null;
+            })}
+          </div>
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            {statusTotals.map(({ key, count }) => {
+              const dot = { new: 'bg-blue-400', confirmed: 'bg-yellow-400', delivered: 'bg-green-400', cancelled: 'bg-red-400' }[key] ?? 'bg-gray-300';
+              return (
+                <span key={key} className="flex items-center gap-1.5 text-xs text-gray-600">
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
+                  {STATUS_LABELS[key]?.label} <span className="font-semibold text-gray-800">{count}</span>
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 7-day bar chart */}
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Last 7 Days</span>
+          <div className="flex items-end gap-1.5 h-16">
+            {last7.map(({ label, count, isToday }) => (
+              <div key={label} className="flex-1 flex flex-col items-center gap-1">
+                <span className="text-[10px] text-gray-500 font-medium leading-none">{count > 0 ? count : ''}</span>
+                <div className="w-full rounded-t-sm transition-all" style={{ height: `${(count / maxDay) * 44}px`, minHeight: count > 0 ? '4px' : '2px' }}
+                  title={`${count} order${count !== 1 ? 's' : ''}`}
+                >
+                  <div className={`w-full h-full rounded-t-sm ${isToday ? 'bg-primary-500' : 'bg-primary-200'}`} />
+                </div>
+                <span className={`text-[10px] leading-none font-medium ${isToday ? 'text-primary-600' : 'text-gray-400'}`}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Tab bar */}
