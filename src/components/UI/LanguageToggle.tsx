@@ -5,25 +5,27 @@ export const LanguageToggle = ({ className }: { className?: string }) => {
   const { language, setLanguage } = useLanguageStore();
 
   return (
-    <div className={cn("flex items-center gap-1 bg-gray-100 rounded-lg p-1", className)}>
+    <div className={cn("flex items-center gap-1 bg-white rounded-xl p-1.5", className)}>
       <button
         onClick={() => setLanguage('en')}
+        aria-pressed={language === 'en'}
         className={cn(
-          "px-2 py-1 text-xs font-medium rounded-md transition-colors",
+          "h-10 px-3 text-sm font-semibold rounded-lg transition-colors",
           language === 'en'
-            ? "bg-white text-primary-700 shadow-sm"
-            : "text-gray-500 hover:text-gray-700"
+            ? "bg-primary-600 text-white shadow-sm"
+            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         )}
       >
         EN
       </button>
       <button
         onClick={() => setLanguage('ar')}
+        aria-pressed={language === 'ar'}
         className={cn(
-          "px-2 py-1 text-xs font-bold rounded-md transition-colors font-arabic",
+          "h-10 px-3 text-sm font-bold rounded-lg transition-colors font-arabic",
           language === 'ar'
-            ? "bg-white text-primary-700 shadow-sm"
-            : "text-gray-500 hover:text-gray-700"
+            ? "bg-primary-600 text-white shadow-sm"
+            : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
         )}
       >
         عربي

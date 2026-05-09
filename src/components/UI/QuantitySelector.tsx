@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { Button } from './Button';
 
@@ -22,25 +22,61 @@ export const QuantitySelector = ({
   size = 'md',
 }: QuantitySelectorProps) => {
   const [inputValue, setInputValue] = useState(quantity.toString());
-  const [prevQuantity, setPrevQuantity] = useState(quantity);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // Sync state with props if prop changes externally
-  if (quantity !== prevQuantity) {
-    setPrevQuantity(quantity);
-    setInputValue(quantity.toString());
-  }
+  const decimalPlaces = useMemo(() => {
+    const stepStr = step.toString();
+    const dot = stepStr.indexOf('.');
+    return dot === -1 ? 0 : stepStr.length - dot - 1;
+  }, [step]);
+
+  useEffect(() => {
+    if (!isEditing) {
+      setInputValue(quantity.toString());
+    }
+  }, [quantity, isEditing]);
+
+  const normalizeValue = (rawValue: string) => {
+    const parsed = Number.parseFloat(rawValue.replace(',', '.'));
+    if (Number.isNaN(parsed)) return quantity;
+
+    const clamped = Math.max(min, parsed);
+    const snapped = min + Math.round((clamped - min) / step) * step;
+    return Number(snapped.toFixed(decimalPlaces));
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-    const val = parseFloat(e.target.value);
-    if (!isNaN(val) && onChange) {
-      onChange(val);
+    const nextRawValue = e.target.value;
+    setInputValue(nextRawValue);
+
+    if (!onChange) return;
+    if (
+      nextRawValue.trim() === '' ||
+      nextRawValue === '-' ||
+      nextRawValue === '.' ||
+      nextRawValue === ',' ||
+      nextRawValue === '-.' ||
+      nextRawValue === '-,'
+    ) {
+      return;
     }
+
+    const parsed = Number.parseFloat(nextRawValue.replace(',', '.'));
+    if (Number.isNaN(parsed)) return;
+
+    onChange(parsed);
   };
 
   const handleBlur = () => {
-    // Ensure on blur we sync back to the actual quantity (handling empty or invalid input)
-    setInputValue(quantity.toString());
+    setIsEditing(false);
+    if (!onChange) {
+      setInputValue(quantity.toString());
+      return;
+    }
+
+    const next = normalizeValue(inputValue);
+    onChange(next);
+    setInputValue(next.toString());
   };
 
   return (
@@ -60,7 +96,13 @@ export const QuantitySelector = ({
         type="number"
         value={inputValue}
         onChange={handleChange}
+        onFocus={() => setIsEditing(true)}
         onBlur={handleBlur}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            (e.currentTarget as HTMLInputElement).blur();
+          }
+        }}
         min={min}
         step={step}
         className="w-16 text-center border-gray-200 rounded-md py-1 px-1 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none text-sm font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent"

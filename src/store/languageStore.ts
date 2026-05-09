@@ -8,23 +8,29 @@ interface LanguageStore {
   language: Language;
   direction: 'ltr' | 'rtl';
   setLanguage: (language: Language) => void;
-  t: (key: TranslationKey) => string;
+  t: (key: TranslationKey, vars?: Record<string, string | number>) => string;
 }
 
 export const useLanguageStore = create<LanguageStore>()(
   persist(
     (set, get) => ({
-      language: 'en',
-      direction: 'ltr',
+      language: 'ar',
+      direction: 'rtl',
       setLanguage: (language) => {
         const direction = language === 'ar' ? 'rtl' : 'ltr';
         document.documentElement.dir = direction;
         document.documentElement.lang = language;
         set({ language, direction });
       },
-      t: (key: TranslationKey) => {
+      t: (key: TranslationKey, vars?: Record<string, string | number>) => {
         const lang = get().language;
-        return translations[lang][key] || key;
+        const value = translations[lang][key] || key;
+        if (!vars) return value;
+
+        return Object.entries(vars).reduce(
+          (result, [name, replacement]) => result.replaceAll(`{${name}}`, String(replacement)),
+          value
+        );
       },
     }),
     {

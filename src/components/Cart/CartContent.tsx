@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+const SAVED_DETAILS_KEY = 'parisienne_saved_details';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingBagIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../../store/cartStore';
@@ -56,6 +58,22 @@ export const CartContent = () => {
   const [locationStatus, setLocationStatus] = useState('');
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [error, setError] = useState('');
+  const [saveDetails, setSaveDetails] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(SAVED_DETAILS_KEY);
+    if (!saved) return;
+    try {
+      const d = JSON.parse(saved);
+      if (d.deliveryArea) setDeliveryArea(d.deliveryArea);
+      if (d.deliveryStreet) setDeliveryStreet(d.deliveryStreet);
+      if (d.deliveryBuilding) setDeliveryBuilding(d.deliveryBuilding);
+      if (d.deliveryFloor) setDeliveryFloor(d.deliveryFloor);
+      if (d.deliveryDetails) setDeliveryDetails(d.deliveryDetails);
+    } catch {
+      // corrupted storage — ignore
+    }
+  }, []);
 
   const clearLocationData = () => {
     setLocationUrl('');
@@ -145,8 +163,18 @@ export const CartContent = () => {
       locationDetails: deliveryDetails || undefined
     };
 
+    if (saveDetails) {
+      localStorage.setItem(SAVED_DETAILS_KEY, JSON.stringify({
+        deliveryArea,
+        deliveryStreet,
+        deliveryBuilding,
+        deliveryFloor,
+        deliveryDetails,
+      }));
+    }
+
     const link = generateWhatsAppLink(items, language, details);
-    
+
     window.open(link, '_blank');
     clearCart();
     setCartOpen(false);
@@ -446,6 +474,16 @@ export const CartContent = () => {
           </div>
         )}
         
+        <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={saveDetails}
+            onChange={(e) => setSaveDetails(e.target.checked)}
+            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+          />
+          <span className="text-sm text-gray-600">{t('save_details')}</span>
+        </label>
+
         <Button
           onClick={handleCheckout}
           className="w-full flex items-center justify-center gap-2 py-4 text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"

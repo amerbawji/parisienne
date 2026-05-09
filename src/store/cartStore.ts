@@ -31,13 +31,14 @@ interface CartState {
     step?: number;
     minQuantity?: number;
     instructions?: string;
-  }) => void;
+  }) => string;
   removeItem: (instanceId: string) => void;
   updateQuantity: (instanceId: string, quantity: number) => void;
   updateInstructions: (instanceId: string, instructions: string) => void;
   updateOptions: (instanceId: string, options: Record<string, string>) => void;
   clearCart: () => void;
   getTotalItems: () => number;
+  getSubtotal: () => number;
 }
 
 export const useCartStore = create<CartState>()(
@@ -48,8 +49,8 @@ export const useCartStore = create<CartState>()(
       toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
       setCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
       addItem: (newItem) => {
+        const instanceId = Math.random().toString(36).substring(7);
         set((state) => {
-          const instanceId = Math.random().toString(36).substring(7);
           const quantity = newItem.quantity || newItem.minQuantity || 1;
           return {
             items: [...state.items, { 
@@ -65,6 +66,7 @@ export const useCartStore = create<CartState>()(
             }],
           };
         });
+        return instanceId;
       },
       updateOptions: (instanceId, options) => {
         set((state) => ({
@@ -96,13 +98,10 @@ export const useCartStore = create<CartState>()(
         set({ items: [] });
       },
       getTotalItems: () => {
-        return get().items.reduce((total, item) => {
-          if (item.step && item.step < 1) {
-            return total + 1;
-          }
-          return total + item.quantity;
-        }, 0);
+        return get().items.reduce((total, item) => total + item.quantity, 0);
       },
+      getSubtotal: () =>
+        get().items.reduce((total, item) => total + item.price * item.quantity, 0),
     }),
     {
       name: 'cart-storage',

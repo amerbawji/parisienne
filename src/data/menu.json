@@ -4,7 +4,7 @@
       "id": "cat-8",
       "name_en": "Grilled",
       "name_ar": "مشوي",
-      "image": "/categories/grilled.webp",
+      "image": "/categories/grilled.jpg",
       "items": [
         {
           "id": "prod-434",
@@ -929,7 +929,7 @@
       "id": "cat-77",
       "name_en": "Sandwiches",
       "name_ar": "سندويشات",
-      "image": "/categories/sandwiches.webp",
+      "image": "/categories/sandwiches.jpg",
       "items": [
         {
           "id": "prod-544",
@@ -1898,7 +1898,7 @@
       "id": "cat-100",
       "name_en": "Plates",
       "name_ar": "صحون",
-      "image": "/categories/plates.webp",
+      "image": "/categories/plates.jpg",
       "items": [
         {
           "id": "prod-454",
@@ -2297,7 +2297,7 @@
       "id": "cat-261",
       "name_en": "Lahm B Aajin",
       "name_ar": "لحم بعجين",
-      "image": "/categories/lahm b aajin.webp",
+      "image": "/categories/lahm b aajin.jpg",
       "items": [
         {
           "id": "prod-410",
@@ -2410,7 +2410,7 @@
       "id": "cat-38",
       "name_en": "Chicken",
       "name_ar": "دجاج",
-      "image": "/categories/chicken.webp",
+      "image": "/categories/chicken.jpg",
       "items": [
         {
           "id": "prod-605",
@@ -2647,7 +2647,7 @@
       "id": "cat-66",
       "name_en": "Frozen Items",
       "name_ar": "مثلجات",
-      "image": "/categories/frozen items.webp",
+      "image": "/categories/frozen items.jpg",
       "items": [
         {
           "id": "prod-503",
@@ -2853,7 +2853,7 @@
       "id": "cat-260",
       "name_en": "Appetizers",
       "name_ar": "مقبلات",
-      "image": "/categories/appetizers.webp",
+      "image": "/categories/appetizers.jpg",
       "items": [
         {
           "id": "prod-532",
@@ -2979,7 +2979,7 @@
           "id": "prod-531",
           "name_en": "Tabbouleh",
           "name_ar": "تبوله",
-          "image": "/images/Plate Tabbouleh.JPG",
+          "image": "/images/Plate Tabbouleh.jpeg",
           "price": 5.03,
           "unit": "piece",
           "description_en": "",
@@ -3000,7 +3000,7 @@
           "id": "prod-533",
           "name_en": "Fattoush",
           "name_ar": "فتوش",
-          "image": "/images/Plate Fattoush.JPG",
+          "image": "/images/Plate Fattoush.jpeg",
           "price": 4.47,
           "unit": "piece",
           "description_en": "",
@@ -4128,7 +4128,7 @@
       "id": "cat-233",
       "name_en": "Beverages",
       "name_ar": "مرطبات",
-      "image": "/categories/beverages.webp",
+      "image": "/categories/beverages.jpg",
       "items": [
         {
           "id": "prod-499",

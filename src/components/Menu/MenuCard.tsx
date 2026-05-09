@@ -26,6 +26,7 @@ interface MenuCardProps {
   item: MenuItem;
   expanded: boolean;
   onToggle: () => void;
+  onItemAdded?: (payload: { instanceId: string; itemName: string }) => void;
 }
 
 const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string) => {
@@ -34,10 +35,12 @@ const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string
   return translated;
 };
 
-const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
+const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
 
   const cartInstances = useMemo(() => cartItems.filter((i) => i.id === item.id), [cartItems, item.id]);
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
@@ -45,7 +48,9 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
   const [pendingOptions, setPendingOptions] = useState<Record<string, string>>({});
   
   const step = item.weight_step || 1;
-  const minQuantity = item.min_quantity || 1;
+  const minQuantity = item.unit === 'kg' && step < 1 && (!item.min_quantity || item.min_quantity >= 1)
+    ? 0.5
+    : (item.min_quantity || 1);
   const round = (num: number) => Math.round(num * 100) / 100;
 
   const [pendingInstructions, setPendingInstructions] = useState('');
@@ -68,11 +73,12 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
   };
 
   const unitPrice = getUnitPrice();
+  const previewTotal = unitPrice === null ? null : round(unitPrice * pendingQuantity);
 
   const handleAddToCart = () => {
     if (unitPrice === null) return;
 
-    addItem({
+    const instanceId = addItem({
       id: item.id,
       name: language === 'ar' ? item.name_ar : item.name_en, // Current display name
       name_en: item.name_en,
@@ -84,6 +90,7 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
       minQuantity,
       quantity: pendingQuantity,
     });
+    onItemAdded?.({ instanceId, itemName: language === 'ar' ? item.name_ar : item.name_en });
     setPendingOptions({});
     setPendingInstructions('');
     setPendingQuantity(minQuantity);
@@ -115,10 +122,50 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
 
   const presets = item.presets || [];
   const imageUrl = item.image || `https://placehold.co/400x300?text=${encodeURIComponent(item.name_en)}`;
-  
+  const quickAddEnabled = !item.option_price_overrides;
+
   const displayName = language === 'ar' ? item.name_ar : item.name_en;
   const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
   const shouldShowUnit = Boolean(item.unit && item.unit !== 'piece');
+
+  const handleQuickAdd = () => {
+    if (!quickAddEnabled) {
+      onToggle();
+      return;
+    }
+    const instanceId = addItem({
+      id: item.id,
+      name: displayName,
+      name_en: item.name_en,
+      name_ar: item.name_ar,
+      price: item.price,
+      selectedOptions: {},
+      instructions: '',
+      step,
+      minQuantity,
+      quantity: minQuantity,
+    });
+    onItemAdded?.({ instanceId, itemName: displayName });
+  };
+
+  const handleQuickDecrease = () => {
+    const targetInstance = [...cartInstances]
+      .reverse()
+      .find((instance) => Object.keys(instance.selectedOptions || {}).length === 0) || cartInstances[cartInstances.length - 1];
+
+    if (!targetInstance) return;
+
+    const targetMin = targetInstance.minQuantity ?? minQuantity;
+    const targetStep = targetInstance.step ?? step;
+    const nextQuantity = round(targetInstance.quantity - targetStep);
+
+    if (nextQuantity >= targetMin - 0.001) {
+      updateQuantity(targetInstance.instanceId, nextQuantity);
+      return;
+    }
+
+    removeItem(targetInstance.instanceId);
+  };
 
   return (
     <div 
@@ -158,10 +205,12 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
                 {language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}
               </span>
             ) : (
-              <span className="font-bold text-primary-600">
-                ${unitPrice.toFixed(2)}
-                {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
-              </span>
+              <>
+                <span className="font-bold text-primary-600">
+                  ${unitPrice.toFixed(2)}
+                  {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
+                </span>
+              </>
             )}
           </div>
         </div>
@@ -238,6 +287,12 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
                   step={step}
                 />
               </div>
+              {previewTotal !== null && (
+                <div className="text-right pr-1 min-w-[88px]">
+                  <p className="text-[11px] text-gray-500">{t('total')}</p>
+                  <p className="text-sm font-bold text-primary-700">${previewTotal.toFixed(2)}</p>
+                </div>
+              )}
               <Button 
                 onClick={handleAddToCart} 
                 className="shrink-0 flex items-center justify-center gap-2 px-4"
@@ -251,9 +306,43 @@ const MenuCardComponent = ({ item, expanded, onToggle }: MenuCardProps) => {
           </div>
         ) : (
           <div className="mt-auto flex justify-end">
-             <span className="text-sm text-primary-600 font-semibold">
-               + {t('add') || 'Add'}
-             </span>
+            {totalQuantity > 0 && quickAddEnabled ? (
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleQuickDecrease}
+                  className="h-11 min-w-11 px-3"
+                  aria-label={t('decrease_quantity')}
+                >
+                  -
+                </Button>
+                <span className="min-w-14 text-center text-sm font-semibold text-gray-700">
+                  {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')}
+                </span>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={handleQuickAdd}
+                  className="h-11 min-w-11 px-3"
+                  aria-label={t('increase_quantity')}
+                >
+                  +
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleQuickAdd();
+                }}
+                variant="ghost"
+                className="h-11 px-4 text-sm text-primary-700"
+              >
+                + {t('add') || 'Add'}
+              </Button>
+            )}
           </div>
         )}
       </div>
