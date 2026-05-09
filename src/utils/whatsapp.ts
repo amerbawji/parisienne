@@ -35,8 +35,8 @@ const formatDate = (dateString?: string): string => {
   return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
 };
 
-export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', details?: OrderDetails): string => {
-  const number = '9613502022';
+export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', details?: OrderDetails, whatsappNumber = '9613502022'): string => {
+  const number = whatsappNumber;
   const isAr = language === 'ar';
 
   // Translations

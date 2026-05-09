@@ -494,7 +494,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
-  const { open_time, close_time, closed_days, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const { open_time, close_time, closed_days, whatsapp_number, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [hoursSaving, setHoursSaving] = useState(false);
@@ -502,6 +502,9 @@ function SettingsTab() {
   const [openTime, setOpenTime] = useState(open_time);
   const [closeTime, setCloseTime] = useState(close_time);
   const [closedDays, setClosedDays] = useState<number[]>(closed_days);
+  const [waNumber, setWaNumber] = useState(whatsapp_number);
+  const [waSaving, setWaSaving] = useState(false);
+  const [waError, setWaError] = useState('');
 
   useEffect(() => {
     fetchConfig().then(() => {
@@ -509,6 +512,7 @@ function SettingsTab() {
       setOpenTime(s.open_time);
       setCloseTime(s.close_time);
       setClosedDays(s.closed_days);
+      setWaNumber(s.whatsapp_number);
     });
   }, [fetchConfig]);
 
@@ -585,6 +589,26 @@ function SettingsTab() {
         )}
       </div>
 
+      {/* WhatsApp Number */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
+        <h2 className="text-base font-bold text-gray-800">WhatsApp Number</h2>
+        <p className="text-xs text-gray-500">Orders are sent to this number. Include country code, no spaces or symbols (e.g. 9613502022).</p>
+        <div className="flex gap-2 items-end">
+          <div className="flex-1 flex flex-col gap-1">
+            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Number</label>
+            <input type="tel" value={waNumber} onChange={(e) => setWaNumber(e.target.value.replace(/\D/g, ''))}
+              placeholder="9613502022"
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+          </div>
+          <button type="button" disabled={waSaving}
+            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); } catch { setWaError('Failed to save.'); } finally { setWaSaving(false); } }}
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+            {waSaving ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+        {waError && <p className="text-xs text-red-600">{waError}</p>}
+      </div>
+
       {/* Promo Popup */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-base font-bold text-gray-800">Promo Popup</h2>
@@ -627,7 +651,7 @@ interface CategoryFormState {
 }
 
 function CategoriesTab() {
-  const { categories, addCategory, updateCategory, deleteCategory } = useMenuStore();
+  const { categories, addCategory, updateCategory, deleteCategory, reorderCategory } = useMenuStore();
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -818,6 +842,20 @@ function CategoriesTab() {
                   <p className="text-xs text-gray-400 mt-0.5">{cat.items.length} items{!cat.active && <span className="ml-2 text-orange-500 font-medium">Hidden</span>}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
+                  <div className="flex gap-1 self-center">
+                    <button type="button" onClick={() => reorderCategory(cat.id, 'up')}
+                      disabled={categories.indexOf(cat) === 0}
+                      className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
+                      title="Move up">
+                      <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                    </button>
+                    <button type="button" onClick={() => reorderCategory(cat.id, 'down')}
+                      disabled={categories.indexOf(cat) === categories.length - 1}
+                      className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
+                      title="Move down">
+                      <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                  </div>
                   <button
                     type="button"
                     onClick={() => updateCategory(cat.id, { active: !cat.active })}
@@ -902,7 +940,7 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
 // ─── Tab: Items ───────────────────────────────────────────────────────────────
 
 function ItemsTab() {
-  const { categories, addItem, updateItem, deleteItem } = useMenuStore();
+  const { categories, addItem, updateItem, deleteItem, reorderItem } = useMenuStore();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
     categories[0]?.id ?? ''
   );
@@ -999,10 +1037,33 @@ function ItemsTab() {
                   {item.options && item.options.length > 0 && (
                     <span className="ml-2 text-primary-500">{item.options.length} option(s)</span>
                   )}
-                  {item.active === false && <span className="ml-2 text-orange-500 font-medium">Hidden</span>}
+                  {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">Out of stock</span>}
+                  {item.active === false && <span className="ml-2 text-red-500 font-medium">Hidden</span>}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
+                <div className="flex gap-1 self-center">
+                  <button type="button" onClick={() => reorderItem(selectedCategoryId, item.id, 'up')}
+                    disabled={items.indexOf(item) === 0}
+                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
+                    title="Move up">
+                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                  </button>
+                  <button type="button" onClick={() => reorderItem(selectedCategoryId, item.id, 'down')}
+                    disabled={items.indexOf(item) === items.length - 1}
+                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
+                    title="Move down">
+                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => updateItem(selectedCategoryId, item.id, { in_stock: item.in_stock === false ? true : false })}
+                  className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                  title={item.in_stock === false ? 'Out of stock — click to mark in stock' : 'In stock — click to mark out of stock'}
+                >
+                  {item.in_stock === false ? 'Out of stock' : 'In stock'}
+                </button>
                 <button
                   type="button"
                   onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false })}

@@ -20,6 +20,7 @@ export interface MenuItem {
   options?: { name: string; choices: string[] }[];
   option_price_overrides?: Record<string, Record<string, number>>;
   presets?: string[];
+  in_stock?: boolean;
 }
 
 interface MenuCardProps {
@@ -123,6 +124,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
   const presets = item.presets || [];
   const imageUrl = item.image || `https://placehold.co/400x300?text=${encodeURIComponent(item.name_en)}`;
   const quickAddEnabled = !item.option_price_overrides;
+  const inStock = item.in_stock !== false;
 
   const displayName = language === 'ar' ? item.name_ar : item.name_en;
   const displayDesc = language === 'ar' ? item.description_ar : item.description_en;
@@ -168,8 +170,8 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
   };
 
   return (
-    <div 
-      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col' : 'flex-row h-full hover:shadow-md cursor-pointer'}`}
+    <div
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col' : 'flex-row h-full hover:shadow-md cursor-pointer'} ${!inStock ? 'opacity-60' : ''}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
@@ -187,7 +189,14 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
           className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
-        {totalQuantity > 0 && (
+        {!inStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+            <span className="bg-white/90 text-gray-700 text-xs font-bold px-3 py-1 rounded-full shadow">
+              {language === 'ar' ? 'غير متوفر' : 'Out of stock'}
+            </span>
+          </div>
+        )}
+        {inStock && totalQuantity > 0 && (
           <div className="absolute top-2 left-2 rtl:left-auto rtl:right-2 bg-primary-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md animate-in zoom-in">
              {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')}
              {shouldShowUnit && ` ${safeT(t, `unit_${item.unit}`, item.unit!)}`}
@@ -293,11 +302,11 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   <p className="text-sm font-bold text-primary-700">${previewTotal.toFixed(2)}</p>
                 </div>
               )}
-              <Button 
-                onClick={handleAddToCart} 
+              <Button
+                onClick={handleAddToCart}
                 className="shrink-0 flex items-center justify-center gap-2 px-4"
                 aria-label={t('add')}
-                disabled={unitPrice === null}
+                disabled={unitPrice === null || !inStock}
               >
                 <PlusIcon className="h-5 w-5" />
                 {t('add')}
@@ -306,7 +315,11 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
           </div>
         ) : (
           <div className="mt-auto flex justify-end">
-            {totalQuantity > 0 && quickAddEnabled ? (
+            {!inStock ? (
+              <span className="text-xs text-gray-400 font-medium py-2">
+                {language === 'ar' ? 'غير متوفر' : 'Out of stock'}
+              </span>
+            ) : totalQuantity > 0 && quickAddEnabled ? (
               <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                 <Button
                   type="button"

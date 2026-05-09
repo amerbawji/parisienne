@@ -22,6 +22,7 @@ export interface MenuItem {
   options?: MenuOption[];
   presets?: string[];
   active?: boolean;
+  in_stock?: boolean;
 }
 
 export interface Category {
@@ -44,10 +45,12 @@ interface MenuStore {
   addItem: (categoryId: string, item: MenuItem) => Promise<void>;
   updateItem: (categoryId: string, itemId: string, updates: Partial<MenuItem>) => Promise<void>;
   deleteItem: (categoryId: string, itemId: string) => Promise<void>;
+  reorderCategory: (id: string, direction: 'up' | 'down') => Promise<void>;
+  reorderItem: (categoryId: string, itemId: string, direction: 'up' | 'down') => Promise<void>;
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number; active: boolean };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number; active: boolean; in_stock: boolean };
 type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -75,6 +78,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           image: item.image_url || undefined,
           presets: item.presets?.length ? item.presets : undefined,
           active: item.active,
+          in_stock: item.in_stock,
           options: opts
             .filter((o) => o.item_id === item.id)
             .sort((a, b) => a.sort_order - b.sort_order)
@@ -136,7 +140,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       price: item.price, unit: item.unit, weight_step: item.weight_step ?? null,
       min_quantity: item.min_quantity ?? null, description_en: item.description_en ?? '',
       description_ar: item.description_ar ?? '', image_url: item.image ?? '',
-      presets: item.presets ?? [], sort_order, active: true,
+      presets: item.presets ?? [], sort_order, active: true, in_stock: true,
     });
     if (ie) throw ie;
     if (item.options?.length) {
@@ -162,6 +166,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       ...(image              !== undefined && { image_url: image ?? '' }),
       ...(rest.presets       !== undefined && { presets: rest.presets }),
       ...(rest.active        !== undefined && { active: rest.active }),
+      ...(rest.in_stock      !== undefined && { in_stock: rest.in_stock }),
     }).eq('id', itemId);
     if (ie) throw ie;
     if (options !== undefined) {
@@ -187,6 +192,37 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       categories: s.categories.map((c) =>
         c.id === categoryId ? { ...c, items: c.items.filter((i) => i.id !== itemId) } : c
       ),
+    }));
+  },
+
+  reorderCategory: async (id, direction) => {
+    const cats = [...get().categories];
+    const idx = cats.findIndex((c) => c.id === id);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= cats.length) return;
+    [cats[idx], cats[swapIdx]] = [cats[swapIdx], cats[idx]];
+    await Promise.all([
+      supabase.from('categories').update({ sort_order: idx }).eq('id', cats[idx].id),
+      supabase.from('categories').update({ sort_order: swapIdx }).eq('id', cats[swapIdx].id),
+    ]);
+    set({ categories: cats });
+  },
+
+  reorderItem: async (categoryId, itemId, direction) => {
+    const cats = get().categories;
+    const cat = cats.find((c) => c.id === categoryId);
+    if (!cat) return;
+    const items = [...cat.items];
+    const idx = items.findIndex((i) => i.id === itemId);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= items.length) return;
+    [items[idx], items[swapIdx]] = [items[swapIdx], items[idx]];
+    await Promise.all([
+      supabase.from('items').update({ sort_order: idx }).eq('id', items[idx].id),
+      supabase.from('items').update({ sort_order: swapIdx }).eq('id', items[swapIdx].id),
+    ]);
+    set((s) => ({
+      categories: s.categories.map((c) => c.id === categoryId ? { ...c, items } : c),
     }));
   },
 }));

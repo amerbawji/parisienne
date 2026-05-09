@@ -5,6 +5,7 @@ interface StoreConfig {
   open_time: string;
   close_time: string;
   closed_days: number[];
+  whatsapp_number: string;
 }
 
 interface StoreConfigStore extends StoreConfig {
@@ -18,12 +19,19 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
   open_time: '08:00',
   close_time: '23:00',
   closed_days: [],
+  whatsapp_number: '9613502022',
   loading: true,
 
   fetchConfig: async () => {
     const { data, error } = await supabase.from('store_config').select('*').eq('id', 1).single();
     if (!error && data) {
-      set({ open_time: data.open_time, close_time: data.close_time, closed_days: data.closed_days ?? [], loading: false });
+      set({
+        open_time: data.open_time,
+        close_time: data.close_time,
+        closed_days: data.closed_days ?? [],
+        whatsapp_number: data.whatsapp_number ?? '9613502022',
+        loading: false,
+      });
     } else {
       set({ loading: false });
     }

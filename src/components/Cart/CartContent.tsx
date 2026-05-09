@@ -38,6 +38,7 @@ export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
   const { t, language } = useLanguageStore();
   const storeIsOpen = useStoreConfigStore((s) => s.isOpen)();
+  const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
   const navigate = useNavigate();
   const totalItems = getTotalItems();
   const hasWeightBasedItem = items.some((item) => (item.step ?? 1) < 1 || (item.minQuantity ?? 1) < 1);
@@ -187,7 +188,7 @@ export const CartContent = () => {
       }));
     }
 
-    const link = generateWhatsAppLink(items, language, details);
+    const link = generateWhatsAppLink(items, language, details, whatsappNumber);
 
     const { error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,

@@ -23,7 +23,8 @@ CREATE TABLE items (
   image_url       TEXT NOT NULL DEFAULT '',
   presets         JSONB NOT NULL DEFAULT '[]',
   sort_order      INTEGER NOT NULL DEFAULT 0,
-  active          BOOLEAN NOT NULL DEFAULT true
+  active          BOOLEAN NOT NULL DEFAULT true,
+  in_stock        BOOLEAN NOT NULL DEFAULT true
 );
 
 CREATE TABLE item_options (
@@ -83,7 +84,8 @@ CREATE TABLE store_config (
   id          INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   open_time   TEXT NOT NULL DEFAULT '08:00',
   close_time  TEXT NOT NULL DEFAULT '23:00',
-  closed_days JSONB NOT NULL DEFAULT '[]'
+  closed_days      JSONB NOT NULL DEFAULT '[]',
+  whatsapp_number  TEXT NOT NULL DEFAULT '9613502022'
 );
 
 INSERT INTO store_config (id, open_time, close_time, closed_days) VALUES (1, '08:00', '23:00', '[]');
