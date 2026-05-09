@@ -1053,13 +1053,21 @@ function AdminShell() {
       <header className="bg-primary-600 text-white shadow-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
           <h1 className="text-base font-bold tracking-wide">Parisienne Admin Panel</h1>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="text-xs px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
-          >
-            Log Out
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href="/"
+              className="text-xs px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
+            >
+              ← Main Page
+            </a>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="text-xs px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
+            >
+              Log Out
+            </button>
+          </div>
         </div>
       </header>
 
