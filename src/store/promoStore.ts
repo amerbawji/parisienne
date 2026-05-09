@@ -11,9 +11,9 @@ interface PromoStore {
 }
 
 export const usePromoStore = create<PromoStore>((set) => ({
-  enabled: true,
+  enabled: false,
   image: '/promo-ramadan.jpg',
-  loading: false,
+  loading: true,
 
   fetchPromo: async () => {
     set({ loading: true });
