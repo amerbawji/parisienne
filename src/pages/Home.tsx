@@ -19,6 +19,7 @@ export const Home = () => {
   const [menuSelectionMode, setMenuSelectionMode] = useState(false);
   const promoEnabled = usePromoStore((state) => state.enabled);
   const promoImage = usePromoStore((state) => state.image);
+  const promoLoading = usePromoStore((state) => state.loading);
   const fetchPromo = usePromoStore((state) => state.fetchPromo);
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
   const menuLoading = useMenuStore((state) => state.loading);
@@ -81,8 +82,8 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (!menuLoading) setShowSplashPromo(promoEnabled);
-  }, [menuLoading, promoEnabled]);
+    if (!menuLoading && !promoLoading) setShowSplashPromo(promoEnabled);
+  }, [menuLoading, promoLoading, promoEnabled]);
 
   useEffect(() => {
     if (!lastAdded) return;
