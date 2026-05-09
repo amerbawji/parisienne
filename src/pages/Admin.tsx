@@ -1078,28 +1078,57 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
     setUpdatingStatus(null);
   };
 
+  const statusTabs = [{ key: 'all', label: 'All' }, ...Object.entries(STATUS_LABELS).map(([k, v]) => ({ key: k, label: v.label }))];
+  const serviceTabs = [{ key: 'all', label: 'All' }, { key: 'delivery', label: 'Delivery' }, { key: 'takeaway', label: 'Takeaway' }];
+
   const header = (
-    <div className="flex flex-wrap items-center gap-2 mb-4">
-      <h2 className="text-base font-bold text-gray-800 mr-auto">Orders</h2>
-      {/* Filters */}
-      <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-600">
-        <option value="all">All statuses</option>
-        {Object.entries(STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-      </select>
-      <select value={filterService} onChange={(e) => setFilterService(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-600">
-        <option value="all">All types</option>
-        <option value="delivery">Delivery</option>
-        <option value="takeaway">Takeaway</option>
-      </select>
-      <button
-        type="button"
-        onClick={onRefresh}
-        disabled={loading}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition"
-      >
-        <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-        Refresh
-      </button>
+    <div className="flex flex-col gap-2 mb-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-base font-bold text-gray-800">Orders</h2>
+        <button
+          type="button"
+          onClick={onRefresh}
+          disabled={loading}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition"
+        >
+          <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+          Refresh
+        </button>
+      </div>
+      {/* Status filter */}
+      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+        {statusTabs.map((t) => (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => setFilterStatus(t.key)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition border ${
+              filterStatus === t.key
+                ? 'bg-primary-600 text-white border-primary-600'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {/* Service type filter */}
+      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+        {serviceTabs.map((t) => (
+          <button
+            key={t.key}
+            type="button"
+            onClick={() => setFilterService(t.key)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-full whitespace-nowrap transition border ${
+              filterService === t.key
+                ? 'bg-primary-600 text-white border-primary-600'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 
