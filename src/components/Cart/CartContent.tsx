@@ -141,7 +141,7 @@ export const CartContent = () => {
     );
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (items.length === 0) return;
 
     if (timing === 'scheduled' && !scheduledTime) {
@@ -176,7 +176,7 @@ export const CartContent = () => {
 
     const link = generateWhatsAppLink(items, language, details);
 
-    supabase.from('orders').insert({
+    const { error: orderError } = await supabase.from('orders').insert({
       service_type: serviceType,
       timing,
       scheduled_time: scheduledTime || null,
@@ -192,11 +192,12 @@ export const CartContent = () => {
         name_ar: item.name_ar || item.name,
         quantity: item.quantity,
         price: item.price,
-        unit: item.step && item.step < 1 ? 'kg' : 'piece',
+        unit: (item as Record<string, unknown>).step && ((item as Record<string, unknown>).step as number) < 1 ? 'kg' : 'piece',
         selected_options: item.selectedOptions || {},
       })),
       total: totalPrice,
     });
+    if (orderError) console.error('[Order save failed]', orderError);
 
     window.open(link, '_blank');
     clearCart();

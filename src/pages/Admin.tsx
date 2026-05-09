@@ -1053,10 +1053,11 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
 };
 
-function OrdersTab({ orders, loading, onUpdateStatus }: {
+function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
   orders: Order[];
   loading: boolean;
   onUpdateStatus: (id: string, status: string) => void;
+  onRefresh: () => void;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
@@ -1068,17 +1069,37 @@ function OrdersTab({ orders, loading, onUpdateStatus }: {
     setUpdatingStatus(null);
   };
 
-  if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>;
-
-  if (orders.length === 0) return (
-    <div className="text-center py-20 text-gray-400">
-      <p className="text-lg font-semibold">No orders yet</p>
-      <p className="text-sm mt-1">Orders will appear here once customers place them.</p>
+  const header = (
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-base font-bold text-gray-800">Orders</h2>
+      <button
+        type="button"
+        onClick={onRefresh}
+        disabled={loading}
+        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition"
+      >
+        <svg className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        Refresh
+      </button>
     </div>
   );
 
+  if (loading) return <>{header}<div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div></>;
+
+  if (orders.length === 0) return (
+    <>
+      {header}
+      <div className="text-center py-16 text-gray-400">
+        <p className="text-lg font-semibold">No orders yet</p>
+        <p className="text-sm mt-1">Orders will appear here once customers place them.</p>
+      </div>
+    </>
+  );
+
   return (
-    <div className="space-y-3">
+    <div>
+      {header}
+      <div className="space-y-3">
       {orders.map((order) => {
         const date = new Date(order.created_at);
         const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
@@ -1171,6 +1192,7 @@ function OrdersTab({ orders, loading, onUpdateStatus }: {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
@@ -1219,11 +1241,16 @@ function AdminShell() {
 
   useState(() => { Promise.all([fetchMenu(), fetchPromo()]); });
 
+  const refreshOrders = async () => {
+    setOrdersLoading(true);
+    const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+    if (error) console.error('[Orders fetch failed]', error);
+    if (data) setOrders(data as Order[]);
+    setOrdersLoading(false);
+  };
+
   useEffect(() => {
-    supabase.from('orders').select('*').order('created_at', { ascending: false }).then(({ data }) => {
-      if (data) setOrders(data as Order[]);
-      setOrdersLoading(false);
-    });
+    refreshOrders();
 
     const channel = supabase
       .channel('orders-realtime')
@@ -1312,7 +1339,7 @@ function AdminShell() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} />}
         {tab === 'promo' && <PromoTab />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
