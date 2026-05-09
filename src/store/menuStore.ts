@@ -28,6 +28,7 @@ export interface Category {
   name_en: string;
   name_ar: string;
   image: string;
+  active: boolean;
   items: MenuItem[];
 }
 
@@ -44,7 +45,7 @@ interface MenuStore {
   deleteItem: (categoryId: string, itemId: string) => Promise<void>;
 }
 
-type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; sort_order: number };
+type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number };
 type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: string[]; sort_order: number };
 type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
 
@@ -56,6 +57,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
       name_en: cat.name_en,
       name_ar: cat.name_ar,
       image: cat.image_url,
+      active: cat.active,
       items: items
         .filter((i) => i.category_id === cat.id)
         .sort((a, b) => a.sort_order - b.sort_order)
@@ -102,7 +104,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
   addCategory: async (cat) => {
     const sort_order = get().categories.length;
     const { error } = await supabase.from('categories').insert({
-      id: cat.id, name_en: cat.name_en, name_ar: cat.name_ar, image_url: cat.image, sort_order,
+      id: cat.id, name_en: cat.name_en, name_ar: cat.name_ar, image_url: cat.image, active: true, sort_order,
     });
     if (error) throw error;
     set((s) => ({ categories: [...s.categories, { ...cat, items: [] }] }));
@@ -112,7 +114,8 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
     const { error } = await supabase.from('categories').update({
       ...(updates.name_en !== undefined && { name_en: updates.name_en }),
       ...(updates.name_ar !== undefined && { name_ar: updates.name_ar }),
-      ...(updates.image  !== undefined && { image_url: updates.image }),
+      ...(updates.image   !== undefined && { image_url: updates.image }),
+      ...(updates.active  !== undefined && { active: updates.active }),
     }).eq('id', id);
     if (error) throw error;
     set((s) => ({ categories: s.categories.map((c) => c.id === id ? { ...c, ...updates } : c) }));

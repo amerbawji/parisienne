@@ -49,7 +49,7 @@ export const Home = () => {
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   const categories = useMemo(
-    () => storeCategories.filter((category) => !(category as typeof category & { hidden?: boolean }).hidden),
+    () => storeCategories.filter((category) => category.active !== false),
     [storeCategories]
   );
   const filteredCategories = useMemo(

@@ -5,6 +5,7 @@ CREATE TABLE categories (
   name_en     TEXT NOT NULL,
   name_ar     TEXT NOT NULL,
   image_url   TEXT NOT NULL DEFAULT '',
+  active      BOOLEAN NOT NULL DEFAULT true,
   sort_order  INTEGER NOT NULL DEFAULT 0
 );
 

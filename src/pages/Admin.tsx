@@ -761,7 +761,7 @@ function CategoriesTab() {
                 </div>
               </form>
             ) : (
-              <div className="flex items-center gap-3 p-3 sm:p-4">
+              <div className={`flex items-center gap-3 p-3 sm:p-4 ${!cat.active ? 'opacity-50' : ''}`}>
                 {cat.image && (
                   <img
                     src={cat.image}
@@ -772,9 +772,17 @@ function CategoriesTab() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
                   <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{cat.items.length} items</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{cat.items.length} items{!cat.active && <span className="ml-2 text-orange-500 font-medium">Hidden</span>}</p>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-1.5 shrink-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => updateCategory(cat.id, { active: !cat.active })}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
+                    title={cat.active ? 'Active — click to deactivate' : 'Inactive — click to activate'}
+                  >
+                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
+                  </button>
                   <button
                     type="button"
                     onClick={() => startEdit(cat)}
