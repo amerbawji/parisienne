@@ -9,6 +9,7 @@ import { CartItemRow } from './CartItemRow';
 import { Button } from '../UI/Button';
 import { generateWhatsAppLink } from '../../utils/whatsapp';
 import { cn } from '../../utils/cn';
+import { supabase } from '../../lib/supabase';
 
 const OptionButton = ({ 
   selected, 
@@ -174,6 +175,28 @@ export const CartContent = () => {
     }
 
     const link = generateWhatsAppLink(items, language, details);
+
+    supabase.from('orders').insert({
+      service_type: serviceType,
+      timing,
+      scheduled_time: scheduledTime || null,
+      payment_method: paymentMethod,
+      delivery_area: deliveryArea || null,
+      delivery_street: deliveryStreet || null,
+      delivery_building: deliveryBuilding || null,
+      delivery_floor: deliveryFloor || null,
+      delivery_details: deliveryDetails || null,
+      location_url: locationUrl || null,
+      items: items.map((item) => ({
+        name_en: item.name_en || item.name,
+        name_ar: item.name_ar || item.name,
+        quantity: item.quantity,
+        price: item.price,
+        unit: item.step && item.step < 1 ? 'kg' : 'piece',
+        selected_options: item.selectedOptions || {},
+      })),
+      total: totalPrice,
+    });
 
     window.open(link, '_blank');
     clearCart();

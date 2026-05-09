@@ -54,6 +54,27 @@ CREATE POLICY "public_all" ON items        FOR ALL USING (true) WITH CHECK (true
 CREATE POLICY "public_all" ON item_options FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "public_all" ON promo_config FOR ALL USING (true) WITH CHECK (true);
 
+CREATE TABLE orders (
+  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
+  service_type     TEXT NOT NULL,
+  timing           TEXT,
+  scheduled_time   TEXT,
+  payment_method   TEXT,
+  delivery_area    TEXT,
+  delivery_street  TEXT,
+  delivery_building TEXT,
+  delivery_floor   TEXT,
+  delivery_details TEXT,
+  location_url     TEXT,
+  items            JSONB NOT NULL DEFAULT '[]',
+  total            NUMERIC(10,2) NOT NULL DEFAULT 0,
+  status           TEXT NOT NULL DEFAULT 'new'
+);
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public_all" ON orders FOR ALL USING (true) WITH CHECK (true);
+
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
 -- Then add this policy in Storage → menu-images → Policies:

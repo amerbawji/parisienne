@@ -1,7 +1,7 @@
-import { useState, useRef, type ChangeEvent } from 'react';
+import { useState, useRef, useEffect, type ChangeEvent } from 'react';
 import { useMenuStore, type Category, type MenuItem, type MenuOption } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
-import { uploadImage } from '../lib/supabase';
+import { uploadImage, supabase } from '../lib/supabase';
 
 const ADMIN_PASSWORD = 'parisienne2025';
 const SESSION_KEY = 'parisienne_admin_auth';
@@ -1025,12 +1025,167 @@ function PasswordGate({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
+// ─── Tab: Orders ─────────────────────────────────────────────────────────────
+
+interface OrderItem { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }
+interface Order {
+  id: string;
+  created_at: string;
+  service_type: string;
+  timing: string | null;
+  scheduled_time: string | null;
+  payment_method: string | null;
+  delivery_area: string | null;
+  delivery_street: string | null;
+  delivery_building: string | null;
+  delivery_floor: string | null;
+  delivery_details: string | null;
+  location_url: string | null;
+  items: OrderItem[];
+  total: number;
+  status: string;
+}
+
+const STATUS_LABELS: Record<string, { label: string; color: string }> = {
+  new:       { label: 'New',       color: 'bg-blue-100 text-blue-700' },
+  confirmed: { label: 'Confirmed', color: 'bg-yellow-100 text-yellow-700' },
+  delivered: { label: 'Delivered', color: 'bg-green-100 text-green-700' },
+  cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
+};
+
+function OrdersTab() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.from('orders').select('*').order('created_at', { ascending: false }).then(({ data }) => {
+      if (data) setOrders(data as Order[]);
+      setLoading(false);
+    });
+  }, []);
+
+  const updateStatus = async (id: string, status: string) => {
+    setUpdatingStatus(id);
+    await supabase.from('orders').update({ status }).eq('id', id);
+    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
+    setUpdatingStatus(null);
+  };
+
+  if (loading) return <div className="flex justify-center py-20"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>;
+
+  if (orders.length === 0) return (
+    <div className="text-center py-20 text-gray-400">
+      <p className="text-lg font-semibold">No orders yet</p>
+      <p className="text-sm mt-1">Orders will appear here once customers place them.</p>
+    </div>
+  );
+
+  return (
+    <div className="space-y-3">
+      {orders.map((order) => {
+        const date = new Date(order.created_at);
+        const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
+        const isOpen = expanded === order.id;
+        return (
+          <div key={order.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+            {/* Header row */}
+            <button
+              type="button"
+              onClick={() => setExpanded(isOpen ? null : order.id)}
+              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-semibold text-gray-900">
+                    {date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    {' '}
+                    <span className="text-gray-500 font-normal">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
+                  </span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badge.color}`}>{badge.label}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-0.5">{order.items.length} item{order.items.length !== 1 ? 's' : ''} · ${Number(order.total).toFixed(2)}</p>
+              </div>
+              <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+
+            {/* Expanded details */}
+            {isOpen && (
+              <div className="border-t border-gray-100 px-4 py-4 space-y-4">
+                {/* Status changer */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Status:</span>
+                  {Object.entries(STATUS_LABELS).map(([key, val]) => (
+                    <button
+                      key={key}
+                      type="button"
+                      disabled={updatingStatus === order.id}
+                      onClick={() => updateStatus(order.id, key)}
+                      className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}
+                    >
+                      {val.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Delivery / Order info */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 text-sm">
+                  {order.service_type === 'delivery' && (<>
+                    {order.delivery_area    && <><span className="text-gray-500">Area</span><span className="col-span-1 font-medium">{order.delivery_area}</span></>}
+                    {order.delivery_street  && <><span className="text-gray-500">Street</span><span className="col-span-1 font-medium">{order.delivery_street}</span></>}
+                    {order.delivery_building && <><span className="text-gray-500">Building</span><span className="col-span-1 font-medium">{order.delivery_building}</span></>}
+                    {order.delivery_floor   && <><span className="text-gray-500">Floor</span><span className="col-span-1 font-medium">{order.delivery_floor}</span></>}
+                    {order.delivery_details && <><span className="text-gray-500">Details</span><span className="col-span-1 font-medium">{order.delivery_details}</span></>}
+                    {order.location_url     && <><span className="text-gray-500">Location</span><a href={order.location_url} target="_blank" rel="noreferrer" className="col-span-1 text-primary-600 underline font-medium">Open map</a></>}
+                  </>)}
+                  {order.timing === 'scheduled' && order.scheduled_time && <><span className="text-gray-500">Scheduled</span><span className="col-span-1 font-medium">{order.scheduled_time}</span></>}
+                  {order.payment_method && <><span className="text-gray-500">Payment</span><span className="col-span-1 font-medium capitalize">{order.payment_method}</span></>}
+                </div>
+
+                {/* Items */}
+                <div>
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Items</p>
+                  <div className="space-y-2">
+                    {order.items.map((item, i) => (
+                      <div key={i} className="flex items-start justify-between gap-2 text-sm">
+                        <div className="flex-1 min-w-0">
+                          <span className="font-medium text-gray-900">{item.name_en}</span>
+                          {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
+                          {item.selected_options && Object.keys(item.selected_options).length > 0 && (
+                            <div className="text-xs text-gray-500 mt-0.5">
+                              {Object.entries(item.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-gray-500">×{item.quantity}</span>
+                          <span className="ml-2 font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
+                    <span>Total</span>
+                    <span>${Number(order.total).toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Admin Shell ──────────────────────────────────────────────────────────────
 
-type Tab = 'promo' | 'categories' | 'items';
+type Tab = 'orders' | 'promo' | 'categories' | 'items';
 
 function AdminShell() {
-  const [tab, setTab] = useState<Tab>('promo');
+  const [tab, setTab] = useState<Tab>('orders');
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
 
@@ -1042,6 +1197,7 @@ function AdminShell() {
   };
 
   const tabs: { key: Tab; label: string }[] = [
+    { key: 'orders', label: 'Orders' },
     { key: 'promo', label: 'Promo' },
     { key: 'categories', label: 'Categories' },
     { key: 'items', label: 'Items' },
@@ -1093,6 +1249,7 @@ function AdminShell() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        {tab === 'orders' && <OrdersTab />}
         {tab === 'promo' && <PromoTab />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
