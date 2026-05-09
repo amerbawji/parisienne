@@ -761,12 +761,12 @@ function CategoriesTab() {
                 </div>
               </form>
             ) : (
-              <div className="flex items-center gap-4 p-4">
+              <div className="flex items-center gap-3 p-3 sm:p-4">
                 {cat.image && (
                   <img
                     src={cat.image}
                     alt={cat.name_en}
-                    className="h-14 w-20 object-cover rounded-lg border border-gray-100 shrink-0"
+                    className="h-12 w-16 sm:h-14 sm:w-20 object-cover rounded-lg border border-gray-100 shrink-0"
                   />
                 )}
                 <div className="flex-1 min-w-0">
@@ -774,7 +774,7 @@ function CategoriesTab() {
                   <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
                   <p className="text-xs text-gray-400 mt-0.5">{cat.items.length} items</p>
                 </div>
-                <div className="flex gap-2 shrink-0">
+                <div className="flex flex-col sm:flex-row gap-1.5 shrink-0">
                   <button
                     type="button"
                     onClick={() => startEdit(cat)}
@@ -934,7 +934,7 @@ function ItemsTab() {
           ) : (
             <div
               key={item.id}
-              className="border border-gray-200 rounded-xl bg-white p-4 flex items-center gap-4"
+              className="border border-gray-200 rounded-xl bg-white p-3 sm:p-4 flex items-center gap-3"
             >
               <QuickImageChange
                 image={item.image ?? ''}
@@ -950,7 +950,7 @@ function ItemsTab() {
                   )}
                 </p>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className="flex flex-col sm:flex-row gap-1.5 shrink-0">
                 <button
                   type="button"
                   onClick={() => { setEditingItemId(item.id); setShowAddForm(false); }}
@@ -1079,7 +1079,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh }: {
   };
 
   const header = (
-    <div className="flex flex-wrap items-center gap-3 mb-4">
+    <div className="flex flex-wrap items-center gap-2 mb-4">
       <h2 className="text-base font-bold text-gray-800 mr-auto">Orders</h2>
       {/* Filters */}
       <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-600">
@@ -1237,7 +1237,7 @@ function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () =
 
   const date = new Date(order.created_at);
   return (
-    <div className="w-72 bg-white border border-primary-200 rounded-xl shadow-lg p-4 flex gap-3 animate-in slide-in-from-right-4 fade-in duration-300">
+    <div className="w-64 sm:w-72 bg-white border border-primary-200 rounded-xl shadow-lg p-3 sm:p-4 flex gap-3 animate-in slide-in-from-right-4 fade-in duration-300">
       <div className="shrink-0 w-9 h-9 rounded-full bg-primary-600 flex items-center justify-center">
         <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
       </div>
@@ -1327,19 +1327,19 @@ function AdminShell() {
     <div className="min-h-screen bg-gray-50">
       {/* Top nav */}
       <header className="bg-primary-600 text-white shadow-md sticky top-0 z-40">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-          <h1 className="text-base font-bold tracking-wide">Parisienne Admin Panel</h1>
-          <div className="flex items-center gap-2">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
+          <h1 className="text-sm sm:text-base font-bold tracking-wide truncate">Admin Panel</h1>
+          <div className="flex items-center gap-1.5 shrink-0">
             <a
               href="/"
-              className="text-xs px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
+              className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap"
             >
-              ← Main Page
+              ← Menu
             </a>
             <button
               type="button"
               onClick={handleLogout}
-              className="text-xs px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
+              className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition"
             >
               Log Out
             </button>
@@ -1349,13 +1349,13 @@ function AdminShell() {
 
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 sticky top-14 z-30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 py-2">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex gap-1 py-2 overflow-x-auto scrollbar-hide">
           {tabs.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
-              className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
+              className={`px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg transition whitespace-nowrap ${
                 tab === t.key
                   ? 'bg-primary-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -1368,7 +1368,7 @@ function AdminShell() {
       </div>
 
       {/* Content */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} />}
         {tab === 'promo' && <PromoTab />}
         {tab === 'categories' && <CategoriesTab />}
