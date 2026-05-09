@@ -1,4 +1,4 @@
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, type ChangeEvent } from 'react';
 import { useMenuStore, type Category, type MenuItem, type MenuOption } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { uploadImage } from '../lib/supabase';
