@@ -150,7 +150,7 @@ export const Home = () => {
       )}
 
       <header ref={headerRef} className="bg-white shadow-sm sticky top-0 z-40" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] gap-4 sm:items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] gap-3 sm:gap-4 sm:items-center">
           <div className="flex items-center justify-between w-full sm:w-auto">
             <div className="flex items-center gap-2 shrink-0">
               <div className="h-12 sm:h-14 lg:h-16">
@@ -272,7 +272,7 @@ export const Home = () => {
             <div className="h-8 w-8 rounded-full border-4 border-primary-200 border-t-primary-600 animate-spin" />
           </div>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
           {!menuLoading && filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
               const isOpen = menuSelectionMode
@@ -313,7 +313,7 @@ export const Home = () => {
                   
                   {isOpen && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                      <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                      <div className="p-3 sm:p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                         {category.items.map((item) => (
                           <div
                             key={item.id}

@@ -178,7 +178,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
     >
       {/* Image Side */}
       <div
-        className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-64 cursor-pointer' : 'w-32 h-24 sm:w-40 sm:h-28'}`}
+        className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-52 sm:h-64 cursor-pointer' : 'w-24 h-20 sm:w-32 sm:h-24'}`}
         onClick={(e) => {
           if (!expanded) return;
           e.stopPropagation();
@@ -207,9 +207,9 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
       </div>
 
       {/* Content Side */}
-      <div className="p-4 flex flex-col flex-grow min-w-0">
+      <div className="p-3 sm:p-4 flex flex-col flex-grow min-w-0">
         <div className="mb-1">
-          <h3 className="font-bold text-lg text-gray-900 break-words whitespace-normal">{displayName}</h3>
+          <h3 className="font-bold text-base sm:text-lg text-gray-900 break-words whitespace-normal">{displayName}</h3>
           <div className="mt-1">
             {unitPrice === null ? (
               <span className="text-sm text-gray-500">
@@ -263,7 +263,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   <button
                     key={i}
                     onClick={(e) => { e.stopPropagation(); togglePreset(preset); }}
-                    className={`text-[10px] px-2 py-0.5 rounded-full border transition-colors ${
+                    className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                       pendingInstructions.includes(preset.en)
                         ? 'bg-primary-100 text-primary-700 border-primary-200'
                         : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
@@ -327,19 +327,19 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   type="button"
                   variant="secondary"
                   onClick={handleQuickDecrease}
-                  className="h-11 min-w-11 px-3"
+                  className="h-9 min-w-9 sm:h-11 sm:min-w-11 px-2 sm:px-3"
                   aria-label={t('decrease_quantity')}
                 >
                   -
                 </Button>
-                <span className="min-w-14 text-center text-sm font-semibold text-gray-700">
+                <span className="min-w-10 sm:min-w-14 text-center text-sm font-semibold text-gray-700">
                   {Number.isInteger(totalQuantity) ? totalQuantity : totalQuantity.toFixed(2).replace(/\.?0+$/, '')}
                 </span>
                 <Button
                   type="button"
                   variant="primary"
                   onClick={handleQuickAdd}
-                  className="h-11 min-w-11 px-3"
+                  className="h-9 min-w-9 sm:h-11 sm:min-w-11 px-2 sm:px-3"
                   aria-label={t('increase_quantity')}
                 >
                   +

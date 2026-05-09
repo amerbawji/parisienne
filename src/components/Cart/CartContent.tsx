@@ -234,7 +234,7 @@ export const CartContent = () => {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4 scrollbar-hide">
         <div className="flex justify-end mb-2">
           <button 
             onClick={() => {
@@ -258,7 +258,7 @@ export const CartContent = () => {
         </ul>
 
         {/* Customer Info */}
-        <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+        <div className="space-y-3 bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-100">
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('your_name')}</label>
             <input
@@ -282,7 +282,7 @@ export const CartContent = () => {
         </div>
 
         {/* Order Options */}
-        <div className="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+        <div className="space-y-4 bg-gray-50 p-3 sm:p-4 rounded-xl border border-gray-100">
           <div>
             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">{t('service_type')}</label>
             <div className="flex gap-2">
@@ -459,7 +459,7 @@ export const CartContent = () => {
                     : "bg-white text-gray-600 border-gray-200 hover:border-primary-300 hover:bg-primary-50"
                 )}
               >
-                🕒 {t('now')}{!storeIsOpen && <span className="ml-1 text-xs">(closed)</span>}
+                🕒 {t('now')}{!storeIsOpen && <span className="ml-1 text-[10px] sm:text-xs opacity-70">(closed)</span>}
               </button>
               <OptionButton 
                 selected={timing === 'scheduled'} 
@@ -505,7 +505,7 @@ export const CartContent = () => {
         </div>
       </div>
       
-      <div className="bg-white p-6 border-t border-gray-100 mt-auto safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <div className="bg-white px-4 py-4 sm:px-6 sm:py-5 border-t border-gray-100 mt-auto safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         {error && (
           <div className="mb-4 text-sm text-red-500 bg-red-50 p-3 rounded-lg flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
@@ -523,7 +523,7 @@ export const CartContent = () => {
             <span>${deliveryFee.toFixed(2)}</span>
           </div>
         )}
-        <div className="flex justify-between text-xl font-bold text-gray-900 mb-6">
+        <div className="flex justify-between text-xl font-bold text-gray-900 mb-4">
           <span>{t('total_amount')}</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
@@ -555,7 +555,7 @@ export const CartContent = () => {
 
         <Button
           onClick={handleCheckout}
-          className="w-full flex items-center justify-center gap-2 py-4 text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
+          className="w-full flex items-center justify-center gap-2 py-3.5 sm:py-4 text-base sm:text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
         >
           {t('confirm_whatsapp')}
         </Button>
