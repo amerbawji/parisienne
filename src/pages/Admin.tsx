@@ -1154,7 +1154,7 @@ function MenuTab() {
             <div
               key={cat.id}
               ref={(el) => { catRefs.current[cat.id] = el; }}
-              draggable={editingId === null && editingItem === null}
+              draggable={editingId === null && editingItem === null && expandedCatId !== cat.id}
               onDragStart={(e) => { dragCatRef.current = cat.id; e.dataTransfer.effectAllowed = 'move'; }}
               onDragOver={(e) => { e.preventDefault(); if (dragCatRef.current && dragCatRef.current !== cat.id) setDragOverCatId(cat.id); }}
               onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverCatId(null); }}
