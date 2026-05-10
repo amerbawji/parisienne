@@ -226,7 +226,6 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
                 </span>
                 <span className="text-sm text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
-                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">-{discountPct}%</span>
               </div>
             ) : (
               <span className="font-bold text-primary-600">
