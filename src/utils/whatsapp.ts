@@ -7,6 +7,8 @@ export interface OrderDetails {
   timing: 'now' | 'scheduled';
   scheduledTime?: string;
   paymentMethod: 'cash' | 'card';
+  customerName?: string;
+  customerPhone?: string;
   locationLabel?: string;
   locationUrl?: string;
   locationCoordinates?: string;
@@ -64,12 +66,16 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
     totalItems: isAr ? 'عدد العناصر:' : 'Total Items:',
     deliveryCharge: isAr ? 'كلفة التوصيل:' : 'Delivery Charge:',
     totalBill: isAr ? 'المجموع النهائي:' : 'Total Bill:',
+    name: isAr ? '*الاسم:*' : '*Name:*',
+    phone: isAr ? '*الهاتف:*' : '*Phone:*',
     thankYou: isAr ? 'شكرا.' : 'Thank you.'
   };
-  
+
   let message = t.hello;
 
   if (details) {
+    if (details.customerName) message += `${t.name} ${details.customerName}\n`;
+    if (details.customerPhone) message += `${t.phone} ${details.customerPhone}\n`;
     message += `${t.orderType} ${details.serviceType === 'delivery' ? t.delivery : t.takeaway}\n`;
     message += `${t.time} ${details.timing === 'now' ? t.asap : `📅 ${formatDate(details.scheduledTime)}`}\n`;
     message += `${t.payment} ${details.paymentMethod === 'cash' ? t.cash : t.card}\n`;

@@ -166,6 +166,8 @@ export const CartContent = () => {
       timing,
       scheduledTime,
       paymentMethod,
+      customerName: customerName || undefined,
+      customerPhone: customerPhone || undefined,
       locationLabel: locationUrl ? t('location_shared') : undefined,
       locationUrl: locationUrl || undefined,
       locationCoordinates: locationCoordinates || undefined,
