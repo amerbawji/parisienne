@@ -675,7 +675,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
         <InputField
           label={t('min_qty_label') as string}
           value={form.min_quantity ?? ''}
-          onChange={(v) => set('min_quantity', v ? parseInt(v) : undefined)}
+          onChange={(v) => set('min_quantity', v ? parseFloat(v) : undefined)}
           type="number"
           placeholder="e.g. 1"
         />
