@@ -49,7 +49,7 @@ type AdminLang = 'en' | 'ar';
 const adminDict = {
   en: {
     admin_panel: 'Admin Panel', back_to_menu: '← Menu', log_out: 'Log Out', lang_toggle: 'عربي',
-    tab_orders: 'Orders', tab_categories: 'Categories', tab_items: 'Items', tab_settings: 'Settings', tab_customers: 'Customers',
+    tab_orders: 'Orders', tab_categories: 'Categories', tab_items: 'Items', tab_settings: 'Settings', tab_customers: 'Customers', tab_menu: 'Menu',
     orders_heading: 'Orders', today_orders: "Today's Orders", today_revenue: "Today's Revenue",
     needs_attention: 'Needs Attention', delivered_today: 'Delivered Today',
     orders_placed_today: 'orders placed today', from_today_orders: "from today's orders",
@@ -129,7 +129,7 @@ const adminDict = {
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
-    tab_orders: 'الطلبات', tab_categories: 'الفئات', tab_items: 'الأصناف', tab_settings: 'الإعدادات', tab_customers: 'العملاء',
+    tab_orders: 'الطلبات', tab_categories: 'الفئات', tab_items: 'الأصناف', tab_settings: 'الإعدادات', tab_customers: 'العملاء', tab_menu: 'القائمة',
     orders_heading: 'الطلبات', today_orders: 'طلبات اليوم', today_revenue: 'إيرادات اليوم',
     needs_attention: 'تحتاج انتباهاً', delivered_today: 'موصّل اليوم',
     orders_placed_today: 'طلب اليوم', from_today_orders: 'من طلبات اليوم',
@@ -952,7 +952,7 @@ function SettingsTab() {
   );
 }
 
-// ─── Tab: Categories ─────────────────────────────────────────────────────────
+// ─── Tab: Menu (Categories + Items combined) ─────────────────────────────────
 
 interface CategoryFormState {
   name_en: string;
@@ -960,14 +960,17 @@ interface CategoryFormState {
   image: string;
 }
 
-function CategoriesTab() {
-  const { categories, addCategory, updateCategory, deleteCategory, reorderCategory } = useMenuStore();
+function MenuTab() {
+  const { categories, addCategory, updateCategory, deleteCategory, reorderCategory, addItem, updateItem, deleteItem, reorderItem } = useMenuStore();
   const toast = useToast();
   const { t } = useAdminT();
+  const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [showAddItemFor, setShowAddItemFor] = useState<string | null>(null);
+  const [editingItem, setEditingItem] = useState<{ catId: string; itemId: string } | null>(null);
 
   const emptyForm = (): CategoryFormState => ({ name_en: '', name_ar: '', image: '' });
   const [addForm, setAddForm] = useState<CategoryFormState>(emptyForm());
@@ -1020,6 +1023,25 @@ function CategoriesTab() {
     catch { setError(t('failed_delete') as string); }
   };
 
+  const handleAddItem = async (item: MenuItem) => {
+    if (!showAddItemFor) return;
+    await addItem(showAddItemFor, { ...item, id: item.id || `prod-${Date.now()}` });
+    setShowAddItemFor(null);
+    toast(t('toast_item_added') as string);
+  };
+
+  const handleUpdateItem = async (item: MenuItem) => {
+    if (!editingItem) return;
+    await updateItem(editingItem.catId, item.id, item);
+    setEditingItem(null);
+    toast(t('toast_item_saved') as string);
+  };
+
+  const handleDeleteItem = async (catId: string, item: MenuItem) => {
+    if (!window.confirm((t('confirm_delete_item') as (n: string) => string)(item.name_en))) return;
+    await deleteItem(catId, item.id);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {error && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
@@ -1035,53 +1057,21 @@ function CategoriesTab() {
       </div>
 
       {showAddForm && (
-        <form
-          onSubmit={handleAdd}
-          className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm flex flex-col gap-3"
-        >
+        <form onSubmit={handleAdd} className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm flex flex-col gap-3">
           <h3 className="text-sm font-bold text-gray-700">{t('new_category') as string}</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <InputField
-              label={t('name_en') as string}
-              value={addForm.name_en}
-              onChange={(v) => setAddForm((f) => ({ ...f, name_en: v }))}
-              required
-              placeholder="e.g. Grilled"
-            />
-            <InputField
-              label={t('name_ar') as string}
-              value={addForm.name_ar}
-              onChange={(v) => setAddForm((f) => ({ ...f, name_ar: v }))}
-              required
-              placeholder="مثال: مشوي"
-              dir="rtl"
-            />
+            <InputField label={t('name_en') as string} value={addForm.name_en} onChange={(v) => setAddForm((f) => ({ ...f, name_en: v }))} required placeholder="e.g. Grilled" />
+            <InputField label={t('name_ar') as string} value={addForm.name_ar} onChange={(v) => setAddForm((f) => ({ ...f, name_ar: v }))} required placeholder="مثال: مشوي" dir="rtl" />
           </div>
-          <ImageUploadField
-            label={t('category_image') as string}
-            folder="categories"
-            currentImage={addForm.image}
-            onImage={(url) => setAddForm((f) => ({ ...f, image: url }))}
-            onRemove={() => setAddForm((f) => ({ ...f, image: '' }))}
-          />
+          <ImageUploadField label={t('category_image') as string} folder="categories" currentImage={addForm.image} onImage={(url) => setAddForm((f) => ({ ...f, image: url }))} onRemove={() => setAddForm((f) => ({ ...f, image: '' }))} />
           {(!addForm.name_en.trim() || !addForm.name_ar.trim()) && (addForm.name_en || addForm.name_ar) && (
-            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-              {t('both_names_required') as string}
-            </p>
+            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t('both_names_required') as string}</p>
           )}
           <div className="flex gap-2">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-              disabled={!addForm.name_en.trim() || !addForm.name_ar.trim() || saving}
-            >
+            <button type="submit" className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50" disabled={!addForm.name_en.trim() || !addForm.name_ar.trim() || saving}>
               {saving ? t('saving') as string : t('save_category') as string}
             </button>
-            <button
-              type="button"
-              onClick={() => { setShowAddForm(false); setAddForm(emptyForm()); }}
-              className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition"
-            >
+            <button type="button" onClick={() => { setShowAddForm(false); setAddForm(emptyForm()); }} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition">
               {t('cancel_btn') as string}
             </button>
           </div>
@@ -1089,123 +1079,175 @@ function CategoriesTab() {
       )}
 
       <div className="flex flex-col gap-3">
-        {categories.map((cat) => (
-          <div key={cat.id} className="border border-gray-200 rounded-xl bg-white overflow-hidden">
-            {editingId === cat.id ? (
-              <form
-                onSubmit={(e) => handleEditSave(e, cat.id)}
-                className="p-4 flex flex-col gap-3"
-              >
-                <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <InputField
-                    label={t('name_en') as string}
-                    value={editForm.name_en}
-                    onChange={(v) => setEditForm((f) => ({ ...f, name_en: v }))}
-                    required
-                  />
-                  <InputField
-                    label={t('name_ar') as string}
-                    value={editForm.name_ar}
-                    onChange={(v) => setEditForm((f) => ({ ...f, name_ar: v }))}
-                    required
-                    dir="rtl"
-                  />
-                </div>
-                <ImageUploadField
-                  label={t('category_image') as string}
-                  folder="categories"
-                  currentImage={editForm.image}
-                  onImage={(url) => setEditForm((f) => ({ ...f, image: url }))}
-                  onRemove={() => setEditForm((f) => ({ ...f, image: '' }))}
-                />
-                {(!editForm.name_en.trim() || !editForm.name_ar.trim()) && (
-                  <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                    {t('both_names_required') as string}
-                  </p>
-                )}
-                <div className="flex gap-2">
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-                    disabled={!editForm.name_en.trim() || !editForm.name_ar.trim() || saving}
-                  >
-                    {saving ? t('saving') as string : t('save_btn') as string}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setEditingId(null)}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition"
-                  >
-                    {t('cancel_btn') as string}
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <div className={`p-3 sm:p-4 ${!cat.active ? 'opacity-50' : ''}`}>
-                {/* Info row */}
-                <div className="flex items-center gap-3">
-                  {cat.image && (
-                    <img
-                      src={cat.image}
-                      alt={cat.name_en}
-                      className="h-12 w-16 sm:h-14 sm:w-20 object-cover rounded-lg border border-gray-100 shrink-0"
-                    />
+        {categories.map((cat) => {
+          const isOpen = expandedCatId === cat.id;
+          return (
+            <div key={cat.id} className="border border-gray-200 rounded-xl bg-white overflow-hidden">
+              {editingId === cat.id ? (
+                <form onSubmit={(e) => handleEditSave(e, cat.id)} className="p-4 flex flex-col gap-3">
+                  <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <InputField label={t('name_en') as string} value={editForm.name_en} onChange={(v) => setEditForm((f) => ({ ...f, name_en: v }))} required />
+                    <InputField label={t('name_ar') as string} value={editForm.name_ar} onChange={(v) => setEditForm((f) => ({ ...f, name_ar: v }))} required dir="rtl" />
+                  </div>
+                  <ImageUploadField label={t('category_image') as string} folder="categories" currentImage={editForm.image} onImage={(url) => setEditForm((f) => ({ ...f, image: url }))} onRemove={() => setEditForm((f) => ({ ...f, image: '' }))} />
+                  {(!editForm.name_en.trim() || !editForm.name_ar.trim()) && (
+                    <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t('both_names_required') as string}</p>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
-                    <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      {(t('item_count') as (n: number) => string)(cat.items.length)}
-                      {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
-                      {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
-                    </p>
-                  </div>
-                </div>
-                {/* Actions row */}
-                <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
-                  <div className="flex gap-1">
-                    <button type="button" onClick={() => reorderCategory(cat.id, 'up')}
-                      disabled={categories.indexOf(cat) === 0}
-                      className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
-                      title={t('move_up') as string}>
-                      <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                  <div className="flex gap-2">
+                    <button type="submit" className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50" disabled={!editForm.name_en.trim() || !editForm.name_ar.trim() || saving}>
+                      {saving ? t('saving') as string : t('save_btn') as string}
                     </button>
-                    <button type="button" onClick={() => reorderCategory(cat.id, 'down')}
-                      disabled={categories.indexOf(cat) === categories.length - 1}
-                      className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
-                      title={t('move_down') as string}>
-                      <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition">
+                      {t('cancel_btn') as string}
                     </button>
                   </div>
+                </form>
+              ) : (
+                <>
+                  {/* Category header — clickable to expand/collapse */}
                   <button
                     type="button"
-                    dir="ltr"
-                    onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
-                    title={cat.active ? t('active_title') as string : t('inactive_title') as string}
+                    onClick={() => setExpandedCatId(isOpen ? null : cat.id)}
+                    className={`w-full text-left p-3 sm:p-4 hover:bg-gray-50 transition ${!cat.active ? 'opacity-50' : ''}`}
                   >
-                    <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
+                    <div className="flex items-center gap-3">
+                      {cat.image && (
+                        <img src={cat.image} alt={cat.name_en} className="h-14 w-20 object-cover rounded-lg border border-gray-100 shrink-0" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
+                        <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">
+                          {(t('item_count') as (n: number) => string)(cat.items.length)}
+                          {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
+                          {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
+                        </p>
+                      </div>
+                      <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => startEdit(cat)}
-                    className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-                  >
-                    {t('edit_btn') as string}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(cat)}
-                    className="px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition"
-                  >
-                    {t('delete_btn') as string}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+
+                  {/* Category actions row */}
+                  <div className="flex items-center gap-2 px-3 sm:px-4 pb-3 flex-wrap border-t border-gray-50">
+                    <div className="flex gap-1 mt-2">
+                      <button type="button" onClick={() => reorderCategory(cat.id, 'up')} disabled={categories.indexOf(cat) === 0}
+                        className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_up') as string}>
+                        <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                      </button>
+                      <button type="button" onClick={() => reorderCategory(cat.id, 'down')} disabled={categories.indexOf(cat) === categories.length - 1}
+                        className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_down') as string}>
+                        <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                      </button>
+                    </div>
+                    <button type="button" dir="ltr" onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
+                      className={`relative inline-flex mt-2 h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
+                      title={cat.active ? t('active_title') as string : t('inactive_title') as string}>
+                      <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
+                    </button>
+                    <button type="button" onClick={() => startEdit(cat)} className="mt-2 px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                      {t('edit_btn') as string}
+                    </button>
+                    <button type="button" onClick={() => handleDelete(cat)} className="mt-2 px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
+                      {t('delete_btn') as string}
+                    </button>
+                  </div>
+
+                  {/* Items section — shown when expanded */}
+                  {isOpen && (
+                    <div className="border-t border-gray-100 bg-gray-50/60 p-3 sm:p-4 flex flex-col gap-3">
+                      {/* Add item button */}
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => { setShowAddItemFor(showAddItemFor === cat.id ? null : cat.id); setEditingItem(null); }}
+                          className="px-3 py-1.5 bg-primary-600 text-white text-xs font-semibold rounded-lg hover:bg-primary-700 transition"
+                        >
+                          {showAddItemFor === cat.id ? t('cancel_btn') as string : t('add_item') as string}
+                        </button>
+                      </div>
+
+                      {/* Add item form */}
+                      {showAddItemFor === cat.id && (
+                        <div className="bg-white border border-gray-200 rounded-xl p-3">
+                          <ItemForm initial={{ ...emptyItem(), id: `prod-${Date.now()}` }} onSave={handleAddItem} onCancel={() => setShowAddItemFor(null)} />
+                        </div>
+                      )}
+
+                      {/* Item rows */}
+                      {cat.items.map((item) =>
+                        editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
+                          <div key={item.id} className="bg-white border border-gray-200 rounded-xl p-3">
+                            <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
+                          </div>
+                        ) : (
+                          <div key={item.id} className={`bg-white border border-gray-200 rounded-xl p-3 ${item.active === false ? 'opacity-50' : ''}`}>
+                            {/* Item info row */}
+                            <div className="flex items-center gap-3">
+                              <QuickImageChange
+                                image={item.image ?? ''}
+                                onImage={(url) => updateItem(cat.id, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
+                                <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
+                                <p className="text-xs text-gray-400 mt-0.5">
+                                  ${item.price.toFixed(2)} / {item.unit}
+                                  {item.options && item.options.length > 0 && <span className="ml-2 text-primary-500">{(t('option_count') as (n: number) => string)(item.options.length)}</span>}
+                                  {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
+                                  {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
+                                  {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
+                                </p>
+                              </div>
+                            </div>
+                            {/* Item actions row */}
+                            <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
+                              <div className="flex gap-1">
+                                <button type="button" onClick={() => reorderItem(cat.id, item.id, 'up')} disabled={cat.items.indexOf(item) === 0}
+                                  className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_up') as string}>
+                                  <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                                </button>
+                                <button type="button" onClick={() => reorderItem(cat.id, item.id, 'down')} disabled={cat.items.indexOf(item) === cat.items.length - 1}
+                                  className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_down') as string}>
+                                  <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                </button>
+                              </div>
+                              <button type="button"
+                                onClick={() => updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
+                                className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+                                {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
+                              </button>
+                              <button type="button" dir="ltr"
+                                onClick={() => updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
+                                title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}>
+                                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-6' : 'translate-x-1'}`} />
+                              </button>
+                              <button type="button" onClick={() => { setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
+                                className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                                {t('edit_btn') as string}
+                              </button>
+                              <button type="button" onClick={() => handleDeleteItem(cat.id, item)}
+                                className="px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
+                                {t('delete_btn') as string}
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      )}
+
+                      {cat.items.length === 0 && !showAddItemFor && (
+                        <p className="text-sm text-gray-400 text-center py-4">{t('no_items') as string}</p>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -1257,178 +1299,6 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
         )}
       </div>
       <input type="file" accept="image/*" ref={ref} onChange={handleChange} className="hidden" />
-    </div>
-  );
-}
-
-// ─── Tab: Items ───────────────────────────────────────────────────────────────
-
-function ItemsTab() {
-  const { categories, addItem, updateItem, deleteItem, reorderItem } = useMenuStore();
-  const toast = useToast();
-  const { t } = useAdminT();
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
-    categories[0]?.id ?? ''
-  );
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [editingItemId, setEditingItemId] = useState<string | null>(null);
-
-  const selectedCategory = categories.find((c) => c.id === selectedCategoryId);
-  const items = selectedCategory?.items ?? [];
-
-  const handleAddItem = async (item: MenuItem) => {
-    const newItem: MenuItem = { ...item, id: item.id || `prod-${Date.now()}` };
-    await addItem(selectedCategoryId, newItem);
-    setShowAddForm(false);
-    toast(t('toast_item_added') as string);
-  };
-
-  const handleUpdateItem = async (item: MenuItem) => {
-    await updateItem(selectedCategoryId, item.id, item);
-    setEditingItemId(null);
-    toast(t('toast_item_saved') as string);
-  };
-
-  const handleDelete = async (item: MenuItem) => {
-    if (!window.confirm((t('confirm_delete_item') as (n: string) => string)(item.name_en))) return;
-    await deleteItem(selectedCategoryId, item.id);
-  };
-
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <h2 className="text-base font-bold text-gray-800 shrink-0">{t('items_heading') as string}</h2>
-        <select
-          value={selectedCategoryId}
-          onChange={(e) => {
-            setSelectedCategoryId(e.target.value);
-            setShowAddForm(false);
-            setEditingItemId(null);
-          }}
-          className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
-        >
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name_en}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          onClick={() => { setShowAddForm(!showAddForm); setEditingItemId(null); }}
-          className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition sm:ml-auto"
-        >
-          {showAddForm ? t('cancel_btn') as string : t('add_item') as string}
-        </button>
-      </div>
-
-      {showAddForm && (
-        <div className="flex flex-col gap-2">
-          <h3 className="text-sm font-semibold text-gray-700">{t('add_item') as string}</h3>
-          <ItemForm
-            initial={{ ...emptyItem(), id: `prod-${Date.now()}` }}
-            onSave={handleAddItem}
-            onCancel={() => setShowAddForm(false)}
-          />
-        </div>
-      )}
-
-      {!selectedCategoryId && (
-        <p className="text-sm text-gray-500">{t('select_category') as string}</p>
-      )}
-
-      <div className="flex flex-col gap-3">
-        {items.map((item) =>
-          editingItemId === item.id ? (
-            <div key={item.id} className="flex flex-col gap-2">
-              <h3 className="text-sm font-semibold text-gray-700">{`${t('edit_prefix') as string} ${item.name_en}`}</h3>
-              <ItemForm
-                initial={item}
-                onSave={handleUpdateItem}
-                onCancel={() => setEditingItemId(null)}
-              />
-            </div>
-          ) : (
-            <div
-              key={item.id}
-              className={`border border-gray-200 rounded-xl bg-white p-3 sm:p-4 ${item.active === false ? 'opacity-50' : ''}`}
-            >
-              {/* Info row */}
-              <div className="flex items-center gap-3">
-                <QuickImageChange
-                  image={item.image ?? ''}
-                  onImage={(url) => updateItem(selectedCategoryId, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
-                  <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    ${item.price.toFixed(2)} / {item.unit}
-                    {item.options && item.options.length > 0 && (
-                      <span className="ml-2 text-primary-500">{(t('option_count') as (n: number) => string)(item.options.length)}</span>
-                    )}
-                    {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
-                    {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
-                    {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
-                  </p>
-                </div>
-              </div>
-              {/* Actions row */}
-              <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
-                <div className="flex gap-1">
-                  <button type="button" onClick={() => reorderItem(selectedCategoryId, item.id, 'up')}
-                    disabled={items.indexOf(item) === 0}
-                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
-                    title={t('move_up') as string}>
-                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                  </button>
-                  <button type="button" onClick={() => reorderItem(selectedCategoryId, item.id, 'down')}
-                    disabled={items.indexOf(item) === items.length - 1}
-                    className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
-                    title={t('move_down') as string}>
-                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => updateItem(selectedCategoryId, item.id, { in_stock: item.in_stock === false ? true : false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
-                  className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
-                >
-                  {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
-                </button>
-                <button
-                  type="button"
-                  dir="ltr"
-                  onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
-                  title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}
-                >
-                  <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-6' : 'translate-x-1'}`} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setEditingItemId(item.id); setShowAddForm(false); }}
-                  className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-                >
-                  {t('edit_btn') as string}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item)}
-                  className="px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition"
-                >
-                  {t('delete_btn') as string}
-                </button>
-              </div>
-            </div>
-          )
-        )}
-        {items.length === 0 && !showAddForm && (
-          <p className="text-sm text-gray-400 text-center py-8">
-            {t('no_items') as string}
-          </p>
-        )}
-      </div>
     </div>
   );
 }
@@ -1965,7 +1835,7 @@ function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () =
 
 // ─── Admin Shell ──────────────────────────────────────────────────────────────
 
-type Tab = 'orders' | 'settings' | 'categories' | 'items' | 'customers';
+type Tab = 'orders' | 'customers' | 'menu' | 'settings';
 
 function AdminShell() {
   const [tab, setTab] = useState<Tab>('orders');
@@ -2030,8 +1900,7 @@ function AdminShell() {
   const tabs: { key: Tab; label: string }[] = [
     { key: 'orders', label: t('tab_orders') as string },
     { key: 'customers', label: t('tab_customers') as string },
-    { key: 'categories', label: t('tab_categories') as string },
-    { key: 'items', label: t('tab_items') as string },
+    { key: 'menu', label: t('tab_menu') as string },
     { key: 'settings', label: t('tab_settings') as string },
   ];
 
@@ -2081,8 +1950,7 @@ function AdminShell() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} />}
         {tab === 'customers' && <CustomersTab orders={orders} />}
-        {tab === 'categories' && <CategoriesTab />}
-        {tab === 'items' && <ItemsTab />}
+        {tab === 'menu' && <MenuTab />}
         {tab === 'settings' && <SettingsTab />}
       </main>
 
