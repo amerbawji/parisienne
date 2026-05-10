@@ -14,6 +14,13 @@ import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 import { InstallPrompt } from '../components/UI/InstallPrompt';
 
+const to12h = (time: string) => {
+  const [h, m] = time.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, '0')} ${ampm}`;
+};
+
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
@@ -279,8 +286,8 @@ export const Home = () => {
             </svg>
             <p className="text-sm text-amber-800 font-medium">
               {language === 'ar'
-                ? `المتجر مغلق حالياً (${open_time} – ${close_time}) — نقبل الطلبات المجدولة فقط`
-                : `We're currently closed (${open_time} – ${close_time}) — accepting scheduled orders only`}
+                ? `المتجر مغلق حالياً (${to12h(open_time)} – ${to12h(close_time)}) — نقبل الطلبات المجدولة فقط`
+                : `We're currently closed (${to12h(open_time)} – ${to12h(close_time)}) — accepting scheduled orders only`}
             </p>
           </div>
         </div>
@@ -407,7 +414,7 @@ export const Home = () => {
                 <ClockIcon className="h-5 w-5 text-primary-600 mt-0.5" />
                 <span className="text-sm text-gray-700">
                   <span className="block text-xs text-gray-500">{t('operating_hours')}</span>
-                  <span className="font-semibold group-hover:text-primary-700">{open_time} – {close_time}</span>
+                  <span className="font-semibold group-hover:text-primary-700">{to12h(open_time)} – {to12h(close_time)}</span>
                 </span>
               </a>
             </div>
