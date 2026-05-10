@@ -498,18 +498,25 @@ export const Home = () => {
       </div>
 
       {modalItem && (
-        <div
-          className="fixed inset-0 z-50 sm:hidden bg-gray-50 overflow-y-auto animate-in slide-in-from-bottom duration-300"
-          onClick={() => setModalItem(null)}
-        >
-          <div onClick={(e) => e.stopPropagation()}>
-            <MenuCard
-              item={modalItem}
-              expanded={true}
-              onToggle={() => setModalItem(null)}
-              onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
-            />
+        <div className="fixed inset-0 z-50 sm:hidden bg-gray-50 overflow-y-auto animate-in slide-in-from-bottom duration-300">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shrink-0">
+            <span className="text-lg font-medium text-gray-900">
+              {language === 'ar' ? modalItem.name_ar : modalItem.name_en}
+            </span>
+            <button
+              type="button"
+              className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+              onClick={() => setModalItem(null)}
+            >
+              <XMarkIcon className="h-6 w-6" />
+            </button>
           </div>
+          <MenuCard
+            item={modalItem}
+            expanded={true}
+            onToggle={() => setModalItem(null)}
+            onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
+          />
         </div>
       )}
 
