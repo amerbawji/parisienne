@@ -93,6 +93,10 @@ INSERT INTO store_config (id, open_time, close_time, closed_days) VALUES (1, '08
 ALTER TABLE store_config ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true);
 
+-- ─── Migrations (run manually in Supabase SQL editor) ────────────────────────
+-- ALTER TABLE categories ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+-- ALTER TABLE items      ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
 -- Then add this policy in Storage → menu-images → Policies:

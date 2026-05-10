@@ -28,6 +28,7 @@ export interface MenuItem {
   presets?: Preset[];
   active?: boolean;
   in_stock?: boolean;
+  updated_at?: string;
 }
 
 export interface Category {
@@ -37,6 +38,7 @@ export interface Category {
   image: string;
   active: boolean;
   items: MenuItem[];
+  updated_at?: string;
 }
 
 interface MenuStore {
@@ -54,8 +56,8 @@ interface MenuStore {
   reorderItem: (categoryId: string, itemId: string, direction: 'up' | 'down') => Promise<void>;
 }
 
-type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; sort_order: number; active: boolean; in_stock: boolean };
+type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
 type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -67,6 +69,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
       name_ar: cat.name_ar,
       image: cat.image_url,
       active: cat.active,
+      updated_at: cat.updated_at,
       items: items
         .filter((i) => i.category_id === cat.id)
         .sort((a, b) => a.sort_order - b.sort_order)
@@ -86,6 +89,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
             : undefined,
           active: item.active,
           in_stock: item.in_stock,
+          updated_at: item.updated_at,
           options: opts
             .filter((o) => o.item_id === item.id)
             .sort((a, b) => a.sort_order - b.sort_order)
@@ -124,14 +128,16 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
   },
 
   updateCategory: async (id, updates) => {
+    const now = new Date().toISOString();
     const { error } = await supabase.from('categories').update({
       ...(updates.name_en !== undefined && { name_en: updates.name_en }),
       ...(updates.name_ar !== undefined && { name_ar: updates.name_ar }),
       ...(updates.image   !== undefined && { image_url: updates.image }),
       ...(updates.active  !== undefined && { active: updates.active }),
+      updated_at: now,
     }).eq('id', id);
     if (error) throw error;
-    set((s) => ({ categories: s.categories.map((c) => c.id === id ? { ...c, ...updates } : c) }));
+    set((s) => ({ categories: s.categories.map((c) => c.id === id ? { ...c, ...updates, updated_at: now } : c) }));
   },
 
   deleteCategory: async (id) => {
@@ -160,6 +166,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
   },
 
   updateItem: async (categoryId, itemId, updates) => {
+    const now = new Date().toISOString();
     const { options, image, ...rest } = updates;
     const { error: ie } = await supabase.from('items').update({
       ...(rest.name_en       !== undefined && { name_en: rest.name_en }),
@@ -174,6 +181,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       ...(rest.presets       !== undefined && { presets: rest.presets }),
       ...(rest.active        !== undefined && { active: rest.active }),
       ...(rest.in_stock      !== undefined && { in_stock: rest.in_stock }),
+      updated_at: now,
     }).eq('id', itemId);
     if (ie) throw ie;
     if (options !== undefined) {
@@ -187,7 +195,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
     }
     set((s) => ({
       categories: s.categories.map((c) =>
-        c.id === categoryId ? { ...c, items: c.items.map((it) => it.id === itemId ? { ...it, ...updates } : it) } : c
+        c.id === categoryId ? { ...c, items: c.items.map((it) => it.id === itemId ? { ...it, ...updates, updated_at: now } : it) } : c
       ),
     }));
   },

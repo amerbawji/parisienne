@@ -114,6 +114,7 @@ const adminDict = {
     toast_promo_enabled: 'Promo enabled', toast_promo_image: 'Promo image updated',
     toast_failed_save: 'Failed to save', toast_upload_failed: 'Upload failed',
     toast_order_status: (s: string) => `Order marked ${s}`,
+    last_edited: 'Edited',
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
@@ -182,6 +183,7 @@ const adminDict = {
     toast_promo_enabled: 'تم تفعيل العرض', toast_promo_image: 'تم تحديث صورة العرض',
     toast_failed_save: 'فشل الحفظ', toast_upload_failed: 'فشل الرفع',
     toast_order_status: (s: string) => `تم تحديث الطلب: ${s}`,
+    last_edited: 'عُدِّل',
   },
 } as const;
 
@@ -217,6 +219,18 @@ function emptyItem(): MenuItem {
     options: [],
     presets: [],
   };
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function timeAgo(iso: string | undefined): string {
+  if (!iso) return '';
+  const diff = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 172800) return 'yesterday';
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
 // ─── Subcomponents ──────────────────────────────────────────────────────────
@@ -1069,7 +1083,11 @@ function CategoriesTab() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
                   <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{(t('item_count') as (n: number) => string)(cat.items.length)}{!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {(t('item_count') as (n: number) => string)(cat.items.length)}
+                    {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
+                    {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
+                  </p>
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
                   <div className="flex gap-1 self-center">
@@ -1275,6 +1293,7 @@ function ItemsTab() {
                   )}
                   {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
                   {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
+                  {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
