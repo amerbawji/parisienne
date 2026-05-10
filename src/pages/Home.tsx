@@ -311,7 +311,13 @@ export const Home = () => {
               )}
                 >
                   <button
-                    onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
+                    onClick={() => {
+                      if (expandedCategory === category.id) {
+                        setExpandedCategory(null);
+                      } else {
+                        handleCategoryClick(category.id);
+                      }
+                    }}
                     className="w-full text-start block transition-all hover:shadow-md"
                     aria-expanded={isOpen}
                   >
