@@ -1047,11 +1047,8 @@ function MenuTab() {
       {error && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold text-gray-800">{(t('categories_heading') as (n: number) => string)(categories.length)}</h2>
-        <button
-          type="button"
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition"
-        >
+        <button type="button" onClick={() => setShowAddForm(!showAddForm)}
+          className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition">
           {showAddForm ? t('cancel_btn') as string : t('add_category') as string}
         </button>
       </div>
@@ -1078,11 +1075,12 @@ function MenuTab() {
         </form>
       )}
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         {categories.map((cat) => {
           const isOpen = expandedCatId === cat.id;
+          const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
           return (
-            <div key={cat.id} className="border border-gray-200 rounded-xl bg-white overflow-hidden">
+            <div key={cat.id} className={`rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden transition-all ${!cat.active ? 'opacity-60' : ''}`}>
               {editingId === cat.id ? (
                 <form onSubmit={(e) => handleEditSave(e, cat.id)} className="p-4 flex flex-col gap-3">
                   <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
@@ -1105,141 +1103,135 @@ function MenuTab() {
                 </form>
               ) : (
                 <>
-                  {/* Category header — clickable to expand/collapse */}
-                  <button
-                    type="button"
-                    onClick={() => setExpandedCatId(isOpen ? null : cat.id)}
-                    className={`w-full text-left p-3 sm:p-4 hover:bg-gray-50 transition ${!cat.active ? 'opacity-50' : ''}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {cat.image && (
-                        <img src={cat.image} alt={cat.name_en} className="h-14 w-20 object-cover rounded-lg border border-gray-100 shrink-0" />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
-                        <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          {(t('item_count') as (n: number) => string)(cat.items.length)}
-                          {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
-                          {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
-                        </p>
+                  {/* Category image header — click to expand/collapse */}
+                  <button type="button" onClick={() => setExpandedCatId(isOpen ? null : cat.id)} className="w-full block group">
+                    <div className="relative h-40 w-full overflow-hidden">
+                      <img src={catImage} alt={cat.name_en} className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent flex items-end justify-between p-4">
+                        <div>
+                          <h3 className="text-xl font-bold text-white drop-shadow">{cat.name_en}</h3>
+                          <p className="text-sm text-white/70 mt-0.5">
+                            {(t('item_count') as (n: number) => string)(cat.items.length)}
+                            {!cat.active && <span className="ml-2 text-orange-300 font-medium">{t('hidden_badge') as string}</span>}
+                            {cat.updated_at && <span className="ml-2 text-white/40 text-xs">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
+                          </p>
+                        </div>
+                        <svg className={`w-5 h-5 text-white/80 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
-                      <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
                     </div>
                   </button>
 
-                  {/* Category actions row */}
-                  <div className="flex items-center gap-2 px-3 sm:px-4 pb-3 flex-wrap border-t border-gray-50">
-                    <div className="flex gap-1 mt-2">
+                  {/* Category admin actions */}
+                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border-t border-gray-100 flex-wrap">
+                    <div className="flex gap-1">
                       <button type="button" onClick={() => reorderCategory(cat.id, 'up')} disabled={categories.indexOf(cat) === 0}
-                        className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_up') as string}>
+                        className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_up') as string}>
                         <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
                       </button>
                       <button type="button" onClick={() => reorderCategory(cat.id, 'down')} disabled={categories.indexOf(cat) === categories.length - 1}
-                        className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_down') as string}>
+                        className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_down') as string}>
                         <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                       </button>
                     </div>
                     <button type="button" dir="ltr" onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
-                      className={`relative inline-flex mt-2 h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
                       title={cat.active ? t('active_title') as string : t('inactive_title') as string}>
                       <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
                     </button>
-                    <button type="button" onClick={() => startEdit(cat)} className="mt-2 px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                    <button type="button" onClick={() => startEdit(cat)} className="px-3 py-1 text-xs font-semibold border border-gray-200 bg-white rounded-lg hover:bg-gray-50 transition">
                       {t('edit_btn') as string}
                     </button>
-                    <button type="button" onClick={() => handleDelete(cat)} className="mt-2 px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
+                    <button type="button" onClick={() => handleDelete(cat)} className="px-3 py-1 text-xs font-semibold border border-red-200 bg-white text-red-600 rounded-lg hover:bg-red-50 transition">
                       {t('delete_btn') as string}
                     </button>
                   </div>
 
-                  {/* Items section — shown when expanded */}
+                  {/* Items grid — shown when expanded */}
                   {isOpen && (
-                    <div className="border-t border-gray-100 bg-gray-50/60 p-3 sm:p-4 flex flex-col gap-3">
-                      {/* Add item button */}
-                      <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={() => { setShowAddItemFor(showAddItemFor === cat.id ? null : cat.id); setEditingItem(null); }}
-                          className="px-3 py-1.5 bg-primary-600 text-white text-xs font-semibold rounded-lg hover:bg-primary-700 transition"
-                        >
+                    <div className="p-3 sm:p-4 bg-gray-50/50 border-t border-gray-100">
+                      <div className="flex justify-end mb-3">
+                        <button type="button" onClick={() => { setShowAddItemFor(showAddItemFor === cat.id ? null : cat.id); setEditingItem(null); }}
+                          className="px-3 py-1.5 bg-primary-600 text-white text-xs font-semibold rounded-lg hover:bg-primary-700 transition">
                           {showAddItemFor === cat.id ? t('cancel_btn') as string : t('add_item') as string}
                         </button>
                       </div>
 
-                      {/* Add item form */}
                       {showAddItemFor === cat.id && (
-                        <div className="bg-white border border-gray-200 rounded-xl p-3">
+                        <div className="mb-3 bg-white border border-gray-200 rounded-xl p-3">
                           <ItemForm initial={{ ...emptyItem(), id: `prod-${Date.now()}` }} onSave={handleAddItem} onCancel={() => setShowAddItemFor(null)} />
                         </div>
                       )}
 
-                      {/* Item rows */}
-                      {cat.items.map((item) =>
-                        editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
-                          <div key={item.id} className="bg-white border border-gray-200 rounded-xl p-3">
-                            <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
-                          </div>
-                        ) : (
-                          <div key={item.id} className={`bg-white border border-gray-200 rounded-xl p-3 ${item.active === false ? 'opacity-50' : ''}`}>
-                            {/* Item info row */}
-                            <div className="flex items-center gap-3">
-                              <QuickImageChange
-                                image={item.image ?? ''}
-                                onImage={(url) => updateItem(cat.id, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
-                              />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
-                                <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
-                                <p className="text-xs text-gray-400 mt-0.5">
-                                  ${item.price.toFixed(2)} / {item.unit}
-                                  {item.options && item.options.length > 0 && <span className="ml-2 text-primary-500">{(t('option_count') as (n: number) => string)(item.options.length)}</span>}
-                                  {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
-                                  {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
-                                  {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
-                                </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {cat.items.map((item) =>
+                          editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
+                            <div key={item.id} className="sm:col-span-2 lg:col-span-3 bg-white border border-gray-200 rounded-xl p-3">
+                              <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
+                            </div>
+                          ) : (
+                            <div key={item.id} className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col ${item.active === false ? 'opacity-50' : ''}`}>
+                              {/* Item card — mirrors collapsed MenuCard */}
+                              <div className="flex flex-row flex-1">
+                                <div className="relative shrink-0 w-24 h-20 bg-gray-200">
+                                  <QuickImageChange
+                                    image={item.image ?? ''}
+                                    onImage={(url) => updateItem(cat.id, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
+                                  />
+                                  {item.in_stock === false && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                      <span className="bg-white/90 text-gray-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{t('out_of_stock') as string}</span>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="p-2.5 flex-1 min-w-0">
+                                  <p className="text-sm font-bold text-gray-900 truncate">{item.name_en}</p>
+                                  <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
+                                  <p className="text-xs font-semibold text-primary-600 mt-1">${item.price.toFixed(2)}<span className="text-gray-400 font-normal"> / {item.unit}</span></p>
+                                  {(item.options?.length ?? 0) > 0 && <p className="text-[10px] text-primary-400 mt-0.5">{(t('option_count') as (n: number) => string)(item.options!.length)}</p>}
+                                  {item.updated_at && <p className="text-[10px] text-gray-300 mt-0.5">{t('last_edited') as string} {timeAgo(item.updated_at)}</p>}
+                                </div>
+                              </div>
+                              {/* Item admin actions */}
+                              <div className="flex items-center gap-1.5 px-2.5 py-2 bg-gray-50 border-t border-gray-100 flex-wrap">
+                                <div className="flex gap-1">
+                                  <button type="button" onClick={() => reorderItem(cat.id, item.id, 'up')} disabled={cat.items.indexOf(item) === 0}
+                                    className="p-1 rounded border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_up') as string}>
+                                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
+                                  </button>
+                                  <button type="button" onClick={() => reorderItem(cat.id, item.id, 'down')} disabled={cat.items.indexOf(item) === cat.items.length - 1}
+                                    className="p-1 rounded border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_down') as string}>
+                                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                                  </button>
+                                </div>
+                                <button type="button" dir="ltr"
+                                  onClick={() => updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
+                                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
+                                  title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}>
+                                  <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                                </button>
+                                <button type="button"
+                                  onClick={() => updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
+                                  className={`px-2 py-0.5 text-[10px] font-semibold rounded border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+                                  {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
+                                </button>
+                                <button type="button" onClick={() => { setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
+                                  className="px-2 py-0.5 text-[10px] font-semibold border border-gray-200 bg-white rounded hover:bg-gray-50 transition">
+                                  {t('edit_btn') as string}
+                                </button>
+                                <button type="button" onClick={() => handleDeleteItem(cat.id, item)}
+                                  className="px-2 py-0.5 text-[10px] font-semibold border border-red-200 bg-white text-red-600 rounded hover:bg-red-50 transition">
+                                  {t('delete_btn') as string}
+                                </button>
                               </div>
                             </div>
-                            {/* Item actions row */}
-                            <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
-                              <div className="flex gap-1">
-                                <button type="button" onClick={() => reorderItem(cat.id, item.id, 'up')} disabled={cat.items.indexOf(item) === 0}
-                                  className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_up') as string}>
-                                  <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                                </button>
-                                <button type="button" onClick={() => reorderItem(cat.id, item.id, 'down')} disabled={cat.items.indexOf(item) === cat.items.length - 1}
-                                  className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition" title={t('move_down') as string}>
-                                  <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                                </button>
-                              </div>
-                              <button type="button"
-                                onClick={() => updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
-                                className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
-                                {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
-                              </button>
-                              <button type="button" dir="ltr"
-                                onClick={() => updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
-                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
-                                title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}>
-                                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-6' : 'translate-x-1'}`} />
-                              </button>
-                              <button type="button" onClick={() => { setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
-                                className="px-3 py-1.5 text-xs font-semibold border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-                                {t('edit_btn') as string}
-                              </button>
-                              <button type="button" onClick={() => handleDeleteItem(cat.id, item)}
-                                className="px-3 py-1.5 text-xs font-semibold border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition">
-                                {t('delete_btn') as string}
-                              </button>
-                            </div>
-                          </div>
-                        )
-                      )}
+                          )
+                        )}
+                      </div>
 
                       {cat.items.length === 0 && !showAddItemFor && (
-                        <p className="text-sm text-gray-400 text-center py-4">{t('no_items') as string}</p>
+                        <p className="text-sm text-gray-400 text-center py-6">{t('no_items') as string}</p>
                       )}
                     </div>
                   )}
