@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-vertical-logo.svg';
@@ -17,6 +17,7 @@ import { InstallPrompt } from '../components/UI/InstallPrompt';
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
+  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuSelectionMode, setMenuSelectionMode] = useState(false);
   const promoEnabled = usePromoStore((state) => state.enabled);
@@ -101,6 +102,21 @@ export const Home = () => {
 
     return () => window.clearTimeout(timeout);
   }, [lastAdded]);
+
+  useEffect(() => {
+    if (!modalItem) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalItem(null); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [modalItem]);
+
+  const handleItemToggle = useCallback((item: MenuItem) => {
+    if (window.innerWidth >= 1024) {
+      setModalItem((prev) => (prev?.id === item.id ? null : item));
+    } else {
+      setExpandedItemId((prev) => (prev === item.id ? null : item.id));
+    }
+  }, []);
 
   const handleCategoryClick = (categoryId: string) => {
     setMenuSelectionMode(true);
@@ -317,12 +333,12 @@ export const Home = () => {
                         {category.items.map((item) => (
                           <div
                             key={item.id}
-                            className={cn(expandedItemId === item.id && "col-span-full lg:col-span-1 xl:col-span-2")}
+                            className={cn(expandedItemId === item.id && "col-span-full")}
                           >
-                            <MenuCard 
-                              item={item as MenuItem} 
+                            <MenuCard
+                              item={item as MenuItem}
                               expanded={expandedItemId === item.id}
-                              onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                              onToggle={() => handleItemToggle(item as MenuItem)}
                               onItemAdded={(payload) => setLastAdded(payload)}
                             />
                           </div>
@@ -463,6 +479,25 @@ export const Home = () => {
           )}
         </Button>
       </div>
+
+      {modalItem && (
+        <div
+          className="fixed inset-0 z-50 hidden lg:flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm"
+          onClick={() => setModalItem(null)}
+        >
+          <div
+            className="bg-white rounded-2xl overflow-hidden w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <MenuCard
+              item={modalItem}
+              expanded={true}
+              onToggle={() => setModalItem(null)}
+              onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
+            />
+          </div>
+        </div>
+      )}
 
       <CartSheet />
       <InstallPrompt />
