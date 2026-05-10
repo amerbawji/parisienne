@@ -178,7 +178,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
 
   return (
     <div
-      className={`bg-white rounded-xl border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer hover:shadow-md'} ${!inStock ? 'opacity-60' : ''}`}
+      className={`bg-white rounded-xl overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer hover:shadow-md'} ${!inStock ? 'opacity-60' : ''}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* ── EXPANDED layout ── */}
