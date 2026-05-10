@@ -653,7 +653,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
     onSave(form);
   };
 
-  const unitOptions = ['piece', 'kg', 'plate', 'box'];
+  const unitOptions = ['piece', 'kg', 'plate', 'box', 'sandwich', 'wrap', 'portion', 'roll', 'skewer', 'dozen'];
 
   return (
     <form

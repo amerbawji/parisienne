@@ -203,11 +203,15 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   <span className="text-sm text-gray-500">{language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}</span>
                 ) : discountPct > 0 ? (
                   <div className="flex items-baseline gap-1.5 flex-wrap">
-                    <span className="font-bold text-primary-600">${(unitPrice * (1 - discountPct / 100)).toFixed(2)}{shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
+                    <span className="font-bold text-primary-600">${(unitPrice * (1 - discountPct / 100)).toFixed(2)}</span>
                     <span className="text-sm text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
+                    {shouldShowUnit && <span className="text-xs font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5">{safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
                   </div>
                 ) : (
-                  <span className="font-bold text-primary-600">${unitPrice.toFixed(2)}{shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <span className="font-bold text-primary-600">${unitPrice.toFixed(2)}</span>
+                    {shouldShowUnit && <span className="text-xs font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5">{safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
+                  </div>
                 )}
               </div>
             </div>
@@ -345,11 +349,16 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                 <span className="text-xs text-gray-400">{language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}</span>
               ) : discountPct > 0 ? (
                 <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <span className="font-bold text-sm sm:text-base text-gray-900">${discountedUnitPrice!.toFixed(2)}{shouldShowUnit && <span className="text-xs text-gray-400 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
+                  <span className="font-bold text-sm sm:text-base text-gray-900">${discountedUnitPrice!.toFixed(2)}</span>
                   <span className="text-xs text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
                 </div>
               ) : (
-                <span className="font-bold text-sm sm:text-base text-gray-900">${unitPrice.toFixed(2)}{shouldShowUnit && <span className="text-xs text-gray-400 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
+                <span className="font-bold text-sm sm:text-base text-gray-900">${unitPrice.toFixed(2)}</span>
+              )}
+              {shouldShowUnit && (
+                <span className="inline-block text-[10px] font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5 mt-1">
+                  {safeT(t, `unit_${item.unit}`, item.unit!)}
+                </span>
               )}
               {totalQuantity > 0 && quickAddEnabled && (
                 <div className="flex items-center gap-1.5 mt-2" onClick={(e) => e.stopPropagation()}>
