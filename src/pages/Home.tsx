@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import logo from '../assets/malhame-vertical-logo.svg';
+import logo from '../assets/malhame-horizontal-logo.svg';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
 import { useLanguageStore } from '../store/languageStore';
