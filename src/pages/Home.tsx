@@ -317,7 +317,7 @@ export const Home = () => {
                         {category.items.map((item) => (
                           <div
                             key={item.id}
-                            className={cn(expandedItemId === item.id && "col-span-full")}
+                            className={cn(expandedItemId === item.id && "col-span-full lg:col-span-1 xl:col-span-2")}
                           >
                             <MenuCard 
                               item={item as MenuItem} 
