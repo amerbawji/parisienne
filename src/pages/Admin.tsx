@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, createContext, useContext, type ChangeEvent } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, createContext, useContext, type ChangeEvent } from 'react';
 import { useMenuStore, type Category, type MenuItem, type MenuOption, type Preset } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
@@ -1762,8 +1762,9 @@ function CustomersTab({ orders }: { orders: Order[] }) {
       if (order.customer_name && !entry.name) entry.name = order.customer_name;
       entry.orders.push(order);
     }
+    type CustomerEntry = { phone: string; name: string; orders: Order[]; totalSpent: number; lastOrder: string };
     return Array.from(map.values())
-      .map((c) => ({
+      .map((c): CustomerEntry => ({
         ...c,
         orders: c.orders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
         totalSpent: c.orders.reduce((s, o) => s + Number(o.total), 0),
@@ -1853,7 +1854,7 @@ function CustomersTab({ orders }: { orders: Order[] }) {
                               <span className="capitalize">{order.service_type}</span>
                             </p>
                             <p className="text-xs text-gray-400 mt-0.5 truncate">
-                              {order.items.map((i: { name_en?: string; name_ar?: string; name?: string }) => i.name_en || i.name).join(', ')}
+                              {(order.items as { name_en?: string; name?: string }[]).map((i) => i.name_en || i.name || '').join(', ')}
                             </p>
                           </div>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-semibold shrink-0 ${badge.color}`}>{badge.label}</span>
