@@ -1294,7 +1294,6 @@ function MenuTab() {
 function QuickImageChange({ image, onImage }: { image: string; onImage: (url: string) => void }) {
   const ref = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const { t } = useAdminT();
 
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
