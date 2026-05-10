@@ -87,7 +87,8 @@ const adminDict = {
     choice_placeholder: 'Choice', price_placeholder: '+price',
     presets_label: 'Presets', add_btn: 'Add',
     preset_en_placeholder: 'English (e.g. No pickles)', preset_ar_placeholder: 'Arabic (e.g. بدون كبيس)',
-    preset_missing_ar: 'Arabic translation required',
+    preset_missing_ar: 'Arabic translation required', preset_missing_en: 'English translation required',
+    both_descriptions_required: 'If you add a description, both English and Arabic are required.',
     out_of_stock: 'Out of stock', in_stock: 'In stock',
     active_item_title: 'Active — click to hide', hidden_item_title: 'Hidden — click to show',
     option_count: (n: number) => `${n} option(s)`,
@@ -167,7 +168,8 @@ const adminDict = {
     choice_placeholder: 'اختيار', price_placeholder: '+سعر',
     presets_label: 'اختصارات', add_btn: 'إضافة',
     preset_en_placeholder: 'إنجليزي (e.g. No pickles)', preset_ar_placeholder: 'عربي (مثلاً: بدون كبيس)',
-    preset_missing_ar: 'الترجمة العربية مطلوبة',
+    preset_missing_ar: 'الترجمة العربية مطلوبة', preset_missing_en: 'الترجمة الإنجليزية مطلوبة',
+    both_descriptions_required: 'إذا أضفت وصفاً، يجب إدخاله بالإنجليزية والعربية معاً.',
     out_of_stock: 'غير متوفر', in_stock: 'متوفر',
     active_item_title: 'نشط — انقر للإخفاء', hidden_item_title: 'مخفي — انقر للإظهار',
     option_count: (n: number) => `${n} خيار`,
@@ -265,6 +267,7 @@ function InputField({
   placeholder = '',
   required = false,
   dir,
+  error = false,
 }: {
   label: string;
   value: string | number;
@@ -273,6 +276,7 @@ function InputField({
   placeholder?: string;
   required?: boolean;
   dir?: 'ltr' | 'rtl';
+  error?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-1">
@@ -286,7 +290,7 @@ function InputField({
         dir={dir}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400"
+        className={`border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 ${error ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}
       />
     </div>
   );
@@ -524,14 +528,18 @@ function PresetsEditor({
   const [draftEn, setDraftEn] = useState('');
   const [draftAr, setDraftAr] = useState('');
   const [missingAr, setMissingAr] = useState(false);
+  const [missingEn, setMissingEn] = useState(false);
   const { t } = useAdminT();
 
   const add = () => {
     const en = draftEn.trim();
     const ar = draftAr.trim();
-    if (!en) return;
-    if (!ar) { setMissingAr(true); return; }
-    setMissingAr(false);
+    if (!en && !ar) return;
+    const noEn = !en;
+    const noAr = !ar;
+    setMissingEn(noEn);
+    setMissingAr(noAr);
+    if (noEn || noAr) return;
     onChange([...presets, { en, ar }]);
     setDraftEn('');
     setDraftAr('');
@@ -564,11 +572,11 @@ function PresetsEditor({
           <input
             type="text"
             value={draftEn}
-            onChange={(e) => setDraftEn(e.target.value)}
+            onChange={(e) => { setDraftEn(e.target.value); setMissingEn(false); }}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
             placeholder={t('preset_en_placeholder') as string}
             dir="ltr"
-            className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+            className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingEn ? 'border-red-400' : 'border-gray-200'}`}
           />
           <input
             type="text"
@@ -587,6 +595,7 @@ function PresetsEditor({
             {t('add_btn') as string}
           </button>
         </div>
+        {missingEn && <p className="text-xs text-red-500">{t('preset_missing_en') as string}</p>}
         {missingAr && <p className="text-xs text-red-500">{t('preset_missing_ar') as string}</p>}
       </div>
     </div>
@@ -608,9 +617,14 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
   const set = <K extends keyof MenuItem>(key: K, value: MenuItem[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  const descEnFilled = !!form.description_en?.trim();
+  const descArFilled = !!form.description_ar?.trim();
+  const descValid = descEnFilled === descArFilled;
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name_en.trim() || !form.name_ar.trim()) return;
+    if (!descValid) return;
     onSave(form);
   };
 
@@ -691,12 +705,14 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
           value={form.description_en ?? ''}
           onChange={(v) => set('description_en', v)}
           placeholder="Optional description"
+          error={!descValid && descArFilled && !descEnFilled}
         />
         <InputField
           label={t('desc_ar') as string}
           value={form.description_ar ?? ''}
           onChange={(v) => set('description_ar', v)}
           placeholder="وصف اختياري"
+          error={!descValid && descEnFilled && !descArFilled}
         />
       </div>
 
@@ -723,12 +739,17 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
           {t('both_names_required') as string}
         </p>
       )}
+      {!descValid && (
+        <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          {t('both_descriptions_required') as string}
+        </p>
+      )}
 
       <div className="flex gap-2 pt-2">
         <button
           type="submit"
           className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-          disabled={!form.name_en.trim() || !form.name_ar.trim()}
+          disabled={!form.name_en.trim() || !form.name_ar.trim() || !descValid}
         >
           {t('save_item') as string}
         </button>
