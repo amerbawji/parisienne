@@ -49,7 +49,7 @@ type AdminLang = 'en' | 'ar';
 const adminDict = {
   en: {
     admin_panel: 'Admin Panel', back_to_menu: '← Menu', log_out: 'Log Out', lang_toggle: 'عربي',
-    tab_orders: 'Orders', tab_categories: 'Categories', tab_items: 'Items', tab_settings: 'Settings',
+    tab_orders: 'Orders', tab_categories: 'Categories', tab_items: 'Items', tab_settings: 'Settings', tab_customers: 'Customers',
     orders_heading: 'Orders', today_orders: "Today's Orders", today_revenue: "Today's Revenue",
     needs_attention: 'Needs Attention', delivered_today: 'Delivered Today',
     orders_placed_today: 'orders placed today', from_today_orders: "from today's orders",
@@ -115,10 +115,18 @@ const adminDict = {
     toast_failed_save: 'Failed to save', toast_upload_failed: 'Upload failed',
     toast_order_status: (s: string) => `Order marked ${s}`,
     last_edited: 'Edited',
+    customers_heading: (n: number) => `Customers (${n})`,
+    search_customers: 'Search by name or phone…',
+    no_customers: 'No customers found.',
+    customer_orders_count: (n: number) => `${n} order${n !== 1 ? 's' : ''}`,
+    customer_total_spent: 'Total spent',
+    customer_last_order: 'Last order',
+    customer_order_history: 'Order history',
+    no_phone: 'No phone',
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
-    tab_orders: 'الطلبات', tab_categories: 'الفئات', tab_items: 'الأصناف', tab_settings: 'الإعدادات',
+    tab_orders: 'الطلبات', tab_categories: 'الفئات', tab_items: 'الأصناف', tab_settings: 'الإعدادات', tab_customers: 'العملاء',
     orders_heading: 'الطلبات', today_orders: 'طلبات اليوم', today_revenue: 'إيرادات اليوم',
     needs_attention: 'تحتاج انتباهاً', delivered_today: 'موصّل اليوم',
     orders_placed_today: 'طلب اليوم', from_today_orders: 'من طلبات اليوم',
@@ -184,6 +192,14 @@ const adminDict = {
     toast_failed_save: 'فشل الحفظ', toast_upload_failed: 'فشل الرفع',
     toast_order_status: (s: string) => `تم تحديث الطلب: ${s}`,
     last_edited: 'عُدِّل',
+    customers_heading: (n: number) => `العملاء (${n})`,
+    search_customers: 'بحث بالاسم أو الهاتف…',
+    no_customers: 'لا يوجد عملاء.',
+    customer_orders_count: (n: number) => `${n} ${n === 1 ? 'طلب' : 'طلبات'}`,
+    customer_total_spent: 'إجمالي الإنفاق',
+    customer_last_order: 'آخر طلب',
+    customer_order_history: 'سجل الطلبات',
+    no_phone: 'بدون هاتف',
   },
 } as const;
 
@@ -786,7 +802,7 @@ function SettingsTab() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-lg">
+    <div className="flex flex-col gap-6 max-w-2xl">
       {/* Opening Hours */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-base font-bold text-gray-800">{t('opening_hours') as string}</h2>
@@ -1728,6 +1744,134 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
 }
 
 
+// ─── Customers Tab ────────────────────────────────────────────────────────────
+
+function CustomersTab({ orders }: { orders: Order[] }) {
+  const { t } = useAdminT();
+  const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  const customers = useMemo(() => {
+    const map = new Map<string, { phone: string; name: string; orders: Order[] }>();
+    for (const order of orders) {
+      const key = order.customer_phone?.trim() || `__noPhone__${order.customer_name || order.id}`;
+      if (!map.has(key)) {
+        map.set(key, { phone: order.customer_phone || '', name: order.customer_name || '', orders: [] });
+      }
+      const entry = map.get(key)!;
+      if (order.customer_name && !entry.name) entry.name = order.customer_name;
+      entry.orders.push(order);
+    }
+    return Array.from(map.values())
+      .map((c) => ({
+        ...c,
+        orders: c.orders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
+        totalSpent: c.orders.reduce((s, o) => s + Number(o.total), 0),
+        lastOrder: c.orders.reduce((latest, o) => o.created_at > latest ? o.created_at : latest, ''),
+      }))
+      .sort((a, b) => new Date(b.lastOrder).getTime() - new Date(a.lastOrder).getTime());
+  }, [orders]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return customers;
+    return customers.filter((c) =>
+      c.name.toLowerCase().includes(q) || c.phone.includes(q)
+    );
+  }, [customers, search]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-base font-bold text-gray-800">
+          {(t('customers_heading') as (n: number) => string)(customers.length)}
+        </h2>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('search_customers') as string}
+          className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full sm:w-64"
+        />
+      </div>
+
+      {filtered.length === 0 && (
+        <p className="text-sm text-gray-400 text-center py-12">{t('no_customers') as string}</p>
+      )}
+
+      <div className="flex flex-col gap-2">
+        {filtered.map((customer) => {
+          const key = customer.phone || customer.name;
+          const isExpanded = expanded === key;
+          const lastDate = customer.lastOrder
+            ? new Date(customer.lastOrder).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            : '—';
+          return (
+            <div key={key} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setExpanded(isExpanded ? null : key)}
+                className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition text-left"
+              >
+                <div className="h-9 w-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 font-bold text-sm">
+                  {(customer.name || customer.phone || '?')[0].toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-800 truncate">
+                    {customer.name || <span className="text-gray-400 italic">{t('no_phone') as string}</span>}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{customer.phone || '—'}</p>
+                </div>
+                <div className="text-right shrink-0 hidden sm:block">
+                  <p className="text-xs text-gray-400">{t('customer_last_order') as string}</p>
+                  <p className="text-xs font-medium text-gray-600">{lastDate}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-xs font-semibold text-primary-600">${customer.totalSpent.toFixed(2)}</p>
+                  <p className="text-xs text-gray-400">{(t('customer_orders_count') as (n: number) => string)(customer.orders.length)}</p>
+                </div>
+                <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isExpanded && (
+                <div className="border-t border-gray-100 px-4 py-3">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('customer_order_history') as string}</p>
+                  <div className="flex flex-col gap-2">
+                    {customer.orders.map((order) => {
+                      const d = new Date(order.created_at);
+                      const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
+                      return (
+                        <div key={order.id} className="flex items-center gap-3 text-sm py-2 border-b border-gray-50 last:border-0">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs text-gray-500">
+                              {d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              {' · '}
+                              {d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                              {' · '}
+                              <span className="capitalize">{order.service_type}</span>
+                            </p>
+                            <p className="text-xs text-gray-400 mt-0.5 truncate">
+                              {order.items.map((i: { name_en?: string; name_ar?: string; name?: string }) => i.name_en || i.name).join(', ')}
+                            </p>
+                          </div>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-semibold shrink-0 ${badge.color}`}>{badge.label}</span>
+                          <span className="text-sm font-bold text-gray-800 shrink-0">${Number(order.total).toFixed(2)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── Order Notification Toast ─────────────────────────────────────────────────
 
 function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () => void }) {
@@ -1759,7 +1903,7 @@ function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () =
 
 // ─── Admin Shell ──────────────────────────────────────────────────────────────
 
-type Tab = 'orders' | 'settings' | 'categories' | 'items';
+type Tab = 'orders' | 'settings' | 'categories' | 'items' | 'customers';
 
 function AdminShell() {
   const [tab, setTab] = useState<Tab>('orders');
@@ -1823,6 +1967,7 @@ function AdminShell() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'orders', label: t('tab_orders') as string },
+    { key: 'customers', label: t('tab_customers') as string },
     { key: 'categories', label: t('tab_categories') as string },
     { key: 'items', label: t('tab_items') as string },
     { key: 'settings', label: t('tab_settings') as string },
@@ -1873,6 +2018,7 @@ function AdminShell() {
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} />}
+        {tab === 'customers' && <CustomersTab orders={orders} />}
         {tab === 'categories' && <CategoriesTab />}
         {tab === 'items' && <ItemsTab />}
         {tab === 'settings' && <SettingsTab />}

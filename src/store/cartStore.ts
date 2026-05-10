@@ -98,7 +98,9 @@ export const useCartStore = create<CartState>()(
         set({ items: [] });
       },
       getTotalItems: () => {
-        return get().items.reduce((total, item) => total + item.quantity, 0);
+        return get().items.reduce((total, item) => {
+          return total + (item.step && item.step < 1 ? 1 : item.quantity);
+        }, 0);
       },
       getSubtotal: () =>
         get().items.reduce((total, item) => total + item.price * item.quantity, 0),
