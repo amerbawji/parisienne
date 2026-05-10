@@ -114,14 +114,15 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
   };
 
   const togglePreset = (preset: Preset) => {
-    const text = preset.en;
+    const text = language === 'ar' ? preset.ar : preset.en;
     const current = pendingInstructions;
     let newInstructions = current;
 
     if (current.includes(text)) {
-      newInstructions = current.replace(text, '').replace(/,\s*,/g, ',').replace(/^,\s*/, '').replace(/,\s*$/, '');
+      newInstructions = current.replace(text, '').replace(/،\s*،/g, '،').replace(/,\s*,/g, ',').replace(/^[،,]\s*/, '').replace(/\s*[،,]$/, '');
     } else {
-      newInstructions = current ? `${current}, ${text}` : text;
+      const sep = language === 'ar' ? '، ' : ', ';
+      newInstructions = current ? `${current}${sep}${text}` : text;
     }
     setPendingInstructions(newInstructions);
   };
