@@ -518,60 +518,56 @@ export const CartContent = () => {
         </div>
       </div>
       
-      <div className="bg-white px-4 py-4 sm:px-6 sm:py-5 border-t border-gray-100 mt-auto safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <div className="bg-white px-4 py-3 border-t border-gray-100 mt-auto safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         {error && (
-          <div className="mb-4 text-sm text-red-500 bg-red-50 p-3 rounded-lg flex items-center gap-2">
+          <div className="mb-2 text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
             {error}
           </div>
         )}
-        
-        <div className="flex justify-between text-base font-medium text-gray-500 mb-2">
-          <span>{t('total_items')}</span>
-          <span>{totalItems}</span>
-        </div>
-        {serviceType === 'delivery' && (
-          <div className="flex justify-between text-base font-medium text-gray-500 mb-2">
-            <span>{t('delivery_charge')}</span>
-            <span>${deliveryFee.toFixed(2)}</span>
-          </div>
-        )}
-        <div className="flex justify-between text-xl font-bold text-gray-900 mb-4">
-          <span>{t('total_amount')}</span>
-          <span>${totalPrice.toFixed(2)}</span>
-        </div>
 
-        {(hasWeightBasedItem || paymentMethod === 'card') && (
-          <div className="mb-4 text-xs text-gray-500">
-            {hasWeightBasedItem && (
-              <div>
-                <span className="font-semibold text-gray-600">{t('disclaimer_title')}</span> {t('disclaimer_text')}
+        <div className="flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <div className="flex items-baseline gap-1.5 text-xs text-gray-400">
+                <span>{t('total_items')}</span>
+                <span className="font-medium text-gray-600">{totalItems}</span>
+              </div>
+              {serviceType === 'delivery' && (
+                <div className="flex items-baseline gap-1.5 text-xs text-gray-400">
+                  <span>{t('delivery_charge')}</span>
+                  <span className="font-medium text-gray-600">${deliveryFee.toFixed(2)}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              <span className="text-sm text-gray-500">{t('total_amount')}</span>
+              <span className="text-xl font-bold text-gray-900">${totalPrice.toFixed(2)}</span>
+            </div>
+            {(hasWeightBasedItem || paymentMethod === 'card') && (
+              <div className="mt-1 text-[10px] text-gray-400 leading-tight">
+                {hasWeightBasedItem && <span><span className="font-semibold">{t('disclaimer_title')}</span> {t('disclaimer_text')}</span>}
+                {paymentMethod === 'card' && <span className={hasWeightBasedItem ? 'ml-1' : ''}>{t('card_disclaimer')}</span>}
               </div>
             )}
-            {paymentMethod === 'card' && (
-              <div className="mt-1 text-primary-600 font-medium">
-                {t('card_disclaimer')}
-              </div>
-            )}
+            <label className="flex items-center gap-1.5 mt-1.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={saveDetails}
+                onChange={(e) => setSaveDetails(e.target.checked)}
+                className="h-3.5 w-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+              />
+              <span className="text-xs text-gray-400">{t('save_details')}</span>
+            </label>
           </div>
-        )}
-        
-        <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={saveDetails}
-            onChange={(e) => setSaveDetails(e.target.checked)}
-            className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
-          />
-          <span className="text-sm text-gray-600">{t('save_details')}</span>
-        </label>
 
         <Button
           onClick={handleCheckout}
-          className="w-full flex items-center justify-center gap-2 py-3.5 sm:py-4 text-base sm:text-lg shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
+          className="shrink-0 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
         >
           {t('confirm_whatsapp')}
         </Button>
+        </div>
       </div>
     </div>
   );
