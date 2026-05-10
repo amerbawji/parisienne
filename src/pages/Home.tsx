@@ -499,16 +499,10 @@ export const Home = () => {
 
       {modalItem && (
         <div
-          className="fixed inset-0 z-50 sm:hidden flex items-end bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 sm:hidden bg-gray-50 overflow-y-auto animate-in slide-in-from-bottom duration-300"
           onClick={() => setModalItem(null)}
         >
-          <div
-            className="w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-gray-50 shadow-2xl animate-in slide-in-from-bottom duration-300"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-center pt-3 pb-1 sticky top-0 bg-gray-50">
-              <div className="w-10 h-1 rounded-full bg-gray-300" />
-            </div>
+          <div onClick={(e) => e.stopPropagation()}>
             <MenuCard
               item={modalItem}
               expanded={true}
