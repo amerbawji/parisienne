@@ -39,6 +39,7 @@ export const CartContent = () => {
   const { t, language } = useLanguageStore();
   const storeIsOpen = useStoreConfigStore((s) => s.isOpen)();
   const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
+  const discountPct = useStoreConfigStore((s) => s.discount_percentage);
   const navigate = useNavigate();
   const totalItems = getTotalItems();
   const hasWeightBasedItem = items.some((item) => (item.step ?? 1) < 1 || (item.minQuantity ?? 1) < 1);
@@ -47,6 +48,8 @@ export const CartContent = () => {
   const itemsTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryFee = serviceType === 'delivery' ? 1.5 : 0;
   const totalPrice = itemsTotal + deliveryFee;
+  const originalSubtotal = discountPct > 0 ? itemsTotal / (1 - discountPct / 100) : itemsTotal;
+  const discountAmount = originalSubtotal - itemsTotal;
   const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
   const [scheduledTime, setScheduledTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
@@ -175,7 +178,8 @@ export const CartContent = () => {
       locationStreet: deliveryStreet || undefined,
       locationBuilding: deliveryBuilding || undefined,
       locationFloor: deliveryFloor || undefined,
-      locationDetails: deliveryDetails || undefined
+      locationDetails: deliveryDetails || undefined,
+      discountPercentage: discountPct > 0 ? discountPct : undefined,
     };
 
     if (saveDetails) {
@@ -533,6 +537,12 @@ export const CartContent = () => {
                 <span>{t('total_items')}</span>
                 <span className="font-medium text-gray-600">{totalItems}</span>
               </div>
+              {discountPct > 0 && (
+                <div className="flex items-baseline gap-1.5 text-xs text-emerald-600 font-medium">
+                  <span>-{discountPct}%</span>
+                  <span className="font-semibold">-${discountAmount.toFixed(2)}</span>
+                </div>
+              )}
               {serviceType === 'delivery' && (
                 <div className="flex items-baseline gap-1.5 text-xs text-gray-400">
                   <span>{t('delivery_charge')}</span>
@@ -542,6 +552,9 @@ export const CartContent = () => {
             </div>
             <div className="flex items-baseline gap-2 mt-0.5">
               <span className="text-sm text-gray-500">{t('total_amount')}</span>
+              {discountPct > 0 && (
+                <span className="text-sm text-gray-400 line-through">${(originalSubtotal + deliveryFee).toFixed(2)}</span>
+              )}
               <span className="text-xl font-bold text-gray-900">${totalPrice.toFixed(2)}</span>
             </div>
             {(hasWeightBasedItem || paymentMethod === 'card') && (

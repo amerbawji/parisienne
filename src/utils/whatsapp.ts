@@ -17,6 +17,7 @@ export interface OrderDetails {
   locationBuilding?: string;
   locationFloor?: string;
   locationDetails?: string;
+  discountPercentage?: number;
 }
 
 const formatDate = (dateString?: string): string => {
@@ -64,6 +65,7 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
     price: isAr ? 'السعر:' : 'Price:',
     instructions: isAr ? 'ملاحظات:' : 'Instructions:',
     totalItems: isAr ? 'عدد العناصر:' : 'Total Items:',
+    discount: isAr ? 'خصم:' : 'Discount:',
     deliveryCharge: isAr ? 'كلفة التوصيل:' : 'Delivery Charge:',
     totalBill: isAr ? 'المجموع النهائي:' : 'Total Bill:',
     name: isAr ? '*الاسم:*' : '*Name:*',
@@ -139,6 +141,12 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
   
   message += '--------------------\n';
   message += `${t.totalItems} ${totalItems}\n`;
+
+  if (details && details.discountPercentage && details.discountPercentage > 0) {
+    const originalSubtotal = itemsTotal / (1 - details.discountPercentage / 100);
+    const discountAmount = originalSubtotal - itemsTotal;
+    message += `${t.discount} -${details.discountPercentage}% (-$${discountAmount.toFixed(2)})\n`;
+  }
 
   if (details && details.serviceType === 'delivery') {
     const deliveryFee = 1.5;

@@ -114,6 +114,9 @@ const adminDict = {
     toast_promo_enabled: 'Promo enabled', toast_promo_image: 'Promo image updated',
     toast_failed_save: 'Failed to save', toast_upload_failed: 'Upload failed',
     toast_order_status: (s: string) => `Order marked ${s}`,
+    discount_heading: 'Store-wide Discount', discount_label: 'Discount (%)',
+    discount_hint: 'Apply a percentage discount to all item prices on the menu. Set to 0 to disable.',
+    save_discount: 'Save Discount', toast_discount_saved: 'Discount saved',
     last_edited: 'Edited',
     customers_heading: (n: number) => `Customers (${n})`,
     search_customers: 'Search by name or phone…',
@@ -191,6 +194,9 @@ const adminDict = {
     toast_promo_enabled: 'تم تفعيل العرض', toast_promo_image: 'تم تحديث صورة العرض',
     toast_failed_save: 'فشل الحفظ', toast_upload_failed: 'فشل الرفع',
     toast_order_status: (s: string) => `تم تحديث الطلب: ${s}`,
+    discount_heading: 'خصم شامل', discount_label: 'الخصم (%)',
+    discount_hint: 'تطبيق خصم بنسبة مئوية على جميع أسعار الأصناف في القائمة. اضبطه على 0 للتعطيل.',
+    save_discount: 'حفظ الخصم', toast_discount_saved: 'تم حفظ الخصم',
     last_edited: 'عُدِّل',
     customers_heading: (n: number) => `العملاء (${n})`,
     search_customers: 'بحث بالاسم أو الهاتف…',
@@ -743,7 +749,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
-  const { open_time, close_time, closed_days, whatsapp_number, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const { open_time, close_time, closed_days, whatsapp_number, discount_percentage, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -756,6 +762,8 @@ function SettingsTab() {
   const [waNumber, setWaNumber] = useState(whatsapp_number);
   const [waSaving, setWaSaving] = useState(false);
   const [waError, setWaError] = useState('');
+  const [discountPct, setDiscountPct] = useState(discount_percentage);
+  const [discountSaving, setDiscountSaving] = useState(false);
 
   useEffect(() => {
     fetchConfig().then(() => {
@@ -764,6 +772,7 @@ function SettingsTab() {
       setCloseTime(s.close_time);
       setClosedDays(s.closed_days);
       setWaNumber(s.whatsapp_number);
+      setDiscountPct(s.discount_percentage);
     });
   }, [fetchConfig]);
 
@@ -863,6 +872,51 @@ function SettingsTab() {
           </button>
         </div>
         {waError && <p className="text-xs text-red-600">{waError}</p>}
+      </div>
+
+      {/* Discount */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
+        <div>
+          <h2 className="text-base font-bold text-gray-800">{t('discount_heading') as string}</h2>
+          <p className="text-xs text-gray-500 mt-1">{t('discount_hint') as string}</p>
+        </div>
+        {discountPct > 0 && (
+          <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+            <span className="text-amber-600 text-sm font-semibold">{discountPct}% discount active</span>
+          </div>
+        )}
+        <div className="flex gap-2 items-end">
+          <div className="flex flex-col gap-1 flex-1">
+            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('discount_label') as string}</label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              step="1"
+              value={discountPct}
+              onChange={(e) => setDiscountPct(Math.min(100, Math.max(0, Number(e.target.value))))}
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full"
+            />
+          </div>
+          <button
+            type="button"
+            disabled={discountSaving}
+            onClick={async () => {
+              setDiscountSaving(true);
+              try {
+                await updateConfig({ discount_percentage: discountPct });
+                toast(t('toast_discount_saved') as string);
+              } catch {
+                toast(t('toast_failed_save') as string, 'error');
+              } finally {
+                setDiscountSaving(false);
+              }
+            }}
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
+          >
+            {discountSaving ? t('saving') as string : t('save_discount') as string}
+          </button>
+        </div>
       </div>
 
       {/* Promo Popup */}

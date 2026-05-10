@@ -96,6 +96,7 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ─── Migrations (run manually in Supabase SQL editor) ────────────────────────
 -- ALTER TABLE categories ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
 -- ALTER TABLE items      ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+-- ALTER TABLE store_config ADD COLUMN discount_percentage INTEGER NOT NULL DEFAULT 0;
 
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON

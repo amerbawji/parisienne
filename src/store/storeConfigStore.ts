@@ -6,6 +6,7 @@ interface StoreConfig {
   close_time: string;
   closed_days: number[];
   whatsapp_number: string;
+  discount_percentage: number;
 }
 
 interface StoreConfigStore extends StoreConfig {
@@ -20,6 +21,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
   close_time: '23:00',
   closed_days: [],
   whatsapp_number: '9613502022',
+  discount_percentage: 0,
   loading: true,
 
   fetchConfig: async () => {
@@ -30,6 +32,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
         close_time: data.close_time,
         closed_days: data.closed_days ?? [],
         whatsapp_number: data.whatsapp_number ?? '9613502022',
+        discount_percentage: data.discount_percentage ?? 0,
         loading: false,
       });
     } else {

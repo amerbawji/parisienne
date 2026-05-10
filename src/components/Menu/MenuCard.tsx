@@ -1,6 +1,7 @@
 import { memo, useMemo, useState } from 'react';
 import { useCartStore } from '../../store/cartStore';
 import { useLanguageStore } from '../../store/languageStore';
+import { useStoreConfigStore } from '../../store/storeConfigStore';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button } from '../UI/Button';
 import { QuantitySelector } from '../UI/QuantitySelector';
@@ -39,6 +40,7 @@ const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string
 
 const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
+  const discountPct = useStoreConfigStore((s) => s.discount_percentage);
   const cartItems = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -75,17 +77,18 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
   };
 
   const unitPrice = getUnitPrice();
-  const previewTotal = unitPrice === null ? null : round(unitPrice * pendingQuantity);
+  const discountedUnitPrice = unitPrice === null ? null : round(unitPrice * (1 - discountPct / 100));
+  const previewTotal = discountedUnitPrice === null ? null : round(discountedUnitPrice * pendingQuantity);
 
   const handleAddToCart = () => {
-    if (unitPrice === null) return;
+    if (unitPrice === null || discountedUnitPrice === null) return;
 
     const instanceId = addItem({
       id: item.id,
       name: language === 'ar' ? item.name_ar : item.name_en, // Current display name
       name_en: item.name_en,
       name_ar: item.name_ar,
-      price: unitPrice,
+      price: discountedUnitPrice,
       selectedOptions: pendingOptions,
       instructions: pendingInstructions,
       step,
@@ -137,12 +140,13 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
       onToggle();
       return;
     }
+    const effectivePrice = round(item.price * (1 - discountPct / 100));
     const instanceId = addItem({
       id: item.id,
       name: displayName,
       name_en: item.name_en,
       name_ar: item.name_ar,
-      price: item.price,
+      price: effectivePrice,
       selectedOptions: {},
       instructions: '',
       step,
@@ -215,13 +219,20 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
               <span className="text-sm text-gray-500">
                 {language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}
               </span>
-            ) : (
-              <>
+            ) : discountPct > 0 ? (
+              <div className="flex items-baseline gap-1.5 flex-wrap">
                 <span className="font-bold text-primary-600">
-                  ${unitPrice.toFixed(2)}
+                  ${(unitPrice * (1 - discountPct / 100)).toFixed(2)}
                   {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
                 </span>
-              </>
+                <span className="text-sm text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
+                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">-{discountPct}%</span>
+              </div>
+            ) : (
+              <span className="font-bold text-primary-600">
+                ${unitPrice.toFixed(2)}
+                {shouldShowUnit && <span className="text-sm text-gray-500 font-normal"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
+              </span>
             )}
           </div>
         </div>
@@ -308,7 +319,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                 onClick={handleAddToCart}
                 className="shrink-0 flex items-center justify-center gap-2 px-4"
                 aria-label={t('add')}
-                disabled={unitPrice === null || !inStock}
+                disabled={discountedUnitPrice === null || !inStock}
               >
                 <PlusIcon className="h-5 w-5" />
                 {t('add')}
