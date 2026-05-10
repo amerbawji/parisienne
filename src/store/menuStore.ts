@@ -54,6 +54,8 @@ interface MenuStore {
   deleteItem: (categoryId: string, itemId: string) => Promise<void>;
   reorderCategory: (id: string, direction: 'up' | 'down') => Promise<void>;
   reorderItem: (categoryId: string, itemId: string, direction: 'up' | 'down') => Promise<void>;
+  reorderCategoryToIndex: (id: string, toIndex: number) => Promise<void>;
+  reorderItemToIndex: (categoryId: string, itemId: string, toIndex: number) => Promise<void>;
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
@@ -236,6 +238,30 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       supabase.from('items').update({ sort_order: idx }).eq('id', items[idx].id),
       supabase.from('items').update({ sort_order: swapIdx }).eq('id', items[swapIdx].id),
     ]);
+    set((s) => ({
+      categories: s.categories.map((c) => c.id === categoryId ? { ...c, items } : c),
+    }));
+  },
+
+  reorderCategoryToIndex: async (id, toIndex) => {
+    const cats = [...get().categories];
+    const fromIndex = cats.findIndex((c) => c.id === id);
+    if (fromIndex < 0 || fromIndex === toIndex) return;
+    const [moved] = cats.splice(fromIndex, 1);
+    cats.splice(toIndex, 0, moved);
+    await Promise.all(cats.map((c, i) => supabase.from('categories').update({ sort_order: i }).eq('id', c.id)));
+    set({ categories: cats });
+  },
+
+  reorderItemToIndex: async (categoryId, itemId, toIndex) => {
+    const cat = get().categories.find((c) => c.id === categoryId);
+    if (!cat) return;
+    const items = [...cat.items];
+    const fromIndex = items.findIndex((i) => i.id === itemId);
+    if (fromIndex < 0 || fromIndex === toIndex) return;
+    const [moved] = items.splice(fromIndex, 1);
+    items.splice(toIndex, 0, moved);
+    await Promise.all(items.map((it, i) => supabase.from('items').update({ sort_order: i }).eq('id', it.id)));
     set((s) => ({
       categories: s.categories.map((c) => c.id === categoryId ? { ...c, items } : c),
     }));

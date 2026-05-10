@@ -326,51 +326,52 @@ function ImageUploadField({
   return (
     <div className="flex flex-col gap-2">
       <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{label}</label>
-      {currentImage ? (
-        <div className="relative w-fit">
-          <img
-            src={currentImage}
-            alt="preview"
-            className="h-28 w-44 object-cover rounded-lg border border-gray-200"
-          />
-          <button
-            type="button"
-            onClick={() => ref.current?.click()}
-            className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 rounded-lg transition text-white text-xs font-semibold"
-          >
-            {t('change_btn') as string}
-          </button>
-        </div>
-      ) : (
-        <div
-          onClick={() => ref.current?.click()}
-          className="h-28 w-44 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition"
-        >
-          <svg className="h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <span className="text-xs text-gray-400">{t('click_to_upload') as string}</span>
-        </div>
-      )}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => ref.current?.click()}
-          disabled={uploading}
-          className="text-xs px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition disabled:opacity-50"
-        >
-          {uploading ? t('uploading') as string : currentImage ? t('replace_image') as string : t('upload_image_btn') as string}
-        </button>
-        {currentImage && onRemove && (
-          <button
-            type="button"
-            onClick={onRemove}
-            className="text-xs px-3 py-1.5 border border-red-200 rounded-lg hover:bg-red-50 text-red-600 transition"
-          >
-            {t('remove_btn') as string}
-          </button>
+      <div
+        onClick={() => !uploading && ref.current?.click()}
+        className={`relative w-full rounded-xl overflow-hidden border-2 bg-gray-50 cursor-pointer group transition ${currentImage ? 'border-gray-200' : 'border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50'}`}
+        style={{ aspectRatio: '4/3' }}
+      >
+        {currentImage ? (
+          <>
+            <img src={currentImage} alt="preview" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/50 opacity-0 group-hover:opacity-100 transition">
+              {uploading ? (
+                <div className="w-6 h-6 rounded-full border-2 border-white/40 border-t-white animate-spin" />
+              ) : (
+                <>
+                  <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
+                  <span className="text-white text-xs font-semibold">{t('change_btn') as string}</span>
+                </>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+            {uploading ? (
+              <div className="w-7 h-7 rounded-full border-2 border-gray-300 border-t-primary-500 animate-spin" />
+            ) : (
+              <>
+                <svg className="h-10 w-10 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm text-gray-400">{t('click_to_upload') as string}</span>
+              </>
+            )}
+          </div>
         )}
       </div>
+      {currentImage && onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="self-start text-xs px-3 py-1.5 border border-red-200 rounded-lg hover:bg-red-50 text-red-600 transition"
+        >
+          {t('remove_btn') as string}
+        </button>
+      )}
       <input type="file" accept="image/*" ref={ref} onChange={handleChange} className="hidden" />
     </div>
   );
@@ -961,12 +962,16 @@ interface CategoryFormState {
 }
 
 function MenuTab() {
-  const { categories, addCategory, updateCategory, deleteCategory, reorderCategory, addItem, updateItem, deleteItem, reorderItem } = useMenuStore();
+  const { categories, addCategory, updateCategory, deleteCategory, reorderCategoryToIndex, addItem, updateItem, deleteItem, reorderItemToIndex } = useMenuStore();
   const toast = useToast();
   const { t } = useAdminT();
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const pendingScrollRef = useRef<string | null>(null);
+  const dragCatRef = useRef<string | null>(null);
+  const [dragOverCatId, setDragOverCatId] = useState<string | null>(null);
+  const dragItemRef = useRef<{ catId: string; itemId: string } | null>(null);
+  const [dragOverItemId, setDragOverItemId] = useState<string | null>(null);
 
   useEffect(() => {
     const id = pendingScrollRef.current;
@@ -1094,7 +1099,24 @@ function MenuTab() {
           const isOpen = expandedCatId === cat.id;
           const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
           return (
-            <div key={cat.id} ref={(el) => { catRefs.current[cat.id] = el; }} className={`rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden transition-all ${!cat.active ? 'opacity-60' : ''}`}>
+            <div
+              key={cat.id}
+              ref={(el) => { catRefs.current[cat.id] = el; }}
+              draggable={editingId !== cat.id}
+              onDragStart={(e) => { dragCatRef.current = cat.id; e.dataTransfer.effectAllowed = 'move'; }}
+              onDragOver={(e) => { e.preventDefault(); if (dragCatRef.current && dragCatRef.current !== cat.id) setDragOverCatId(cat.id); }}
+              onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverCatId(null); }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOverCatId(null);
+                const fromId = dragCatRef.current;
+                dragCatRef.current = null;
+                if (!fromId || fromId === cat.id) return;
+                reorderCategoryToIndex(fromId, categories.findIndex((c) => c.id === cat.id));
+              }}
+              onDragEnd={() => { dragCatRef.current = null; setDragOverCatId(null); }}
+              className={`rounded-xl bg-white shadow-sm border overflow-hidden transition-all cursor-grab active:cursor-grabbing ${dragOverCatId === cat.id ? 'border-primary-400 ring-2 ring-primary-300' : 'border-gray-100'} ${!cat.active ? 'opacity-60' : ''}`}
+            >
               {editingId === cat.id ? (
                 <form onSubmit={(e) => handleEditSave(e, cat.id)} className="p-4 flex flex-col gap-3">
                   <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
@@ -1139,17 +1161,12 @@ function MenuTab() {
 
                   {/* Category admin actions */}
                   <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border-t border-gray-100 flex-wrap">
-                    <div className="flex gap-1">
-                      <button type="button" onClick={() => reorderCategory(cat.id, 'up')} disabled={categories.indexOf(cat) === 0}
-                        className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_up') as string}>
-                        <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                      </button>
-                      <button type="button" onClick={() => reorderCategory(cat.id, 'down')} disabled={categories.indexOf(cat) === categories.length - 1}
-                        className="p-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_down') as string}>
-                        <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                      </button>
-                    </div>
-                    <button type="button" dir="ltr" onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
+                    <svg className="w-4 h-4 text-gray-300 shrink-0 cursor-grab" viewBox="0 0 16 16" fill="currentColor">
+                      <circle cx="5" cy="4" r="1.2"/><circle cx="11" cy="4" r="1.2"/>
+                      <circle cx="5" cy="8" r="1.2"/><circle cx="11" cy="8" r="1.2"/>
+                      <circle cx="5" cy="12" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
+                    </svg>
+                    <button type="button" dir="ltr" onClick={(e) => { e.stopPropagation(); updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string)); }}
                       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
                       title={cat.active ? t('active_title') as string : t('inactive_title') as string}>
                       <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -1185,7 +1202,23 @@ function MenuTab() {
                               <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
                             </div>
                           ) : (
-                            <div key={item.id} className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col ${item.active === false ? 'opacity-50' : ''}`}>
+                            <div
+                              key={item.id}
+                              draggable
+                              onDragStart={(e) => { e.stopPropagation(); dragItemRef.current = { catId: cat.id, itemId: item.id }; e.dataTransfer.effectAllowed = 'move'; }}
+                              onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (dragItemRef.current?.catId === cat.id && dragItemRef.current.itemId !== item.id) setDragOverItemId(item.id); }}
+                              onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverItemId(null); }}
+                              onDrop={(e) => {
+                                e.preventDefault(); e.stopPropagation();
+                                setDragOverItemId(null);
+                                const from = dragItemRef.current;
+                                dragItemRef.current = null;
+                                if (!from || from.catId !== cat.id || from.itemId === item.id) return;
+                                reorderItemToIndex(cat.id, from.itemId, cat.items.findIndex((i) => i.id === item.id));
+                              }}
+                              onDragEnd={(e) => { e.stopPropagation(); dragItemRef.current = null; setDragOverItemId(null); }}
+                              className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col cursor-grab active:cursor-grabbing transition ${dragOverItemId === item.id ? 'border-primary-400 ring-2 ring-primary-300' : 'border-gray-100'} ${item.active === false ? 'opacity-50' : ''}`}
+                            >
                               {/* Item card — mirrors collapsed MenuCard */}
                               <div className="flex flex-row flex-1">
                                 <div className="relative shrink-0 w-24 h-20 bg-gray-200">
@@ -1200,7 +1233,14 @@ function MenuTab() {
                                   )}
                                 </div>
                                 <div className="p-2.5 flex-1 min-w-0">
-                                  <p className="text-sm font-bold text-gray-900 truncate">{item.name_en}</p>
+                                  <div className="flex items-start justify-between gap-1">
+                                    <p className="text-sm font-bold text-gray-900 truncate">{item.name_en}</p>
+                                    <svg className="w-3.5 h-3.5 text-gray-300 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
+                                      <circle cx="5" cy="4" r="1.1"/><circle cx="11" cy="4" r="1.1"/>
+                                      <circle cx="5" cy="8" r="1.1"/><circle cx="11" cy="8" r="1.1"/>
+                                      <circle cx="5" cy="12" r="1.1"/><circle cx="11" cy="12" r="1.1"/>
+                                    </svg>
+                                  </div>
                                   <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
                                   <p className="text-xs font-semibold text-primary-600 mt-1">${item.price.toFixed(2)}<span className="text-gray-400 font-normal"> / {item.unit}</span></p>
                                   {(item.options?.length ?? 0) > 0 && <p className="text-[10px] text-primary-400 mt-0.5">{(t('option_count') as (n: number) => string)(item.options!.length)}</p>}
@@ -1209,32 +1249,22 @@ function MenuTab() {
                               </div>
                               {/* Item admin actions */}
                               <div className="flex items-center gap-1.5 px-2.5 py-2 bg-gray-50 border-t border-gray-100 flex-wrap">
-                                <div className="flex gap-1">
-                                  <button type="button" onClick={() => reorderItem(cat.id, item.id, 'up')} disabled={cat.items.indexOf(item) === 0}
-                                    className="p-1 rounded border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_up') as string}>
-                                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" /></svg>
-                                  </button>
-                                  <button type="button" onClick={() => reorderItem(cat.id, item.id, 'down')} disabled={cat.items.indexOf(item) === cat.items.length - 1}
-                                    className="p-1 rounded border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-30 transition" title={t('move_down') as string}>
-                                    <svg className="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                                  </button>
-                                </div>
                                 <button type="button" dir="ltr"
-                                  onClick={() => updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
+                                  onClick={(e) => { e.stopPropagation(); updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string)); }}
                                   className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
                                   title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}>
                                   <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
                                 </button>
                                 <button type="button"
-                                  onClick={() => updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
+                                  onClick={(e) => { e.stopPropagation(); updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string)); }}
                                   className={`px-2 py-0.5 text-[10px] font-semibold rounded border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
                                   {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
                                 </button>
-                                <button type="button" onClick={() => { setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
+                                <button type="button" onClick={(e) => { e.stopPropagation(); setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
                                   className="px-2 py-0.5 text-[10px] font-semibold border border-gray-200 bg-white rounded hover:bg-gray-50 transition">
                                   {t('edit_btn') as string}
                                 </button>
-                                <button type="button" onClick={() => handleDeleteItem(cat.id, item)}
+                                <button type="button" onClick={(e) => { e.stopPropagation(); handleDeleteItem(cat.id, item); }}
                                   className="px-2 py-0.5 text-[10px] font-semibold border border-red-200 bg-white text-red-600 rounded hover:bg-red-50 transition">
                                   {t('delete_btn') as string}
                                 </button>
