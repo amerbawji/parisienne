@@ -1312,20 +1312,19 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
 
   return (
     <div
-      className="relative h-14 w-14 rounded-lg border border-gray-200 shrink-0 overflow-hidden cursor-pointer group"
+      className="relative w-full h-full overflow-hidden cursor-pointer group bg-gray-100"
       onClick={() => ref.current?.click()}
-      title={t('click_to_upload') as string}
     >
       {image ? (
-        <img src={image} alt="" className="h-full w-full object-cover" />
+        <img src={image} alt="" className="w-full h-full object-cover" />
       ) : (
-        <div className="h-full w-full bg-gray-100 flex items-center justify-center">
-          <svg className="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-full h-full flex items-center justify-center">
+          <svg className="h-7 w-7 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
       )}
-      <div className={`absolute inset-0 flex items-center justify-center transition ${uploading ? 'bg-black/50 opacity-100' : 'bg-black/50 opacity-0 group-hover:opacity-100'}`}>
+      <div className={`absolute inset-0 flex items-center justify-center transition ${uploading ? 'bg-black/50 opacity-100' : 'bg-black/40 opacity-0 group-hover:opacity-100'}`}>
         {uploading ? (
           <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin" />
         ) : (
