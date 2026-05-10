@@ -1154,7 +1154,7 @@ function MenuTab() {
             <div
               key={cat.id}
               ref={(el) => { catRefs.current[cat.id] = el; }}
-              draggable={editingId !== cat.id && editingItem === null}
+              draggable={editingId === null && editingItem === null}
               onDragStart={(e) => { dragCatRef.current = cat.id; e.dataTransfer.effectAllowed = 'move'; }}
               onDragOver={(e) => { e.preventDefault(); if (dragCatRef.current && dragCatRef.current !== cat.id) setDragOverCatId(cat.id); }}
               onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverCatId(null); }}
@@ -1256,7 +1256,7 @@ function MenuTab() {
                           ) : (
                             <div
                               key={item.id}
-                              draggable={editingItem === null}
+                              draggable={editingId === null && editingItem === null}
                               onDragStart={(e) => { e.stopPropagation(); dragItemRef.current = { catId: cat.id, itemId: item.id }; e.dataTransfer.effectAllowed = 'move'; }}
                               onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (dragItemRef.current?.catId === cat.id && dragItemRef.current.itemId !== item.id) setDragOverItemId(item.id); }}
                               onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverItemId(null); }}
