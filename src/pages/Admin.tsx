@@ -54,7 +54,7 @@ const adminDict = {
     needs_attention: 'Needs Attention', delivered_today: 'Delivered Today',
     orders_placed_today: 'orders placed today', from_today_orders: "from today's orders",
     new_confirmed: 'new + confirmed', completed_today: 'completed today',
-    all_time_status: 'All-time by Status', last_7_days: 'Last 7 Days',
+    all_time_status: "Today's Status Breakdown", last_7_days: 'Last 7 Days',
     refresh: 'Refresh', today: 'Today', no_orders: (s: string) => `No ${s} orders.`,
     status_label: 'Status:', name_label: 'Name:', phone_label: 'Phone:',
     area_label: 'Area', street_label: 'Street', building_label: 'Building',
@@ -122,7 +122,7 @@ const adminDict = {
     needs_attention: 'تحتاج انتباهاً', delivered_today: 'موصّل اليوم',
     orders_placed_today: 'طلب اليوم', from_today_orders: 'من طلبات اليوم',
     new_confirmed: 'جديد + مؤكد', completed_today: 'مكتمل اليوم',
-    all_time_status: 'حسب الحالة', last_7_days: 'آخر 7 أيام',
+    all_time_status: 'توزيع اليوم حسب الحالة', last_7_days: 'آخر 7 أيام',
     refresh: 'تحديث', today: 'اليوم', no_orders: (s: string) => `لا توجد طلبات${s ? ` ${s}` : ''}.`,
     status_label: 'الحالة:', name_label: 'الاسم:', phone_label: 'الهاتف:',
     area_label: 'المنطقة', street_label: 'الشارع', building_label: 'المبنى',
@@ -1557,7 +1557,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
   const todayStr = new Date().toDateString();
   const todayOrders = orders.filter(o => new Date(o.created_at).toDateString() === todayStr);
   const todayRevenue = todayOrders.reduce((s, o) => s + Number(o.total), 0);
-  const pending = orders.filter(o => o.status === 'new' || o.status === 'confirmed').length;
+  const pending = todayOrders.filter(o => o.status === 'new' || o.status === 'confirmed').length;
   const deliveredToday = todayOrders.filter(o => o.status === 'delivered').length;
 
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -1570,8 +1570,8 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
   });
   const maxDay = Math.max(...last7.map(d => d.count), 1);
 
-  const statusTotals = Object.keys(STATUS_LABELS).map(k => ({ key: k, count: orders.filter(o => o.status === k).length }));
-  const totalOrders = orders.length || 1;
+  const statusTotals = Object.keys(STATUS_LABELS).map(k => ({ key: k, count: todayOrders.filter(o => o.status === k).length }));
+  const totalOrders = todayOrders.length || 1;
 
   if (loading) return (
     <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
