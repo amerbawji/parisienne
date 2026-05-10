@@ -190,6 +190,11 @@ export const CartContent = () => {
 
     const link = generateWhatsAppLink(items, language, details, whatsappNumber);
 
+    // Open a blank window synchronously while still in the user-gesture context.
+    // Safari (and iOS PWA homescreen) blocks window.open called after any await.
+    // We get the reference now, then set its href once the DB write is done.
+    const waWindow = window.open('', '_blank');
+
     const { error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,
       customer_phone: customerPhone || null,
@@ -215,7 +220,13 @@ export const CartContent = () => {
     });
     if (orderError) console.error('[Order save failed]', orderError);
 
-    window.open(link, '_blank');
+    // Redirect the pre-opened window to WhatsApp; fall back to location.href
+    // if the browser blocked the popup (e.g. standalone PWA on older iOS).
+    if (waWindow) {
+      waWindow.location.href = link;
+    } else {
+      window.location.href = link;
+    }
     clearCart();
     setCartOpen(false);
     navigate('/');
