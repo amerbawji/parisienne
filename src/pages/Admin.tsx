@@ -82,9 +82,10 @@ const adminDict = {
     step_label: 'Step / Increment', min_qty_label: 'Min Quantity',
     desc_en: 'Description (English)', desc_ar: 'Description (Arabic)',
     options_label: 'Options', add_option: '+ Add Option',
-    option_placeholder: 'Option name (e.g. Cooking Level)',
+    option_placeholder: 'Option name (e.g. Cooking Level)', option_ar_placeholder: 'اسم الخيار (مثلاً: درجة الاستواء)',
     remove_btn: 'Remove', add_choice: '+ Add Choice',
-    choice_placeholder: 'Choice', price_placeholder: '+price',
+    choice_en_placeholder: 'Choice (English)', choice_ar_placeholder: 'Choice (Arabic)', choice_placeholder: 'Choice', price_placeholder: '+price',
+    options_incomplete: 'All options must have both English and Arabic names, and all choices must have both translations.',
     presets_label: 'Presets', add_btn: 'Add',
     preset_en_placeholder: 'English (e.g. No pickles)', preset_ar_placeholder: 'Arabic (e.g. بدون كبيس)',
     preset_missing_ar: 'Arabic translation required', preset_missing_en: 'English translation required',
@@ -163,9 +164,10 @@ const adminDict = {
     step_label: 'الخطوة / التدرج', min_qty_label: 'الحد الأدنى',
     desc_en: 'الوصف (إنجليزي)', desc_ar: 'الوصف (عربي)',
     options_label: 'الخيارات', add_option: '+ إضافة خيار',
-    option_placeholder: 'اسم الخيار (مثلاً: درجة الاستواء)',
+    option_placeholder: 'Option name (e.g. Cooking Level)', option_ar_placeholder: 'اسم الخيار (مثلاً: درجة الاستواء)',
     remove_btn: 'حذف', add_choice: '+ إضافة اختيار',
-    choice_placeholder: 'اختيار', price_placeholder: '+سعر',
+    choice_en_placeholder: 'اختيار (إنجليزي)', choice_ar_placeholder: 'اختيار (عربي)', choice_placeholder: 'اختيار', price_placeholder: '+سعر',
+    options_incomplete: 'جميع الخيارات يجب أن تحتوي على أسماء بالإنجليزية والعربية، وكذلك كل الاختيارات.',
     presets_label: 'اختصارات', add_btn: 'إضافة',
     preset_en_placeholder: 'إنجليزي (e.g. No pickles)', preset_ar_placeholder: 'عربي (مثلاً: بدون كبيس)',
     preset_missing_ar: 'الترجمة العربية مطلوبة', preset_missing_en: 'الترجمة الإنجليزية مطلوبة',
@@ -393,57 +395,54 @@ function OptionsEditor({
   const { t } = useAdminT();
 
   const addOption = () =>
-    onChange([...options, { name: '', choices: [], price_additions: {} }]);
+    onChange([...options, { name: '', name_ar: '', choices: [], choices_ar: [], price_additions: {} }]);
 
   const removeOption = (i: number) =>
     onChange(options.filter((_, idx) => idx !== i));
 
-  const updateOptionName = (i: number, name: string) => {
-    const next = options.map((o, idx) => (idx === i ? { ...o, name } : o));
-    onChange(next);
-  };
+  const updateOptionField = (i: number, field: 'name' | 'name_ar', val: string) =>
+    onChange(options.map((o, idx) => (idx === i ? { ...o, [field]: val } : o)));
 
-  const addChoice = (i: number) => {
-    const next = options.map((o, idx) =>
-      idx === i ? { ...o, choices: [...o.choices, ''] } : o
-    );
-    onChange(next);
-  };
+  const addChoice = (i: number) =>
+    onChange(options.map((o, idx) =>
+      idx === i ? { ...o, choices: [...o.choices, ''], choices_ar: [...(o.choices_ar ?? []), ''] } : o
+    ));
 
-  const updateChoice = (optIdx: number, choiceIdx: number, val: string) => {
-    const next = options.map((o, idx) => {
+  const updateChoiceEn = (optIdx: number, ci: number, val: string) =>
+    onChange(options.map((o, idx) => {
       if (idx !== optIdx) return o;
-      const choices = o.choices.map((c, ci) => (ci === choiceIdx ? val : c));
-      return { ...o, choices };
-    });
-    onChange(next);
-  };
+      return { ...o, choices: o.choices.map((c, i) => (i === ci ? val : c)) };
+    }));
 
-  const removeChoice = (optIdx: number, choiceIdx: number) => {
-    const next = options.map((o, idx) => {
+  const updateChoiceAr = (optIdx: number, ci: number, val: string) =>
+    onChange(options.map((o, idx) => {
       if (idx !== optIdx) return o;
-      const choices = o.choices.filter((_, ci) => ci !== choiceIdx);
+      const choices_ar = [...(o.choices_ar ?? o.choices.map(() => ''))];
+      choices_ar[ci] = val;
+      return { ...o, choices_ar };
+    }));
+
+  const removeChoice = (optIdx: number, choiceIdx: number) =>
+    onChange(options.map((o, idx) => {
+      if (idx !== optIdx) return o;
       const pa = { ...(o.price_additions || {}) };
       delete pa[o.choices[choiceIdx]];
-      return { ...o, choices, price_additions: pa };
-    });
-    onChange(next);
-  };
+      return {
+        ...o,
+        choices: o.choices.filter((_, ci) => ci !== choiceIdx),
+        choices_ar: (o.choices_ar ?? []).filter((_, ci) => ci !== choiceIdx),
+        price_additions: pa,
+      };
+    }));
 
-  const updatePriceAddition = (optIdx: number, choice: string, val: string) => {
-    const next = options.map((o, idx) => {
+  const updatePriceAddition = (optIdx: number, choice: string, val: string) =>
+    onChange(options.map((o, idx) => {
       if (idx !== optIdx) return o;
       const pa = { ...(o.price_additions || {}) };
       const num = parseFloat(val);
-      if (isNaN(num) || num === 0) {
-        delete pa[choice];
-      } else {
-        pa[choice] = num;
-      }
+      if (isNaN(num) || num === 0) delete pa[choice]; else pa[choice] = num;
       return { ...o, price_additions: pa };
-    });
-    onChange(next);
-  };
+    }));
 
   return (
     <div className="flex flex-col gap-3">
@@ -464,26 +463,42 @@ function OptionsEditor({
               type="text"
               value={opt.name}
               placeholder={t('option_placeholder') as string}
-              onChange={(e) => updateOptionName(i, e.target.value)}
-              className="flex-1 border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300"
+              onChange={(e) => updateOptionField(i, 'name', e.target.value)}
+              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name.trim() && opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+            />
+            <input
+              type="text"
+              value={opt.name_ar ?? ''}
+              placeholder={t('option_ar_placeholder') as string}
+              dir="rtl"
+              onChange={(e) => updateOptionField(i, 'name_ar', e.target.value)}
+              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${opt.name.trim() && !opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
             />
             <button
               type="button"
               onClick={() => removeOption(i)}
-              className="text-red-500 hover:text-red-700 text-xs px-2 py-1 border border-red-200 rounded transition"
+              className="text-red-500 hover:text-red-700 text-xs px-2 py-1 border border-red-200 rounded transition shrink-0"
             >
               {t('remove_btn') as string}
             </button>
           </div>
-          <div className="flex flex-col gap-1 pl-2">
+          <div className="flex flex-col gap-1.5 pl-2">
             {opt.choices.map((choice, ci) => (
-              <div key={ci} className="flex gap-2 items-center">
+              <div key={ci} className="flex gap-1.5 items-center">
                 <input
                   type="text"
                   value={choice}
-                  placeholder={t('choice_placeholder') as string}
-                  onChange={(e) => updateChoice(i, ci, e.target.value)}
-                  className="flex-1 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+                  placeholder={t('choice_en_placeholder') as string}
+                  onChange={(e) => updateChoiceEn(i, ci, e.target.value)}
+                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!choice.trim() && opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+                />
+                <input
+                  type="text"
+                  value={opt.choices_ar?.[ci] ?? ''}
+                  placeholder={t('choice_ar_placeholder') as string}
+                  dir="rtl"
+                  onChange={(e) => updateChoiceAr(i, ci, e.target.value)}
+                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${choice.trim() && !opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
                 />
                 <input
                   type="number"
@@ -491,12 +506,12 @@ function OptionsEditor({
                   value={opt.price_additions?.[choice] ?? ''}
                   placeholder={t('price_placeholder') as string}
                   onChange={(e) => updatePriceAddition(i, choice, e.target.value)}
-                  className="w-20 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+                  className="w-16 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
                 <button
                   type="button"
                   onClick={() => removeChoice(i, ci)}
-                  className="text-red-400 hover:text-red-600 text-xs"
+                  className="text-red-400 hover:text-red-600 text-xs shrink-0"
                 >
                   ✕
                 </button>
@@ -621,10 +636,18 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
   const descArFilled = !!form.description_ar?.trim();
   const descValid = descEnFilled === descArFilled;
 
+  const optionsValid = (form.options ?? []).every(
+    (opt) =>
+      opt.name.trim() &&
+      opt.name_ar?.trim() &&
+      opt.choices.every((c, ci) => c.trim() && opt.choices_ar?.[ci]?.trim())
+  );
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name_en.trim() || !form.name_ar.trim()) return;
     if (!descValid) return;
+    if (!optionsValid) return;
     onSave(form);
   };
 
@@ -744,12 +767,17 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
           {t('both_descriptions_required') as string}
         </p>
       )}
+      {!optionsValid && (form.options?.length ?? 0) > 0 && (
+        <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          {t('options_incomplete') as string}
+        </p>
+      )}
 
       <div className="flex gap-2 pt-2">
         <button
           type="submit"
           className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-          disabled={!form.name_en.trim() || !form.name_ar.trim() || !descValid}
+          disabled={!form.name_en.trim() || !form.name_ar.trim() || !descValid || !optionsValid}
         >
           {t('save_item') as string}
         </button>

@@ -247,9 +247,11 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
               <div className="space-y-2">
                 {item.options.map((opt) => (
                   <div key={opt.name} className="text-xs">
-                    <span className="font-medium text-gray-700 block mb-1">{safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:</span>
+                    <span className="font-medium text-gray-700 block mb-1">
+                      {language === 'ar' && opt.name_ar ? opt.name_ar : safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:
+                    </span>
                     <div className="flex flex-wrap gap-1">
-                      {opt.choices.map((choice) => (
+                      {opt.choices.map((choice, ci) => (
                         <button
                           key={choice}
                           onClick={(e) => { e.stopPropagation(); handleOptionChange(opt.name, choice); }}
@@ -259,7 +261,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                               : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
                           }`}
                         >
-                          {safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
+                          {language === 'ar' && opt.choices_ar?.[ci] ? opt.choices_ar[ci] : safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
                         </button>
                       ))}
                     </div>

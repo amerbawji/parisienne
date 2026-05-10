@@ -4,7 +4,9 @@ import { supabase } from '../lib/supabase';
 export interface MenuOption {
   id?: string;
   name: string;
+  name_ar?: string;
   choices: string[];
+  choices_ar?: string[];
   price_additions?: Record<string, number>;
 }
 
@@ -60,7 +62,7 @@ interface MenuStore {
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
 type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
-type OptRow = { id: string; item_id: string; name: string; choices: string[]; price_additions: Record<string, number>; sort_order: number };
+type OptRow = { id: string; item_id: string; name: string; name_ar: string; choices: string[]; choices_ar: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
   return cats
@@ -95,7 +97,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           options: opts
             .filter((o) => o.item_id === item.id)
             .sort((a, b) => a.sort_order - b.sort_order)
-            .map((o) => ({ id: o.id, name: o.name, choices: o.choices, price_additions: o.price_additions })),
+            .map((o) => ({ id: o.id, name: o.name, name_ar: o.name_ar, choices: o.choices, choices_ar: o.choices_ar, price_additions: o.price_additions })),
         })),
     }));
 }
@@ -160,7 +162,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
     if (ie) throw ie;
     if (item.options?.length) {
       const { error: oe } = await supabase.from('item_options').insert(
-        item.options.map((o, i) => ({ item_id: item.id, name: o.name, choices: o.choices, price_additions: o.price_additions ?? {}, sort_order: i }))
+        item.options.map((o, i) => ({ item_id: item.id, name: o.name, name_ar: o.name_ar ?? '', choices: o.choices, choices_ar: o.choices_ar ?? [], price_additions: o.price_additions ?? {}, sort_order: i }))
       );
       if (oe) throw oe;
     }
@@ -190,7 +192,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       await supabase.from('item_options').delete().eq('item_id', itemId);
       if (options.length) {
         const { error: oe } = await supabase.from('item_options').insert(
-          options.map((o, i) => ({ item_id: itemId, name: o.name, choices: o.choices, price_additions: o.price_additions ?? {}, sort_order: i }))
+          options.map((o, i) => ({ item_id: itemId, name: o.name, name_ar: o.name_ar ?? '', choices: o.choices, choices_ar: o.choices_ar ?? [], price_additions: o.price_additions ?? {}, sort_order: i }))
         );
         if (oe) throw oe;
       }
