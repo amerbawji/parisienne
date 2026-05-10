@@ -466,7 +466,7 @@ function OptionsEditor({
               value={opt.name}
               placeholder={t('option_placeholder') as string}
               onChange={(e) => updateOptionField(i, 'name', e.target.value)}
-              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name.trim() && opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name.trim() ? 'border-red-400' : 'border-gray-200'}`}
             />
             <input
               type="text"
@@ -474,7 +474,7 @@ function OptionsEditor({
               placeholder={t('option_ar_placeholder') as string}
               dir="rtl"
               onChange={(e) => updateOptionField(i, 'name_ar', e.target.value)}
-              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${opt.name.trim() && !opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
             />
             <button
               type="button"
@@ -492,7 +492,7 @@ function OptionsEditor({
                   value={choice}
                   placeholder={t('choice_en_placeholder') as string}
                   onChange={(e) => updateChoiceEn(i, ci, e.target.value)}
-                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!choice.trim() && opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!choice.trim() ? 'border-red-400' : 'border-gray-200'}`}
                 />
                 <input
                   type="text"
@@ -500,7 +500,7 @@ function OptionsEditor({
                   placeholder={t('choice_ar_placeholder') as string}
                   dir="rtl"
                   onChange={(e) => updateChoiceAr(i, ci, e.target.value)}
-                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${choice.trim() && !opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
                 />
                 <input
                   type="number"
