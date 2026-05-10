@@ -1256,7 +1256,7 @@ function MenuTab() {
                           ) : (
                             <div
                               key={item.id}
-                              draggable
+                              draggable={editingItem === null}
                               onDragStart={(e) => { e.stopPropagation(); dragItemRef.current = { catId: cat.id, itemId: item.id }; e.dataTransfer.effectAllowed = 'move'; }}
                               onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (dragItemRef.current?.catId === cat.id && dragItemRef.current.itemId !== item.id) setDragOverItemId(item.id); }}
                               onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverItemId(null); }}
