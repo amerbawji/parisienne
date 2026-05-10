@@ -19,7 +19,7 @@ export interface MenuItem {
   unit?: string;
   weight_step?: number;
   min_quantity?: number;
-  options?: { name: string; choices: string[] }[];
+  options?: { name: string; name_ar?: string; choices: string[]; choices_ar?: string[] }[];
   option_price_overrides?: Record<string, Record<string, number>>;
   presets?: Preset[];
   in_stock?: boolean;
