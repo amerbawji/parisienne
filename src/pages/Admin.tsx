@@ -965,6 +965,20 @@ function MenuTab() {
   const toast = useToast();
   const { t } = useAdminT();
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+  const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const pendingScrollRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const id = pendingScrollRef.current;
+    if (!id) return;
+    pendingScrollRef.current = null;
+    const el = catRefs.current[id];
+    if (!el) return;
+    const offset = 110; // sticky header (~56px) + tabs bar (~44px) + gap
+    const top = window.scrollY + el.getBoundingClientRect().top - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }, [expandedCatId]);
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -1080,7 +1094,7 @@ function MenuTab() {
           const isOpen = expandedCatId === cat.id;
           const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
           return (
-            <div key={cat.id} className={`rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden transition-all ${!cat.active ? 'opacity-60' : ''}`}>
+            <div key={cat.id} ref={(el) => { catRefs.current[cat.id] = el; }} className={`rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden transition-all ${!cat.active ? 'opacity-60' : ''}`}>
               {editingId === cat.id ? (
                 <form onSubmit={(e) => handleEditSave(e, cat.id)} className="p-4 flex flex-col gap-3">
                   <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
@@ -1104,7 +1118,7 @@ function MenuTab() {
               ) : (
                 <>
                   {/* Category image header — click to expand/collapse */}
-                  <button type="button" onClick={() => setExpandedCatId(isOpen ? null : cat.id)} className="w-full block group">
+                  <button type="button" onClick={() => { if (!isOpen) pendingScrollRef.current = cat.id; setExpandedCatId(isOpen ? null : cat.id); }} className="w-full block group">
                     <div className="relative h-40 w-full overflow-hidden">
                       <img src={catImage} alt={cat.name_en} className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent flex items-end justify-between p-4">
