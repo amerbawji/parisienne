@@ -1088,25 +1088,29 @@ function CategoriesTab() {
                 </div>
               </form>
             ) : (
-              <div className={`flex items-center gap-3 p-3 sm:p-4 ${!cat.active ? 'opacity-50' : ''}`}>
-                {cat.image && (
-                  <img
-                    src={cat.image}
-                    alt={cat.name_en}
-                    className="h-12 w-16 sm:h-14 sm:w-20 object-cover rounded-lg border border-gray-100 shrink-0"
-                  />
-                )}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
-                  <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {(t('item_count') as (n: number) => string)(cat.items.length)}
-                    {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
-                    {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
-                  </p>
+              <div className={`p-3 sm:p-4 ${!cat.active ? 'opacity-50' : ''}`}>
+                {/* Info row */}
+                <div className="flex items-center gap-3">
+                  {cat.image && (
+                    <img
+                      src={cat.image}
+                      alt={cat.name_en}
+                      className="h-12 w-16 sm:h-14 sm:w-20 object-cover rounded-lg border border-gray-100 shrink-0"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-gray-800 truncate">{cat.name_en}</p>
+                    <p className="text-xs text-gray-500 truncate" dir="rtl">{cat.name_ar}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {(t('item_count') as (n: number) => string)(cat.items.length)}
+                      {!cat.active && <span className="ml-2 text-orange-500 font-medium">{t('hidden_badge') as string}</span>}
+                      {cat.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
-                  <div className="flex gap-1 self-center">
+                {/* Actions row */}
+                <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
+                  <div className="flex gap-1">
                     <button type="button" onClick={() => reorderCategory(cat.id, 'up')}
                       disabled={categories.indexOf(cat) === 0}
                       className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
@@ -1124,7 +1128,7 @@ function CategoriesTab() {
                     type="button"
                     dir="ltr"
                     onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
                     title={cat.active ? t('active_title') as string : t('inactive_title') as string}
                   >
                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -1293,27 +1297,31 @@ function ItemsTab() {
           ) : (
             <div
               key={item.id}
-              className={`border border-gray-200 rounded-xl bg-white p-3 sm:p-4 flex items-center gap-3 ${item.active === false ? 'opacity-50' : ''}`}
+              className={`border border-gray-200 rounded-xl bg-white p-3 sm:p-4 ${item.active === false ? 'opacity-50' : ''}`}
             >
-              <QuickImageChange
-                image={item.image ?? ''}
-                onImage={(url) => updateItem(selectedCategoryId, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
-              />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
-                <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
-                <p className="text-xs text-gray-400 mt-0.5">
-                  ${item.price.toFixed(2)} / {item.unit}
-                  {item.options && item.options.length > 0 && (
-                    <span className="ml-2 text-primary-500">{(t('option_count') as (n: number) => string)(item.options.length)}</span>
-                  )}
-                  {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
-                  {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
-                  {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
-                </p>
+              {/* Info row */}
+              <div className="flex items-center gap-3">
+                <QuickImageChange
+                  image={item.image ?? ''}
+                  onImage={(url) => updateItem(selectedCategoryId, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-800 truncate">{item.name_en}</p>
+                  <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    ${item.price.toFixed(2)} / {item.unit}
+                    {item.options && item.options.length > 0 && (
+                      <span className="ml-2 text-primary-500">{(t('option_count') as (n: number) => string)(item.options.length)}</span>
+                    )}
+                    {item.in_stock === false && <span className="ml-2 text-orange-500 font-medium">{t('out_of_stock') as string}</span>}
+                    {item.active === false && <span className="ml-2 text-red-500 font-medium">{t('hidden_badge') as string}</span>}
+                    {item.updated_at && <span className="ml-2 text-gray-300">{t('last_edited') as string} {timeAgo(item.updated_at)}</span>}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1.5 shrink-0">
-                <div className="flex gap-1 self-center">
+              {/* Actions row */}
+              <div className="flex items-center gap-2 mt-2.5 pt-2.5 border-t border-gray-100 flex-wrap">
+                <div className="flex gap-1">
                   <button type="button" onClick={() => reorderItem(selectedCategoryId, item.id, 'up')}
                     disabled={items.indexOf(item) === 0}
                     className="p-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-30 transition"
@@ -1331,7 +1339,6 @@ function ItemsTab() {
                   type="button"
                   onClick={() => updateItem(selectedCategoryId, item.id, { in_stock: item.in_stock === false ? true : false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
                   className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
-                  title={item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
                 >
                   {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
                 </button>
@@ -1339,7 +1346,7 @@ function ItemsTab() {
                   type="button"
                   dir="ltr"
                   onClick={() => updateItem(selectedCategoryId, item.id, { active: item.active === false ? true : false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none self-center ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
                   title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}
                 >
                   <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-6' : 'translate-x-1'}`} />
