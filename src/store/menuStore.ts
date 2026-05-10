@@ -58,6 +58,7 @@ interface MenuStore {
   reorderItem: (categoryId: string, itemId: string, direction: 'up' | 'down') => Promise<void>;
   reorderCategoryToIndex: (id: string, toIndex: number) => Promise<void>;
   reorderItemToIndex: (categoryId: string, itemId: string, toIndex: number) => Promise<void>;
+  moveItem: (fromCategoryId: string, itemId: string, toCategoryId: string) => Promise<void>;
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
@@ -211,6 +212,28 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       categories: s.categories.map((c) =>
         c.id === categoryId ? { ...c, items: c.items.filter((i) => i.id !== itemId) } : c
       ),
+    }));
+  },
+
+  moveItem: async (fromCategoryId, itemId, toCategoryId) => {
+    const cats = get().categories;
+    const fromCat = cats.find((c) => c.id === fromCategoryId);
+    const toCat = cats.find((c) => c.id === toCategoryId);
+    if (!fromCat || !toCat) return;
+    const item = fromCat.items.find((i) => i.id === itemId);
+    if (!item) return;
+    const newSortOrder = toCat.items.length;
+    const { error } = await supabase
+      .from('items')
+      .update({ category_id: toCategoryId, sort_order: newSortOrder })
+      .eq('id', itemId);
+    if (error) throw error;
+    set((s) => ({
+      categories: s.categories.map((c) => {
+        if (c.id === fromCategoryId) return { ...c, items: c.items.filter((i) => i.id !== itemId) };
+        if (c.id === toCategoryId) return { ...c, items: [...c.items, item] };
+        return c;
+      }),
     }));
   },
 

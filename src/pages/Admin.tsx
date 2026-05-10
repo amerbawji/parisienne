@@ -94,6 +94,7 @@ const adminDict = {
     active_item_title: 'Active — click to hide', hidden_item_title: 'Hidden — click to show',
     option_count: (n: number) => `${n} option(s)`,
     confirm_delete_item: (n: string) => `Delete item "${n}"?`,
+    move_to_category: 'Move to…', toast_item_moved: 'Item moved',
     uploading: 'Uploading…', replace_image: 'Replace Image', upload_image_btn: 'Upload Image',
     change_btn: 'Change', custom_unit: 'Custom unit', click_to_upload: 'Click to upload',
     opening_hours: 'Opening Hours', opens_label: 'Opens', closes_label: 'Closes',
@@ -176,6 +177,7 @@ const adminDict = {
     active_item_title: 'نشط — انقر للإخفاء', hidden_item_title: 'مخفي — انقر للإظهار',
     option_count: (n: number) => `${n} خيار`,
     confirm_delete_item: (n: string) => `حذف الصنف "${n}"؟`,
+    move_to_category: 'نقل إلى…', toast_item_moved: 'تم نقل الصنف',
     uploading: 'جاري الرفع...', replace_image: 'استبدال الصورة', upload_image_btn: 'رفع صورة',
     change_btn: 'تغيير', custom_unit: 'وحدة مخصصة', click_to_upload: 'انقر للرفع',
     opening_hours: 'ساعات العمل', opens_label: 'يفتح', closes_label: 'يغلق',
@@ -1011,7 +1013,7 @@ interface CategoryFormState {
 }
 
 function MenuTab() {
-  const { categories, addCategory, updateCategory, deleteCategory, reorderCategoryToIndex, addItem, updateItem, deleteItem, reorderItemToIndex } = useMenuStore();
+  const { categories, addCategory, updateCategory, deleteCategory, reorderCategoryToIndex, addItem, updateItem, deleteItem, reorderItemToIndex, moveItem } = useMenuStore();
   const toast = useToast();
   const { t } = useAdminT();
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
@@ -1039,6 +1041,7 @@ function MenuTab() {
   const [error, setError] = useState('');
   const [showAddItemFor, setShowAddItemFor] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<{ catId: string; itemId: string } | null>(null);
+  const [movingItem, setMovingItem] = useState<{ catId: string; itemId: string } | null>(null);
 
   const emptyForm = (): CategoryFormState => ({ name_en: '', name_ar: '', image: '' });
   const [addForm, setAddForm] = useState<CategoryFormState>(emptyForm());
@@ -1309,15 +1312,40 @@ function MenuTab() {
                                   className={`px-2 py-0.5 text-[10px] font-semibold rounded border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
                                   {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
                                 </button>
-                                <button type="button" onClick={(e) => { e.stopPropagation(); setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); }}
+                                <button type="button" onClick={(e) => { e.stopPropagation(); setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); setMovingItem(null); }}
                                   className="px-2 py-0.5 text-[10px] font-semibold border border-gray-200 bg-white rounded hover:bg-gray-50 transition">
                                   {t('edit_btn') as string}
+                                </button>
+                                <button type="button"
+                                  onClick={(e) => { e.stopPropagation(); setMovingItem(movingItem?.itemId === item.id ? null : { catId: cat.id, itemId: item.id }); }}
+                                  className={`px-2 py-0.5 text-[10px] font-semibold border rounded transition ${movingItem?.itemId === item.id ? 'bg-primary-100 text-primary-700 border-primary-300' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}>
+                                  {t('move_to_category') as string}
                                 </button>
                                 <button type="button" onClick={(e) => { e.stopPropagation(); handleDeleteItem(cat.id, item); }}
                                   className="px-2 py-0.5 text-[10px] font-semibold border border-red-200 bg-white text-red-600 rounded hover:bg-red-50 transition">
                                   {t('delete_btn') as string}
                                 </button>
                               </div>
+                              {movingItem?.itemId === item.id && (
+                                <div className="px-2.5 pb-2.5 bg-gray-50" onClick={(e) => e.stopPropagation()}>
+                                  <select
+                                    defaultValue=""
+                                    onChange={async (e) => {
+                                      const toCatId = e.target.value;
+                                      if (!toCatId) return;
+                                      setMovingItem(null);
+                                      await moveItem(cat.id, item.id, toCatId);
+                                      toast(t('toast_item_moved') as string);
+                                    }}
+                                    className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-primary-300"
+                                  >
+                                    <option value="" disabled>{t('move_to_category') as string}</option>
+                                    {categories.filter((c) => c.id !== cat.id).map((c) => (
+                                      <option key={c.id} value={c.id}>{c.name_en}</option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )}
                             </div>
                           )
                         )}
