@@ -1967,9 +1967,9 @@ function AdminShell() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'orders', label: t('tab_orders') as string },
+    { key: 'customers', label: t('tab_customers') as string },
     { key: 'categories', label: t('tab_categories') as string },
     { key: 'items', label: t('tab_items') as string },
-    { key: 'customers', label: t('tab_customers') as string },
     { key: 'settings', label: t('tab_settings') as string },
   ];
 
