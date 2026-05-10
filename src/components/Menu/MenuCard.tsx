@@ -178,12 +178,12 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col' : 'flex-row h-20 sm:h-24 hover:shadow-md cursor-pointer'} ${!inStock ? 'opacity-60' : ''}`}
+      className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex transition-shadow group ${expanded ? 'flex-col' : 'flex-row hover:shadow-md cursor-pointer'} ${!inStock ? 'opacity-60' : ''}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* Image Side */}
       <div
-        className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-52 sm:h-64 cursor-pointer' : 'w-24 h-20 sm:w-32 sm:h-24'}`}
+        className={`relative bg-gray-200 shrink-0 ${expanded ? 'w-full h-52 sm:h-64 cursor-pointer' : 'w-24 sm:w-32 self-stretch'}`}
         onClick={(e) => {
           if (!expanded) return;
           e.stopPropagation();
@@ -212,7 +212,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
       </div>
 
       {/* Content Side */}
-      <div className={`${expanded ? 'p-3 sm:p-4' : 'p-2 sm:p-3'} flex flex-col flex-grow min-w-0 overflow-hidden`}>
+      <div className="p-3 sm:p-4 flex flex-col flex-grow min-w-0 overflow-hidden">
         <div className="mb-1">
           <h3 className="font-bold text-base sm:text-lg text-gray-900 break-words whitespace-normal">{displayName}</h3>
           <div className="mt-1">
