@@ -358,19 +358,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   +
                 </Button>
               </div>
-            ) : (
-              <Button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleQuickAdd();
-                }}
-                variant="ghost"
-                className="h-11 px-4 text-sm text-primary-700"
-              >
-                + {t('add') || 'Add'}
-              </Button>
-            )}
+            ) : null}
           </div>
         )}
       </div>
