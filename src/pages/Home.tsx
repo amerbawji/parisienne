@@ -118,20 +118,24 @@ export const Home = () => {
     }
   }, []);
 
+  const pendingScrollRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const categoryId = pendingScrollRef.current;
+    if (!categoryId) return;
+    pendingScrollRef.current = null;
+    const target = categoryRefs.current[categoryId];
+    if (!target) return;
+    const headerHeight = headerRef.current?.offsetHeight ?? 0;
+    const targetTop = window.scrollY + target.getBoundingClientRect().top - headerHeight - 8;
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+  }, [expandedCategory]);
+
   const handleCategoryClick = (categoryId: string) => {
     setMenuSelectionMode(true);
     setExpandedItemId(null);
+    pendingScrollRef.current = categoryId;
     setExpandedCategory(categoryId);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const target = categoryRefs.current[categoryId];
-        if (!target) return;
-        const headerHeight = headerRef.current?.offsetHeight ?? 0;
-        const targetTop = window.scrollY + target.getBoundingClientRect().top - headerHeight - 8;
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-      });
-    });
   };
 
   return (
