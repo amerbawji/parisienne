@@ -1133,6 +1133,7 @@ function MenuTab() {
   const [itemSearch, setItemSearch] = useState('');
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const desktopCatRefs = useRef<Record<string, HTMLElement | null>>({});
   const pendingScrollRef = useRef<string | null>(null);
   const dragCatRef = useRef<string | null>(null);
   const [dragOverCatId, setDragOverCatId] = useState<string | null>(null);
@@ -1294,7 +1295,194 @@ function MenuTab() {
         </form>
       )}
 
-      <div className="flex flex-col gap-4">
+      {/* ── Desktop: sidebar + always-expanded sections ── */}
+      <div className="hidden lg:flex gap-8 items-start">
+        {/* Sidebar nav */}
+        <aside className="w-52 xl:w-60 shrink-0 sticky top-20 overflow-y-auto scrollbar-hide max-h-[calc(100vh-5rem)]">
+          <nav className="flex flex-col gap-0.5">
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Categories</p>
+            {displayCategories.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => {
+                  const el = desktopCatRefs.current[cat.id];
+                  if (!el) return;
+                  el.style.scrollMarginTop = '90px';
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className={`text-start px-3 py-2 rounded-lg text-sm transition-colors font-medium ${!cat.active ? 'text-gray-400' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                {cat.name_en}
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        {/* Sections */}
+        <div className="flex-1 min-w-0 space-y-10">
+          {displayCategories.map((cat) => {
+            const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
+            return (
+              <section
+                key={cat.id}
+                ref={(el) => { desktopCatRefs.current[cat.id] = el; }}
+              >
+                {/* Category header */}
+                {editingId === cat.id ? (
+                  <form onSubmit={(e) => handleEditSave(e, cat.id)} className="p-4 flex flex-col gap-3 bg-white border border-gray-200 rounded-xl mb-4">
+                    <h3 className="text-sm font-bold text-gray-700">{`${t('edit_prefix') as string} ${cat.name_en}`}</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <InputField label={t('name_en') as string} value={editForm.name_en} onChange={(v) => setEditForm((f) => ({ ...f, name_en: v }))} required />
+                      <InputField label={t('name_ar') as string} value={editForm.name_ar} onChange={(v) => setEditForm((f) => ({ ...f, name_ar: v }))} required dir="rtl" />
+                    </div>
+                    <ImageUploadField label={t('category_image') as string} folder="categories" currentImage={editForm.image} onImage={(url) => setEditForm((f) => ({ ...f, image: url }))} onRemove={() => setEditForm((f) => ({ ...f, image: '' }))} />
+                    {(!editForm.name_en.trim() || !editForm.name_ar.trim()) && (
+                      <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{t('both_names_required') as string}</p>
+                    )}
+                    <div className="flex gap-2">
+                      <button type="submit" className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50" disabled={!editForm.name_en.trim() || !editForm.name_ar.trim() || saving}>
+                        {saving ? t('saving') as string : t('save_btn') as string}
+                      </button>
+                      <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition">
+                        {t('cancel_btn') as string}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className={`flex items-center gap-3 mb-4 pb-3 border-b border-gray-100 ${!cat.active ? 'opacity-60' : ''}`}>
+                    <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
+                      <img src={catImage} alt="" className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h2 className="text-lg font-bold text-gray-900">{cat.name_en}</h2>
+                      <p className="text-xs text-gray-400">
+                        {(t('item_count') as (n: number) => string)(cat.items.length)}
+                        {!cat.active && <span className="text-orange-400 ml-1.5">· {t('hidden_badge') as string}</span>}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button type="button" dir="ltr" onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
+                        title={cat.active ? t('active_title') as string : t('inactive_title') as string}>
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${cat.active ? 'translate-x-6' : 'translate-x-1'}`} />
+                      </button>
+                      <button type="button" onClick={() => startEdit(cat)} className="px-3 py-1 text-xs font-semibold border border-gray-200 bg-white rounded-lg hover:bg-gray-50 transition">
+                        {t('edit_btn') as string}
+                      </button>
+                      <button type="button" onClick={() => handleDelete(cat)} className="px-3 py-1 text-xs font-semibold border border-red-200 bg-white text-red-600 rounded-lg hover:bg-red-50 transition">
+                        {t('delete_btn') as string}
+                      </button>
+                      <button type="button" onClick={() => { setShowAddItemFor(showAddItemFor === cat.id ? null : cat.id); setEditingItem(null); }}
+                        className="px-3 py-1 bg-primary-600 text-white text-xs font-semibold rounded-lg hover:bg-primary-700 transition">
+                        {showAddItemFor === cat.id ? t('cancel_btn') as string : t('add_item') as string}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {showAddItemFor === cat.id && (
+                  <div className="mb-4 bg-white border border-gray-200 rounded-xl p-3">
+                    <ItemForm initial={{ ...emptyItem(), id: `prod-${Date.now()}` }} onSave={handleAddItem} onCancel={() => setShowAddItemFor(null)} />
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2">
+                  {cat.items.map((item) =>
+                    editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
+                      <div key={item.id} className="col-span-2 xl:col-span-3 bg-white border border-gray-200 rounded-xl p-3">
+                        <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
+                      </div>
+                    ) : (
+                      <div
+                        key={item.id}
+                        className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col transition ${!item.active ? 'opacity-50' : ''} border-gray-100`}
+                      >
+                        <div className="flex flex-row gap-3 p-3 flex-1">
+                          <div className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-gray-200">
+                            <QuickImageChange
+                              image={item.image ?? ''}
+                              onImage={(url) => updateItem(cat.id, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
+                            />
+                            {item.in_stock === false && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
+                                <span className="bg-white/90 text-gray-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{t('out_of_stock') as string}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                            <div>
+                              <p className="font-semibold text-sm text-gray-900 line-clamp-2 leading-snug">{item.name_en}</p>
+                              <p className="text-xs text-gray-400 truncate mt-0.5" dir="rtl">{item.name_ar}</p>
+                            </div>
+                            <div>
+                              <p className="font-bold text-sm text-gray-900">${item.price.toFixed(2)}<span className="text-xs font-normal text-gray-400 ml-1">/ {item.unit}</span></p>
+                              {(item.options?.length ?? 0) > 0 && <p className="text-[10px] text-primary-400 mt-0.5">{(t('option_count') as (n: number) => string)(item.options!.length)}</p>}
+                              {item.updated_at && <p className="text-[10px] text-gray-300 mt-0.5">{t('last_edited') as string} {timeAgo(item.updated_at)}</p>}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-2.5 py-2 bg-gray-50 border-t border-gray-100 flex-wrap">
+                          <button type="button" dir="ltr"
+                            onClick={() => updateItem(cat.id, item.id, { active: item.active === false }).then(() => toast(item.active === false ? t('toast_item_visible') as string : t('toast_item_hidden') as string))}
+                            className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${item.active !== false ? 'bg-primary-600' : 'bg-gray-300'}`}
+                            title={item.active !== false ? t('active_item_title') as string : t('hidden_item_title') as string}>
+                            <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${item.active !== false ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                          </button>
+                          <button type="button"
+                            onClick={() => updateItem(cat.id, item.id, { in_stock: item.in_stock === false }).then(() => toast(item.in_stock === false ? t('toast_in_stock') as string : t('toast_out_of_stock') as string))}
+                            className={`px-2 py-0.5 text-[10px] font-semibold rounded border transition ${item.in_stock === false ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'}`}>
+                            {item.in_stock === false ? t('out_of_stock') as string : t('in_stock') as string}
+                          </button>
+                          <button type="button" onClick={() => { setEditingItem({ catId: cat.id, itemId: item.id }); setShowAddItemFor(null); setMovingItem(null); }}
+                            className="px-2 py-0.5 text-[10px] font-semibold border border-gray-200 bg-white rounded hover:bg-gray-50 transition">
+                            {t('edit_btn') as string}
+                          </button>
+                          <button type="button"
+                            onClick={() => setMovingItem(movingItem?.itemId === item.id ? null : { catId: cat.id, itemId: item.id })}
+                            className={`px-2 py-0.5 text-[10px] font-semibold border rounded transition ${movingItem?.itemId === item.id ? 'bg-primary-100 text-primary-700 border-primary-300' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}>
+                            {t('move_to_category') as string}
+                          </button>
+                          <button type="button" onClick={() => handleDeleteItem(cat.id, item)}
+                            className="px-2 py-0.5 text-[10px] font-semibold border border-red-200 bg-white text-red-600 rounded hover:bg-red-50 transition">
+                            {t('delete_btn') as string}
+                          </button>
+                        </div>
+                        {movingItem?.itemId === item.id && (
+                          <div className="px-2.5 pb-2.5 bg-gray-50">
+                            <select
+                              defaultValue=""
+                              onChange={async (e) => {
+                                const toCatId = e.target.value;
+                                if (!toCatId) return;
+                                setMovingItem(null);
+                                await moveItem(cat.id, item.id, toCatId);
+                                toast(t('toast_item_moved') as string);
+                              }}
+                              className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs bg-white focus:outline-none focus:ring-1 focus:ring-primary-300"
+                            >
+                              <option value="" disabled>{t('move_to_category') as string}</option>
+                              {categories.filter((c) => c.id !== cat.id).map((c) => (
+                                <option key={c.id} value={c.id}>{c.name_en}</option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  )}
+                </div>
+                {cat.items.length === 0 && !showAddItemFor && (
+                  <p className="text-sm text-gray-400 text-center py-6">{t('no_items') as string}</p>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Mobile: accordion ── */}
+      <div className="lg:hidden flex flex-col gap-4">
         {displayCategories.map((cat) => {
           const isOpen = isSearching || expandedCatId === cat.id;
           const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
@@ -1513,7 +1701,7 @@ function MenuTab() {
             </div>
           );
         })}
-      </div>
+      </div>{/* end lg:hidden accordion */}
     </div>
   );
 }
