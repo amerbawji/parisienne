@@ -16,7 +16,7 @@ interface StoreConfigStore extends StoreConfig {
   loading: boolean;
   fetchConfig: () => Promise<void>;
   updateConfig: (updates: Partial<StoreConfig>) => Promise<void>;
-  setForceClosed: (val: boolean) => void;
+  setForceClosed: (val: boolean) => Promise<void>;
   isOpen: () => boolean;
 }
 
@@ -38,6 +38,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
         closed_days: data.closed_days ?? [],
         whatsapp_number: data.whatsapp_number ?? '9613502022',
         discount_percentage: data.discount_percentage ?? 0,
+        force_closed: data.force_closed ?? (localStorage.getItem(FORCE_CLOSED_KEY) === 'true'),
         loading: false,
       });
     } else {
@@ -51,9 +52,12 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
     set(updates);
   },
 
-  setForceClosed: (val: boolean) => {
-    localStorage.setItem(FORCE_CLOSED_KEY, val ? 'true' : 'false');
+  setForceClosed: async (val: boolean) => {
     set({ force_closed: val });
+    localStorage.setItem(FORCE_CLOSED_KEY, val ? 'true' : 'false');
+    try {
+      await supabase.from('store_config').update({ force_closed: val }).eq('id', 1);
+    } catch { /* column may not exist yet — localStorage fallback is active */ }
   },
 
   isOpen: () => {

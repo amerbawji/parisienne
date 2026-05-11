@@ -1050,7 +1050,6 @@ interface CategoryFormState {
 
 function MenuTab() {
   const { categories, addCategory, updateCategory, deleteCategory, reorderCategoryToIndex, addItem, updateItem, deleteItem, reorderItemToIndex, moveItem } = useMenuStore();
-  const { closed_days, updateConfig } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
   const [itemSearch, setItemSearch] = useState('');
@@ -1186,31 +1185,6 @@ function MenuTab() {
         />
       </div>
 
-      {/* Closed days strip (Feature 3) */}
-      <div className="flex items-center gap-2 mb-0 flex-wrap">
-        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0">{t('closed_on') as string}</span>
-        <div className="flex gap-1 flex-wrap">
-          {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((day, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => {
-                const next = closed_days.includes(i)
-                  ? closed_days.filter((d) => d !== i)
-                  : [...closed_days, i];
-                updateConfig({ closed_days: next });
-              }}
-              className={`text-xs px-2 py-1 rounded-lg font-medium transition ${
-                closed_days.includes(i)
-                  ? 'bg-red-100 text-red-700 border border-red-200'
-                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
-              }`}
-            >
-              {day}
-            </button>
-          ))}
-        </div>
-      </div>
 
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold text-gray-800">{(t('categories_heading') as (n: number) => string)(categories.length)}</h2>
