@@ -827,6 +827,28 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
         </div>
       </div>
 
+      <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-3 py-2">
+        <div>
+          <p className="text-xs font-semibold text-gray-700">Show in "You might also like"</p>
+          <p className="text-[11px] text-gray-400 mt-0.5">When on, this item can appear as a suggestion inside other expanded items.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => set('show_in_related', !(form.show_in_related ?? true))}
+          className={`relative shrink-0 ml-4 w-10 h-6 rounded-full transition-colors ${
+            (form.show_in_related ?? true) ? 'bg-primary-600' : 'bg-gray-300'
+          }`}
+          aria-checked={(form.show_in_related ?? true)}
+          role="switch"
+        >
+          <span
+            className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+              (form.show_in_related ?? true) ? 'translate-x-5' : 'translate-x-1'
+            }`}
+          />
+        </button>
+      </div>
+
       {(!form.name_en.trim() || !form.name_ar.trim()) && (
         <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
           {t('both_names_required') as string}

@@ -30,6 +30,7 @@ export interface MenuItem {
   option_price_overrides?: Record<string, Record<string, number>>;
   presets?: Preset[];
   tags?: string[];
+  show_in_related?: boolean;
   in_stock?: boolean;
 }
 

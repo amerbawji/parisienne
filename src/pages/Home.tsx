@@ -161,7 +161,9 @@ export const Home = () => {
     const map: Record<string, MenuItem[]> = {};
     for (const cat of filteredCategories) {
       for (const item of cat.items) {
-        map[item.id] = cat.items.filter((i) => i.id !== item.id) as MenuItem[];
+        map[item.id] = cat.items.filter(
+          (i) => i.id !== item.id && i.show_in_related !== false
+        ) as MenuItem[];
       }
     }
     return map;

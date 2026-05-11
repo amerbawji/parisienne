@@ -29,6 +29,7 @@ export interface MenuItem {
   options?: MenuOption[];
   presets?: Preset[];
   tags?: string[];
+  show_in_related?: boolean;
   active?: boolean;
   in_stock?: boolean;
   updated_at?: string;
@@ -63,7 +64,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; show_in_related?: boolean | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
 type OptRow = { id: string; item_id: string; name: string; name_ar: string; choices: string[]; choices_ar: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -94,6 +95,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
             ? item.presets.map((p) => (typeof p === 'string' ? { en: p, ar: p } : p))
             : undefined,
           tags: item.tags ?? [],
+          show_in_related: item.show_in_related ?? true,
           active: item.active,
           in_stock: item.in_stock,
           updated_at: item.updated_at,
@@ -175,11 +177,14 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
 
   updateItem: async (categoryId, itemId, updates) => {
     const now = new Date().toISOString();
-    const { options, image, tags, ...rest } = updates;
-    if (tags !== undefined) {
-      // Run tags update separately so a missing DB column doesn't break the main save.
-      supabase.from('items').update({ tags }).eq('id', itemId).then(({ error }) => {
-        if (error) console.warn('[tags update skipped — run: ALTER TABLE items ADD COLUMN IF NOT EXISTS tags JSONB DEFAULT \'[]\';]', error.message);
+    const { options, image, tags, show_in_related, ...rest } = updates;
+    if (tags !== undefined || show_in_related !== undefined) {
+      // Run separately so a missing DB column doesn't break the main save.
+      supabase.from('items').update({
+        ...(tags !== undefined && { tags }),
+        ...(show_in_related !== undefined && { show_in_related }),
+      }).eq('id', itemId).then(({ error }) => {
+        if (error) console.warn('[tags/show_in_related update skipped — run migrations]', error.message);
       });
     }
     const { error: ie } = await supabase.from('items').update({
