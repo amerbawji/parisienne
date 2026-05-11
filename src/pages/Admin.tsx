@@ -2025,7 +2025,7 @@ function AdminShell() {
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
-  const { force_closed, setForceClosed } = useStoreConfigStore();
+  const { force_closed, force_open, setForceState } = useStoreConfigStore();
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
@@ -2100,14 +2100,16 @@ function AdminShell() {
           <div className="flex items-center gap-1.5 shrink-0">
             <button
               type="button"
-              onClick={() => setForceClosed(!force_closed)}
+              onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
               className={`text-xs px-2 sm:px-3 py-1.5 rounded-lg font-semibold transition whitespace-nowrap ${
                 force_closed
                   ? 'bg-red-500 text-white hover:bg-red-600'
-                  : 'bg-emerald-500 text-white hover:bg-emerald-600'
+                  : force_open
+                    ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                    : 'bg-white/20 text-white hover:bg-white/30'
               }`}
             >
-              {force_closed ? t('store_closed_label') as string : t('store_open') as string}
+              {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
             </button>
             <button type="button" onClick={toggleLang}
               className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">

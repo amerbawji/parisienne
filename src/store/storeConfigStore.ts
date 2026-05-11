@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 
 const FORCE_CLOSED_KEY = 'parisienne_force_closed';
+const FORCE_OPEN_KEY   = 'parisienne_force_open';
 
 interface StoreConfig {
   open_time: string;
@@ -13,10 +14,11 @@ interface StoreConfig {
 
 interface StoreConfigStore extends StoreConfig {
   force_closed: boolean;
+  force_open: boolean;
   loading: boolean;
   fetchConfig: () => Promise<void>;
   updateConfig: (updates: Partial<StoreConfig>) => Promise<void>;
-  setForceClosed: (val: boolean) => Promise<void>;
+  setForceState: (state: 'open' | 'closed' | 'auto') => void;
   isOpen: () => boolean;
 }
 
@@ -27,6 +29,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
   whatsapp_number: '9613502022',
   discount_percentage: 0,
   force_closed: localStorage.getItem(FORCE_CLOSED_KEY) === 'true',
+  force_open:   localStorage.getItem(FORCE_OPEN_KEY)   === 'true',
   loading: true,
 
   fetchConfig: async () => {
@@ -38,7 +41,6 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
         closed_days: data.closed_days ?? [],
         whatsapp_number: data.whatsapp_number ?? '9613502022',
         discount_percentage: data.discount_percentage ?? 0,
-        force_closed: data.force_closed ?? (localStorage.getItem(FORCE_CLOSED_KEY) === 'true'),
         loading: false,
       });
     } else {
@@ -52,25 +54,26 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
     set(updates);
   },
 
-  setForceClosed: async (val: boolean) => {
-    set({ force_closed: val });
-    localStorage.setItem(FORCE_CLOSED_KEY, val ? 'true' : 'false');
-    try {
-      await supabase.from('store_config').update({ force_closed: val }).eq('id', 1);
-    } catch { /* column may not exist yet — localStorage fallback is active */ }
+  setForceState: (state) => {
+    const force_open   = state === 'open';
+    const force_closed = state === 'closed';
+    localStorage.setItem(FORCE_OPEN_KEY,   force_open   ? 'true' : 'false');
+    localStorage.setItem(FORCE_CLOSED_KEY, force_closed ? 'true' : 'false');
+    set({ force_open, force_closed });
   },
 
   isOpen: () => {
-    const { open_time, close_time, closed_days, force_closed } = get();
+    const { open_time, close_time, closed_days, force_open, force_closed } = get();
+    if (force_open)   return true;
     if (force_closed) return false;
     const now = new Date();
     const day = now.getDay();
     if (closed_days.includes(day)) return false;
     const [oh, om] = open_time.split(':').map(Number);
     const [ch, cm] = close_time.split(':').map(Number);
-    const openMinutes = oh * 60 + om;
+    const openMinutes  = oh * 60 + om;
     const closeMinutes = ch * 60 + cm;
-    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const nowMinutes   = now.getHours() * 60 + now.getMinutes();
     return nowMinutes >= openMinutes && nowMinutes < closeMinutes;
   },
 }));
