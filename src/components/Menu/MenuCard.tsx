@@ -106,7 +106,6 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
       minQuantity,
       quantity: pendingQuantity,
     });
-    navigator.vibrate?.(10);
     onItemAdded?.({ instanceId, itemName: language === 'ar' ? item.name_ar : item.name_en });
     setPendingOptions({});
     setPendingInstructions('');
@@ -166,7 +165,6 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
       minQuantity,
       quantity: minQuantity,
     });
-    navigator.vibrate?.(10);
     onItemAdded?.({ instanceId, itemName: displayName });
   };
 

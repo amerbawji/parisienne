@@ -24,7 +24,6 @@ const to12h = (time: string) => {
 
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
   const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [menuSelectionMode, setMenuSelectionMode] = useState(false);
@@ -125,11 +124,7 @@ export const Home = () => {
   }, [modalItem]);
 
   const handleItemToggle = useCallback((item: MenuItem) => {
-    if (window.innerWidth < 640) {
-      setModalItem(item);
-    } else {
-      setExpandedItemId((prev) => (prev === item.id ? null : item.id));
-    }
+    setModalItem(item);
   }, []);
 
   const pendingScrollRef = useRef<string | null>(null);
@@ -154,21 +149,14 @@ export const Home = () => {
     return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [expandedCategory]);
 
-  const relatedItemsMap = useMemo(() => {
-    const map: Record<string, MenuItem[]> = {};
-    for (const cat of filteredCategories) {
-      for (const item of cat.items) {
-        map[item.id] = cat.items.filter(
-          (i) => i.id !== item.id && i.show_in_related !== false
-        ) as MenuItem[];
-      }
-    }
-    return map;
-  }, [filteredCategories]);
+  const modalRelatedItems = useMemo(() => {
+    if (!modalItem) return [];
+    const cat = filteredCategories.find((c) => c.items.some((i) => i.id === modalItem.id));
+    return (cat?.items.filter((i) => i.id !== modalItem.id && i.show_in_related !== false) ?? []) as MenuItem[];
+  }, [modalItem, filteredCategories]);
 
   const handleCategoryClick = (categoryId: string) => {
     setMenuSelectionMode(true);
-    setExpandedItemId(null);
     pendingScrollRef.current = categoryId;
     setExpandedCategory(categoryId);
   };
@@ -422,19 +410,13 @@ export const Home = () => {
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
                         {category.items.map((item) => (
-                          <div
+                          <MenuCard
                             key={item.id}
-                            className={cn(expandedItemId === item.id && "col-span-full")}
-                          >
-                            <MenuCard
-                              item={item as MenuItem}
-                              expanded={expandedItemId === item.id}
-                              onToggle={() => handleItemToggle(item as MenuItem)}
-                              onItemAdded={(payload) => setLastAdded(payload)}
-                              relatedItems={expandedItemId === item.id ? relatedItemsMap[item.id] : undefined}
-                              onRelatedItemSelect={handleItemToggle}
-                            />
-                          </div>
+                            item={item as MenuItem}
+                            expanded={false}
+                            onToggle={() => handleItemToggle(item as MenuItem)}
+                            onItemAdded={(payload) => setLastAdded(payload)}
+                          />
                         ))}
                       </div>
                     </div>
@@ -572,27 +554,37 @@ export const Home = () => {
       </div>
 
       {modalItem && (
-        <div className="fixed inset-0 z-50 sm:hidden bg-gray-50 overflow-y-auto animate-in slide-in-from-bottom duration-300">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shrink-0">
-            <span className="text-lg font-medium text-gray-900">
-              {language === 'ar' ? modalItem.name_ar : modalItem.name_en}
-            </span>
-            <button
-              type="button"
-              className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-              onClick={() => setModalItem(null)}
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setModalItem(null)}
+        >
+          <div
+            className="w-full sm:max-w-xl bg-gray-50 flex flex-col h-dvh sm:h-auto sm:max-h-[88vh] sm:rounded-2xl overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shrink-0">
+              <span className="text-lg font-medium text-gray-900">
+                {language === 'ar' ? modalItem.name_ar : modalItem.name_en}
+              </span>
+              <button
+                type="button"
+                className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                onClick={() => setModalItem(null)}
+              >
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="overflow-y-auto flex-1">
+              <MenuCard
+                item={modalItem}
+                expanded={true}
+                onToggle={() => setModalItem(null)}
+                onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
+                relatedItems={modalRelatedItems}
+                onRelatedItemSelect={(rel) => setModalItem(rel)}
+              />
+            </div>
           </div>
-          <MenuCard
-            item={modalItem}
-            expanded={true}
-            onToggle={() => setModalItem(null)}
-            onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
-            relatedItems={relatedItemsMap[modalItem.id]}
-            onRelatedItemSelect={(rel) => { setModalItem(rel); }}
-          />
         </div>
       )}
 
