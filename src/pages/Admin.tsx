@@ -477,13 +477,13 @@ function OptionsEditor({
       </div>
       {options.map((opt, i) => (
         <div key={i} className="border border-gray-200 rounded-lg p-3 bg-gray-50 flex flex-col gap-2">
-          <div className="flex gap-2 items-center">
+          <div className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
             <input
               type="text"
               value={opt.name}
               placeholder={t('option_placeholder') as string}
               onChange={(e) => updateOptionField(i, 'name', e.target.value)}
-              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name.trim() ? 'border-red-400' : 'border-gray-200'}`}
+              className={`min-w-0 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name.trim() ? 'border-red-400' : 'border-gray-200'}`}
             />
             <input
               type="text"
@@ -491,25 +491,25 @@ function OptionsEditor({
               placeholder={t('option_ar_placeholder') as string}
               dir="rtl"
               onChange={(e) => updateOptionField(i, 'name_ar', e.target.value)}
-              className={`flex-1 border rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.name_ar?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+              className="min-w-0 border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary-300"
             />
             <button
               type="button"
               onClick={() => removeOption(i)}
-              className="text-red-500 hover:text-red-700 text-xs px-2 py-1 border border-red-200 rounded transition shrink-0"
+              className="text-red-500 hover:text-red-700 text-xs px-2 py-1 border border-red-200 rounded transition whitespace-nowrap"
             >
               {t('remove_btn') as string}
             </button>
           </div>
           <div className="flex flex-col gap-1.5 pl-2">
             {opt.choices.map((choice, ci) => (
-              <div key={ci} className="flex gap-1.5 items-center">
+              <div key={ci} className="grid grid-cols-[1fr_1fr_4rem_1.5rem] gap-1.5 items-center">
                 <input
                   type="text"
                   value={choice}
                   placeholder={t('choice_en_placeholder') as string}
                   onChange={(e) => updateChoiceEn(i, ci, e.target.value)}
-                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!choice.trim() ? 'border-red-400' : 'border-gray-200'}`}
+                  className={`min-w-0 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!choice.trim() ? 'border-red-400' : 'border-gray-200'}`}
                 />
                 <input
                   type="text"
@@ -517,7 +517,7 @@ function OptionsEditor({
                   placeholder={t('choice_ar_placeholder') as string}
                   dir="rtl"
                   onChange={(e) => updateChoiceAr(i, ci, e.target.value)}
-                  className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${!opt.choices_ar?.[ci]?.trim() ? 'border-red-400' : 'border-gray-200'}`}
+                  className="min-w-0 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
                 <input
                   type="number"
@@ -525,14 +525,14 @@ function OptionsEditor({
                   value={opt.price_additions?.[choice] ?? ''}
                   placeholder={t('price_placeholder') as string}
                   onChange={(e) => updatePriceAddition(i, choice, e.target.value)}
-                  className="w-16 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
+                  className="min-w-0 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
                 <button
                   type="button"
                   onClick={() => removeChoice(i, ci)}
-                  className="text-red-400 hover:text-red-600 text-xs shrink-0"
+                  className="text-red-400 hover:text-red-600 text-lg leading-none shrink-0 text-center"
                 >
-                  ✕
+                  ×
                 </button>
               </div>
             ))}
@@ -603,7 +603,7 @@ function PresetsEditor({
         ))}
       </div>
       <div className="flex flex-col gap-1.5">
-        <div className="flex gap-2">
+        <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
           <input
             type="text"
             value={draftEn}
@@ -611,7 +611,7 @@ function PresetsEditor({
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
             placeholder={t('preset_en_placeholder') as string}
             dir="ltr"
-            className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingEn ? 'border-red-400' : 'border-gray-200'}`}
+            className={`min-w-0 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingEn ? 'border-red-400' : 'border-gray-200'}`}
           />
           <input
             type="text"
@@ -620,12 +620,12 @@ function PresetsEditor({
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), add())}
             placeholder={t('preset_ar_placeholder') as string}
             dir="rtl"
-            className={`flex-1 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingAr ? 'border-red-400' : 'border-gray-200'}`}
+            className={`min-w-0 border rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300 ${missingAr ? 'border-red-400' : 'border-gray-200'}`}
           />
           <button
             type="button"
             onClick={add}
-            className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition shrink-0"
+            className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition whitespace-nowrap"
           >
             {t('add_btn') as string}
           </button>
@@ -1393,12 +1393,7 @@ function MenuTab() {
                 )}
 
                 <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2">
-                  {cat.items.map((item) =>
-                    editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
-                      <div key={item.id} className="col-span-2 xl:col-span-3 bg-white border border-gray-200 rounded-xl p-3">
-                        <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
-                      </div>
-                    ) : (
+                  {cat.items.map((item) => (
                       <div
                         key={item.id}
                         className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col transition ${!item.active ? 'opacity-50' : ''} border-gray-100`}
@@ -1474,8 +1469,7 @@ function MenuTab() {
                           </div>
                         )}
                       </div>
-                    )
-                  )}
+                  ))}
                 </div>
                 {cat.items.length === 0 && !showAddItemFor && (
                   <p className="text-sm text-gray-400 text-center py-6">{t('no_items') as string}</p>
@@ -1589,12 +1583,7 @@ function MenuTab() {
                       )}
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {cat.items.map((item) =>
-                          editingItem?.catId === cat.id && editingItem?.itemId === item.id ? (
-                            <div key={item.id} className="sm:col-span-2 lg:col-span-3 bg-white border border-gray-200 rounded-xl p-3">
-                              <ItemForm initial={item} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
-                            </div>
-                          ) : (
+                        {cat.items.map((item) => (
                             <div
                               key={item.id}
                               draggable={editingId === null && editingItem === null}
@@ -1692,8 +1681,7 @@ function MenuTab() {
                                 </div>
                               )}
                             </div>
-                          )
-                        )}
+                        ))}
                       </div>
 
                       {cat.items.length === 0 && !showAddItemFor && (
@@ -1707,6 +1695,31 @@ function MenuTab() {
           );
         })}
       </div>{/* end lg:hidden accordion */}
+
+      {/* ── Edit item modal ── */}
+      {editingItem && (() => {
+        const editCat = categories.find((c) => c.id === editingItem.catId);
+        const editItemData = editCat?.items.find((i) => i.id === editingItem.itemId);
+        if (!editItemData) return null;
+        return (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-150" onClick={() => setEditingItem(null)}>
+            <div
+              className="w-full sm:max-w-2xl bg-white flex flex-col h-dvh sm:h-auto sm:max-h-[90vh] sm:rounded-2xl overflow-hidden shadow-2xl animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
+                <span className="font-semibold text-gray-900">{t('edit_btn') as string}: {editItemData.name_en}</span>
+                <button type="button" onClick={() => setEditingItem(null)} className="p-1.5 rounded-full hover:bg-gray-100 transition text-gray-400 hover:text-gray-600">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div className="overflow-y-auto flex-1 p-4">
+                <ItemForm initial={editItemData} onSave={handleUpdateItem} onCancel={() => setEditingItem(null)} />
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
