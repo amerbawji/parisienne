@@ -150,7 +150,7 @@ export const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-36 sm:pb-24 font-sans">
+    <div className={`min-h-screen bg-gray-50 font-sans ${totalItems > 0 ? 'pb-36 sm:pb-24' : 'pb-8'}`}>
       {showSplashPromo && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[1px] flex items-center justify-center p-4">
           <div className="relative w-full max-w-md sm:max-w-lg rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
