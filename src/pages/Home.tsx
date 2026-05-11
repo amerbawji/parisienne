@@ -35,7 +35,7 @@ export const Home = () => {
   const fetchConfig = useStoreConfigStore((state) => state.fetchConfig);
   const open_time = useStoreConfigStore((state) => state.open_time);
   const close_time = useStoreConfigStore((state) => state.close_time);
-  const isOpen = useStoreConfigStore((state) => state.isOpen)();
+  const isOpen = useStoreConfigStore((s) => s.isOpen());
   const configLoading = useStoreConfigStore((state) => state.loading);
   const menuLoading = useMenuStore((state) => state.loading);
   const [showSplashPromo, setShowSplashPromo] = useState(false);

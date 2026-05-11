@@ -37,7 +37,7 @@ const OptionButton = ({
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
   const { t, language } = useLanguageStore();
-  const storeIsOpen = useStoreConfigStore((s) => s.isOpen)();
+  const storeIsOpen = useStoreConfigStore((s) => s.isOpen());
   const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
   const discountPct = useStoreConfigStore((s) => s.discount_percentage);
   const navigate = useNavigate();
