@@ -1341,15 +1341,15 @@ function MenuTab() {
                 <>
                   {/* Category image header — click to expand/collapse */}
                   <button type="button" onClick={() => { if (!isOpen) pendingScrollRef.current = cat.id; setExpandedCatId(isOpen ? null : cat.id); }} className="w-full block group">
-                    <div className="relative h-40 w-full overflow-hidden">
-                      <img src={catImage} alt={cat.name_en} className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent flex items-end justify-between p-4">
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <img src={catImage} alt={cat.name_en} className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-between p-6">
                         <div>
-                          <h3 className="text-xl font-bold text-white drop-shadow">{cat.name_en}</h3>
-                          <p className="text-sm text-white/70 mt-0.5">
+                          <h3 className="text-3xl font-bold text-white drop-shadow-md">{cat.name_en}</h3>
+                          <p className="text-sm text-white/70 mt-0.5 flex items-center gap-2 flex-wrap">
                             {(t('item_count') as (n: number) => string)(cat.items.length)}
-                            {!cat.active && <span className="ml-2 text-orange-300 font-medium">{t('hidden_badge') as string}</span>}
-                            {cat.updated_at && <span className="ml-2 text-white/40 text-xs">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
+                            {!cat.active && <span className="text-orange-300 font-medium">{t('hidden_badge') as string}</span>}
+                            {cat.updated_at && <span className="text-white/40 text-xs">{t('last_edited') as string} {timeAgo(cat.updated_at)}</span>}
                           </p>
                         </div>
                         <svg className={`w-5 h-5 text-white/80 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1420,31 +1420,35 @@ function MenuTab() {
                               className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col cursor-grab active:cursor-grabbing transition ${dragOverItemId === item.id ? 'border-primary-400 ring-2 ring-primary-300' : 'border-gray-100'} ${item.active === false ? 'opacity-50' : ''}`}
                             >
                               {/* Item card — mirrors collapsed MenuCard */}
-                              <div className="flex flex-row flex-1">
-                                <div className="relative shrink-0 w-24 h-20 bg-gray-200">
+                              <div className="flex flex-row gap-3 p-3 flex-1">
+                                <div className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-gray-200">
                                   <QuickImageChange
                                     image={item.image ?? ''}
                                     onImage={(url) => updateItem(cat.id, item.id, { image: url }).then(() => toast(t('toast_image_updated') as string))}
                                   />
                                   {item.in_stock === false && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
                                       <span className="bg-white/90 text-gray-700 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{t('out_of_stock') as string}</span>
                                     </div>
                                   )}
-                                </div>
-                                <div className="p-2.5 flex-1 min-w-0">
-                                  <div className="flex items-start justify-between gap-1">
-                                    <p className="text-sm font-bold text-gray-900 truncate">{item.name_en}</p>
-                                    <svg className="w-3.5 h-3.5 text-gray-300 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="currentColor">
+                                  <div className="absolute top-1 end-1">
+                                    <svg className="w-4 h-4 text-white/80 drop-shadow" viewBox="0 0 16 16" fill="currentColor">
                                       <circle cx="5" cy="4" r="1.1"/><circle cx="11" cy="4" r="1.1"/>
                                       <circle cx="5" cy="8" r="1.1"/><circle cx="11" cy="8" r="1.1"/>
                                       <circle cx="5" cy="12" r="1.1"/><circle cx="11" cy="12" r="1.1"/>
                                     </svg>
                                   </div>
-                                  <p className="text-xs text-gray-500 truncate" dir="rtl">{item.name_ar}</p>
-                                  <p className="text-xs font-semibold text-primary-600 mt-1">${item.price.toFixed(2)}<span className="text-gray-400 font-normal"> / {item.unit}</span></p>
-                                  {(item.options?.length ?? 0) > 0 && <p className="text-[10px] text-primary-400 mt-0.5">{(t('option_count') as (n: number) => string)(item.options!.length)}</p>}
-                                  {item.updated_at && <p className="text-[10px] text-gray-300 mt-0.5">{t('last_edited') as string} {timeAgo(item.updated_at)}</p>}
+                                </div>
+                                <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                                  <div>
+                                    <p className="font-semibold text-sm text-gray-900 line-clamp-2 leading-snug">{item.name_en}</p>
+                                    <p className="text-xs text-gray-400 truncate mt-0.5" dir="rtl">{item.name_ar}</p>
+                                  </div>
+                                  <div>
+                                    <p className="font-bold text-sm text-gray-900">${item.price.toFixed(2)}<span className="text-xs font-normal text-gray-400 ml-1">/ {item.unit}</span></p>
+                                    {(item.options?.length ?? 0) > 0 && <p className="text-[10px] text-primary-400 mt-0.5">{(t('option_count') as (n: number) => string)(item.options!.length)}</p>}
+                                    {item.updated_at && <p className="text-[10px] text-gray-300 mt-0.5">{t('last_edited') as string} {timeAgo(item.updated_at)}</p>}
+                                  </div>
                                 </div>
                               </div>
                               {/* Item admin actions */}
