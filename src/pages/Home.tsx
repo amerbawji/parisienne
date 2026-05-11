@@ -114,7 +114,11 @@ export const Home = () => {
     if (!modalItem) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalItem(null); };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
   }, [modalItem]);
 
   const handleItemToggle = useCallback((item: MenuItem) => {
