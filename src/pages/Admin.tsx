@@ -838,6 +838,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
   const { open_time, close_time, closed_days, whatsapp_number, discount_percentage, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const { force_closed, force_open, setForceState } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -900,6 +901,29 @@ function SettingsTab() {
 
   return (
     <div className="flex flex-col gap-6 max-w-2xl">
+      {/* Store Status Override */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-base font-bold text-gray-800">Store Status</h2>
+          <p className="text-xs text-gray-500 mt-0.5">
+            {force_closed ? 'Forced closed — overrides schedule' : force_open ? 'Forced open — overrides schedule' : 'Following opening hours schedule'}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
+          className={`text-sm px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap ${
+            force_closed
+              ? 'bg-red-500 text-white hover:bg-red-600'
+              : force_open
+                ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
+        </button>
+      </div>
+
       {/* Opening Hours */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-base font-bold text-gray-800">{t('opening_hours') as string}</h2>
@@ -2025,7 +2049,6 @@ function AdminShell() {
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
-  const { force_closed, force_open, setForceState } = useStoreConfigStore();
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
@@ -2098,19 +2121,6 @@ function AdminShell() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
           <h1 className="text-sm sm:text-base font-bold tracking-wide truncate">{t('admin_panel') as string}</h1>
           <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              type="button"
-              onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
-              className={`text-xs px-2 sm:px-3 py-1.5 rounded-lg font-semibold transition whitespace-nowrap ${
-                force_closed
-                  ? 'bg-red-500 text-white hover:bg-red-600'
-                  : force_open
-                    ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
-            </button>
             <button type="button" onClick={toggleLang}
               className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
               {t('lang_toggle') as string}
