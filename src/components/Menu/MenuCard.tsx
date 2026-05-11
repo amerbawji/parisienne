@@ -276,7 +276,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                       key={i}
                       onClick={(e) => { e.stopPropagation(); togglePreset(preset); }}
                       className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
-                        pendingInstructions.includes(preset.en)
+                        pendingInstructions.includes(language === 'ar' ? preset.ar : preset.en)
                           ? 'bg-primary-100 text-primary-700 border-primary-200'
                           : 'bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100'
                       }`}
