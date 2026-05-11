@@ -363,13 +363,18 @@ export const Home = () => {
       )}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {menuLoading && (
-          <div className="flex items-center justify-center py-24">
-            <div className="h-8 w-8 rounded-full border-4 border-primary-200 border-t-primary-600 animate-spin" />
-          </div>
-        )}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
-          {!menuLoading && filteredCategories.length > 0 ? (
+          {menuLoading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                {/* image placeholder */}
+                <div className="relative h-48 w-full bg-gray-200 animate-pulse">
+                  <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-gray-300/60 to-transparent" />
+                  <div className="absolute bottom-5 left-5 h-5 w-32 bg-gray-300 rounded-md animate-pulse" />
+                </div>
+              </div>
+            ))
+          ) : filteredCategories.length > 0 ? (
             filteredCategories.map((category) => {
               const isOpen = menuSelectionMode
                 ? expandedCategory === category.id
@@ -438,11 +443,9 @@ export const Home = () => {
               );
             })
           ) : (
-            !menuLoading && (
-              <div className="text-center py-20 text-gray-500">
-                {t('no_items_found')}
-              </div>
-            )
+            <div className="text-center py-20 text-gray-500 col-span-full">
+              {t('no_items_found')}
+            </div>
           )}
         </div>
       </main>
