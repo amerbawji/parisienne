@@ -42,6 +42,9 @@ export const Home = () => {
   const [lastAdded, setLastAdded] = useState<{ instanceId: string; itemName: string } | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const desktopCategoryRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [activeCatId, setActiveCatId] = useState<string | null>(null);
+  const [headerHeight, setHeaderHeight] = useState(80);
   const cartItems = useCartStore((state) => state.items);
   const addCartItem = useCartStore((state) => state.addItem);
   const storeCategories = useMenuStore((state) => state.categories);
@@ -98,6 +101,30 @@ export const Home = () => {
   useEffect(() => {
     Promise.all([fetchMenu(), fetchPromo(), fetchConfig()]);
   }, []);
+
+  // Track sticky header height for sidebar positioning
+  useEffect(() => {
+    if (!headerRef.current) return;
+    const ro = new ResizeObserver(() => setHeaderHeight(headerRef.current?.offsetHeight ?? 80));
+    ro.observe(headerRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  // Scroll-spy: highlight active sidebar category as user scrolls
+  useEffect(() => {
+    const els = Object.values(desktopCategoryRefs.current).filter(Boolean) as HTMLElement[];
+    if (els.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActiveCatId(entry.target.getAttribute('data-cat-id'));
+        }
+      },
+      { rootMargin: '-10% 0px -80% 0px', threshold: 0 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [filteredCategories]);
 
   useEffect(() => {
     if (!menuLoading && !promoLoading) setShowSplashPromo(promoEnabled);
@@ -265,9 +292,9 @@ export const Home = () => {
         </div>
 
         {filteredCategories.length > 0 && (
-          <div className="border-t border-gray-100">
+          <div className="border-t border-gray-100 lg:hidden">
             <div
-              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto lg:overflow-visible"
+              className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto"
               dir={language === 'ar' ? 'rtl' : 'ltr'}
             >
               <div className="flex gap-2 min-w-max lg:min-w-0 lg:flex-wrap">
@@ -350,66 +377,113 @@ export const Home = () => {
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
-          {menuLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                {/* image placeholder */}
-                <div className="relative h-48 w-full bg-gray-200 animate-pulse">
-                  <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-gray-300/60 to-transparent" />
-                  <div className="absolute bottom-5 left-5 h-5 w-32 bg-gray-300 rounded-md animate-pulse" />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        {menuLoading ? (
+          <>
+            {/* Mobile skeletons */}
+            <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="relative h-48 w-full bg-gray-200 animate-pulse">
+                    <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-gray-300/60 to-transparent" />
+                    <div className="absolute bottom-5 left-5 h-5 w-32 bg-gray-300 rounded-md" />
+                  </div>
                 </div>
+              ))}
+            </div>
+            {/* Desktop skeletons */}
+            <div className="hidden lg:flex gap-8">
+              <div className="w-52 xl:w-60 shrink-0 space-y-2 pt-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-8 bg-gray-200 rounded-lg animate-pulse" style={{ width: `${55 + (i * 13) % 40}%` }} />
+                ))}
               </div>
-            ))
-          ) : filteredCategories.length > 0 ? (
-            filteredCategories.map((category) => {
-              const isOpen = menuSelectionMode
-                ? expandedCategory === category.id
-                : expandedCategory === category.id || searchQuery.length > 0;
-              
-              return (
-                <div 
-                  key={category.id} 
-                  ref={(el) => {
-                    categoryRefs.current[category.id] = el;
-                  }}
-                  className={cn(
-                "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
-                isOpen && "md:col-span-2 lg:col-span-3"
-              )}
-                >
-                  <button
-                    onClick={() => {
-                      if (expandedCategory === category.id) {
-                        setExpandedCategory(null);
-                      } else {
-                        handleCategoryClick(category.id);
-                      }
-                    }}
-                    className="w-full text-start block transition-all hover:shadow-md"
-                    aria-expanded={isOpen}
-                  >
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <img 
-                        src={category.image} 
-                        alt={language === 'ar' ? category.name_ar : category.name_en}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                        <h2 className="text-3xl font-bold text-white drop-shadow-md">
-                          {language === 'ar' ? category.name_ar : category.name_en}
-                        </h2>
-                      </div>
+              <div className="flex-1 space-y-10">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-gray-200 rounded-lg animate-pulse shrink-0" />
+                      <div className="h-6 w-36 bg-gray-200 rounded-md animate-pulse" />
                     </div>
-                  </button>
-                  
-                  {isOpen && (
-                    <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
-                        {category.items.map((item) => (
+                    <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2">
+                      {Array.from({ length: 6 }).map((_, j) => (
+                        <div key={j} className="bg-white rounded-xl flex gap-3 p-3">
+                          <div className="w-24 h-24 bg-gray-200 rounded-xl animate-pulse shrink-0" />
+                          <div className="flex-1 space-y-2 py-1">
+                            <div className="h-3.5 bg-gray-200 rounded animate-pulse w-3/4" />
+                            <div className="h-3 bg-gray-200 rounded animate-pulse w-full" />
+                            <div className="h-3 bg-gray-200 rounded animate-pulse w-2/3" />
+                            <div className="h-4 bg-gray-200 rounded animate-pulse w-1/3 mt-1" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* ── Desktop: sidebar + always-expanded sections ── */}
+            <div className="hidden lg:flex gap-8 items-start">
+              {/* Sidebar */}
+              <aside
+                className="w-52 xl:w-60 shrink-0 sticky overflow-y-auto scrollbar-hide"
+                style={{ top: headerHeight + 16, maxHeight: `calc(100vh - ${headerHeight + 32}px)` }}
+              >
+                {filteredCategories.length > 0 && (
+                  <nav className="flex flex-col gap-0.5" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">
+                      {language === 'ar' ? 'القائمة' : 'Menu'}
+                    </p>
+                    {filteredCategories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          const target = desktopCategoryRefs.current[cat.id];
+                          if (!target) return;
+                          target.style.scrollMarginTop = `${headerHeight + 16}px`;
+                          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                        className={cn(
+                          'text-start px-3 py-2 rounded-lg text-sm transition-colors',
+                          activeCatId === cat.id
+                            ? 'bg-primary-50 text-primary-700 font-semibold'
+                            : 'text-gray-600 hover:bg-gray-100 font-medium'
+                        )}
+                      >
+                        {language === 'ar' ? cat.name_ar : cat.name_en}
+                      </button>
+                    ))}
+                  </nav>
+                )}
+              </aside>
+
+              {/* Sections */}
+              <div className="flex-1 min-w-0 space-y-10">
+                {filteredCategories.length > 0 ? (
+                  filteredCategories.map((cat) => (
+                    <section
+                      key={cat.id}
+                      ref={(el) => { desktopCategoryRefs.current[cat.id] = el; }}
+                      data-cat-id={cat.id}
+                    >
+                      <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                        <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
+                          <img src={cat.image} alt="" className="w-full h-full object-cover" loading="lazy" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-gray-900">
+                            {language === 'ar' ? cat.name_ar : cat.name_en}
+                          </h2>
+                          <p className="text-xs text-gray-400">
+                            {cat.items.length} {language === 'ar' ? 'صنف' : 'items'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2">
+                        {cat.items.map((item) => (
                           <MenuCard
                             key={item.id}
                             item={item as MenuItem}
@@ -419,17 +493,79 @@ export const Home = () => {
                           />
                         ))}
                       </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })
-          ) : (
-            <div className="text-center py-20 text-gray-500 col-span-full">
-              {t('no_items_found')}
+                    </section>
+                  ))
+                ) : (
+                  <div className="text-center py-20 text-gray-500">{t('no_items_found')}</div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
+
+            {/* ── Mobile: tap-to-expand category cards ── */}
+            <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
+              {filteredCategories.length > 0 ? (
+                filteredCategories.map((category) => {
+                  const isOpen = menuSelectionMode
+                    ? expandedCategory === category.id
+                    : expandedCategory === category.id || searchQuery.length > 0;
+                  return (
+                    <div
+                      key={category.id}
+                      ref={(el) => { categoryRefs.current[category.id] = el; }}
+                      className={cn(
+                        'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300',
+                        isOpen && 'md:col-span-2'
+                      )}
+                    >
+                      <button
+                        onClick={() => {
+                          if (expandedCategory === category.id) setExpandedCategory(null);
+                          else handleCategoryClick(category.id);
+                        }}
+                        className="w-full text-start block transition-all hover:shadow-md"
+                        aria-expanded={isOpen}
+                      >
+                        <div className="relative h-48 w-full overflow-hidden">
+                          <img
+                            src={category.image}
+                            alt={language === 'ar' ? category.name_ar : category.name_en}
+                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                            <h2 className="text-3xl font-bold text-white drop-shadow-md">
+                              {language === 'ar' ? category.name_ar : category.name_en}
+                            </h2>
+                          </div>
+                        </div>
+                      </button>
+                      {isOpen && (
+                        <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
+                            {category.items.map((item) => (
+                              <MenuCard
+                                key={item.id}
+                                item={item as MenuItem}
+                                expanded={false}
+                                onToggle={() => handleItemToggle(item as MenuItem)}
+                                onItemAdded={(payload) => setLastAdded(payload)}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-20 text-gray-500 col-span-full">
+                  {t('no_items_found')}
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </main>
 
       <footer className="border-t border-gray-200 bg-gradient-to-b from-white to-gray-50">
