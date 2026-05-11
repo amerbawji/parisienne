@@ -317,7 +317,7 @@ export const Home = () => {
                     categoryRefs.current[category.id] = el;
                   }}
                   className={cn(
-                "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300 [content-visibility:auto]",
+                "bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300",
                 isOpen && "md:col-span-2 lg:col-span-3"
               )}
                 >
