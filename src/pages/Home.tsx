@@ -138,11 +138,20 @@ export const Home = () => {
     const categoryId = pendingScrollRef.current;
     if (!categoryId) return;
     pendingScrollRef.current = null;
-    const target = categoryRefs.current[categoryId];
-    if (!target) return;
-    const headerHeight = headerRef.current?.offsetHeight ?? 0;
-    const targetTop = window.scrollY + target.getBoundingClientRect().top - headerHeight - 8;
-    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+
+    // Double-rAF: wait for the collapse of the previous category to finish
+    // reflow before measuring, so the scroll target is at its final position.
+    let r1: number, r2: number;
+    r1 = requestAnimationFrame(() => {
+      r2 = requestAnimationFrame(() => {
+        const target = categoryRefs.current[categoryId];
+        if (!target) return;
+        const headerHeight = headerRef.current?.offsetHeight ?? 0;
+        target.style.scrollMarginTop = `${headerHeight + 12}px`;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
   }, [expandedCategory]);
 
   const relatedItemsMap = useMemo(() => {
