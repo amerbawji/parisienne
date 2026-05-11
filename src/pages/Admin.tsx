@@ -426,7 +426,11 @@ function OptionsEditor({
   const updateChoiceEn = (optIdx: number, ci: number, val: string) =>
     onChange(options.map((o, idx) => {
       if (idx !== optIdx) return o;
-      return { ...o, choices: o.choices.map((c, i) => (i === ci ? val : c)) };
+      const oldKey = o.choices[ci];
+      const newChoices = o.choices.map((c, i) => (i === ci ? val : c));
+      const pa = { ...(o.price_additions || {}) };
+      if (oldKey in pa) { pa[val] = pa[oldKey]; delete pa[oldKey]; }
+      return { ...o, choices: newChoices, price_additions: pa };
     }));
 
   const updateChoiceAr = (optIdx: number, ci: number, val: string) =>
@@ -570,6 +574,7 @@ function PresetsEditor({
     setMissingEn(noEn);
     setMissingAr(noAr);
     if (noEn || noAr) return;
+    if (presets.some((p) => p.en === en || p.ar === ar)) return;
     onChange([...presets, { en, ar }]);
     setDraftEn('');
     setDraftAr('');
@@ -1729,7 +1734,7 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
   return (
     <div
       className="relative w-full h-full overflow-hidden cursor-pointer group bg-gray-100"
-      onClick={() => ref.current?.click()}
+      onClick={() => { if (!uploading) ref.current?.click(); }}
     >
       {image ? (
         <img src={image} alt="" className="w-full h-full object-cover" />
