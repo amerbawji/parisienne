@@ -1,19 +1,22 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabase';
 
+const FORCE_CLOSED_KEY = 'parisienne_force_closed';
+
 interface StoreConfig {
   open_time: string;
   close_time: string;
   closed_days: number[];
   whatsapp_number: string;
   discount_percentage: number;
-  force_closed: boolean;
 }
 
 interface StoreConfigStore extends StoreConfig {
+  force_closed: boolean;
   loading: boolean;
   fetchConfig: () => Promise<void>;
   updateConfig: (updates: Partial<StoreConfig>) => Promise<void>;
+  setForceClosed: (val: boolean) => void;
   isOpen: () => boolean;
 }
 
@@ -23,7 +26,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
   closed_days: [],
   whatsapp_number: '9613502022',
   discount_percentage: 0,
-  force_closed: false,
+  force_closed: localStorage.getItem(FORCE_CLOSED_KEY) === 'true',
   loading: true,
 
   fetchConfig: async () => {
@@ -35,7 +38,6 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
         closed_days: data.closed_days ?? [],
         whatsapp_number: data.whatsapp_number ?? '9613502022',
         discount_percentage: data.discount_percentage ?? 0,
-        force_closed: data.force_closed ?? false,
         loading: false,
       });
     } else {
@@ -47,6 +49,11 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
     const { error } = await supabase.from('store_config').update(updates).eq('id', 1);
     if (error) throw error;
     set(updates);
+  },
+
+  setForceClosed: (val: boolean) => {
+    localStorage.setItem(FORCE_CLOSED_KEY, val ? 'true' : 'false');
+    set({ force_closed: val });
   },
 
   isOpen: () => {

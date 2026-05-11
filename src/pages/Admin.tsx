@@ -2051,7 +2051,7 @@ function AdminShell() {
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
-  const { force_closed, updateConfig } = useStoreConfigStore();
+  const { force_closed, setForceClosed } = useStoreConfigStore();
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
@@ -2126,7 +2126,7 @@ function AdminShell() {
           <div className="flex items-center gap-1.5 shrink-0">
             <button
               type="button"
-              onClick={() => updateConfig({ force_closed: !force_closed })}
+              onClick={() => setForceClosed(!force_closed)}
               className={`text-xs px-2 sm:px-3 py-1.5 rounded-lg font-semibold transition whitespace-nowrap ${
                 force_closed
                   ? 'bg-red-500 text-white hover:bg-red-600'
