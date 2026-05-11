@@ -350,7 +350,7 @@ export const Home = () => {
                   
                   {isOpen && (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-px">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
                         {category.items.map((item) => (
                           <div
                             key={item.id}
