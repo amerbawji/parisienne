@@ -192,7 +192,7 @@ export const Home = () => {
     <div className={`bg-gray-50 font-sans ${totalItems > 0 ? 'pb-36 sm:pb-24' : 'pb-8'}`}>
       {showSplashPromo && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[1px] flex items-center justify-center p-4">
-          <div className="relative w-full max-w-md sm:max-w-lg rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
+          <div className="relative w-full max-w-md sm:max-w-lg lg:max-w-3xl rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
             <button
               onClick={() => setShowSplashPromo(false)}
               className="absolute top-2 right-2 z-10 h-9 w-9 rounded-full bg-black/60 text-white hover:bg-black/75 transition-colors flex items-center justify-center"
@@ -458,10 +458,11 @@ export const Home = () => {
                     ))}
                   </nav>
                 )}
+
               </aside>
 
               {/* Sections */}
-              <div className="flex-1 min-w-0 space-y-10">
+              <div className="flex-1 min-w-0 space-y-10 min-w-0">
                 {filteredCategories.length > 0 ? (
                   filteredCategories.map((cat) => (
                     <section
@@ -499,6 +500,7 @@ export const Home = () => {
                   <div className="text-center py-20 text-gray-500">{t('no_items_found')}</div>
                 )}
               </div>
+
             </div>
 
             {/* ── Mobile: tap-to-expand category cards ── */}
@@ -572,7 +574,7 @@ export const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 sm:p-5">
             <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-3">{t('contact_hours')}</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <a
                 href="tel:01814841"
                 className="group rounded-xl border border-gray-200 bg-gray-50 hover:bg-primary-50 hover:border-primary-200 transition-colors p-3 flex items-start gap-3"
@@ -695,7 +697,7 @@ export const Home = () => {
           onClick={() => setModalItem(null)}
         >
           <div
-            className="w-full sm:max-w-xl bg-gray-50 flex flex-col h-dvh sm:h-auto sm:max-h-[88vh] sm:rounded-2xl overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
+            className="w-full sm:max-w-xl lg:max-w-3xl bg-gray-50 flex flex-col h-dvh sm:h-auto sm:max-h-[88vh] sm:rounded-2xl overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shrink-0">

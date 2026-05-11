@@ -36,7 +36,7 @@ export const CartSheet = () => {
                 leaveFrom="translate-y-0"
                 leaveTo="translate-y-full"
               >
-                <Dialog.Panel className="pointer-events-auto w-full bg-white shadow-xl sm:rounded-2xl sm:max-w-md sm:h-[80vh] h-full flex flex-col">
+                <Dialog.Panel className="pointer-events-auto w-full bg-white shadow-xl sm:rounded-2xl sm:max-w-md lg:max-w-3xl sm:h-[80vh] h-full flex flex-col">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shrink-0">
                     <Dialog.Title className="text-lg font-medium text-gray-900">{t('cart_title')}</Dialog.Title>
                     <div className="ml-3 flex h-7 items-center">
