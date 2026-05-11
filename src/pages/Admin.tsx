@@ -835,15 +835,15 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
         <button
           type="button"
           onClick={() => set('show_in_related', !(form.show_in_related ?? true))}
-          className={`relative shrink-0 ml-4 w-10 h-6 rounded-full transition-colors ${
+          className={`relative shrink-0 ml-4 w-11 h-6 rounded-full transition-colors duration-200 ${
             (form.show_in_related ?? true) ? 'bg-primary-600' : 'bg-gray-300'
           }`}
           aria-checked={(form.show_in_related ?? true)}
           role="switch"
         >
           <span
-            className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-              (form.show_in_related ?? true) ? 'translate-x-5' : 'translate-x-1'
+            className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
+              (form.show_in_related ?? true) ? 'translate-x-5' : 'translate-x-0'
             }`}
           />
         </button>
