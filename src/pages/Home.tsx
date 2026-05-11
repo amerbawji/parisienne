@@ -8,7 +8,6 @@ import { useLanguageStore } from '../store/languageStore';
 import { useMenuStore } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
-import { useRecentlyViewedStore } from '../store/recentlyViewedStore';
 import { useLastOrderStore } from '../store/lastOrderStore';
 import { Button } from '../components/UI/Button';
 import { cn } from '../utils/cn';
@@ -49,8 +48,6 @@ export const Home = () => {
   const storeCategories = useMenuStore((state) => state.categories);
   const toggleCart = useCartStore((state) => state.toggleCart);
   const removeItem = useCartStore((state) => state.removeItem);
-  const recentlyViewed = useRecentlyViewedStore((s) => s.items);
-  const addRecentlyViewed = useRecentlyViewedStore((s) => s.addItem);
   const lastOrder = useLastOrderStore((s) => s.items);
   const { language, t } = useLanguageStore();
   const totalItems = useMemo(
@@ -128,21 +125,12 @@ export const Home = () => {
   }, [modalItem]);
 
   const handleItemToggle = useCallback((item: MenuItem) => {
-    const categoryId = storeCategories.find((c) => c.items.some((i) => i.id === item.id))?.id ?? '';
-    addRecentlyViewed({
-      id: item.id,
-      name_en: item.name_en,
-      name_ar: item.name_ar,
-      image: item.image,
-      price: item.price,
-      categoryId,
-    });
     if (window.innerWidth < 640) {
       setModalItem(item);
     } else {
       setExpandedItemId((prev) => (prev === item.id ? null : item.id));
     }
-  }, [storeCategories, addRecentlyViewed]);
+  }, []);
 
   const pendingScrollRef = useRef<string | null>(null);
 
@@ -361,49 +349,6 @@ export const Home = () => {
             >
               {language === 'ar' ? 'أعد الطلب' : 'Order again'}
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* Recently viewed */}
-      {recentlyViewed.length > 1 && !searchQuery && (
-        <div className="bg-white border-b border-gray-100" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
-              {language === 'ar' ? 'شاهدته مؤخراً' : 'Recently viewed'}
-            </p>
-            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-              {recentlyViewed.slice(0, 8).map((rv) => {
-                const rvImg = rv.image || `https://placehold.co/80x80?text=${encodeURIComponent(rv.name_en)}`;
-                return (
-                  <button
-                    key={rv.id}
-                    type="button"
-                    onClick={() => {
-                      const cat = filteredCategories.find((c) => c.items.some((i) => i.id === rv.id));
-                      if (!cat) return;
-                      handleCategoryClick(cat.id);
-                      setTimeout(() => {
-                        if (window.innerWidth < 640) {
-                          const item = cat.items.find((i) => i.id === rv.id);
-                          if (item) setModalItem(item as MenuItem);
-                        } else {
-                          setExpandedItemId(rv.id);
-                        }
-                      }, 100);
-                    }}
-                    className="shrink-0 w-16 flex flex-col items-start rounded-lg overflow-hidden border border-gray-100 bg-gray-50 hover:border-primary-200 transition-colors text-start"
-                  >
-                    <div className="w-full h-12 overflow-hidden bg-gray-200">
-                      <img src={rvImg} alt={language === 'ar' ? rv.name_ar : rv.name_en} className="w-full h-full object-cover" loading="lazy" />
-                    </div>
-                    <div className="px-1.5 py-1 w-full">
-                      <p className="text-[9px] font-medium text-gray-700 line-clamp-1 leading-tight">{language === 'ar' ? rv.name_ar : rv.name_en}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </div>
       )}
