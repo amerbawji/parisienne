@@ -4,6 +4,9 @@ import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
 import { uploadImage, supabase } from '../lib/supabase';
 
+// ─── Unsaved changes flag ─────────────────────────────────────────────────────
+let _adminHasUnsaved = false;
+
 // ─── Toast ───────────────────────────────────────────────────────────────────
 
 interface ToastItem { id: string; message: string; type: 'success' | 'error' }
@@ -121,6 +124,11 @@ const adminDict = {
     discount_hint: 'Apply a percentage discount to all item prices on the menu. Set to 0 to disable.',
     save_discount: 'Save Discount', toast_discount_saved: 'Discount saved',
     last_edited: 'Edited',
+    store_open: 'Store Open',
+    store_closed_label: 'Store Closed',
+    search_items: 'Search items…',
+    unsaved_warning: 'You have unsaved changes. Switch tabs anyway?',
+    draft_restored: 'Draft restored — click to discard',
     customers_heading: (n: number) => `Customers (${n})`,
     search_customers: 'Search by name or phone…',
     no_customers: 'No customers found.',
@@ -204,6 +212,11 @@ const adminDict = {
     discount_hint: 'تطبيق خصم بنسبة مئوية على جميع أسعار الأصناف في القائمة. اضبطه على 0 للتعطيل.',
     save_discount: 'حفظ الخصم', toast_discount_saved: 'تم حفظ الخصم',
     last_edited: 'عُدِّل',
+    store_open: 'المحل مفتوح',
+    store_closed_label: 'المحل مغلق',
+    search_items: 'ابحث عن صنف…',
+    unsaved_warning: 'لديك تغييرات غير محفوظة. هل تريد التبديل؟',
+    draft_restored: 'تم استعادة المسودة — انقر للتجاهل',
     customers_heading: (n: number) => `العملاء (${n})`,
     search_customers: 'بحث بالاسم أو الهاتف…',
     no_customers: 'لا يوجد عملاء.',
@@ -628,11 +641,25 @@ interface ItemFormProps {
 }
 
 function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
-  const [form, setForm] = useState<MenuItem>(initial);
+  const draftKey = `admin_item_draft_${initial.id || 'new'}`;
+  const [form, setForm] = useState<MenuItem>(() => {
+    try {
+      const s = localStorage.getItem(draftKey);
+      if (s) return JSON.parse(s) as MenuItem;
+    } catch { /* ignore */ }
+    return initial;
+  });
+  const [draftRestored, setDraftRestored] = useState(() => {
+    try { return !!localStorage.getItem(draftKey); } catch { return false; }
+  });
   const { t } = useAdminT();
 
   const set = <K extends keyof MenuItem>(key: K, value: MenuItem[K]) =>
-    setForm((f) => ({ ...f, [key]: value }));
+    setForm((f) => {
+      const next = { ...f, [key]: value };
+      try { localStorage.setItem(draftKey, JSON.stringify(next)); } catch {}
+      return next;
+    });
 
   const descEnFilled = !!form.description_en?.trim();
   const descArFilled = !!form.description_ar?.trim();
@@ -651,6 +678,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
     if (!descValid) return;
     if (!optionsValid) return;
     onSave(form);
+    try { localStorage.removeItem(draftKey); } catch {}
   };
 
   const unitOptions = ['piece', 'kg', 'plate', 'box', 'sandwich', 'wrap', 'portion', 'roll', 'skewer', 'dozen'];
@@ -660,6 +688,14 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
       onSubmit={handleSubmit}
       className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm flex flex-col gap-4"
     >
+      {draftRestored && (
+        <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-700">
+          <span>{t('draft_restored') as string}</span>
+          <button type="button" onClick={() => { setForm(initial); try { localStorage.removeItem(draftKey); } catch {} setDraftRestored(false); }} className="text-amber-600 hover:text-amber-800 font-semibold ml-2">
+            {t('cancel_btn') as string}
+          </button>
+        </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InputField
           label={t('name_en') as string}
@@ -785,7 +821,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
         </button>
         <button
           type="button"
-          onClick={onCancel}
+          onClick={() => { try { localStorage.removeItem(draftKey); } catch {} onCancel(); }}
           className="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-200 transition"
         >
           {t('cancel_btn') as string}
@@ -1014,8 +1050,10 @@ interface CategoryFormState {
 
 function MenuTab() {
   const { categories, addCategory, updateCategory, deleteCategory, reorderCategoryToIndex, addItem, updateItem, deleteItem, reorderItemToIndex, moveItem } = useMenuStore();
+  const { closed_days, updateConfig } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
+  const [itemSearch, setItemSearch] = useState('');
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const pendingScrollRef = useRef<string | null>(null);
@@ -1042,6 +1080,11 @@ function MenuTab() {
   const [showAddItemFor, setShowAddItemFor] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<{ catId: string; itemId: string } | null>(null);
   const [movingItem, setMovingItem] = useState<{ catId: string; itemId: string } | null>(null);
+
+  useEffect(() => {
+    _adminHasUnsaved = editingItem !== null;
+    return () => { _adminHasUnsaved = false; };
+  }, [editingItem]);
 
   const emptyForm = (): CategoryFormState => ({ name_en: '', name_ar: '', image: '' });
   const [addForm, setAddForm] = useState<CategoryFormState>(emptyForm());
@@ -1113,9 +1156,62 @@ function MenuTab() {
     await deleteItem(catId, item.id);
   };
 
+  const trimmedSearch = itemSearch.trim().toLowerCase();
+  const displayCategories = trimmedSearch
+    ? categories
+        .map((c) => ({
+          ...c,
+          items: c.items.filter(
+            (it) =>
+              it.name_en.toLowerCase().includes(trimmedSearch) ||
+              it.name_ar.toLowerCase().includes(trimmedSearch)
+          ),
+        }))
+        .filter((c) => c.items.length > 0)
+    : categories;
+  const isSearching = !!trimmedSearch;
+
   return (
     <div className="flex flex-col gap-4">
       {error && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
+
+      {/* Search input (Feature 2) */}
+      <div className="mb-0">
+        <input
+          type="text"
+          value={itemSearch}
+          onChange={(e) => setItemSearch(e.target.value)}
+          placeholder={t('search_items') as string}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+        />
+      </div>
+
+      {/* Closed days strip (Feature 3) */}
+      <div className="flex items-center gap-2 mb-0 flex-wrap">
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide shrink-0">{t('closed_on') as string}</span>
+        <div className="flex gap-1 flex-wrap">
+          {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((day, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                const next = closed_days.includes(i)
+                  ? closed_days.filter((d) => d !== i)
+                  : [...closed_days, i];
+                updateConfig({ closed_days: next });
+              }}
+              className={`text-xs px-2 py-1 rounded-lg font-medium transition ${
+                closed_days.includes(i)
+                  ? 'bg-red-100 text-red-700 border border-red-200'
+                  : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
+              }`}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <h2 className="text-base font-bold text-gray-800">{(t('categories_heading') as (n: number) => string)(categories.length)}</h2>
         <button type="button" onClick={() => setShowAddForm(!showAddForm)}
@@ -1147,8 +1243,8 @@ function MenuTab() {
       )}
 
       <div className="flex flex-col gap-4">
-        {categories.map((cat) => {
-          const isOpen = expandedCatId === cat.id;
+        {displayCategories.map((cat) => {
+          const isOpen = isSearching || expandedCatId === cat.id;
           const catImage = cat.image || `https://placehold.co/600x200?text=${encodeURIComponent(cat.name_en)}`;
           return (
             <div
@@ -1955,6 +2051,7 @@ function AdminShell() {
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
+  const { force_closed, updateConfig } = useStoreConfigStore();
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
@@ -2008,6 +2105,11 @@ function AdminShell() {
     window.location.reload();
   };
 
+  const handleTabChange = (key: Tab) => {
+    if (_adminHasUnsaved && !window.confirm(t('unsaved_warning') as string)) return;
+    setTab(key);
+  };
+
   const tabs: { key: Tab; label: string }[] = [
     { key: 'orders', label: t('tab_orders') as string },
     { key: 'customers', label: t('tab_customers') as string },
@@ -2022,6 +2124,17 @@ function AdminShell() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
           <h1 className="text-sm sm:text-base font-bold tracking-wide truncate">{t('admin_panel') as string}</h1>
           <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => updateConfig({ force_closed: !force_closed })}
+              className={`text-xs px-2 sm:px-3 py-1.5 rounded-lg font-semibold transition whitespace-nowrap ${
+                force_closed
+                  ? 'bg-red-500 text-white hover:bg-red-600'
+                  : 'bg-emerald-500 text-white hover:bg-emerald-600'
+              }`}
+            >
+              {force_closed ? t('store_closed_label') as string : t('store_open') as string}
+            </button>
             <button type="button" onClick={toggleLang}
               className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
               {t('lang_toggle') as string}
@@ -2044,7 +2157,7 @@ function AdminShell() {
             <button
               key={tabItem.key}
               type="button"
-              onClick={() => setTab(tabItem.key)}
+              onClick={() => handleTabChange(tabItem.key)}
               className={`px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg transition whitespace-nowrap ${
                 tab === tabItem.key
                   ? 'bg-primary-600 text-white'
