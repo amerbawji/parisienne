@@ -150,7 +150,7 @@ export const Home = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 font-sans ${totalItems > 0 ? 'pb-36 sm:pb-24' : 'pb-8'}`}>
+    <div className={`bg-gray-50 font-sans ${totalItems > 0 ? 'pb-36 sm:pb-24' : 'pb-8'}`}>
       {showSplashPromo && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[1px] flex items-center justify-center p-4">
           <div className="relative w-full max-w-md sm:max-w-lg rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
@@ -297,7 +297,7 @@ export const Home = () => {
         </div>
       )}
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[50vh]">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {menuLoading && (
           <div className="flex items-center justify-center py-24">
             <div className="h-8 w-8 rounded-full border-4 border-primary-200 border-t-primary-600 animate-spin" />
