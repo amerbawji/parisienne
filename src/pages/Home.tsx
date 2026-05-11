@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-horizontal-logo.svg';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
@@ -8,6 +8,8 @@ import { useLanguageStore } from '../store/languageStore';
 import { useMenuStore } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
+import { useRecentlyViewedStore } from '../store/recentlyViewedStore';
+import { useLastOrderStore } from '../store/lastOrderStore';
 import { Button } from '../components/UI/Button';
 import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
@@ -43,9 +45,13 @@ export const Home = () => {
   const headerRef = useRef<HTMLElement | null>(null);
   const categoryRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const cartItems = useCartStore((state) => state.items);
+  const addCartItem = useCartStore((state) => state.addItem);
   const storeCategories = useMenuStore((state) => state.categories);
   const toggleCart = useCartStore((state) => state.toggleCart);
   const removeItem = useCartStore((state) => state.removeItem);
+  const recentlyViewed = useRecentlyViewedStore((s) => s.items);
+  const addRecentlyViewed = useRecentlyViewedStore((s) => s.addItem);
+  const lastOrder = useLastOrderStore((s) => s.items);
   const { language, t } = useLanguageStore();
   const totalItems = useMemo(
     () =>
@@ -122,12 +128,21 @@ export const Home = () => {
   }, [modalItem]);
 
   const handleItemToggle = useCallback((item: MenuItem) => {
+    const categoryId = storeCategories.find((c) => c.items.some((i) => i.id === item.id))?.id ?? '';
+    addRecentlyViewed({
+      id: item.id,
+      name_en: item.name_en,
+      name_ar: item.name_ar,
+      image: item.image,
+      price: item.price,
+      categoryId,
+    });
     if (window.innerWidth < 640) {
       setModalItem(item);
     } else {
       setExpandedItemId((prev) => (prev === item.id ? null : item.id));
     }
-  }, []);
+  }, [storeCategories, addRecentlyViewed]);
 
   const pendingScrollRef = useRef<string | null>(null);
 
@@ -141,6 +156,16 @@ export const Home = () => {
     const targetTop = window.scrollY + target.getBoundingClientRect().top - headerHeight - 8;
     window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
   }, [expandedCategory]);
+
+  const relatedItemsMap = useMemo(() => {
+    const map: Record<string, MenuItem[]> = {};
+    for (const cat of filteredCategories) {
+      for (const item of cat.items) {
+        map[item.id] = cat.items.filter((i) => i.id !== item.id) as MenuItem[];
+      }
+    }
+    return map;
+  }, [filteredCategories]);
 
   const handleCategoryClick = (categoryId: string) => {
     setMenuSelectionMode(true);
@@ -297,6 +322,90 @@ export const Home = () => {
         </div>
       )}
 
+      {/* Order again banner */}
+      {lastOrder.length > 0 && cartItems.length === 0 && (
+        <div className="bg-white border-b border-gray-100" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <ArrowPathIcon className="h-4 w-4 text-primary-600 shrink-0" />
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-gray-900">
+                  {language === 'ar' ? 'طلبك السابق' : 'Your last order'}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {lastOrder.slice(0, 3).map((i) => (language === 'ar' ? i.name_ar : i.name_en) || i.name).join('، ')}
+                  {lastOrder.length > 3 && (language === 'ar' ? ` وأكثر...` : ` +${lastOrder.length - 3} more`)}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                lastOrder.forEach((item) => {
+                  addCartItem({
+                    id: item.id,
+                    name: item.name,
+                    name_en: item.name_en,
+                    name_ar: item.name_ar,
+                    price: item.price,
+                    selectedOptions: item.selectedOptions,
+                    instructions: item.instructions,
+                    step: item.step,
+                    minQuantity: item.minQuantity,
+                    quantity: item.quantity,
+                  });
+                });
+              }}
+              className="shrink-0 text-xs font-semibold px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              {language === 'ar' ? 'أعد الطلب' : 'Order again'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Recently viewed */}
+      {recentlyViewed.length > 1 && !searchQuery && (
+        <div className="bg-white border-b border-gray-100" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
+              {language === 'ar' ? 'شاهدته مؤخراً' : 'Recently viewed'}
+            </p>
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              {recentlyViewed.slice(0, 8).map((rv) => {
+                const rvImg = rv.image || `https://placehold.co/80x80?text=${encodeURIComponent(rv.name_en)}`;
+                return (
+                  <button
+                    key={rv.id}
+                    type="button"
+                    onClick={() => {
+                      const cat = filteredCategories.find((c) => c.items.some((i) => i.id === rv.id));
+                      if (!cat) return;
+                      handleCategoryClick(cat.id);
+                      setTimeout(() => {
+                        if (window.innerWidth < 640) {
+                          const item = cat.items.find((i) => i.id === rv.id);
+                          if (item) setModalItem(item as MenuItem);
+                        } else {
+                          setExpandedItemId(rv.id);
+                        }
+                      }, 100);
+                    }}
+                    className="shrink-0 w-16 flex flex-col items-start rounded-lg overflow-hidden border border-gray-100 bg-gray-50 hover:border-primary-200 transition-colors text-start"
+                  >
+                    <div className="w-full h-12 overflow-hidden bg-gray-200">
+                      <img src={rvImg} alt={language === 'ar' ? rv.name_ar : rv.name_en} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <div className="px-1.5 py-1 w-full">
+                      <p className="text-[9px] font-medium text-gray-700 line-clamp-1 leading-tight">{language === 'ar' ? rv.name_ar : rv.name_en}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {menuLoading && (
           <div className="flex items-center justify-center py-24">
@@ -361,6 +470,8 @@ export const Home = () => {
                               expanded={expandedItemId === item.id}
                               onToggle={() => handleItemToggle(item as MenuItem)}
                               onItemAdded={(payload) => setLastAdded(payload)}
+                              relatedItems={expandedItemId === item.id ? relatedItemsMap[item.id] : undefined}
+                              onRelatedItemSelect={handleItemToggle}
                             />
                           </div>
                         ))}
@@ -520,6 +631,8 @@ export const Home = () => {
             expanded={true}
             onToggle={() => setModalItem(null)}
             onItemAdded={(payload) => { setLastAdded(payload); setModalItem(null); }}
+            relatedItems={relatedItemsMap[modalItem.id]}
+            onRelatedItemSelect={(rel) => { setModalItem(rel); }}
           />
         </div>
       )}

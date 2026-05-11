@@ -28,6 +28,7 @@ export interface MenuItem {
   image?: string;
   options?: MenuOption[];
   presets?: Preset[];
+  tags?: string[];
   active?: boolean;
   in_stock?: boolean;
   updated_at?: string;
@@ -62,7 +63,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
 type OptRow = { id: string; item_id: string; name: string; name_ar: string; choices: string[]; choices_ar: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -92,6 +93,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           presets: item.presets?.length
             ? item.presets.map((p) => (typeof p === 'string' ? { en: p, ar: p } : p))
             : undefined,
+          tags: item.tags ?? [],
           active: item.active,
           in_stock: item.in_stock,
           updated_at: item.updated_at,
@@ -159,6 +161,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       min_quantity: item.min_quantity ?? null, description_en: item.description_en ?? '',
       description_ar: item.description_ar ?? '', image_url: item.image ?? '',
       presets: item.presets ?? [], sort_order, active: true, in_stock: true,
+      ...(item.tags?.length ? { tags: item.tags } : {}),
     });
     if (ie) throw ie;
     if (item.options?.length) {
@@ -172,7 +175,13 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
 
   updateItem: async (categoryId, itemId, updates) => {
     const now = new Date().toISOString();
-    const { options, image, ...rest } = updates;
+    const { options, image, tags, ...rest } = updates;
+    if (tags !== undefined) {
+      // Run tags update separately so a missing DB column doesn't break the main save.
+      supabase.from('items').update({ tags }).eq('id', itemId).then(({ error }) => {
+        if (error) console.warn('[tags update skipped — run: ALTER TABLE items ADD COLUMN IF NOT EXISTS tags JSONB DEFAULT \'[]\';]', error.message);
+      });
+    }
     const { error: ie } = await supabase.from('items').update({
       ...(rest.name_en       !== undefined && { name_en: rest.name_en }),
       ...(rest.name_ar       !== undefined && { name_ar: rest.name_ar }),

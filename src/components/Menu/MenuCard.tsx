@@ -8,6 +8,13 @@ import { QuantitySelector } from '../UI/QuantitySelector';
 import { type TranslationKey } from '../../data/translations';
 import { type Preset } from '../../store/menuStore';
 
+const BADGE_CONFIG: Record<string, { en: string; ar: string; className: string }> = {
+  new:         { en: '✦ New',         ar: '✦ جديد',          className: 'bg-blue-500 text-white' },
+  popular:     { en: '🔥 Popular',    ar: '🔥 الأكثر طلباً', className: 'bg-amber-500 text-white' },
+  "chef's pick": { en: "⭐ Chef's Pick", ar: '⭐ اختيار الشيف', className: 'bg-purple-600 text-white' },
+  spicy:       { en: '🌶️ Spicy',      ar: '🌶️ حار',          className: 'bg-red-500 text-white' },
+};
+
 export interface MenuItem {
   id: string;
   name_en: string;
@@ -22,6 +29,7 @@ export interface MenuItem {
   options?: { name: string; name_ar?: string; choices: string[]; choices_ar?: string[] }[];
   option_price_overrides?: Record<string, Record<string, number>>;
   presets?: Preset[];
+  tags?: string[];
   in_stock?: boolean;
 }
 
@@ -30,6 +38,8 @@ interface MenuCardProps {
   expanded: boolean;
   onToggle: () => void;
   onItemAdded?: (payload: { instanceId: string; itemName: string }) => void;
+  relatedItems?: MenuItem[];
+  onRelatedItemSelect?: (item: MenuItem) => void;
 }
 
 const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string) => {
@@ -38,7 +48,7 @@ const safeT = (t: (key: TranslationKey) => string, key: string, fallback: string
   return translated;
 };
 
-const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardProps) => {
+const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems, onRelatedItemSelect }: MenuCardProps) => {
   const { language, t } = useLanguageStore();
   const discountPct = useStoreConfigStore((s) => s.discount_percentage);
   const cartItems = useCartStore((state) => state.items);
@@ -198,6 +208,19 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
           <div className="p-3 sm:p-4 flex flex-col flex-grow min-w-0">
             <div className="mb-1">
               <h3 className="font-bold text-base sm:text-lg text-gray-900">{displayName}</h3>
+              {item.tags && item.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {item.tags.map((tag) => {
+                    const cfg = BADGE_CONFIG[tag];
+                    if (!cfg) return null;
+                    return (
+                      <span key={tag} className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${cfg.className}`}>
+                        {language === 'ar' ? cfg.ar : cfg.en}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
               <div className="mt-1">
                 {unitPrice === null ? (
                   <span className="text-sm text-gray-500">{language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}</span>
@@ -270,6 +293,36 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                   rows={2}
                 />
               </div>
+
+              {relatedItems && relatedItems.length > 0 && (
+                <div className="pt-1">
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                    {language === 'ar' ? 'قد يعجبك أيضاً' : 'You might also like'}
+                  </p>
+                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                    {relatedItems.slice(0, 4).map((rel) => {
+                      const relImg = rel.image || `https://placehold.co/80x80?text=${encodeURIComponent(rel.name_en)}`;
+                      const relPrice = Math.round(rel.price * (1 - discountPct / 100) * 100) / 100;
+                      return (
+                        <button
+                          key={rel.id}
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); onRelatedItemSelect?.(rel); }}
+                          className="shrink-0 w-20 flex flex-col items-start rounded-lg overflow-hidden border border-gray-100 bg-white hover:border-primary-200 transition-colors text-start"
+                        >
+                          <div className="w-full h-14 overflow-hidden bg-gray-100">
+                            <img src={relImg} alt={language === 'ar' ? rel.name_ar : rel.name_en} className="w-full h-full object-cover" loading="lazy" />
+                          </div>
+                          <div className="px-1.5 py-1 w-full">
+                            <p className="text-[10px] font-medium text-gray-700 line-clamp-1 leading-tight">{language === 'ar' ? rel.name_ar : rel.name_en}</p>
+                            <p className="text-[10px] font-bold text-primary-600 mt-0.5">${relPrice.toFixed(2)}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               <div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
                 <div className="flex-1">
@@ -359,6 +412,19 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded }: MenuCardPr
                 <span className="inline-block text-[10px] font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5 mt-2">
                   {safeT(t, `unit_${item.unit}`, item.unit!)}
                 </span>
+              )}
+              {item.tags && item.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {item.tags.map((tag) => {
+                    const cfg = BADGE_CONFIG[tag];
+                    if (!cfg) return null;
+                    return (
+                      <span key={tag} className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${cfg.className}`}>
+                        {language === 'ar' ? cfg.ar : cfg.en}
+                      </span>
+                    );
+                  })}
+                </div>
               )}
               {totalQuantity > 0 && quickAddEnabled && (
                 <div className="flex items-center gap-1.5 mt-2" onClick={(e) => e.stopPropagation()}>

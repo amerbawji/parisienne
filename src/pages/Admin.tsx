@@ -682,6 +682,12 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
   };
 
   const unitOptions = ['piece', 'kg', 'plate', 'box', 'sandwich', 'wrap', 'portion', 'roll', 'skewer', 'dozen'];
+  const ITEM_BADGES = [
+    { key: 'new',          label: '✦ New',          labelAr: '✦ جديد' },
+    { key: 'popular',      label: '🔥 Popular',      labelAr: '🔥 شائع' },
+    { key: "chef's pick",  label: "⭐ Chef's Pick",  labelAr: '⭐ اختيار الشيف' },
+    { key: 'spicy',        label: '🌶️ Spicy',        labelAr: '🌶️ حار' },
+  ];
 
   return (
     <form
@@ -794,6 +800,32 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
         presets={form.presets ?? []}
         onChange={(p) => set('presets', p)}
       />
+
+      <div className="flex flex-col gap-2">
+        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Badges</span>
+        <div className="flex flex-wrap gap-2">
+          {ITEM_BADGES.map(({ key, label }) => {
+            const active = (form.tags ?? []).includes(key);
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => {
+                  const current = form.tags ?? [];
+                  set('tags', active ? current.filter((t) => t !== key) : [...current, key]);
+                }}
+                className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-colors ${
+                  active
+                    ? 'bg-primary-600 text-white border-primary-600'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {(!form.name_en.trim() || !form.name_ar.trim()) && (
         <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">

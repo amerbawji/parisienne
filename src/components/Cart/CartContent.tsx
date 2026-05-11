@@ -11,6 +11,7 @@ import { generateWhatsAppLink } from '../../utils/whatsapp';
 import { cn } from '../../utils/cn';
 import { supabase } from '../../lib/supabase';
 import { useStoreConfigStore } from '../../store/storeConfigStore';
+import { useLastOrderStore } from '../../store/lastOrderStore';
 
 const OptionButton = ({ 
   selected, 
@@ -36,6 +37,9 @@ const OptionButton = ({
 
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
+  const saveLastOrder = useLastOrderStore((s) => s.saveOrder);
+  const lastOrderItems = useLastOrderStore((s) => s.items);
+  const addItem = useCartStore((s) => s.addItem);
   const { t, language } = useLanguageStore();
   const storeIsOpen = useStoreConfigStore((s) => s.isOpen());
   const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
@@ -233,6 +237,7 @@ export const CartContent = () => {
     } else {
       window.location.href = link;
     }
+    saveLastOrder(items);
     clearCart();
     setCartOpen(false);
     navigate('/');
@@ -240,11 +245,57 @@ export const CartContent = () => {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 h-full">
-        <ShoppingBagIcon className="h-16 w-16 text-gray-300 mb-4" />
-        <h2 className="text-xl font-bold text-gray-900 mb-2">{t('cart_empty')}</h2>
-        <p className="text-gray-500 mb-8 text-center">{t('cart_empty_desc')}</p>
-        <Button onClick={() => setCartOpen(false)}>{t('start_shopping')}</Button>
+      <div className="flex flex-col items-center justify-center p-8 h-full gap-6">
+        <div className="flex flex-col items-center">
+          <ShoppingBagIcon className="h-16 w-16 text-gray-300 mb-4" />
+          <h2 className="text-xl font-bold text-gray-900 mb-2">{t('cart_empty')}</h2>
+          <p className="text-gray-500 mb-4 text-center">{t('cart_empty_desc')}</p>
+          <Button onClick={() => setCartOpen(false)}>{t('start_shopping')}</Button>
+        </div>
+
+        {lastOrderItems.length > 0 && (
+          <div className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              {language === 'ar' ? 'طلبك السابق' : 'Your last order'}
+            </p>
+            <ul className="space-y-1 mb-3">
+              {lastOrderItems.slice(0, 4).map((item) => (
+                <li key={item.instanceId} className="flex items-center justify-between text-sm">
+                  <span className="text-gray-700 truncate flex-1 min-w-0">
+                    {(language === 'ar' ? item.name_ar : item.name_en) || item.name}
+                  </span>
+                  <span className="text-gray-500 shrink-0 ml-2">x{item.quantity}</span>
+                </li>
+              ))}
+              {lastOrderItems.length > 4 && (
+                <li className="text-xs text-gray-400">
+                  {language === 'ar' ? `+${lastOrderItems.length - 4} أكثر` : `+${lastOrderItems.length - 4} more`}
+                </li>
+              )}
+            </ul>
+            <Button
+              onClick={() => {
+                lastOrderItems.forEach((item) => {
+                  addItem({
+                    id: item.id,
+                    name: item.name,
+                    name_en: item.name_en,
+                    name_ar: item.name_ar,
+                    price: item.price,
+                    selectedOptions: item.selectedOptions,
+                    instructions: item.instructions,
+                    step: item.step,
+                    minQuantity: item.minQuantity,
+                    quantity: item.quantity,
+                  });
+                });
+              }}
+              className="w-full"
+            >
+              {language === 'ar' ? 'أعد الطلب' : 'Order Again'}
+            </Button>
+          </div>
+        )}
       </div>
     );
   }
