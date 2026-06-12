@@ -14,6 +14,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
   const step = item.step || 1;
   const minQuantity = item.minQuantity || 1;
   const round = (num: number) => Math.round(num * 100) / 100;
+  const unitLabel = item.unit && item.unit !== 'piece' ? item.unit : null;
 
   const displayName = language === 'ar' ? (item.name_ar || item.name) : (item.name_en || item.name);
 
@@ -53,16 +54,22 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
           )}
 
           <div className="flex items-center justify-between mt-2">
-            <QuantitySelector
-              quantity={item.quantity}
-              onDecrease={() => updateQuantity(item.instanceId, round(item.quantity - step))}
-              onIncrease={() => updateQuantity(item.instanceId, round(item.quantity + step))}
-              onChange={(val) => updateQuantity(item.instanceId, round(val))}
-              min={minQuantity}
-              step={step}
-              size="sm"
-            />
-            <span className="text-sm font-semibold text-primary-600">${(item.price * item.quantity).toFixed(2)}</span>
+            <div className="flex items-center gap-1.5">
+              <QuantitySelector
+                quantity={item.quantity}
+                onDecrease={() => updateQuantity(item.instanceId, round(item.quantity - step))}
+                onIncrease={() => updateQuantity(item.instanceId, round(item.quantity + step))}
+                onChange={(val) => updateQuantity(item.instanceId, round(val))}
+                min={minQuantity}
+                step={step}
+                size="sm"
+              />
+              {unitLabel && <span className="text-xs text-gray-400 font-medium">{unitLabel}</span>}
+            </div>
+            <div className="text-end">
+              <p className="text-sm font-semibold text-primary-600">${(item.price * item.quantity).toFixed(2)}</p>
+              {unitLabel && <p className="text-[11px] text-gray-400">${item.price.toFixed(2)}/{unitLabel}</p>}
+            </div>
           </div>
         </div>
       </div>

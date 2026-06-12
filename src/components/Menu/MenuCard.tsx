@@ -112,6 +112,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
       name_en: item.name_en,
       name_ar: item.name_ar,
       image: item.image,
+      unit: item.unit,
       price: discountedUnitPrice,
       selectedOptions: pendingOptions,
       selectedOptionsAr,
@@ -173,6 +174,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
       name_en: item.name_en,
       name_ar: item.name_ar,
       image: item.image,
+      unit: item.unit,
       price: effectivePrice,
       selectedOptions: {},
       instructions: '',
@@ -251,15 +253,11 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                   <span className="text-sm text-gray-500">{language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}</span>
                 ) : discountPct > 0 ? (
                   <div className="flex items-baseline gap-1.5 flex-wrap">
-                    <span className="font-bold text-primary-600">${(unitPrice * (1 - discountPct / 100)).toFixed(2)}</span>
+                    <span className="font-bold text-primary-600">${(unitPrice * (1 - discountPct / 100)).toFixed(2)}{shouldShowUnit && <span className="text-xs font-normal text-gray-500"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
                     <span className="text-sm text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
-                    {shouldShowUnit && <span className="text-xs font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5">{safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
                   </div>
                 ) : (
-                  <div className="flex items-baseline gap-1.5 flex-wrap">
-                    <span className="font-bold text-primary-600">${unitPrice.toFixed(2)}</span>
-                    {shouldShowUnit && <span className="text-xs font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5">{safeT(t, `unit_${item.unit}`, item.unit!)}</span>}
-                  </div>
+                  <span className="font-bold text-primary-600">${unitPrice.toFixed(2)}{shouldShowUnit && <span className="text-xs font-normal text-gray-500"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
                 )}
               </div>
             </div>
@@ -444,16 +442,11 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                 <span className="text-xs text-gray-400">{language === 'ar' ? 'اختر النوع لعرض السعر' : 'Select option to see price'}</span>
               ) : discountPct > 0 ? (
                 <div className="flex items-baseline gap-1.5 flex-wrap">
-                  <span className="font-bold text-sm sm:text-base text-gray-900">${discountedUnitPrice!.toFixed(2)}</span>
+                  <span className="font-bold text-sm sm:text-base text-gray-900">${discountedUnitPrice!.toFixed(2)}{shouldShowUnit && <span className="text-[11px] font-normal text-gray-400"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
                   <span className="text-xs text-gray-400 line-through">${unitPrice.toFixed(2)}</span>
                 </div>
               ) : (
-                <span className="font-bold text-sm sm:text-base text-gray-900">${unitPrice.toFixed(2)}</span>
-              )}
-              {shouldShowUnit && (
-                <span className="inline-block text-[10px] font-medium text-gray-500 bg-gray-100 rounded-full px-2 py-0.5 mt-2">
-                  {safeT(t, `unit_${item.unit}`, item.unit!)}
-                </span>
+                <span className="font-bold text-sm sm:text-base text-gray-900">${unitPrice.toFixed(2)}{shouldShowUnit && <span className="text-[11px] font-normal text-gray-400"> / {safeT(t, `unit_${item.unit}`, item.unit!)}</span>}</span>
               )}
               {item.tags && item.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-1.5">

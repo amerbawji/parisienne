@@ -8,6 +8,7 @@ export interface CartItem {
   name_en?: string;
   name_ar?: string;
   image?: string;
+  unit?: string;
   price: number;
   quantity: number;
   instructions: string;
@@ -28,6 +29,7 @@ interface CartState {
     name_en?: string;
     name_ar?: string;
     image?: string;
+    unit?: string;
     price: number;
     selectedOptions?: Record<string, string>;
     selectedOptionsAr?: Record<string, string>;
@@ -68,7 +70,8 @@ export const useCartStore = create<CartState>()(
               minQuantity: newItem.minQuantity,
               name_en: newItem.name_en,
               name_ar: newItem.name_ar,
-              image: newItem.image
+              image: newItem.image,
+              unit: newItem.unit
             }],
           };
         });
