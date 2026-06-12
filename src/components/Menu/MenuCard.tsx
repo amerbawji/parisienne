@@ -187,9 +187,12 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
     removeItem(targetInstance.instanceId);
   };
 
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [expandedImgLoaded, setExpandedImgLoaded] = useState(false);
+
   return (
     <div
-      className={`rounded-xl overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm bg-gray-50' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer hover:shadow-md bg-white'} ${!inStock ? 'opacity-60' : ''}`}
+      className={`rounded-xl overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm bg-gray-50' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer active:bg-gray-50 sm:hover:shadow-md bg-white'} ${!inStock ? 'opacity-60' : ''}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* ── EXPANDED layout ── */}
@@ -199,7 +202,13 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
             className="relative w-full h-52 sm:h-64 bg-gray-200 cursor-pointer shrink-0"
             onClick={(e) => { e.stopPropagation(); onToggle(); }}
           >
-            <img src={imageUrl} alt={displayName} className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            <img
+              src={imageUrl}
+              alt={displayName}
+              onLoad={() => setExpandedImgLoaded(true)}
+              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+            {!expandedImgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <span className="bg-white/90 text-gray-700 text-xs font-bold px-3 py-1 rounded-full shadow">{language === 'ar' ? 'غير متوفر' : 'Out of stock'}</span>
@@ -366,7 +375,13 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
         <>
           {/* Image — left in LTR, right in RTL */}
           <div className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-200">
-            <img src={imageUrl} alt={displayName} className="object-cover object-center w-full h-full group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+            <img
+              src={imageUrl}
+              alt={displayName}
+              onLoad={() => setImgLoaded(true)}
+              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            />
+            {!imgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
                 <span className="bg-white/90 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-full">{language === 'ar' ? 'غير متوفر' : 'Out of stock'}</span>
