@@ -109,7 +109,9 @@ export const CartContent = () => {
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   })();
 
-  const isClosedDay = scheduledDate
+  const isPastDate = scheduledDate ? scheduledDate < todayLocal : false;
+
+  const isClosedDay = scheduledDate && !isPastDate
     ? closedDays.includes(new Date(scheduledDate + 'T12:00:00').getDay())
     : false;
 
@@ -599,7 +601,7 @@ export const CartContent = () => {
             {timing === 'scheduled' && (
               <div className="animate-in fade-in duration-200 bg-white border border-gray-200 rounded-xl overflow-hidden">
                 {/* Date row */}
-                <div className={cn('flex items-center gap-3 px-3 py-2.5', isClosedDay && 'bg-red-50')}>
+                <div className={cn('flex items-center gap-3 px-3 py-2.5', (isClosedDay || isPastDate) && 'bg-red-50')}>
                   <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider shrink-0 w-10">
                     {language === 'ar' ? 'تاريخ' : 'Date'}
                   </span>
@@ -610,7 +612,7 @@ export const CartContent = () => {
                     onChange={(e) => { setScheduledDate(e.target.value); setScheduledTimeOfDay(''); setError(''); }}
                     className={cn(
                       'flex-1 min-w-0 text-sm bg-transparent outline-none text-gray-800',
-                      isClosedDay && 'text-red-600'
+                      (isClosedDay || isPastDate) && 'text-red-600'
                     )}
                   />
                 </div>
@@ -625,17 +627,19 @@ export const CartContent = () => {
                     value={scheduledTimeOfDay}
                     min={scheduledDate === todayLocal ? nowTimeLocal : openTime}
                     max={closeTime}
-                    disabled={!scheduledDate || isClosedDay}
+                    disabled={!scheduledDate || isClosedDay || isPastDate}
                     onChange={(e) => { setScheduledTimeOfDay(e.target.value); setError(''); }}
                     className="flex-1 min-w-0 text-sm bg-transparent outline-none text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
                   />
                   <span className="text-[11px] text-gray-400 shrink-0">{openTime}–{closeTime}</span>
                 </div>
                 {/* Validation feedback */}
-                {(isClosedDay || (scheduledTimeOfDay && !isScheduledTimeValid(scheduledTime))) && (
+                {(isPastDate || isClosedDay || (scheduledTimeOfDay && !isScheduledTimeValid(scheduledTime))) && (
                   <div className="border-t border-gray-100 px-3 py-2 bg-red-50">
                     <p className="text-xs text-red-500">
-                      {isClosedDay
+                      {isPastDate
+                        ? (language === 'ar' ? 'هذا التاريخ قد مضى' : 'This date is in the past')
+                        : isClosedDay
                         ? (language === 'ar' ? 'المتجر مغلق في هذا اليوم' : 'Closed on this day')
                         : (language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Hours: ${openTime} – ${closeTime}`)}
                     </p>
