@@ -1356,6 +1356,18 @@ function MenuTab() {
               <section
                 key={cat.id}
                 ref={(el) => { desktopCatRefs.current[cat.id] = el; }}
+                draggable={editingId === null && editingItem === null}
+                onDragStart={(e) => { dragCatRef.current = cat.id; e.dataTransfer.effectAllowed = 'move'; }}
+                onDragOver={(e) => { e.preventDefault(); if (dragCatRef.current && dragCatRef.current !== cat.id) setDragOverCatId(cat.id); }}
+                onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverCatId(null); }}
+                onDrop={() => {
+                  setDragOverCatId(null);
+                  const fromId = dragCatRef.current;
+                  dragCatRef.current = null;
+                  if (fromId && fromId !== cat.id) reorderCategoryToIndex(fromId, categories.findIndex((c) => c.id === cat.id));
+                }}
+                onDragEnd={() => { dragCatRef.current = null; setDragOverCatId(null); }}
+                className={`transition-all rounded-xl ${dragOverCatId === cat.id ? 'ring-2 ring-primary-300 ring-offset-2' : ''} ${editingId === null && editingItem === null ? 'cursor-grab active:cursor-grabbing' : ''}`}
               >
                 {/* Category header */}
                 {editingId === cat.id ? (
@@ -1420,7 +1432,13 @@ function MenuTab() {
                   {cat.items.map((item) => (
                       <div
                         key={item.id}
-                        className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col transition ${!item.active ? 'opacity-50' : ''} border-gray-100`}
+                        draggable={editingId === null && editingItem === null}
+                        onDragStart={(e) => { e.stopPropagation(); dragItemRef.current = { catId: cat.id, itemId: item.id }; e.dataTransfer.effectAllowed = 'move'; }}
+                        onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); if (dragItemRef.current?.catId === cat.id && dragItemRef.current.itemId !== item.id) setDragOverItemId(item.id); }}
+                        onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setDragOverItemId(null); }}
+                        onDrop={(e) => { e.stopPropagation(); setDragOverItemId(null); const from = dragItemRef.current; dragItemRef.current = null; if (from && from.catId === cat.id && from.itemId !== item.id) reorderItemToIndex(cat.id, from.itemId, cat.items.findIndex((i) => i.id === item.id)); }}
+                        onDragEnd={(e) => { e.stopPropagation(); dragItemRef.current = null; setDragOverItemId(null); }}
+                        className={`bg-white rounded-xl shadow-sm border overflow-hidden flex flex-col cursor-grab active:cursor-grabbing transition ${dragOverItemId === item.id ? 'border-primary-400 ring-2 ring-primary-300' : 'border-gray-100'} ${!item.active ? 'opacity-50' : ''}`}
                       >
                         <div className="flex flex-row gap-3 p-3 flex-1">
                           <div className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-gray-200">
