@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import type { CartItem } from '../../store/cartStore';
 
 const SAVED_DETAILS_KEY = 'parisienne_saved_details';
 import { useNavigate } from 'react-router-dom';
@@ -83,6 +84,16 @@ export const CartContent = () => {
   const [customerPhone, setCustomerPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmCountdown, setConfirmCountdown] = useState<number | null>(null);
+
+  interface PlacedOrder {
+    id: string | null;
+    items: CartItem[];
+    total: number;
+    serviceType: 'takeaway' | 'delivery';
+    customerName: string;
+    customerPhone: string;
+  }
+  const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
 
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
@@ -252,7 +263,9 @@ export const CartContent = () => {
     const link = whatsappEnabled ? generateWhatsAppLink(items, language, details, whatsappNumber) : null;
     const waWindow = link ? window.open(link, '_blank') : null;
 
-    const { error: orderError } = await supabase.from('orders').insert({
+    const snapshot = [...items];
+
+    const { data: insertData, error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,
       customer_phone: customerPhone || null,
       service_type: serviceType,
@@ -274,14 +287,21 @@ export const CartContent = () => {
         selected_options: item.selectedOptions || {},
       })),
       total: totalPrice,
-    });
+    }).select('id').single();
     if (orderError) console.error('[Order save failed]', orderError);
 
     if (link && !waWindow) window.location.href = link;
-    saveLastOrder(items);
+    saveLastOrder(snapshot);
     clearCart();
-    setCartOpen(false);
-    navigate('/');
+
+    setPlacedOrder({
+      id: insertData?.id ?? null,
+      items: snapshot,
+      total: totalPrice,
+      serviceType,
+      customerName,
+      customerPhone,
+    });
     setIsSubmitting(false);
   };
 
@@ -304,6 +324,88 @@ export const CartContent = () => {
 
     setConfirmCountdown(4);
   };
+
+  if (placedOrder) {
+    const trackUrl = placedOrder.customerPhone
+      ? `/track?phone=${encodeURIComponent(placedOrder.customerPhone)}`
+      : '/track';
+    return (
+      <div className="flex flex-col h-full bg-white">
+        <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-5">
+          {/* Success header */}
+          <div className="flex flex-col items-center gap-3 py-4">
+            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center text-3xl">🎉</div>
+            <h2 className="text-xl font-bold text-gray-900">
+              {language === 'ar' ? 'تم استلام طلبك!' : 'Order placed!'}
+            </h2>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
+              🕐 {language === 'ar' ? 'تم استلام طلبك' : 'Order received'}
+            </span>
+          </div>
+
+          {/* Items */}
+          <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 flex flex-col gap-2">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              {language === 'ar' ? 'ملخص الطلب' : 'Order summary'}
+            </p>
+            {placedOrder.items.map((item) => (
+              <div key={item.instanceId} className="flex items-center justify-between gap-2 text-sm">
+                <div className="flex-1 min-w-0">
+                  <span className="font-medium text-gray-800">
+                    {(language === 'ar' ? item.name_ar : item.name_en) || item.name}
+                  </span>
+                  {item.selectedOptions && Object.keys(item.selectedOptions).length > 0 && (
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(' · ')}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right shrink-0 text-xs text-gray-500">
+                  ×{item.quantity}
+                  <span className="ml-2 font-semibold text-gray-800">${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              </div>
+            ))}
+            <div className="mt-1 pt-2 border-t border-gray-200 flex justify-between text-sm font-bold text-gray-900">
+              <span>{language === 'ar' ? 'المجموع' : 'Total'}</span>
+              <span>${placedOrder.total.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {/* Track link */}
+          <div className="bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-primary-800">
+                {language === 'ar' ? 'تتبع طلبك' : 'Track your order'}
+              </p>
+              <p className="text-xs text-primary-600 mt-0.5">
+                {language === 'ar'
+                  ? 'تحقق من حالة طلبك في أي وقت.'
+                  : 'Check your order status anytime.'}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => { setCartOpen(false); navigate(trackUrl); setPlacedOrder(null); }}
+              className="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 transition"
+            >
+              {language === 'ar' ? 'تتبع' : 'Track'}
+            </button>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="px-4 py-4 border-t border-gray-100">
+          <Button
+            onClick={() => { setCartOpen(false); navigate('/'); setPlacedOrder(null); }}
+            className="w-full"
+          >
+            {language === 'ar' ? 'متابعة التسوق' : 'Continue shopping'}
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
