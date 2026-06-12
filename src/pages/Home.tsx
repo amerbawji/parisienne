@@ -370,6 +370,7 @@ export const Home = () => {
                     name: item.name,
                     name_en: item.name_en,
                     name_ar: item.name_ar,
+                    image: liveItem?.image || item.image,
                     price: livePrice,
                     selectedOptions: item.selectedOptions,
                     instructions: item.instructions,
@@ -378,6 +379,7 @@ export const Home = () => {
                     quantity: item.quantity,
                   });
                 });
+                toggleCart();
               }}
               className="shrink-0 text-xs font-semibold px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >

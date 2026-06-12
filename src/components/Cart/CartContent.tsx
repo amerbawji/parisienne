@@ -12,6 +12,7 @@ import { cn } from '../../utils/cn';
 import { supabase } from '../../lib/supabase';
 import { useStoreConfigStore } from '../../store/storeConfigStore';
 import { useLastOrderStore } from '../../store/lastOrderStore';
+import { useMenuStore } from '../../store/menuStore';
 
 const OptionButton = ({ 
   selected, 
@@ -37,6 +38,7 @@ const OptionButton = ({
 
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
+  const allMenuItems = useMenuStore((s) => s.categories.flatMap((c) => c.items));
   const saveLastOrder = useLastOrderStore((s) => s.saveOrder);
   const lastOrderItems = useLastOrderStore((s) => s.items);
   const addItem = useCartStore((s) => s.addItem);
@@ -323,12 +325,13 @@ export const CartContent = () => {
             <Button
               onClick={() => {
                 lastOrderItems.forEach((item) => {
+                  const liveItem = allMenuItems.find((i) => i.id === item.id);
                   addItem({
                     id: item.id,
                     name: item.name,
                     name_en: item.name_en,
                     name_ar: item.name_ar,
-                    image: item.image,
+                    image: liveItem?.image || item.image,
                     price: item.price,
                     selectedOptions: item.selectedOptions,
                     instructions: item.instructions,
