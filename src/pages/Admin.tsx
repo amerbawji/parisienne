@@ -1161,6 +1161,7 @@ function MenuTab() {
   const { t } = useAdminT();
   const [itemSearch, setItemSearch] = useState('');
   const [expandedCatId, setExpandedCatId] = useState<string | null>(null);
+  const [desktopExpandedCats, setDesktopExpandedCats] = useState<Set<string>>(new Set());
   const catRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const desktopCatRefs = useRef<Record<string, HTMLElement | null>>({});
   const pendingScrollRef = useRef<string | null>(null);
@@ -1392,16 +1393,24 @@ function MenuTab() {
                   </form>
                 ) : (
                   <div className={`flex items-center gap-3 mb-4 pb-3 border-b border-gray-100 ${!cat.active ? 'opacity-60' : ''}`}>
-                    <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
-                      <img src={catImage} alt="" className="w-full h-full object-cover" loading="lazy" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="text-lg font-bold text-gray-900">{cat.name_en}</h2>
-                      <p className="text-xs text-gray-400">
-                        {(t('item_count') as (n: number) => string)(cat.items.length)}
-                        {!cat.active && <span className="text-orange-400 ml-1.5">· {t('hidden_badge') as string}</span>}
-                      </p>
-                    </div>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onClick={(e) => { e.stopPropagation(); setDesktopExpandedCats((prev) => { const next = new Set(prev); next.has(cat.id) ? next.delete(cat.id) : next.add(cat.id); return next; }); }}
+                      className="flex items-center gap-3 flex-1 min-w-0 text-start"
+                    >
+                      <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
+                        <img src={catImage} alt="" className="w-full h-full object-cover" loading="lazy" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h2 className="text-lg font-bold text-gray-900">{cat.name_en}</h2>
+                        <p className="text-xs text-gray-400">
+                          {(t('item_count') as (n: number) => string)(cat.items.length)}
+                          {!cat.active && <span className="text-orange-400 ml-1.5">· {t('hidden_badge') as string}</span>}
+                        </p>
+                      </div>
+                      <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${desktopExpandedCats.has(cat.id) ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </button>
                     <div className="flex items-center gap-2 shrink-0">
                       <button type="button" dir="ltr" onClick={() => updateCategory(cat.id, { active: !cat.active }).then(() => toast(cat.active ? t('toast_cat_hidden') as string : t('toast_cat_visible') as string))}
                         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${cat.active ? 'bg-primary-600' : 'bg-gray-300'}`}
@@ -1414,7 +1423,7 @@ function MenuTab() {
                       <button type="button" onClick={() => handleDelete(cat)} className="px-3 py-1 text-xs font-semibold border border-red-200 bg-white text-red-600 rounded-lg hover:bg-red-50 transition">
                         {t('delete_btn') as string}
                       </button>
-                      <button type="button" onClick={() => { setShowAddItemFor(showAddItemFor === cat.id ? null : cat.id); setEditingItem(null); }}
+                      <button type="button" onClick={() => { const opening = showAddItemFor !== cat.id; setShowAddItemFor(opening ? cat.id : null); setEditingItem(null); if (opening) setDesktopExpandedCats((prev) => { const next = new Set(prev); next.add(cat.id); return next; }); }}
                         className="px-3 py-1 bg-primary-600 text-white text-xs font-semibold rounded-lg hover:bg-primary-700 transition">
                         {showAddItemFor === cat.id ? t('cancel_btn') as string : t('add_item') as string}
                       </button>
@@ -1422,13 +1431,13 @@ function MenuTab() {
                   </div>
                 )}
 
-                {showAddItemFor === cat.id && (
+                {desktopExpandedCats.has(cat.id) && showAddItemFor === cat.id && (
                   <div className="mb-4 bg-white border border-gray-200 rounded-xl p-3">
                     <ItemForm initial={{ ...emptyItem(), id: `prod-${Date.now()}` }} onSave={handleAddItem} onCancel={() => setShowAddItemFor(null)} />
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2">
+                <div className={`grid grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-2 ${desktopExpandedCats.has(cat.id) ? '' : 'hidden'}`}>
                   {cat.items.map((item) => (
                       <div
                         key={item.id}
