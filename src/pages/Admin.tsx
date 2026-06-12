@@ -107,6 +107,8 @@ const adminDict = {
     closed_on: 'Closed On', closed_days_hint: 'Selected days are closed — customers can only schedule orders on these days.',
     save_hours: 'Save Hours', whatsapp_heading: 'WhatsApp Number',
     whatsapp_hint: 'Orders are sent to this number. Include country code, no spaces or symbols (e.g. 9613502022).',
+    whatsapp_enabled_label: 'Send orders via WhatsApp',
+    whatsapp_enabled_hint: 'When off, orders are saved to the dashboard only — no WhatsApp message is sent.',
     number_label: 'Number', save_btn: 'Save',
     promo_popup: 'Promo Popup', enable_promo: 'Enable promo popup',
     current_image: 'Current Image', upload_new_image: 'Upload New Image', reset_default: 'Reset to Default',
@@ -196,6 +198,8 @@ const adminDict = {
     closed_on: 'مغلق في', closed_days_hint: 'الأيام المختارة مغلقة — يمكن للعملاء جدولة الطلبات فقط في هذه الأيام.',
     save_hours: 'حفظ الساعات', whatsapp_heading: 'رقم واتساب',
     whatsapp_hint: 'يتم إرسال الطلبات لهذا الرقم. أدخل رمز الدولة بدون مسافات (مثلاً: 9613502022).',
+    whatsapp_enabled_label: 'إرسال الطلبات عبر واتساب',
+    whatsapp_enabled_hint: 'عند الإيقاف، تُحفظ الطلبات في لوحة التحكم فقط دون إرسال رسالة واتساب.',
     number_label: 'الرقم', save_btn: 'حفظ',
     promo_popup: 'نافذة العرض', enable_promo: 'تفعيل نافذة العرض',
     current_image: 'الصورة الحالية', upload_new_image: 'رفع صورة جديدة', reset_default: 'إعادة للافتراضي',
@@ -938,7 +942,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
-  const { open_time, close_time, closed_days, whatsapp_number, discount_percentage, hide_items_without_image, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const { open_time, close_time, closed_days, whatsapp_number, whatsapp_enabled, discount_percentage, hide_items_without_image, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const { force_closed, force_open, setForceState } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
@@ -950,6 +954,7 @@ function SettingsTab() {
   const [closeTime, setCloseTime] = useState(close_time);
   const [closedDays, setClosedDays] = useState<number[]>(closed_days);
   const [waNumber, setWaNumber] = useState(whatsapp_number);
+  const [waEnabled, setWaEnabled] = useState(whatsapp_enabled);
   const [waSaving, setWaSaving] = useState(false);
   const [waError, setWaError] = useState('');
   const [discountPct, setDiscountPct] = useState(discount_percentage);
@@ -963,6 +968,7 @@ function SettingsTab() {
       setCloseTime(s.close_time);
       setClosedDays(s.closed_days);
       setWaNumber(s.whatsapp_number);
+      setWaEnabled(s.whatsapp_enabled);
       setDiscountPct(s.discount_percentage);
       setHideNoImage(s.hide_items_without_image);
     });
@@ -1078,6 +1084,25 @@ function SettingsTab() {
         {/* WhatsApp */}
         <div className="px-5 py-4 flex flex-col gap-3">
           <p className="text-sm font-semibold text-gray-800">{t('whatsapp_heading') as string}</p>
+          {/* Enable/disable toggle */}
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm text-gray-700">{t('whatsapp_enabled_label') as string}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{t('whatsapp_enabled_hint') as string}</p>
+            </div>
+            <button
+              type="button"
+              onClick={async () => {
+                const next = !waEnabled;
+                setWaEnabled(next);
+                try { await updateConfig({ whatsapp_enabled: next }); toast(t('toast_wa_saved') as string); }
+                catch { setWaEnabled(!next); toast(t('toast_failed_save') as string, 'error'); }
+              }}
+              className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${waEnabled ? 'bg-primary-600' : 'bg-gray-300'}`}
+            >
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${waEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
+          </div>
           <p className="text-xs text-gray-400">{t('whatsapp_hint') as string}</p>
           <div className="flex gap-2 items-end">
             <div className="flex-1 flex flex-col gap-1">

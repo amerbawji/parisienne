@@ -46,6 +46,7 @@ export const CartContent = () => {
   const { t, language } = useLanguageStore();
   const storeIsOpen = useStoreConfigStore((s) => s.isOpen());
   const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
+  const whatsappEnabled = useStoreConfigStore((s) => s.whatsapp_enabled);
   const discountPct = useStoreConfigStore((s) => s.discount_percentage);
   const openTime = useStoreConfigStore((s) => s.open_time);
   const closeTime = useStoreConfigStore((s) => s.close_time);
@@ -248,8 +249,8 @@ export const CartContent = () => {
       }));
     }
 
-    const link = generateWhatsAppLink(items, language, details, whatsappNumber);
-    const waWindow = window.open(link, '_blank');
+    const link = whatsappEnabled ? generateWhatsAppLink(items, language, details, whatsappNumber) : null;
+    const waWindow = link ? window.open(link, '_blank') : null;
 
     const { error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,
@@ -276,7 +277,7 @@ export const CartContent = () => {
     });
     if (orderError) console.error('[Order save failed]', orderError);
 
-    if (!waWindow) window.location.href = link;
+    if (link && !waWindow) window.location.href = link;
     saveLastOrder(items);
     clearCart();
     setCartOpen(false);
@@ -742,7 +743,7 @@ export const CartContent = () => {
               <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
               {t('sending')}
             </>
-          ) : t('confirm_whatsapp')}
+          ) : whatsappEnabled ? t('confirm_whatsapp') : t('confirm_order')}
         </Button>
         </div>
       </div>
@@ -765,8 +766,8 @@ export const CartContent = () => {
             </p>
             <p className="text-sm font-medium leading-snug">
               {language === 'ar'
-                ? `سيتم الإرسال خلال ${confirmCountdown} ثوانٍ…`
-                : `Sending in ${confirmCountdown}s…`}
+                ? `سيتم تأكيد الطلب خلال ${confirmCountdown} ثوانٍ…`
+                : `Placing order in ${confirmCountdown}s…`}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
