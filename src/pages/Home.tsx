@@ -99,7 +99,7 @@ export const Home = () => {
         })
         .filter((category): category is typeof categories[0] & { image: string } => category !== null);
     },
-    [categories, deferredSearchQuery]
+    [categories, deferredSearchQuery, hideItemsWithoutImage]
   );
   useEffect(() => {
     Promise.all([fetchMenu(), fetchPromo(), fetchConfig()]);
