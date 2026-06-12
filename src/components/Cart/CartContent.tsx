@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const SAVED_DETAILS_KEY = 'parisienne_saved_details';
 import { useNavigate } from 'react-router-dom';
@@ -82,7 +82,6 @@ export const CartContent = () => {
   const [customerPhone, setCustomerPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmCountdown, setConfirmCountdown] = useState<number | null>(null);
-  const pendingWaWindowRef = useRef<Window | null>(null);
 
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
@@ -203,7 +202,7 @@ export const CartContent = () => {
   useEffect(() => {
     if (confirmCountdown === null) return;
     if (confirmCountdown === 0) {
-      doSubmit(pendingWaWindowRef.current);
+      doSubmit();
       return;
     }
     const timer = window.setTimeout(() => setConfirmCountdown((c) => (c !== null ? c - 1 : null)), 1000);
@@ -212,12 +211,10 @@ export const CartContent = () => {
   }, [confirmCountdown]);
 
   const handleCancelConfirm = () => {
-    pendingWaWindowRef.current?.close();
-    pendingWaWindowRef.current = null;
     setConfirmCountdown(null);
   };
 
-  const doSubmit = async (waWindow: Window | null) => {
+  const doSubmit = async () => {
     setConfirmCountdown(null);
     setIsSubmitting(true);
 
@@ -252,6 +249,7 @@ export const CartContent = () => {
     }
 
     const link = generateWhatsAppLink(items, language, details, whatsappNumber);
+    const waWindow = window.open(link, '_blank');
 
     const { error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,
@@ -278,13 +276,7 @@ export const CartContent = () => {
     });
     if (orderError) console.error('[Order save failed]', orderError);
 
-    // Redirect the pre-opened window to WhatsApp; fall back to location.href
-    // if the browser blocked the popup (e.g. standalone PWA on older iOS).
-    if (waWindow) {
-      waWindow.location.href = link;
-    } else {
-      window.location.href = link;
-    }
+    if (!waWindow) window.location.href = link;
     saveLastOrder(items);
     clearCart();
     setCartOpen(false);
@@ -309,8 +301,6 @@ export const CartContent = () => {
     }
     if (timing === 'now' && !storeIsOpen) { setTiming('scheduled'); setError(t('error_store_closed')); return; }
 
-    // Open the popup synchronously while in the user-gesture context (Safari/iOS requires this).
-    pendingWaWindowRef.current = window.open('', '_blank');
     setConfirmCountdown(4);
   };
 
