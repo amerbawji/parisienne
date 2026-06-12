@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Parisienne — Restaurant Ordering App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack online ordering app for Parisienne restaurant. Customers browse the menu, customize items, and send orders via WhatsApp. The admin panel manages the menu, orders, and store settings.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React 19** + **TypeScript** + **Vite**
+- **Tailwind CSS v3** for styling
+- **Supabase** — database, auth, and image storage
+- **Zustand** for client state
+- **React Router v7** for routing
+- **Headless UI** + **Heroicons** for UI components
+- **PWA** support via `vite-plugin-pwa`
 
-## React Compiler
+## Pages & Routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Route | Description |
+|-------|-------------|
+| `/` | Customer-facing menu (Home) |
+| `/cart` | Cart page (legacy, cart is now a sheet) |
+| `/admin` | Admin panel (password-protected) |
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Customer (Home)
+- Browse menu by category with live search and category filter
+- Item modal with image, description, options (radio/select), presets, and quantity
+- Cart sheet with order summary, service type (delivery/pickup/dine-in), and WhatsApp checkout
+- Promo splash popup on first visit
+- Recently viewed items
+- EN/AR bilingual (full RTL support for Arabic)
+- Store open/closed banner based on schedule
+- PWA installable on mobile
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Admin (`/admin`)
+- **Menu tab** — add/edit/delete categories and items, drag to reorder, toggle active/in-stock, quick image upload
+- **Orders tab** — view orders by date, update status (pending → preparing → ready → delivered)
+- **Settings tab** — store status override, opening hours + closed days, WhatsApp number, store-wide discount %, hide items without photo toggle, promo popup image
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── pages/
+│   ├── Home.tsx          # Customer menu page
+│   ├── Admin.tsx         # Admin panel (menu, orders, settings tabs)
+│   └── Cart.tsx          # Cart page
+├── components/
+│   ├── Cart/             # CartSheet, CartContent, CartItemRow
+│   ├── Menu/             # MenuCard (item modal + add to cart)
+│   └── UI/               # Button, LanguageToggle, QuantitySelector, InstallPrompt
+├── store/
+│   ├── cartStore.ts       # Cart items, open/close state
+│   ├── menuStore.ts       # Categories + items from Supabase
+│   ├── storeConfigStore.ts # Hours, WhatsApp, discount, force open/closed
+│   ├── languageStore.ts   # EN/AR toggle + t() helper
+│   ├── promoStore.ts      # Promo popup enabled + image
+│   ├── lastOrderStore.ts  # Persisted last order for re-order
+│   └── recentlyViewedStore.ts
+├── lib/
+│   └── supabase.ts        # Supabase client + image upload helper
+├── data/
+│   └── translations.ts    # All EN + AR strings
+└── utils/
+    ├── cn.ts              # clsx + tailwind-merge helper
+    └── whatsapp.ts        # Order → WhatsApp message formatter
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a `.env` file at the project root:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+## Supabase Schema
+
+Key tables:
+
+- **`categories`** — `id, name_en, name_ar, image, active, sort_order`
+- **`items`** — `id, category_id, name_en, name_ar, description_en, description_ar, price, image, active, in_stock, options (jsonb), presets (jsonb), sort_order`
+- **`orders`** — `id, created_at, status, service_type, customer_name, customer_phone, items (jsonb), total, delivery_*, payment_method, timing, scheduled_time, location_url`
+- **`store_config`** — single row (`id=1`) with `open_time, close_time, closed_days, whatsapp_number, discount_percentage, hide_items_without_image`
+
+Storage bucket: **`menu-images`** (public)
+
+## Getting Started
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # production build
+npm run preview    # preview production build
+```
+
+## Deployment
+
+Deployed to **Vercel** with auto-deploy on push to `master`. Set the environment variables in the Vercel project settings.

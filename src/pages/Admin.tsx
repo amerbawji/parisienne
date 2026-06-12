@@ -963,159 +963,174 @@ function SettingsTab() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-      {/* Store Status Override */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-base font-bold text-gray-800">Store Status</h2>
-          <p className="text-xs text-gray-500 mt-0.5">
-            {force_closed ? 'Forced closed — overrides schedule' : force_open ? 'Forced open — overrides schedule' : 'Following opening hours schedule'}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
-          className={`text-sm px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap ${
-            force_closed ? 'bg-red-500 text-white hover:bg-red-600' : force_open ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-          }`}
-        >
-          {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
-        </button>
-      </div>
+    <div className="flex flex-col gap-4">
 
-      {/* WhatsApp Number */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
-        <h2 className="text-base font-bold text-gray-800">{t('whatsapp_heading') as string}</h2>
-        <p className="text-xs text-gray-500">{t('whatsapp_hint') as string}</p>
-        <div className="flex gap-2 items-end">
-          <div className="flex-1 flex flex-col gap-1">
-            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('number_label') as string}</label>
-            <input type="tel" value={waNumber} onChange={(e) => setWaNumber(e.target.value.replace(/\D/g, ''))}
-              placeholder="9613502022"
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+      {/* ── Card 1: Store Status + Opening Hours ── */}
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        {/* Store Status row */}
+        <div className="flex items-center justify-between gap-4 px-5 py-4">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">Store Status</p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {force_closed ? 'Forced closed — overrides schedule' : force_open ? 'Forced open — overrides schedule' : 'Following opening hours schedule'}
+            </p>
           </div>
-          <button type="button" disabled={waSaving}
-            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); toast(t('toast_wa_saved') as string); } catch { setWaError(t('failed_save') as string); toast(t('toast_failed_save') as string, 'error'); } finally { setWaSaving(false); } }}
-            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
-            {waSaving ? t('saving') as string : t('save_btn') as string}
+          <button
+            type="button"
+            onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
+            className={`text-sm px-4 py-1.5 rounded-lg font-semibold transition whitespace-nowrap ${
+              force_closed ? 'bg-red-500 text-white hover:bg-red-600' : force_open ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
           </button>
         </div>
-        {waError && <p className="text-xs text-red-600">{waError}</p>}
+
+        <div className="border-t border-gray-100" />
+
+        {/* Opening Hours section */}
+        <div className="px-5 py-4 flex flex-col gap-3">
+          <p className="text-sm font-semibold text-gray-800">{t('opening_hours') as string}</p>
+          {configLoading ? (
+            <div className="flex justify-center py-4"><div className="w-6 h-6 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('opens_label') as string}</label>
+                  <input type="time" value={openTime} onChange={(e) => setOpenTime(e.target.value)}
+                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('closes_label') as string}</label>
+                  <input type="time" value={closeTime} onChange={(e) => setCloseTime(e.target.value)}
+                    className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('closed_on') as string}</label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {DAY_NAMES.map((name, i) => (
+                    <button key={i} type="button" onClick={() => toggleClosedDay(i)}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition ${
+                        closedDays.includes(i) ? 'bg-red-100 text-red-700 border-red-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                      }`}>
+                      {name}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400">{t('closed_days_hint') as string}</p>
+              </div>
+              {hoursError && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{hoursError}</p>}
+              <div>
+                <button type="button" onClick={handleSaveHours} disabled={hoursSaving}
+                  className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+                  {hoursSaving ? t('saving') as string : t('save_hours') as string}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Opening Hours */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
-        <h2 className="text-base font-bold text-gray-800">{t('opening_hours') as string}</h2>
-        {configLoading ? (
-          <div className="flex justify-center py-4"><div className="w-6 h-6 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" /></div>
-        ) : (
-          <>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('opens_label') as string}</label>
-                <input type="time" value={openTime} onChange={(e) => setOpenTime(e.target.value)}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('closes_label') as string}</label>
-                <input type="time" value={closeTime} onChange={(e) => setCloseTime(e.target.value)}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
-              </div>
+      {/* ── Card 2: WhatsApp + Discount + Hide No Image ── */}
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        {/* WhatsApp */}
+        <div className="px-5 py-4 flex flex-col gap-3">
+          <p className="text-sm font-semibold text-gray-800">{t('whatsapp_heading') as string}</p>
+          <p className="text-xs text-gray-400">{t('whatsapp_hint') as string}</p>
+          <div className="flex gap-2 items-end">
+            <div className="flex-1 flex flex-col gap-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('number_label') as string}</label>
+              <input type="tel" value={waNumber} onChange={(e) => setWaNumber(e.target.value.replace(/\D/g, ''))}
+                placeholder="9613502022"
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('closed_on') as string}</label>
-              <div className="flex gap-1.5 flex-wrap">
-                {DAY_NAMES.map((name, i) => (
-                  <button key={i} type="button" onClick={() => toggleClosedDay(i)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition ${
-                      closedDays.includes(i) ? 'bg-red-100 text-red-700 border-red-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                    }`}>
-                    {name}
-                  </button>
-                ))}
-              </div>
-              <p className="text-xs text-gray-400">{t('closed_days_hint') as string}</p>
-            </div>
-            {hoursError && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{hoursError}</p>}
-            <button type="button" onClick={handleSaveHours} disabled={hoursSaving}
-              className="self-start px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
-              {hoursSaving ? t('saving') as string : t('save_hours') as string}
+            <button type="button" disabled={waSaving}
+              onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); toast(t('toast_wa_saved') as string); } catch { setWaError(t('failed_save') as string); toast(t('toast_failed_save') as string, 'error'); } finally { setWaSaving(false); } }}
+              className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+              {waSaving ? t('saving') as string : t('save_btn') as string}
             </button>
-          </>
-        )}
-      </div>
-
-      {/* Discount */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
-        <div>
-          <h2 className="text-base font-bold text-gray-800">{t('discount_heading') as string}</h2>
-          <p className="text-xs text-gray-500 mt-1">{t('discount_hint') as string}</p>
+          </div>
+          {waError && <p className="text-xs text-red-600">{waError}</p>}
         </div>
-        {discountPct > 0 && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
-            <span className="text-amber-600 text-sm font-semibold">{discountPct}% discount active</span>
+
+        <div className="border-t border-gray-100" />
+
+        {/* Discount */}
+        <div className="px-5 py-4 flex flex-col gap-3">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">{t('discount_heading') as string}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('discount_hint') as string}</p>
           </div>
-        )}
-        <div className="flex gap-2 items-end">
-          <div className="flex flex-col gap-1 flex-1">
-            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('discount_label') as string}</label>
-            <input type="number" min="0" max="100" step="1" value={discountPct}
-              onChange={(e) => setDiscountPct(Math.min(100, Math.max(0, Number(e.target.value))))}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full" />
+          {discountPct > 0 && (
+            <div className="px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+              <span className="text-amber-600 text-sm font-semibold">{discountPct}% discount active</span>
+            </div>
+          )}
+          <div className="flex gap-2 items-end">
+            <div className="flex flex-col gap-1 flex-1">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('discount_label') as string}</label>
+              <input type="number" min="0" max="100" step="1" value={discountPct}
+                onChange={(e) => setDiscountPct(Math.min(100, Math.max(0, Number(e.target.value))))}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full" />
+            </div>
+            <button type="button" disabled={discountSaving}
+              onClick={async () => { setDiscountSaving(true); try { await updateConfig({ discount_percentage: discountPct }); toast(t('toast_discount_saved') as string); } catch { toast(t('toast_failed_save') as string, 'error'); } finally { setDiscountSaving(false); } }}
+              className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+              {discountSaving ? t('saving') as string : t('save_discount') as string}
+            </button>
           </div>
-          <button type="button" disabled={discountSaving}
-            onClick={async () => { setDiscountSaving(true); try { await updateConfig({ discount_percentage: discountPct }); toast(t('toast_discount_saved') as string); } catch { toast(t('toast_failed_save') as string, 'error'); } finally { setDiscountSaving(false); } }}
-            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
-            {discountSaving ? t('saving') as string : t('save_discount') as string}
+        </div>
+
+        <div className="border-t border-gray-100" />
+
+        {/* Hide items without image */}
+        <div className="px-5 py-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">{t('hide_no_image_heading') as string}</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('hide_no_image_desc') as string}</p>
+          </div>
+          <button type="button" dir="ltr"
+            onClick={async () => {
+              const next = !hideNoImage;
+              setHideNoImage(next);
+              try {
+                await updateConfig({ hide_items_without_image: next });
+                toast(t('toast_hide_no_image_saved') as string);
+              } catch {
+                setHideNoImage(!next);
+                toast(t('toast_upload_failed') as string, 'error');
+              }
+            }}
+            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${hideNoImage ? 'bg-primary-600' : 'bg-gray-300'}`}
+            aria-pressed={hideNoImage}>
+            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hideNoImage ? 'translate-x-6' : 'translate-x-1'}`} />
           </button>
         </div>
       </div>
 
-      {/* Hide items without image — full width */}
-      <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-base font-bold text-gray-800">{t('hide_no_image_heading') as string}</h2>
-          <p className="text-sm text-gray-500 mt-0.5">{t('hide_no_image_desc') as string}</p>
-        </div>
-        <button type="button" dir="ltr"
-          onClick={async () => {
-            const next = !hideNoImage;
-            setHideNoImage(next);
-            try {
-              await updateConfig({ hide_items_without_image: next });
-              toast(t('toast_hide_no_image_saved') as string);
-            } catch {
-              setHideNoImage(!next);
-              toast(t('toast_upload_failed') as string, 'error');
-            }
-          }}
-          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${hideNoImage ? 'bg-primary-600' : 'bg-gray-300'}`}
-          aria-pressed={hideNoImage}>
-          <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hideNoImage ? 'translate-x-6' : 'translate-x-1'}`} />
-        </button>
-      </div>
-
-      </div>{/* end 2-col grid */}
-
-      {/* Promo Popup — full width */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
-        <h2 className="text-base font-bold text-gray-800">{t('promo_popup') as string}</h2>
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">{t('enable_promo') as string}</span>
+      {/* ── Card 3: Promo Popup ── */}
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <div className="px-5 py-4 flex items-center justify-between gap-4">
+          <p className="text-sm font-semibold text-gray-800">{t('promo_popup') as string}</p>
           <button type="button" dir="ltr" onClick={() => setEnabled(!enabled).then(() => toast(enabled ? t('toast_promo_disabled') as string : t('toast_promo_enabled') as string))}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-primary-600' : 'bg-gray-300'}`}
+            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${enabled ? 'bg-primary-600' : 'bg-gray-300'}`}
             aria-pressed={enabled}>
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
           </button>
         </div>
         {image && (
-          <div className="flex flex-col gap-2">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('current_image') as string}</span>
-            <img src={image} alt="Promo" className="w-full max-h-64 object-contain rounded-lg border border-gray-200 bg-gray-50" />
-          </div>
+          <>
+            <div className="border-t border-gray-100" />
+            <div className="px-5 py-4 flex flex-col gap-2">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('current_image') as string}</span>
+              <img src={image} alt="Promo" className="w-full max-h-64 object-contain rounded-lg border border-gray-200 bg-gray-50" />
+            </div>
+          </>
         )}
-        <div className="flex gap-2">
+        <div className="border-t border-gray-100" />
+        <div className="px-5 py-4 flex gap-2">
           <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
             className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
             {uploading ? t('uploading') as string : t('upload_new_image') as string}
@@ -1127,6 +1142,7 @@ function SettingsTab() {
         </div>
         <input type="file" accept="image/*" ref={fileRef} onChange={handleFile} className="hidden" />
       </div>
+
     </div>
   );
 }
