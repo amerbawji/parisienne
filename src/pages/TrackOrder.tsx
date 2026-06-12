@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 
 // Customer-friendly status copy
@@ -36,38 +36,48 @@ interface TrackOrder {
 
 export const TrackOrder = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useCartStore((s) => s.setCartOpen);
   const [lang, setLang] = useState<'en' | 'ar'>('en');
   const isAr = lang === 'ar';
 
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(searchParams.get('phone') ?? '');
   const [orders, setOrders] = useState<TrackOrder[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleTrack = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmed = phone.trim();
-    if (!trimmed) return;
+  const fetchOrders = async (p: string) => {
     setLoading(true);
     setError(null);
     setSubmitted(true);
-
     const { data, error: fetchError } = await supabase
       .from('orders')
       .select('*')
-      .eq('customer_phone', trimmed)
+      .eq('customer_phone', p)
       .order('created_at', { ascending: false })
       .limit(20);
-
     setLoading(false);
     if (fetchError) {
       setError(isAr ? 'حدث خطأ. يرجى المحاولة مجدداً.' : 'Something went wrong. Please try again.');
       return;
     }
     setOrders((data as TrackOrder[]) ?? []);
+  };
+
+  // Auto-fetch if phone was pre-filled from URL param
+  useEffect(() => {
+    const pre = searchParams.get('phone');
+    if (pre) fetchOrders(pre);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleTrack = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = phone.trim();
+    if (!trimmed) return;
+    fetchOrders(trimmed);
   };
 
   const formatDate = (iso: string) => {
