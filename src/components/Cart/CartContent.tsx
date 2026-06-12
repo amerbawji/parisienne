@@ -44,6 +44,9 @@ export const CartContent = () => {
   const storeIsOpen = useStoreConfigStore((s) => s.isOpen());
   const whatsappNumber = useStoreConfigStore((s) => s.whatsapp_number);
   const discountPct = useStoreConfigStore((s) => s.discount_percentage);
+  const openTime = useStoreConfigStore((s) => s.open_time);
+  const closeTime = useStoreConfigStore((s) => s.close_time);
+  const closedDays = useStoreConfigStore((s) => s.closed_days);
   const navigate = useNavigate();
   const totalItems = getTotalItems();
   const hasWeightBasedItem = items.some((item) => (item.step ?? 1) < 1 || (item.minQuantity ?? 1) < 1);
@@ -55,7 +58,9 @@ export const CartContent = () => {
   const originalSubtotal = discountPct > 0 ? itemsTotal / (1 - discountPct / 100) : itemsTotal;
   const discountAmount = originalSubtotal - itemsTotal;
   const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
-  const [scheduledTime, setScheduledTime] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [scheduledTimeOfDay, setScheduledTimeOfDay] = useState('');
+  const scheduledTime = scheduledDate && scheduledTimeOfDay ? `${scheduledDate}T${scheduledTimeOfDay}` : '';
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
   const [locationUrl, setLocationUrl] = useState('');
   const [locationPreviewUrl, setLocationPreviewUrl] = useState('');
@@ -72,6 +77,34 @@ export const CartContent = () => {
   const [saveDetails, setSaveDetails] = useState(true);
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!storeIsOpen && timing === 'now') setTiming('scheduled');
+  }, [storeIsOpen]);
+
+  const isScheduledTimeValid = (value: string): boolean => {
+    if (!value) return false;
+    const d = new Date(value);
+    if (closedDays.includes(d.getDay())) return false;
+    const [oh, om] = openTime.split(':').map(Number);
+    const [ch, cm] = closeTime.split(':').map(Number);
+    const openMins  = oh * 60 + om;
+    const closeMins = ch * 60 + cm;
+    const mins = d.getHours() * 60 + d.getMinutes();
+    if (closeMins <= openMins) return mins >= openMins || mins < closeMins;
+    return mins >= openMins && mins < closeMins;
+  };
+
+  const todayLocal = (() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  })();
+
+  const isClosedDay = scheduledDate
+    ? closedDays.includes(new Date(scheduledDate + 'T12:00:00').getDay())
+    : false;
+
 
   useEffect(() => {
     const saved = localStorage.getItem(SAVED_DETAILS_KEY);
@@ -156,17 +189,32 @@ export const CartContent = () => {
   };
 
   const handleCheckout = async () => {
-    if (items.length === 0) return;
+    if (items.length === 0 || isSubmitting) return;
 
     if (!customerName.trim()) { setError(t('error_name_required')); return; }
     if (!customerPhone.trim()) { setError(t('error_phone_required')); return; }
-    if (serviceType === 'delivery' && !deliveryArea.trim() && !deliveryStreet.trim() && !locationUrl) {
-      setError(t('error_address_required')); return;
+    if (serviceType === 'delivery') {
+      const hasPin = !!locationUrl;
+      const hasTypedAddress = deliveryArea.trim() && deliveryStreet.trim();
+      if (!hasPin && !hasTypedAddress) {
+        setError(t('error_address_required')); return;
+      }
     }
     if (timing === 'scheduled' && !scheduledTime) {
       setError(t('error_schedule'));
       return;
     }
+    if (timing === 'scheduled' && !isScheduledTimeValid(scheduledTime)) {
+      setError(language === 'ar' ? 'المتجر مغلق في هذا الوقت. اختر وقتاً آخر.' : 'Store is closed at the selected time. Please choose another time.');
+      return;
+    }
+    if (timing === 'now' && !storeIsOpen) {
+      setTiming('scheduled');
+      setError(t('error_store_closed'));
+      return;
+    }
+
+    setIsSubmitting(true);
     
     const details = {
       serviceType,
@@ -241,6 +289,7 @@ export const CartContent = () => {
     clearCart();
     setCartOpen(false);
     navigate('/');
+    setIsSubmitting(false);
   };
 
   if (items.length === 0) {
@@ -264,7 +313,7 @@ export const CartContent = () => {
                   <span className="text-gray-700 truncate flex-1 min-w-0">
                     {(language === 'ar' ? item.name_ar : item.name_en) || item.name}
                   </span>
-                  <span className="text-gray-500 shrink-0 ml-2">x{item.quantity}</span>
+                  <span className="text-gray-500 shrink-0 ms-2">x{item.quantity}</span>
                 </li>
               ))}
               {lastOrderItems.length > 4 && (
@@ -492,7 +541,7 @@ export const CartContent = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery || locationCoordinates)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-block ml-3 mt-1 text-xs text-primary-600 hover:text-primary-700 underline"
+                    className="inline-block ms-3 mt-1 text-xs text-primary-600 hover:text-primary-700 underline"
                   >
                     {t('correct_pin_helper')}
                   </a>
@@ -527,7 +576,7 @@ export const CartContent = () => {
                     : "bg-white text-gray-600 border-gray-200 hover:border-primary-300 hover:bg-primary-50"
                 )}
               >
-                🕒 {t('now')}{!storeIsOpen && <span className="ml-1 text-[10px] sm:text-xs opacity-70">(closed)</span>}
+                🕒 {t('now')}{!storeIsOpen && <span className="ms-1 text-[10px] sm:text-xs opacity-70">{t('store_closed_label_short')}</span>}
               </button>
               <OptionButton 
                 selected={timing === 'scheduled'} 
@@ -538,17 +587,56 @@ export const CartContent = () => {
             </div>
             
             {timing === 'scheduled' && (
-              <div className="animate-in fade-in slide-in-from-top-2 duration-200">
-                <input
-                  type="datetime-local"
-                  value={scheduledTime}
-                  onChange={(e) => {
-                    setScheduledTime(e.target.value);
-                    setError('');
-                  }}
-                  className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-                  min={new Date().toISOString().slice(0, 16)}
-                />
+              <div className="animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col gap-2">
+                <div className="grid grid-cols-2 gap-2">
+                  {/* Date */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-500">{language === 'ar' ? 'التاريخ' : 'Date'}</label>
+                    <input
+                      type="date"
+                      value={scheduledDate}
+                      min={todayLocal}
+                      onChange={(e) => { setScheduledDate(e.target.value); setScheduledTimeOfDay(''); setError(''); }}
+                      className={`w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none ${isClosedDay ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                    />
+                    {isClosedDay && (
+                      <p className="text-xs text-red-500">⚠️ {language === 'ar' ? 'مغلق هذا اليوم' : 'Closed this day'}</p>
+                    )}
+                  </div>
+                  {/* Time */}
+                  <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-500">{language === 'ar' ? 'الوقت' : 'Time'}</label>
+                    <input
+                      type="time"
+                      value={scheduledTimeOfDay}
+                      min={openTime}
+                      max={closeTime}
+                      disabled={!scheduledDate || isClosedDay}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setScheduledTimeOfDay(val);
+                        setError('');
+                      }}
+                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-400"
+                    />
+                    <p className="text-xs text-gray-400">{openTime} – {closeTime}</p>
+                  </div>
+                </div>
+                {/* Out-of-hours warning (catches browsers that ignore min/max) */}
+                {scheduledTimeOfDay && (() => {
+                  const [oh, om] = openTime.split(':').map(Number);
+                  const [ch, cm] = closeTime.split(':').map(Number);
+                  const [sh, sm] = scheduledTimeOfDay.split(':').map(Number);
+                  const mins = sh * 60 + sm;
+                  const outOfHours = mins < oh * 60 + om || mins >= ch * 60 + cm;
+                  const isPast = scheduledDate === todayLocal && (() => {
+                    const now = new Date();
+                    return sh * 60 + sm <= now.getHours() * 60 + now.getMinutes();
+                  })();
+                  if (outOfHours) return <p className="text-xs text-red-500">⚠️ {language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Working hours: ${openTime} – ${closeTime}`}</p>;
+                  if (isPast) return <p className="text-xs text-red-500">⚠️ {language === 'ar' ? 'هذا الوقت مضى' : 'This time has already passed'}</p>;
+                  return null;
+                })()}
               </div>
             )}
           </div>
@@ -611,7 +699,7 @@ export const CartContent = () => {
             {(hasWeightBasedItem || paymentMethod === 'card') && (
               <div className="mt-1 text-[10px] text-gray-400 leading-tight">
                 {hasWeightBasedItem && <span><span className="font-semibold">{t('disclaimer_title')}</span> {t('disclaimer_text')}</span>}
-                {paymentMethod === 'card' && <span className={hasWeightBasedItem ? 'ml-1' : ''}>{t('card_disclaimer')}</span>}
+                {paymentMethod === 'card' && <span className={hasWeightBasedItem ? 'ms-1' : ''}>{t('card_disclaimer')}</span>}
               </div>
             )}
             <label className="flex items-center gap-1.5 mt-1.5 cursor-pointer select-none">
@@ -627,9 +715,15 @@ export const CartContent = () => {
 
         <Button
           onClick={handleCheckout}
-          className="shrink-0 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow"
+          disabled={isSubmitting}
+          className="shrink-0 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow disabled:opacity-60"
         >
-          {t('confirm_whatsapp')}
+          {isSubmitting ? (
+            <>
+              <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              {t('sending')}
+            </>
+          ) : t('confirm_whatsapp')}
         </Button>
         </div>
       </div>

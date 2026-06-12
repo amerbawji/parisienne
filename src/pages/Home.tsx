@@ -88,6 +88,7 @@ export const Home = () => {
     [storeCategories]
   );
   const hideItemsWithoutImage = useStoreConfigStore((s) => s.hide_items_without_image);
+  const discountPct = useStoreConfigStore((s) => s.discount_percentage);
 
   const filteredCategories = useMemo(
     () => {
@@ -145,7 +146,7 @@ export const Home = () => {
   }, [filteredCategories, hideItemsWithoutImage]);
 
   useEffect(() => {
-    if (!menuLoading && !promoLoading) setShowSplashPromo(promoEnabled);
+    if (!menuLoading && !promoLoading) setShowSplashPromo(promoEnabled && !!promoImage);
   }, [menuLoading, promoLoading, promoEnabled]);
 
   useEffect(() => {
@@ -213,20 +214,11 @@ export const Home = () => {
               <XMarkIcon className="h-5 w-5" />
             </button>
 
-            {promoImage ? (
-              <img
-                src={promoImage}
-                alt={t('promo_offer_alt')}
-                className="w-full h-auto object-cover"
-              />
-            ) : (
-              <div className="aspect-[4/5] w-full bg-gradient-to-br from-primary-50 to-primary-100 flex items-center justify-center p-6">
-                <div className="text-center">
-                  <p className="text-xs font-semibold tracking-wider text-primary-700 uppercase mb-2">Promo Placeholder</p>
-                  <p className="text-lg font-bold text-primary-900">Upload promo image and set `SPLASH_PROMO_IMAGE` in `Home.tsx`</p>
-                </div>
-              </div>
-            )}
+            <img
+              src={promoImage!}
+              alt={t('promo_offer_alt')}
+              className="w-full h-auto object-cover"
+            />
           </div>
         </div>
       )}
@@ -359,7 +351,7 @@ export const Home = () => {
                   {language === 'ar' ? 'طلبك السابق' : 'Your last order'}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
-                  {lastOrder.slice(0, 3).map((i) => (language === 'ar' ? i.name_ar : i.name_en) || i.name).join('، ')}
+                  {lastOrder.slice(0, 3).map((i) => (language === 'ar' ? i.name_ar : i.name_en) || i.name).join(language === 'ar' ? '، ' : ', ')}
                   {lastOrder.length > 3 && (language === 'ar' ? ` وأكثر...` : ` +${lastOrder.length - 3} more`)}
                 </p>
               </div>
@@ -367,12 +359,18 @@ export const Home = () => {
             <button
               onClick={() => {
                 lastOrder.forEach((item) => {
+                  const liveItem = storeCategories
+                    .flatMap((c) => c.items)
+                    .find((i) => i.id === item.id);
+                  const livePrice = liveItem
+                    ? Math.round(liveItem.price * (1 - discountPct / 100) * 100) / 100
+                    : item.price;
                   addCartItem({
                     id: item.id,
                     name: item.name,
                     name_en: item.name_en,
                     name_ar: item.name_ar,
-                    price: item.price,
+                    price: livePrice,
                     selectedOptions: item.selectedOptions,
                     instructions: item.instructions,
                     step: item.step,

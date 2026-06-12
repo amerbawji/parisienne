@@ -11,6 +11,7 @@ export interface CartItem {
   quantity: number;
   instructions: string;
   selectedOptions?: Record<string, string>;
+  selectedOptionsAr?: Record<string, string>;
   step?: number;
   minQuantity?: number;
 }
@@ -27,6 +28,7 @@ interface CartState {
     name_ar?: string; 
     price: number; 
     selectedOptions?: Record<string, string>;
+    selectedOptionsAr?: Record<string, string>;
     quantity?: number;
     step?: number;
     minQuantity?: number;
@@ -59,6 +61,7 @@ export const useCartStore = create<CartState>()(
               quantity, 
               instructions: newItem.instructions || '', 
               selectedOptions: newItem.selectedOptions || {},
+              selectedOptionsAr: newItem.selectedOptionsAr,
               step: newItem.step,
               minQuantity: newItem.minQuantity,
               name_en: newItem.name_en,
@@ -107,6 +110,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'cart-storage',
+      partialize: (state) => ({ items: state.items }),
     }
   )
 );

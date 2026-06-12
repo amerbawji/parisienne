@@ -85,25 +85,14 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
       if (details.locationUrl) {
         message += `${t.location} ${details.locationLabel || details.locationUrl}\n`;
         message += `${details.locationUrl}\n`;
-        if (details.locationArea) {
-          message += `${t.area} ${details.locationArea}\n`;
-        }
-        if (details.locationStreet) {
-          message += `${t.street} ${details.locationStreet}\n`;
-        }
-        if (details.locationBuilding) {
-          message += `${t.building} ${details.locationBuilding}\n`;
-        }
-        if (details.locationFloor) {
-          message += `${t.floor} ${details.locationFloor}\n`;
-        }
-        if (details.locationDetails) {
-          message += `${t.details} ${details.locationDetails}\n`;
-        }
-        if (details.locationCoordinates) {
-          message += `${t.coordinates} ${details.locationCoordinates}\n`;
-        }
-      } else {
+      }
+      if (details.locationArea) message += `${t.area} ${details.locationArea}\n`;
+      if (details.locationStreet) message += `${t.street} ${details.locationStreet}\n`;
+      if (details.locationBuilding) message += `${t.building} ${details.locationBuilding}\n`;
+      if (details.locationFloor) message += `${t.floor} ${details.locationFloor}\n`;
+      if (details.locationDetails) message += `${t.details} ${details.locationDetails}\n`;
+      if (details.locationCoordinates) message += `${t.coordinates} ${details.locationCoordinates}\n`;
+      if (!details.locationUrl && !details.locationArea && !details.locationStreet) {
         message += `${t.location} ${t.locationUnavailable}\n`;
       }
     }
@@ -119,9 +108,12 @@ export const generateWhatsAppLink = (items: CartItem[], language: 'en' | 'ar', d
     message += `${t.qty} ${item.quantity}\n`;
     message += `${t.price} $${(item.price * item.quantity).toFixed(2)}\n`;
     
-    if (item.selectedOptions && Object.keys(item.selectedOptions).length > 0) {
-      Object.entries(item.selectedOptions).forEach(([key, value]) => {
-         message += `- ${key}: ${value}\n`;
+    const optionsToShow = isAr && item.selectedOptionsAr && Object.keys(item.selectedOptionsAr).length > 0
+      ? item.selectedOptionsAr
+      : item.selectedOptions;
+    if (optionsToShow && Object.keys(optionsToShow).length > 0) {
+      Object.entries(optionsToShow).forEach(([key, value]) => {
+        message += `- ${key}: ${value}\n`;
       });
     }
 

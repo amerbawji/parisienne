@@ -77,6 +77,10 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
     const openMinutes  = oh * 60 + om;
     const closeMinutes = ch * 60 + cm;
     const nowMinutes   = now.getHours() * 60 + now.getMinutes();
+    // Midnight-crossing hours (e.g. 20:00 – 02:00)
+    if (closeMinutes <= openMinutes) {
+      return nowMinutes >= openMinutes || nowMinutes < closeMinutes;
+    }
     return nowMinutes >= openMinutes && nowMinutes < closeMinutes;
   },
 }));

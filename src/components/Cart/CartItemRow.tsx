@@ -20,7 +20,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
   return (
     <div className="py-4 border-b border-gray-100 last:border-0 animate-in fade-in slide-in-from-right-4 duration-300">
       <div className="flex justify-between items-start mb-2">
-        <div className="flex-1 pr-2">
+        <div className="flex-1 pe-2">
           <h4 className="font-medium text-gray-900 text-sm">{displayName}</h4>
           <p className="text-sm text-primary-600 font-medium mt-1">${(item.price * item.quantity).toFixed(2)}</p>
           
@@ -38,7 +38,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
             variant="ghost" 
             size="sm" 
             onClick={() => removeItem(item.instanceId)}
-            className="text-gray-400 hover:text-red-500 p-1 -mr-1"
+            className="text-gray-400 hover:text-red-500 p-1 -me-1"
             aria-label="Remove item"
         >
           <TrashIcon className="h-5 w-5" />

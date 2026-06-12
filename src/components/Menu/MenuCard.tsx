@@ -94,13 +94,26 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
   const handleAddToCart = () => {
     if (unitPrice === null || discountedUnitPrice === null) return;
 
+    const selectedOptionsAr: Record<string, string> = {};
+    if (item.options) {
+      Object.entries(pendingOptions).forEach(([optName, choice]) => {
+        const opt = item.options!.find((o) => o.name === optName);
+        if (!opt) return;
+        const arKey = opt.name_ar || optName;
+        const choiceIdx = opt.choices.indexOf(choice);
+        const arVal = opt.choices_ar?.[choiceIdx] || choice;
+        selectedOptionsAr[arKey] = arVal;
+      });
+    }
+
     const instanceId = addItem({
       id: item.id,
-      name: language === 'ar' ? item.name_ar : item.name_en, // Current display name
+      name: language === 'ar' ? item.name_ar : item.name_en,
       name_en: item.name_en,
       name_ar: item.name_ar,
       price: discountedUnitPrice,
       selectedOptions: pendingOptions,
+      selectedOptionsAr,
       instructions: pendingInstructions,
       step,
       minQuantity,
@@ -332,6 +345,14 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                     })}
                   </div>
                 </div>
+              )}
+
+              {unitPrice === null && item.option_price_overrides && (
+                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                  {language === 'ar'
+                    ? `اختر ${(() => { const k = Object.keys(item.option_price_overrides)[0]; const opt = item.options?.find(o => o.name === k); return (opt?.name_ar || k); })()}`
+                    : `Please select ${Object.keys(item.option_price_overrides)[0]} to continue`}
+                </p>
               )}
 
               <div className="flex items-center gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
