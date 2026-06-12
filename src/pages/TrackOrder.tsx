@@ -45,6 +45,7 @@ export const TrackOrder = () => {
 
   const [phone, setPhone] = useState(searchParams.get('phone') ?? '');
   const [orderNum, setOrderNum] = useState(searchParams.get('order') ?? '');
+  const preFilled = !!(searchParams.get('phone') && searchParams.get('order'));
   const [orders, setOrders] = useState<TrackOrder[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -183,8 +184,8 @@ export const TrackOrder = () => {
       </header>
 
       <main className="flex-1 max-w-lg mx-auto w-full px-4 py-8 flex flex-col gap-6">
-        {/* Logo / intro */}
-        <div className="text-center flex flex-col items-center gap-2">
+        {/* Logo / intro — only shown on cold visit */}
+        {!preFilled && <div className="text-center flex flex-col items-center gap-2">
           <div
             className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-sm"
             style={{ background: '#25568c' }}
@@ -199,10 +200,10 @@ export const TrackOrder = () => {
               ? 'أدخل رقم هاتفك ورقم طلبك للاطلاع على طلباتك.'
               : 'Enter your phone number and order number to view your orders.'}
           </p>
-        </div>
+        </div>}
 
-        {/* Search form */}
-        <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-4">
+        {/* Search form — hidden when pre-filled from URL */}
+        {!preFilled && <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-semibold text-gray-700">
               {isAr ? 'رقم الهاتف' : 'Phone number'}
@@ -240,7 +241,20 @@ export const TrackOrder = () => {
           >
             {loading ? '...' : (isAr ? 'بحث' : 'Track')}
           </button>
-        </form>
+        </form>}
+
+        {/* Loading spinner when pre-filled */}
+        {preFilled && loading && (
+          <div className="flex justify-center py-16">
+            <div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
+          </div>
+        )}
+        {preFilled && error && (
+          <div className="text-center py-12 flex flex-col items-center gap-3">
+            <span className="text-4xl">⚠️</span>
+            <p className="text-gray-500 text-sm">{error}</p>
+          </div>
+        )}
 
         {/* Results */}
         {submitted && !loading && orders !== null && (
