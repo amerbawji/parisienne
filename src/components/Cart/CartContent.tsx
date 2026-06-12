@@ -635,19 +635,21 @@ export const CartContent = () => {
                 </div>
                 {/* Validation feedback */}
                 {(isPastDate || isClosedDay || (scheduledTimeOfDay && !isScheduledTimeValid(scheduledTime))) && (
-                  <div className="border-t border-gray-100 px-3 py-2 bg-red-50">
-                    <p className="text-xs text-red-500">
+                  <div className="border-t border-gray-100 px-3 py-2.5 bg-red-50 flex items-start gap-2">
+                    <span className="text-sm leading-none mt-0.5 shrink-0">⚠️</span>
+                    <p className="text-sm text-red-700 leading-snug">
                       {isPastDate
-                        ? (language === 'ar' ? 'هذا التاريخ قد مضى' : 'This date is in the past')
+                        ? (language === 'ar' ? 'هذا التاريخ قد مضى — اختر اليوم أو لاحقاً' : "That date has already passed — pick today or later.")
                         : isClosedDay
-                        ? (language === 'ar' ? 'المتجر مغلق في هذا اليوم' : 'Closed on this day')
-                        : (language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Hours: ${openTime} – ${closeTime}`)}
+                        ? (language === 'ar' ? 'نحن مغلقون في هذا اليوم — جرب تاريخاً آخر' : "We're closed that day — try a different date.")
+                        : (language === 'ar' ? `هذا الوقت خارج أوقات العمل (${openTime} – ${closeTime}) — اختر وقتاً آخر` : `That time is outside our working hours (${openTime} – ${closeTime}).`)}
                     </p>
                   </div>
                 )}
                 {scheduledTime && isScheduledTimeValid(scheduledTime) && (
-                  <div className="border-t border-gray-100 px-3 py-2 bg-green-50">
-                    <p className="text-xs text-green-600">✓ {language === 'ar' ? 'الوقت متاح' : 'Time available'}</p>
+                  <div className="border-t border-gray-100 px-3 py-2.5 bg-green-50 flex items-center gap-2">
+                    <span className="text-sm leading-none shrink-0">✅</span>
+                    <p className="text-sm text-green-700">{language === 'ar' ? 'الوقت متاح' : "Looks good — we'll have it ready for you."}</p>
                   </div>
                 )}
               </div>
