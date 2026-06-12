@@ -32,6 +32,7 @@ interface TrackOrder {
   total: number;
   timing: string | null;
   scheduled_time: string | null;
+  order_number: number | null;
 }
 
 export const TrackOrder = () => {
@@ -213,7 +214,12 @@ export const TrackOrder = () => {
                   <div key={order.id} className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                     {/* Card header */}
                     <div className="px-4 py-3 flex items-center justify-between gap-3 border-b border-gray-100">
-                      <span className="text-xs text-gray-500">{formatDate(order.created_at)}</span>
+                      <div className="flex flex-col">
+                        {order.order_number != null && (
+                          <span className="text-xs font-bold text-primary-600">#{order.order_number}</span>
+                        )}
+                        <span className="text-xs text-gray-500">{formatDate(order.created_at)}</span>
+                      </div>
                       <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${si.color}`}>
                         <span>{si.icon}</span>
                         <span>{isAr ? si.labelAr : si.label}</span>

@@ -87,6 +87,7 @@ export const CartContent = () => {
 
   interface PlacedOrder {
     id: string | null;
+    orderNumber: number | null;
     items: CartItem[];
     total: number;
     serviceType: 'takeaway' | 'delivery';
@@ -96,7 +97,7 @@ export const CartContent = () => {
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
   const [placedOrderStatus, setPlacedOrderStatus] = useState('new');
   const [showTracking, setShowTracking] = useState(false);
-  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
+  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; order_number: number | null; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
   const [trackingLoading, setTrackingLoading] = useState(false);
 
   useEffect(() => {
@@ -306,7 +307,7 @@ export const CartContent = () => {
         selected_options: item.selectedOptions || {},
       })),
       total: totalPrice,
-    }).select('id').single();
+    }).select('id, order_number').single();
     if (orderError) console.error('[Order save failed]', orderError);
 
     if (link && !waWindow) window.location.href = link;
@@ -315,6 +316,7 @@ export const CartContent = () => {
 
     setPlacedOrder({
       id: insertData?.id ?? null,
+      orderNumber: (insertData as { id: string; order_number: number } | null)?.order_number ?? null,
       items: snapshot,
       total: totalPrice,
       serviceType,
@@ -380,6 +382,9 @@ export const CartContent = () => {
             <h2 className="text-xl font-bold text-gray-900">
               {language === 'ar' ? 'تم استلام طلبك!' : 'Order placed!'}
             </h2>
+            {placedOrder.orderNumber != null && (
+              <p className="text-sm font-semibold text-primary-600">#{placedOrder.orderNumber}</p>
+            )}
             {(() => {
               const si = TRACKING_STATUS[placedOrderStatus] ?? { label: placedOrderStatus, labelAr: placedOrderStatus, color: 'bg-gray-50 text-gray-600 border-gray-200', icon: '•' };
               return (
@@ -488,10 +493,13 @@ export const CartContent = () => {
                 return (
                   <div key={order.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
                     <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-gray-100">
-                      <span className="text-xs text-gray-500">
-                        {orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                        {' · '}{orderDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      <div className="flex flex-col">
+                        {order.order_number != null && <span className="text-xs font-bold text-primary-600">#{order.order_number}</span>}
+                        <span className="text-xs text-gray-500">
+                          {orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                          {' · '}{orderDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
                       <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full border ${si.color}`}>
                         {si.icon} {language === 'ar' ? si.labelAr : si.label}
                       </span>

@@ -1952,6 +1952,7 @@ interface Order {
   total: number;
   status: string;
   seen_at: string | null;
+  order_number: number | null;
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -1984,6 +1985,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
               </span>
             )}
             <span className="text-sm font-semibold text-gray-900">
+              {order.order_number != null && <span className="text-primary-600">#{order.order_number} · </span>}
               {date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
               {' '}<span className="text-gray-500 font-normal">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
             </span>

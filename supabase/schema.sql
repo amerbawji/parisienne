@@ -101,6 +101,8 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE item_options ADD COLUMN name_ar TEXT NOT NULL DEFAULT '';
 -- ALTER TABLE item_options ADD COLUMN choices_ar JSONB NOT NULL DEFAULT '[]';
 -- ALTER TABLE orders ADD COLUMN seen_at TIMESTAMPTZ;
+-- CREATE SEQUENCE order_number_seq START 1001;
+-- ALTER TABLE orders ADD COLUMN order_number INTEGER NOT NULL DEFAULT nextval('order_number_seq');
 
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
