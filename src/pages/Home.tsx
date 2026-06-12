@@ -164,19 +164,13 @@ export const Home = () => {
     if (!categoryId) return;
     pendingScrollRef.current = null;
 
-    // Double-rAF: wait for the collapse of the previous category to finish
-    // reflow before measuring, so the scroll target is at its final position.
-    let r1: number, r2: number;
-    r1 = requestAnimationFrame(() => {
-      r2 = requestAnimationFrame(() => {
-        const target = categoryRefs.current[categoryId];
-        if (!target) return;
-        const headerHeight = headerRef.current?.offsetHeight ?? 0;
-        target.style.scrollMarginTop = `${headerHeight + 12}px`;
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+    const r = requestAnimationFrame(() => {
+      const target = categoryRefs.current[categoryId];
+      if (!target) return;
+      target.style.scrollMarginTop = `${(headerRef.current?.offsetHeight ?? 0) + 12}px`;
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-    return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); };
+    return () => cancelAnimationFrame(r);
   }, [expandedCategory]);
 
   const modalRelatedItems = useMemo(() => {
@@ -534,7 +528,7 @@ export const Home = () => {
                           <img
                             src={category.image}
                             alt={language === 'ar' ? category.name_ar : category.name_en}
-                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                            className="w-full h-full object-cover object-center transition-transform duration-500 sm:group-hover:scale-105"
                             loading="lazy"
                             decoding="async"
                           />
@@ -545,21 +539,23 @@ export const Home = () => {
                           </div>
                         </div>
                       </button>
-                      {isOpen && (
-                        <div className="animate-in fade-in slide-in-from-top-2 duration-200 bg-gray-50/50">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
-                            {category.items.map((item) => (
-                              <MenuCard
-                                key={item.id}
-                                item={item as MenuItem}
-                                expanded={false}
-                                onToggle={() => handleItemToggle(item as MenuItem)}
-                                onItemAdded={(payload) => setLastAdded(payload)}
-                              />
-                            ))}
+                      <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                        <div className="overflow-hidden">
+                          <div className="bg-gray-50/50">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-px gap-y-2">
+                              {category.items.map((item) => (
+                                <MenuCard
+                                  key={item.id}
+                                  item={item as MenuItem}
+                                  expanded={false}
+                                  onToggle={() => handleItemToggle(item as MenuItem)}
+                                  onItemAdded={(payload) => setLastAdded(payload)}
+                                />
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
                   );
                 })
