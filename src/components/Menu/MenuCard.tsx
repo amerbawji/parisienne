@@ -157,7 +157,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
   };
 
   const presets = item.presets || [];
-  const imageUrl = item.image || `https://placehold.co/400x300?text=${encodeURIComponent(item.name_en)}`;
+  const imageUrl = item.image || null;
   const quickAddEnabled = !item.option_price_overrides;
   const inStock = item.in_stock !== false;
 
@@ -222,13 +222,13 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
             className="relative w-full h-52 sm:h-64 bg-gray-200 cursor-pointer shrink-0"
             onClick={(e) => { e.stopPropagation(); onToggle(); }}
           >
-            <img
+            {imageUrl && <img
               src={imageUrl}
               alt={displayName}
               onLoad={() => setExpandedImgLoaded(true)}
-              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
-            />
-            {!expandedImgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
+              className={`object-cover object-center w-full h-full transition-opacity duration-200 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
+            />}
+            {(!imageUrl || !expandedImgLoaded) && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <span className="bg-white/90 text-gray-700 text-xs font-bold px-3 py-1 rounded-full shadow">{language === 'ar' ? 'غير متوفر' : 'Out of stock'}</span>
@@ -266,7 +266,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
             </div>
             {displayDesc && <p className="text-gray-600 text-sm mb-3 line-clamp-3">{displayDesc}</p>}
 
-            <div className="mt-auto space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="mt-auto space-y-3">
               {item.options && item.options.length > 0 && (
                 <div className="space-y-2">
                   {item.options.map((opt) => (
@@ -414,13 +414,13 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
         <>
           {/* Image — left in LTR, right in RTL */}
           <div className="relative shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-gray-200">
-            <img
+            {imageUrl && <img
               src={imageUrl}
               alt={displayName}
               onLoad={() => setImgLoaded(true)}
-              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
-            />
-            {!imgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />}
+              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-opacity duration-200 ${imgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
+            />}
+            {(!imageUrl || !imgLoaded) && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
                 <span className="bg-white/90 text-gray-700 text-[10px] font-bold px-2 py-0.5 rounded-full">{language === 'ar' ? 'غير متوفر' : 'Out of stock'}</span>

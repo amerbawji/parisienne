@@ -704,11 +704,12 @@ export const Home = () => {
 
       {modalItem && (
         <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/50 animate-in fade-in duration-150"
           onClick={() => setModalItem(null)}
         >
           <div
-            className="w-full sm:max-w-xl lg:max-w-3xl bg-gray-50 flex flex-col h-dvh sm:h-auto sm:max-h-[88vh] sm:rounded-2xl overflow-hidden animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
+            className="w-full sm:max-w-xl lg:max-w-3xl bg-gray-50 flex flex-col h-dvh sm:h-auto sm:max-h-[88vh] sm:rounded-2xl overflow-hidden animate-in slide-in-from-bottom duration-200 sm:duration-150"
+            style={{ willChange: 'transform' }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white shrink-0">
