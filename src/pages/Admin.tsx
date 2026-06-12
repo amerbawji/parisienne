@@ -1967,14 +1967,14 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   onToggle: () => void;
   onUpdateStatus: (id: string, status: string) => void;
   updatingStatus: string | null;
-  onMarkSeen: (id: string) => void;
+  onMarkSeen: (id: string, currentStatus: string) => void;
 }) {
   const date = new Date(order.created_at);
   const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
   const { t } = useAdminT();
   return (
     <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${!order.seen_at ? 'border-amber-300' : 'border-gray-200'}`}>
-      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
+      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id, order.status); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             {!order.seen_at && (
@@ -2061,7 +2061,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
   onUpdateStatus: (id: string, status: string) => void;
   onRefresh: () => void;
   toast: ShowToast;
-  onMarkSeen: (id: string) => void;
+  onMarkSeen: (id: string, currentStatus: string) => void;
 }) {
   const { t } = useAdminT();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -2094,7 +2094,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
     setUpdatingStatus(id);
     await supabase.from('orders').update({ status }).eq('id', id);
     onUpdateStatus(id, status);
-    onMarkSeen(id);
+    onMarkSeen(id, '');
     setUpdatingStatus(null);
     toast((t('toast_order_status') as (s: string) => string)(STATUS_LABELS[status]?.label ?? status));
   };
@@ -2485,14 +2485,13 @@ function AdminShell() {
     setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
   };
 
-  const handleMarkSeen = useCallback(async (id: string) => {
+  const handleMarkSeen = useCallback(async (id: string, currentStatus: string) => {
     const now = new Date().toISOString();
-    const order = orders.find(o => o.id === id);
     const updates: Record<string, string> = { seen_at: now };
-    if (order?.status === 'new') updates.status = 'confirmed';
+    if (currentStatus === 'new') updates.status = 'confirmed';
     await supabase.from('orders').update(updates).eq('id', id);
     setOrders(prev => prev.map(o => o.id === id ? { ...o, ...updates } : o));
-  }, [orders]);
+  }, []);
 
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
