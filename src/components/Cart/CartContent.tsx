@@ -94,6 +94,7 @@ export const CartContent = () => {
     customerPhone: string;
   }
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
+  const [placedOrderStatus, setPlacedOrderStatus] = useState('new');
   const [showTracking, setShowTracking] = useState(false);
   const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
   const [trackingLoading, setTrackingLoading] = useState(false);
@@ -101,6 +102,21 @@ export const CartContent = () => {
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
   }, [storeIsOpen]);
+
+  useEffect(() => {
+    if (!placedOrder?.id) return;
+    setPlacedOrderStatus('new');
+    // Fetch current status in case it already changed
+    supabase.from('orders').select('status').eq('id', placedOrder.id).single()
+      .then(({ data }) => { if (data) setPlacedOrderStatus(data.status); });
+    // Subscribe to live status updates
+    const channel = supabase
+      .channel(`placed-order-${placedOrder.id}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${placedOrder.id}` },
+        (payload) => { setPlacedOrderStatus((payload.new as { status: string }).status); })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [placedOrder?.id]);
 
   const isScheduledTimeValid = (value: string): boolean => {
     if (!value) return false;
@@ -364,9 +380,14 @@ export const CartContent = () => {
             <h2 className="text-xl font-bold text-gray-900">
               {language === 'ar' ? 'تم استلام طلبك!' : 'Order placed!'}
             </h2>
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
-              🕐 {language === 'ar' ? 'تم استلام طلبك' : 'Order received'}
-            </span>
+            {(() => {
+              const si = TRACKING_STATUS[placedOrderStatus] ?? { label: placedOrderStatus, labelAr: placedOrderStatus, color: 'bg-gray-50 text-gray-600 border-gray-200', icon: '•' };
+              return (
+                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border ${si.color}`}>
+                  {si.icon} {language === 'ar' ? si.labelAr : si.label}
+                </span>
+              );
+            })()}
           </div>
 
           {/* Items */}
@@ -443,7 +464,10 @@ export const CartContent = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={language === 'ar' ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
             </svg>
           </button>
-          <h2 className="text-base font-bold text-gray-900">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
+          <h2 className="text-base font-bold text-gray-900 flex-1">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
+          <button type="button" onClick={openTracking} className="text-xs text-primary-600 font-medium hover:underline shrink-0">
+            {language === 'ar' ? 'تحديث' : 'Refresh'}
+          </button>
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
