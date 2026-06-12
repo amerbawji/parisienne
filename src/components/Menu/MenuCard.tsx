@@ -207,7 +207,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
 
   return (
     <div
-      className={`rounded-xl overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm bg-gray-50' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer active:bg-gray-50 sm:hover:shadow-md bg-white'} ${!inStock ? 'opacity-60' : ''}`}
+      className={`rounded-xl overflow-hidden flex transition-shadow group ${expanded ? 'flex-col shadow-sm bg-gray-50' : 'flex-row gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer active:bg-gray-50 sm:hover:shadow-md bg-white'}`}
       onClick={() => !expanded && onToggle()}
     >
       {/* ── EXPANDED layout ── */}
@@ -221,7 +221,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
               src={imageUrl}
               alt={displayName}
               onLoad={() => setExpandedImgLoaded(true)}
-              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
             />
             {!expandedImgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
             {!inStock && (
@@ -324,7 +324,8 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                   <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
                     {language === 'ar' ? 'قد يعجبك أيضاً' : 'You might also like'}
                   </p>
-                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+                  <div className="relative">
+                  <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide pe-6">
                     {relatedItems.slice(0, 4).map((rel) => {
                       const relImg = rel.image || `https://placehold.co/80x80?text=${encodeURIComponent(rel.name_en)}`;
                       const relPrice = Math.round(rel.price * (1 - discountPct / 100) * 100) / 100;
@@ -345,6 +346,8 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                         </button>
                       );
                     })}
+                  </div>
+                  <div className={`absolute top-0 bottom-1 end-0 w-8 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none`} />
                   </div>
                 </div>
               )}
@@ -402,7 +405,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
               src={imageUrl}
               alt={displayName}
               onLoad={() => setImgLoaded(true)}
-              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+              className={`object-cover object-center w-full h-full sm:group-hover:scale-105 transition-all duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
             />
             {!imgLoaded && <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-xl" />}
             {!inStock && (

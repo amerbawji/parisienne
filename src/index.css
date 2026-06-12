@@ -21,3 +21,15 @@
     font-size: max(16px, 1em);
   }
 }
+
+@layer utilities {
+  .safe-area-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+  .pb-safe-36 {
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom, 0px));
+  }
+  .pb-safe-24 {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+}

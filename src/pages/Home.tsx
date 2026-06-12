@@ -202,7 +202,7 @@ export const Home = () => {
   };
 
   return (
-    <div className={`bg-gray-50 font-sans ${totalItems > 0 ? 'pb-36 sm:pb-24' : 'pb-8'}`}>
+    <div className={`bg-gray-50 font-sans ${totalItems > 0 ? 'pb-safe-36 sm:pb-safe-24' : 'pb-8'}`}>
       {showSplashPromo && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[1px] flex items-center justify-center p-4">
           <div className="relative w-full max-w-md sm:max-w-lg lg:max-w-3xl rounded-2xl overflow-hidden bg-white shadow-2xl border border-gray-200">
@@ -638,7 +638,7 @@ export const Home = () => {
             <CheckCircleIcon className="h-5 w-5 text-secondary-400 shrink-0 mt-0.5" aria-hidden="true" />
             <div className="min-w-0 flex-1">
               <p className="text-[11px] uppercase tracking-wider text-gray-300">{t('added_to_cart')}</p>
-              <p className="text-sm font-medium truncate">{lastAdded.itemName}</p>
+              <p className="text-sm font-medium line-clamp-2 leading-snug">{lastAdded.itemName}</p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <button
@@ -668,7 +668,7 @@ export const Home = () => {
       )}
 
       {totalItems > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-6">
+        <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:pb-6 safe-area-bottom">
           <div className="mx-auto max-w-3xl rounded-2xl bg-white border border-gray-200 shadow-xl px-4 py-3 flex items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs text-gray-500">{t('items')} {totalItems}</p>

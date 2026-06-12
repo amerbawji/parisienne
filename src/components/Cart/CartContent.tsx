@@ -328,6 +328,7 @@ export const CartContent = () => {
                     name: item.name,
                     name_en: item.name_en,
                     name_ar: item.name_ar,
+                    image: item.image,
                     price: item.price,
                     selectedOptions: item.selectedOptions,
                     instructions: item.instructions,

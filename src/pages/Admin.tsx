@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo, createContext, useCo
 import { useMenuStore, type Category, type MenuItem, type MenuOption, type Preset } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
+import { useLanguageStore } from '../store/languageStore';
 import { uploadImage, supabase } from '../lib/supabase';
 
 // ─── Unsaved changes flag ─────────────────────────────────────────────────────
@@ -16,6 +17,8 @@ const useToast = () => useContext(ToastContext);
 
 function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const { language } = useLanguageStore();
+  const isRtl = language === 'ar';
 
   const showToast = useCallback<ShowToast>((message, type = 'success') => {
     const id = Math.random().toString(36).slice(2);
@@ -26,12 +29,12 @@ function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={showToast}>
       {children}
-      <div className="fixed top-4 right-4 z-[60] flex flex-col gap-2 items-end pointer-events-none">
+      <div className={`fixed top-4 z-[60] flex flex-col gap-2 pointer-events-none ${isRtl ? 'left-4 items-start' : 'right-4 items-end'}`}>
         {toasts.map((t) => (
           <div key={t.id}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium text-white animate-in slide-in-from-right-4 fade-in duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg text-sm font-medium text-white fade-in duration-200 ${
               t.type === 'success' ? 'bg-emerald-600' : 'bg-red-600'
-            }`}>
+            } ${isRtl ? 'animate-in slide-in-from-left-4' : 'animate-in slide-in-from-right-4'}`}>
             {t.type === 'success'
               ? <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
               : <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>

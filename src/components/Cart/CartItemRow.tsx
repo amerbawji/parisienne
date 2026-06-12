@@ -73,7 +73,7 @@ export const CartItemRow = ({ item }: CartItemRowProps) => {
           value={item.instructions || ''}
           onChange={(e) => updateInstructions(item.instanceId, e.target.value)}
           className="w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none resize-none bg-gray-50 placeholder:text-gray-400"
-          rows={1}
+          rows={2}
         />
       </div>
     </div>
