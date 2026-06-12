@@ -58,9 +58,7 @@ export const CartContent = () => {
   const originalSubtotal = discountPct > 0 ? itemsTotal / (1 - discountPct / 100) : itemsTotal;
   const discountAmount = originalSubtotal - itemsTotal;
   const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
-  const [scheduledDate, setScheduledDate] = useState('');
-  const [scheduledTimeOfDay, setScheduledTimeOfDay] = useState('');
-  const scheduledTime = scheduledDate && scheduledTimeOfDay ? `${scheduledDate}T${scheduledTimeOfDay}` : '';
+  const [scheduledTime, setScheduledTime] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
   const [locationUrl, setLocationUrl] = useState('');
   const [locationPreviewUrl, setLocationPreviewUrl] = useState('');
@@ -96,13 +94,13 @@ export const CartContent = () => {
     return mins >= openMins && mins < closeMins;
   };
 
-  const todayLocal = (() => {
+  const nowLocalDT = (() => {
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   })();
 
-  const isClosedDay = scheduledDate
-    ? closedDays.includes(new Date(scheduledDate + 'T12:00:00').getDay())
+  const isClosedDay = scheduledTime
+    ? closedDays.includes(new Date(scheduledTime).getDay())
     : false;
 
 
@@ -366,9 +364,9 @@ export const CartContent = () => {
           </button>
         </div>
 
-        <ul role="list" className="divide-y divide-gray-100 mb-6">
+        <ul role="list" className="flex flex-col gap-2 mb-4">
           {items.map((item) => (
-            <li key={item.instanceId || item.id} className="py-4">
+            <li key={item.instanceId || item.id} className="bg-gray-50 border border-gray-100 rounded-xl px-3">
               <CartItemRow item={item} />
             </li>
           ))}
@@ -587,55 +585,51 @@ export const CartContent = () => {
             </div>
             
             {timing === 'scheduled' && (
-              <div className="animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col gap-2">
-                <div className="grid grid-cols-2 gap-2">
-                  {/* Date */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-gray-500">{language === 'ar' ? 'التاريخ' : 'Date'}</label>
-                    <input
-                      type="date"
-                      value={scheduledDate}
-                      min={todayLocal}
-                      onChange={(e) => { setScheduledDate(e.target.value); setScheduledTimeOfDay(''); setError(''); }}
-                      className={`w-full p-2 text-sm border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none ${isClosedDay ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
-                    />
-                    {isClosedDay && (
-                      <p className="text-xs text-red-500">⚠️ {language === 'ar' ? 'مغلق هذا اليوم' : 'Closed this day'}</p>
-                    )}
-                  </div>
-                  {/* Time */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs font-medium text-gray-500">{language === 'ar' ? 'الوقت' : 'Time'}</label>
-                    <input
-                      type="time"
-                      value={scheduledTimeOfDay}
-                      min={openTime}
-                      max={closeTime}
-                      disabled={!scheduledDate || isClosedDay}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setScheduledTimeOfDay(val);
-                        setError('');
-                      }}
-                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none disabled:bg-gray-100 disabled:text-gray-400"
-                    />
-                    <p className="text-xs text-gray-400">{openTime} – {closeTime}</p>
-                  </div>
+              <div className="animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col gap-1.5 bg-white border border-gray-200 rounded-xl p-3">
+                <div className="flex items-center justify-between mb-0.5">
+                  <label className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                    {language === 'ar' ? 'موعد الطلب' : 'Schedule for'}
+                  </label>
+                  <span className="text-[11px] text-gray-400">{openTime} – {closeTime}</span>
                 </div>
-                {/* Out-of-hours warning (catches browsers that ignore min/max) */}
-                {scheduledTimeOfDay && (() => {
+                <input
+                  type="datetime-local"
+                  value={scheduledTime}
+                  min={nowLocalDT}
+                  onChange={(e) => { setScheduledTime(e.target.value); setError(''); }}
+                  className={cn(
+                    'w-full px-3 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-gray-50 text-gray-800',
+                    isClosedDay ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                  )}
+                />
+                {scheduledTime && (() => {
+                  if (isClosedDay) return (
+                    <p className="text-xs text-red-500 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {language === 'ar' ? 'المتجر مغلق في هذا اليوم' : 'Store is closed on this day'}
+                    </p>
+                  );
+                  const d = new Date(scheduledTime);
                   const [oh, om] = openTime.split(':').map(Number);
                   const [ch, cm] = closeTime.split(':').map(Number);
-                  const [sh, sm] = scheduledTimeOfDay.split(':').map(Number);
-                  const mins = sh * 60 + sm;
-                  const outOfHours = mins < oh * 60 + om || mins >= ch * 60 + cm;
-                  const isPast = scheduledDate === todayLocal && (() => {
-                    const now = new Date();
-                    return sh * 60 + sm <= now.getHours() * 60 + now.getMinutes();
-                  })();
-                  if (outOfHours) return <p className="text-xs text-red-500">⚠️ {language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Working hours: ${openTime} – ${closeTime}`}</p>;
-                  if (isPast) return <p className="text-xs text-red-500">⚠️ {language === 'ar' ? 'هذا الوقت مضى' : 'This time has already passed'}</p>;
-                  return null;
+                  const mins = d.getHours() * 60 + d.getMinutes();
+                  const openMins = oh * 60 + om;
+                  const closeMins = ch * 60 + cm;
+                  const outOfHours = closeMins <= openMins
+                    ? !(mins >= openMins || mins < closeMins)
+                    : !(mins >= openMins && mins < closeMins);
+                  if (outOfHours) return (
+                    <p className="text-xs text-red-500 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Working hours: ${openTime} – ${closeTime}`}
+                    </p>
+                  );
+                  return (
+                    <p className="text-xs text-green-600 flex items-center gap-1">
+                      <span>✓</span>
+                      {language === 'ar' ? 'الوقت متاح' : 'Time available'}
+                    </p>
+                  );
                 })()}
               </div>
             )}
