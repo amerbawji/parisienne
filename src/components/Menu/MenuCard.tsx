@@ -73,18 +73,21 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
 
   const getUnitPrice = (): number | null => {
     const overrides = item.option_price_overrides;
-    if (!overrides) return item.price;
-
-    let matchedPrice: number | null = null;
-
-    Object.entries(pendingOptions).forEach(([optionName, choice]) => {
-      const priceForChoice = overrides[optionName]?.[choice];
-      if (typeof priceForChoice === 'number') {
-        matchedPrice = priceForChoice;
-      }
+    if (overrides) {
+      let matchedPrice: number | null = null;
+      Object.entries(pendingOptions).forEach(([optionName, choice]) => {
+        const priceForChoice = overrides[optionName]?.[choice];
+        if (typeof priceForChoice === 'number') matchedPrice = priceForChoice;
+      });
+      return matchedPrice;
+    }
+    // Sum price_additions from selected choices on top of base price
+    let price = item.price;
+    (item.options ?? []).forEach((opt) => {
+      const chosen = pendingOptions[opt.name];
+      if (chosen && opt.price_additions?.[chosen]) price += opt.price_additions[chosen];
     });
-
-    return matchedPrice;
+    return price;
   };
 
   const unitPrice = getUnitPrice();
@@ -272,19 +275,31 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                         {language === 'ar' && opt.name_ar ? opt.name_ar : safeT(t, `option_${opt.name.toLowerCase().replace(/ /g, '_')}`, opt.name)}:
                       </span>
                       <div className="flex flex-wrap gap-1">
-                        {opt.choices.map((choice, ci) => (
+                        {opt.choices.map((choice, ci) => {
+                          const addition = opt.price_additions?.[choice];
+                          const overridePrice = item.option_price_overrides?.[opt.name]?.[choice];
+                          const discountMul = 1 - discountPct / 100;
+                          const priceHint = overridePrice != null
+                            ? `$${(overridePrice * discountMul).toFixed(2)}`
+                            : addition
+                            ? `+$${(addition * discountMul).toFixed(2)}`
+                            : null;
+                          const label = language === 'ar' && opt.choices_ar?.[ci] ? opt.choices_ar[ci] : safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice);
+                          return (
                           <button
                             key={choice}
                             onClick={(e) => { e.stopPropagation(); handleOptionChange(opt.name, choice); }}
-                            className={`px-2 py-1 rounded border transition-colors ${
+                            className={`px-2 py-1 rounded border transition-colors flex items-center gap-1 ${
                               pendingOptions[opt.name] === choice
                                 ? 'bg-primary-500 text-white border-primary-500'
                                 : 'bg-white text-gray-600 border-gray-200 hover:border-primary-300'
                             }`}
                           >
-                            {language === 'ar' && opt.choices_ar?.[ci] ? opt.choices_ar[ci] : safeT(t, `choice_${choice.toLowerCase().replace(/[\s-]/g, '_')}`, choice)}
+                            {label}
+                            {priceHint && <span className={`text-[10px] font-semibold ${pendingOptions[opt.name] === choice ? 'text-white/80' : 'text-primary-600'}`}>{priceHint}</span>}
                           </button>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
