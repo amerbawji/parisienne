@@ -38,7 +38,8 @@ const OptionButton = ({
 
 export const CartContent = () => {
   const { items, getTotalItems, clearCart, setCartOpen } = useCartStore();
-  const allMenuItems = useMenuStore((s) => s.categories.flatMap((c) => c.items));
+  const menuCategories = useMenuStore((s) => s.categories);
+  const allMenuItems = menuCategories.flatMap((c) => c.items);
   const saveLastOrder = useLastOrderStore((s) => s.saveOrder);
   const lastOrderItems = useLastOrderStore((s) => s.items);
   const addItem = useCartStore((s) => s.addItem);
