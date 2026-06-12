@@ -1951,6 +1951,7 @@ interface Order {
   items: OrderItem[];
   total: number;
   status: string;
+  seen_at: string | null;
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -1960,21 +1961,28 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
 };
 
-function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus }: {
+function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, onMarkSeen }: {
   order: Order;
   expanded: boolean;
   onToggle: () => void;
   onUpdateStatus: (id: string, status: string) => void;
   updatingStatus: string | null;
+  onMarkSeen: (id: string) => void;
 }) {
   const date = new Date(order.created_at);
   const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
   const { t } = useAdminT();
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-      <button type="button" onClick={onToggle} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
+    <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${!order.seen_at ? 'border-amber-300' : 'border-gray-200'}`}>
+      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
+            {!order.seen_at && (
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
+              </span>
+            )}
             <span className="text-sm font-semibold text-gray-900">
               {date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
               {' '}<span className="text-gray-500 font-normal">{date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
@@ -2047,12 +2055,13 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus }
   );
 }
 
-function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
+function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSeen }: {
   orders: Order[];
   loading: boolean;
   onUpdateStatus: (id: string, status: string) => void;
   onRefresh: () => void;
   toast: ShowToast;
+  onMarkSeen: (id: string) => void;
 }) {
   const { t } = useAdminT();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -2085,6 +2094,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
     setUpdatingStatus(id);
     await supabase.from('orders').update({ status }).eq('id', id);
     onUpdateStatus(id, status);
+    onMarkSeen(id);
     setUpdatingStatus(null);
     toast((t('toast_order_status') as (s: string) => string)(STATUS_LABELS[status]?.label ?? status));
   };
@@ -2248,7 +2258,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast }: {
                 : list.map((order) => (
                     <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                       onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                      onUpdateStatus={handleUpdateStatus} updatingStatus={updatingStatus} />
+                      onUpdateStatus={handleUpdateStatus} updatingStatus={updatingStatus} onMarkSeen={onMarkSeen} />
                   ))
               }
             </div>
@@ -2475,6 +2485,12 @@ function AdminShell() {
     setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
   };
 
+  const handleMarkSeen = useCallback(async (id: string) => {
+    const now = new Date().toISOString();
+    await supabase.from('orders').update({ seen_at: now }).eq('id', id);
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, seen_at: now } : o));
+  }, []);
+
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
   const handleLogout = () => {
@@ -2538,7 +2554,7 @@ function AdminShell() {
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} />}
         {tab === 'customers' && <CustomersTab orders={orders} />}
         {tab === 'menu' && <MenuTab />}
         {tab === 'settings' && <SettingsTab />}

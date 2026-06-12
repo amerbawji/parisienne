@@ -100,6 +100,7 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE store_config ADD COLUMN whatsapp_enabled BOOLEAN NOT NULL DEFAULT true;
 -- ALTER TABLE item_options ADD COLUMN name_ar TEXT NOT NULL DEFAULT '';
 -- ALTER TABLE item_options ADD COLUMN choices_ar JSONB NOT NULL DEFAULT '[]';
+-- ALTER TABLE orders ADD COLUMN seen_at TIMESTAMPTZ;
 
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
