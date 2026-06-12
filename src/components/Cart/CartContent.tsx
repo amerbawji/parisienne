@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const SAVED_DETAILS_KEY = 'parisienne_saved_details';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBagIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, TrashIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../../store/cartStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { CartItemRow } from './CartItemRow';
@@ -81,6 +81,8 @@ export const CartContent = () => {
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmCountdown, setConfirmCountdown] = useState<number | null>(null);
+  const pendingWaWindowRef = useRef<Window | null>(null);
 
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
@@ -198,34 +200,27 @@ export const CartContent = () => {
     );
   };
 
-  const handleCheckout = async () => {
-    if (items.length === 0 || isSubmitting) return;
+  useEffect(() => {
+    if (confirmCountdown === null) return;
+    if (confirmCountdown === 0) {
+      doSubmit(pendingWaWindowRef.current);
+      return;
+    }
+    const timer = window.setTimeout(() => setConfirmCountdown((c) => (c !== null ? c - 1 : null)), 1000);
+    return () => window.clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmCountdown]);
 
-    if (!customerName.trim()) { setError(t('error_name_required')); return; }
-    if (!customerPhone.trim()) { setError(t('error_phone_required')); return; }
-    if (serviceType === 'delivery') {
-      const hasPin = !!locationUrl;
-      const hasTypedAddress = deliveryArea.trim() && deliveryStreet.trim();
-      if (!hasPin && !hasTypedAddress) {
-        setError(t('error_address_required')); return;
-      }
-    }
-    if (timing === 'scheduled' && !scheduledTime) {
-      setError(t('error_schedule'));
-      return;
-    }
-    if (timing === 'scheduled' && !isScheduledTimeValid(scheduledTime)) {
-      setError(language === 'ar' ? `الوقت المختار خارج ساعات العمل (${openTime} – ${closeTime}).` : `That time is outside our working hours (${openTime} – ${closeTime}).`);
-      return;
-    }
-    if (timing === 'now' && !storeIsOpen) {
-      setTiming('scheduled');
-      setError(t('error_store_closed'));
-      return;
-    }
+  const handleCancelConfirm = () => {
+    pendingWaWindowRef.current?.close();
+    pendingWaWindowRef.current = null;
+    setConfirmCountdown(null);
+  };
 
+  const doSubmit = async (waWindow: Window | null) => {
+    setConfirmCountdown(null);
     setIsSubmitting(true);
-    
+
     const details = {
       serviceType,
       timing,
@@ -257,11 +252,6 @@ export const CartContent = () => {
     }
 
     const link = generateWhatsAppLink(items, language, details, whatsappNumber);
-
-    // Open a blank window synchronously while still in the user-gesture context.
-    // Safari (and iOS PWA homescreen) blocks window.open called after any await.
-    // We get the reference now, then set its href once the DB write is done.
-    const waWindow = window.open('', '_blank');
 
     const { error: orderError } = await supabase.from('orders').insert({
       customer_name: customerName || null,
@@ -300,6 +290,28 @@ export const CartContent = () => {
     setCartOpen(false);
     navigate('/');
     setIsSubmitting(false);
+  };
+
+  const handleCheckout = () => {
+    if (items.length === 0 || isSubmitting || confirmCountdown !== null) return;
+
+    if (!customerName.trim()) { setError(t('error_name_required')); return; }
+    if (!customerPhone.trim()) { setError(t('error_phone_required')); return; }
+    if (serviceType === 'delivery') {
+      const hasPin = !!locationUrl;
+      const hasTypedAddress = deliveryArea.trim() && deliveryStreet.trim();
+      if (!hasPin && !hasTypedAddress) { setError(t('error_address_required')); return; }
+    }
+    if (timing === 'scheduled' && !scheduledTime) { setError(t('error_schedule')); return; }
+    if (timing === 'scheduled' && !isScheduledTimeValid(scheduledTime)) {
+      setError(language === 'ar' ? `الوقت المختار خارج ساعات العمل (${openTime} – ${closeTime}).` : `That time is outside our working hours (${openTime} – ${closeTime}).`);
+      return;
+    }
+    if (timing === 'now' && !storeIsOpen) { setTiming('scheduled'); setError(t('error_store_closed')); return; }
+
+    // Open the popup synchronously while in the user-gesture context (Safari/iOS requires this).
+    pendingWaWindowRef.current = window.open('', '_blank');
+    setConfirmCountdown(4);
   };
 
   if (items.length === 0) {
@@ -362,6 +374,7 @@ export const CartContent = () => {
   }
 
   return (
+    <>
     <div className="flex flex-col h-full bg-white">
       <div className="flex-1 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4 scrollbar-hide">
         <div className="flex justify-end mb-2">
@@ -731,7 +744,7 @@ export const CartContent = () => {
 
         <Button
           onClick={handleCheckout}
-          disabled={isSubmitting}
+          disabled={isSubmitting || confirmCountdown !== null}
           className="shrink-0 flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold shadow-lg shadow-primary-500/20 hover:shadow-primary-500/30 transition-shadow disabled:opacity-60"
         >
           {isSubmitting ? (
@@ -744,5 +757,51 @@ export const CartContent = () => {
         </div>
       </div>
     </div>
+
+    {confirmCountdown !== null && (
+      <div
+        className={cn(
+          "fixed z-50 bottom-24 sm:bottom-8 rounded-2xl shadow-2xl bg-gray-900 text-white border border-gray-700/70 w-[min(92vw,30rem)] overflow-hidden",
+          language === 'ar' ? "left-4 sm:left-6" : "right-4 sm:right-6"
+        )}
+        role="status"
+        aria-live="polite"
+      >
+        <div className="flex items-start gap-3 px-4 py-3">
+          <span className="text-lg leading-none mt-0.5 shrink-0">🛍️</span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] uppercase tracking-wider text-gray-300">
+              {language === 'ar' ? 'تأكيد الطلب' : 'Confirm order'}
+            </p>
+            <p className="text-sm font-medium leading-snug">
+              {language === 'ar'
+                ? `سيتم الإرسال خلال ${confirmCountdown} ثوانٍ…`
+                : `Sending in ${confirmCountdown}s…`}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              className="h-9 px-3 rounded-lg bg-amber-300 text-gray-900 text-sm font-semibold hover:bg-amber-200 active:scale-[0.98] transition"
+              onClick={handleCancelConfirm}
+            >
+              {language === 'ar' ? 'تعديل' : 'Edit'}
+            </button>
+            <button
+              type="button"
+              className="h-9 w-9 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition"
+              onClick={handleCancelConfirm}
+              aria-label="Cancel"
+            >
+              <XMarkIcon className="h-5 w-5 mx-auto" />
+            </button>
+          </div>
+        </div>
+        <div className="h-1 bg-white/10">
+          <div className="h-full w-full bg-secondary-400/80 animate-[shrink_4s_linear_forwards]" />
+        </div>
+      </div>
+    )}
+    </>
   );
 };
