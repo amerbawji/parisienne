@@ -2487,9 +2487,12 @@ function AdminShell() {
 
   const handleMarkSeen = useCallback(async (id: string) => {
     const now = new Date().toISOString();
-    await supabase.from('orders').update({ seen_at: now }).eq('id', id);
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, seen_at: now } : o));
-  }, []);
+    const order = orders.find(o => o.id === id);
+    const updates: Record<string, string> = { seen_at: now };
+    if (order?.status === 'new') updates.status = 'confirmed';
+    await supabase.from('orders').update(updates).eq('id', id);
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, ...updates } : o));
+  }, [orders]);
 
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 

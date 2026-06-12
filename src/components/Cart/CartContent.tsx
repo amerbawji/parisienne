@@ -94,6 +94,9 @@ export const CartContent = () => {
     customerPhone: string;
   }
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
+  const [showTracking, setShowTracking] = useState(false);
+  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
+  const [trackingLoading, setTrackingLoading] = useState(false);
 
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
@@ -325,6 +328,29 @@ export const CartContent = () => {
     setConfirmCountdown(4);
   };
 
+  const TRACKING_STATUS: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
+    new:       { label: 'Order received',  labelAr: 'تم استلام طلبك',  color: 'bg-blue-50 text-blue-700 border-blue-200',    icon: '🕐' },
+    confirmed: { label: 'Confirmed',        labelAr: 'تم تأكيد طلبك',  color: 'bg-yellow-50 text-yellow-700 border-yellow-200', icon: '✅' },
+    preparing: { label: 'Being prepared',   labelAr: 'يتم التحضير',     color: 'bg-orange-50 text-orange-700 border-orange-200', icon: '👨‍🍳' },
+    ready:     { label: 'Ready for pickup', labelAr: 'جاهز للاستلام',  color: 'bg-purple-50 text-purple-700 border-purple-200', icon: '🎁' },
+    delivered: { label: 'Delivered',        labelAr: 'تم التوصيل',      color: 'bg-green-50 text-green-700 border-green-200',   icon: '🎉' },
+    cancelled: { label: 'Cancelled',        labelAr: 'تم الإلغاء',      color: 'bg-red-50 text-red-700 border-red-200',        icon: '❌' },
+  };
+
+  const openTracking = async () => {
+    setShowTracking(true);
+    if (!customerPhone.trim()) return;
+    setTrackingLoading(true);
+    const { data } = await supabase
+      .from('orders')
+      .select('id,created_at,status,service_type,items,total')
+      .eq('customer_phone', customerPhone.trim())
+      .order('created_at', { ascending: false })
+      .limit(20);
+    setTrackingOrders((data as typeof trackingOrders) ?? []);
+    setTrackingLoading(false);
+  };
+
   if (placedOrder) {
     const trackUrl = placedOrder.customerPhone
       ? `/track?phone=${encodeURIComponent(placedOrder.customerPhone)}`
@@ -407,6 +433,80 @@ export const CartContent = () => {
     );
   }
 
+  if (showTracking) {
+    return (
+      <div className="flex flex-col h-full bg-white">
+        {/* Header */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
+          <button type="button" onClick={() => setShowTracking(false)} className="text-gray-500 hover:text-gray-800 transition p-1 -ml-1">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={language === 'ar' ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
+            </svg>
+          </button>
+          <h2 className="text-base font-bold text-gray-900">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          {trackingLoading ? (
+            <div className="flex justify-center py-16">
+              <div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
+            </div>
+          ) : trackingOrders.length === 0 ? (
+            <div className="flex flex-col items-center gap-3 py-16 text-center">
+              <span className="text-4xl">🔍</span>
+              <p className="text-gray-500 text-sm">{language === 'ar' ? 'لا توجد طلبات مرتبطة بهذا الرقم.' : 'No orders found for this number.'}</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {trackingOrders.map((order) => {
+                const si = TRACKING_STATUS[order.status] ?? { label: order.status, labelAr: order.status, color: 'bg-gray-50 text-gray-600 border-gray-200', icon: '•' };
+                const orderDate = new Date(order.created_at);
+                return (
+                  <div key={order.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                    <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-gray-100">
+                      <span className="text-xs text-gray-500">
+                        {orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                        {' · '}{orderDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full border ${si.color}`}>
+                        {si.icon} {language === 'ar' ? si.labelAr : si.label}
+                      </span>
+                    </div>
+                    <div className="px-3 py-2.5 flex flex-col gap-1.5">
+                      {order.items.map((item, i) => (
+                        <div key={i} className="flex items-center justify-between gap-2 text-sm">
+                          <span className="text-gray-800 flex-1 min-w-0 truncate">
+                            {(language === 'ar' ? item.name_ar : item.name_en) || item.name_en}
+                          </span>
+                          <span className="text-gray-400 shrink-0 text-xs">×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      ))}
+                      <div className="pt-1.5 mt-0.5 border-t border-gray-100 flex items-center justify-between">
+                        <span className="text-sm font-bold text-gray-900">${Number(order.total).toFixed(2)}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            order.items.forEach((item) => {
+                              addItem({ id: crypto.randomUUID(), name: item.name_en || item.name_ar, name_en: item.name_en, name_ar: item.name_ar, price: item.price, quantity: item.quantity, unit: item.unit, selectedOptions: item.selected_options });
+                            });
+                            setShowTracking(false);
+                          }}
+                          className="text-xs font-semibold px-3 py-1.5 rounded-lg text-white bg-primary-600 hover:bg-primary-700 transition"
+                        >
+                          🔁 {language === 'ar' ? 'أعد الطلب' : 'Reorder'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-8 h-full gap-6">
@@ -416,6 +516,20 @@ export const CartContent = () => {
           <p className="text-gray-500 mb-4 text-center">{t('cart_empty_desc')}</p>
           <Button onClick={() => setCartOpen(false)}>{t('start_shopping')}</Button>
         </div>
+
+        {customerPhone && (
+          <button
+            type="button"
+            onClick={openTracking}
+            className="w-full flex items-center justify-between gap-3 bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 hover:bg-primary-100 transition"
+          >
+            <div className="text-start">
+              <p className="text-sm font-semibold text-primary-800">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</p>
+              <p className="text-xs text-primary-600 mt-0.5">{language === 'ar' ? 'تحقق من حالة طلباتك السابقة' : 'Check the status of your past orders'}</p>
+            </div>
+            <span className="text-primary-600 text-lg shrink-0">📦</span>
+          </button>
+        )}
 
         {lastOrderItems.length > 0 && (
           <div className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4">
