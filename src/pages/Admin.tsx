@@ -123,6 +123,7 @@ const adminDict = {
     discount_heading: 'Store-wide Discount', discount_label: 'Discount (%)',
     discount_hint: 'Apply a percentage discount to all item prices on the menu. Set to 0 to disable.',
     save_discount: 'Save Discount', toast_discount_saved: 'Discount saved',
+    hide_no_image_heading: 'Hide Items Without Photo', hide_no_image_desc: 'When on, items with no photo will be hidden from the customer menu.', toast_hide_no_image_saved: 'Setting saved',
     last_edited: 'Edited',
     store_open: 'Store Open',
     store_closed_label: 'Store Closed',
@@ -211,6 +212,7 @@ const adminDict = {
     discount_heading: 'خصم شامل', discount_label: 'الخصم (%)',
     discount_hint: 'تطبيق خصم بنسبة مئوية على جميع أسعار الأصناف في القائمة. اضبطه على 0 للتعطيل.',
     save_discount: 'حفظ الخصم', toast_discount_saved: 'تم حفظ الخصم',
+    hide_no_image_heading: 'إخفاء الأصناف بدون صورة', hide_no_image_desc: 'عند التفعيل، ستُخفى الأصناف التي لا تحتوي على صورة من قائمة الزبائن.', toast_hide_no_image_saved: 'تم حفظ الإعداد',
     last_edited: 'عُدِّل',
     store_open: 'المحل مفتوح',
     store_closed_label: 'المحل مغلق',
@@ -896,7 +898,7 @@ const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function SettingsTab() {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
-  const { open_time, close_time, closed_days, whatsapp_number, discount_percentage, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
+  const { open_time, close_time, closed_days, whatsapp_number, discount_percentage, hide_items_without_image, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const { force_closed, force_open, setForceState } = useStoreConfigStore();
   const toast = useToast();
   const { t } = useAdminT();
@@ -912,6 +914,7 @@ function SettingsTab() {
   const [waError, setWaError] = useState('');
   const [discountPct, setDiscountPct] = useState(discount_percentage);
   const [discountSaving, setDiscountSaving] = useState(false);
+  const [hideNoImage, setHideNoImage] = useState(hide_items_without_image);
 
   useEffect(() => {
     fetchConfig().then(() => {
@@ -921,6 +924,7 @@ function SettingsTab() {
       setClosedDays(s.closed_days);
       setWaNumber(s.whatsapp_number);
       setDiscountPct(s.discount_percentage);
+      setHideNoImage(s.hide_items_without_image);
     });
   }, [fetchConfig]);
 
@@ -959,7 +963,8 @@ function SettingsTab() {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-2xl">
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
       {/* Store Status Override */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
         <div>
@@ -1090,7 +1095,33 @@ function SettingsTab() {
         </div>
       </div>
 
-      {/* Promo Popup */}
+      {/* Hide items without image */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
+        <h2 className="text-base font-bold text-gray-800">{t('hide_no_image_heading') as string}</h2>
+        <div className="flex items-start justify-between gap-4">
+          <p className="text-sm text-gray-500">{t('hide_no_image_desc') as string}</p>
+          <button type="button" dir="ltr"
+            onClick={async () => {
+              const next = !hideNoImage;
+              setHideNoImage(next);
+              try {
+                await updateConfig({ hide_items_without_image: next });
+                toast(t('toast_hide_no_image_saved') as string);
+              } catch {
+                setHideNoImage(!next);
+                toast(t('toast_upload_failed') as string, 'error');
+              }
+            }}
+            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${hideNoImage ? 'bg-primary-600' : 'bg-gray-300'}`}
+            aria-pressed={hideNoImage}>
+            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hideNoImage ? 'translate-x-6' : 'translate-x-1'}`} />
+          </button>
+        </div>
+      </div>
+
+      </div>{/* end 2-col grid */}
+
+      {/* Promo Popup — full width */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <h2 className="text-base font-bold text-gray-800">{t('promo_popup') as string}</h2>
         <div className="flex items-center justify-between">

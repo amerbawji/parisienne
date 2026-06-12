@@ -72,6 +72,8 @@ export const Home = () => {
     () => storeCategories.filter((category) => category.active !== false),
     [storeCategories]
   );
+  const hideItemsWithoutImage = useStoreConfigStore((s) => s.hide_items_without_image);
+
   const filteredCategories = useMemo(
     () => {
       const query = deferredSearchQuery.trim().toLowerCase();
@@ -79,6 +81,7 @@ export const Home = () => {
         .map((category) => {
           const matchingItems = category.items.filter((item) => {
             if (item.active === false) return false;
+            if (hideItemsWithoutImage && !item.image) return false;
             if (!query) return true;
             return (
               item.name_en.toLowerCase().includes(query) ||
@@ -124,7 +127,7 @@ export const Home = () => {
     );
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [filteredCategories]);
+  }, [filteredCategories, hideItemsWithoutImage]);
 
   useEffect(() => {
     if (!menuLoading && !promoLoading) setShowSplashPromo(promoEnabled);

@@ -10,6 +10,7 @@ interface StoreConfig {
   closed_days: number[];
   whatsapp_number: string;
   discount_percentage: number;
+  hide_items_without_image: boolean;
 }
 
 interface StoreConfigStore extends StoreConfig {
@@ -28,6 +29,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
   closed_days: [],
   whatsapp_number: '9613502022',
   discount_percentage: 0,
+  hide_items_without_image: false,
   force_closed: localStorage.getItem(FORCE_CLOSED_KEY) === 'true',
   force_open:   localStorage.getItem(FORCE_OPEN_KEY)   === 'true',
   loading: true,
@@ -41,6 +43,7 @@ export const useStoreConfigStore = create<StoreConfigStore>((set, get) => ({
         closed_days: data.closed_days ?? [],
         whatsapp_number: data.whatsapp_number ?? '9613502022',
         discount_percentage: data.discount_percentage ?? 0,
+        hide_items_without_image: data.hide_items_without_image ?? false,
         loading: false,
       });
     } else {
