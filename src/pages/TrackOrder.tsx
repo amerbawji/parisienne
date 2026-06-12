@@ -44,19 +44,37 @@ export const TrackOrder = () => {
   const isAr = lang === 'ar';
 
   const [phone, setPhone] = useState(searchParams.get('phone') ?? '');
+  const [orderNum, setOrderNum] = useState(searchParams.get('order') ?? '');
   const [orders, setOrders] = useState<TrackOrder[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
-  const fetchOrders = async (p: string) => {
+  const fetchOrders = async (p: string, num: string) => {
     setLoading(true);
     setError(null);
     setSubmitted(true);
+
+    // Verify phone + order number match before revealing any orders
+    const { data: verifyData } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('customer_phone', p.trim())
+      .eq('order_number', Number(num.trim()))
+      .single();
+
+    if (!verifyData) {
+      setLoading(false);
+      setError(isAr ? 'لم نتمكن من إيجاد طلب بهذه المعلومات.' : "We couldn't find an order with those details.");
+      setOrders(null);
+      return;
+    }
+
+    // Verified — load all orders for this phone
     const { data, error: fetchError } = await supabase
       .from('orders')
       .select('*')
-      .eq('customer_phone', p)
+      .eq('customer_phone', p.trim())
       .order('created_at', { ascending: false })
       .limit(20);
     setLoading(false);
@@ -67,10 +85,11 @@ export const TrackOrder = () => {
     setOrders((data as TrackOrder[]) ?? []);
   };
 
-  // Auto-fetch if phone was pre-filled from URL param
+  // Auto-fetch if both params pre-filled from URL
   useEffect(() => {
-    const pre = searchParams.get('phone');
-    if (pre) fetchOrders(pre);
+    const prePhone = searchParams.get('phone');
+    const preOrder = searchParams.get('order');
+    if (prePhone && preOrder) fetchOrders(prePhone, preOrder);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,11 +115,10 @@ export const TrackOrder = () => {
     return () => { supabase.removeChannel(channel); };
   }, [orders?.map((o) => o.id).join()]);
 
-  const handleTrack = async (e: React.FormEvent) => {
+  const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmed = phone.trim();
-    if (!trimmed) return;
-    fetchOrders(trimmed);
+    if (!phone.trim() || !orderNum.trim()) return;
+    fetchOrders(phone, orderNum);
   };
 
   const formatDate = (iso: string) => {
@@ -178,38 +196,50 @@ export const TrackOrder = () => {
           </h1>
           <p className="text-sm text-gray-500 max-w-xs">
             {isAr
-              ? 'أدخل رقم هاتفك لعرض طلباتك السابقة وحالتها الحالية.'
-              : 'Enter your phone number to view your past orders and their current status.'}
+              ? 'أدخل رقم هاتفك ورقم طلبك للاطلاع على طلباتك.'
+              : 'Enter your phone number and order number to view your orders.'}
           </p>
         </div>
 
         {/* Search form */}
-        <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-700">
-            {isAr ? 'رقم الهاتف' : 'Phone number'}
-          </label>
-          <div className="flex gap-2">
+        <form onSubmit={handleTrack} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-gray-700">
+              {isAr ? 'رقم الهاتف' : 'Phone number'}
+            </label>
             <input
               type="tel"
               inputMode="numeric"
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+              onChange={(e) => { setPhone(e.target.value.replace(/\D/g, '')); setOrders(null); }}
               placeholder={isAr ? 'مثال: 96170000000' : 'e.g. 96170000000'}
-              className="flex-1 min-w-0 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
+              className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
               required
             />
-            <button
-              type="submit"
-              disabled={loading || !phone.trim()}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition disabled:opacity-50"
-              style={{ background: '#25568c' }}
-            >
-              {loading
-                ? (isAr ? '...' : '...')
-                : (isAr ? 'بحث' : 'Track')}
-            </button>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-semibold text-gray-700">
+              {isAr ? 'رقم الطلب' : 'Order number'}
+            </label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={orderNum}
+              onChange={(e) => { setOrderNum(e.target.value.replace(/\D/g, '')); setOrders(null); }}
+              placeholder={isAr ? 'مثال: 1001' : 'e.g. 1001'}
+              className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
+              required
+            />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading || !phone.trim() || !orderNum.trim()}
+            className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition disabled:opacity-50"
+            style={{ background: '#25568c' }}
+          >
+            {loading ? '...' : (isAr ? 'بحث' : 'Track')}
+          </button>
         </form>
 
         {/* Results */}

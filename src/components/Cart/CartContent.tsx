@@ -370,7 +370,9 @@ export const CartContent = () => {
   };
 
   if (placedOrder) {
-    const trackUrl = placedOrder.customerPhone
+    const trackUrl = placedOrder.customerPhone && placedOrder.orderNumber
+      ? `/track?phone=${encodeURIComponent(placedOrder.customerPhone)}&order=${placedOrder.orderNumber}`
+      : placedOrder.customerPhone
       ? `/track?phone=${encodeURIComponent(placedOrder.customerPhone)}`
       : '/track';
     return (
