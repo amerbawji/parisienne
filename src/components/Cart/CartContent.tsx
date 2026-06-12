@@ -61,7 +61,9 @@ export const CartContent = () => {
   const originalSubtotal = discountPct > 0 ? itemsTotal / (1 - discountPct / 100) : itemsTotal;
   const discountAmount = originalSubtotal - itemsTotal;
   const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
-  const [scheduledTime, setScheduledTime] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [scheduledTimeOfDay, setScheduledTimeOfDay] = useState('');
+  const scheduledTime = scheduledDate && scheduledTimeOfDay ? `${scheduledDate}T${scheduledTimeOfDay}` : '';
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
   const [locationUrl, setLocationUrl] = useState('');
   const [locationPreviewUrl, setLocationPreviewUrl] = useState('');
@@ -97,13 +99,18 @@ export const CartContent = () => {
     return mins >= openMins && mins < closeMins;
   };
 
-  const nowLocalDT = (() => {
+  const todayLocal = (() => {
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   })();
 
-  const isClosedDay = scheduledTime
-    ? closedDays.includes(new Date(scheduledTime).getDay())
+  const nowTimeLocal = (() => {
+    const d = new Date();
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  })();
+
+  const isClosedDay = scheduledDate
+    ? closedDays.includes(new Date(scheduledDate + 'T12:00:00').getDay())
     : false;
 
 
@@ -590,52 +597,61 @@ export const CartContent = () => {
             </div>
             
             {timing === 'scheduled' && (
-              <div className="animate-in fade-in slide-in-from-top-2 duration-200 flex flex-col gap-1.5 bg-white border border-gray-200 rounded-xl p-3">
-                <div className="flex items-center justify-between mb-0.5">
-                  <label className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
-                    {language === 'ar' ? 'موعد الطلب' : 'Schedule for'}
-                  </label>
-                  <span className="text-[11px] text-gray-400">{openTime} – {closeTime}</span>
+              <div className="animate-in fade-in duration-200 bg-white border border-gray-200 rounded-xl overflow-hidden">
+                {/* Date row */}
+                <div className={cn('flex items-center gap-3 px-3 py-2.5', isClosedDay && 'bg-red-50')}>
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider shrink-0 w-10">
+                    {language === 'ar' ? 'تاريخ' : 'Date'}
+                  </span>
+                  <input
+                    type="date"
+                    value={scheduledDate}
+                    min={todayLocal}
+                    onChange={(e) => { setScheduledDate(e.target.value); setScheduledTimeOfDay(''); setError(''); }}
+                    className={cn(
+                      'flex-1 min-w-0 text-sm bg-transparent outline-none text-gray-800',
+                      isClosedDay && 'text-red-600'
+                    )}
+                  />
                 </div>
-                <input
-                  type="datetime-local"
-                  value={scheduledTime}
-                  min={nowLocalDT}
-                  onChange={(e) => { setScheduledTime(e.target.value); setError(''); }}
-                  className={cn(
-                    'w-full px-3 py-2.5 text-sm border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-gray-50 text-gray-800',
-                    isClosedDay ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                  )}
-                />
-                {scheduledTime && (() => {
-                  if (isClosedDay) return (
-                    <p className="text-xs text-red-500 flex items-center gap-1">
-                      <span>⚠️</span>
-                      {language === 'ar' ? 'المتجر مغلق في هذا اليوم' : 'Store is closed on this day'}
-                    </p>
-                  );
-                  const d = new Date(scheduledTime);
+                <div className="border-t border-gray-100" />
+                {/* Time row */}
+                <div className="flex items-center gap-3 px-3 py-2.5">
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider shrink-0 w-10">
+                    {language === 'ar' ? 'وقت' : 'Time'}
+                  </span>
+                  <input
+                    type="time"
+                    value={scheduledTimeOfDay}
+                    min={scheduledDate === todayLocal ? nowTimeLocal : openTime}
+                    max={closeTime}
+                    disabled={!scheduledDate || isClosedDay}
+                    onChange={(e) => { setScheduledTimeOfDay(e.target.value); setError(''); }}
+                    className="flex-1 min-w-0 text-sm bg-transparent outline-none text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+                  />
+                  <span className="text-[11px] text-gray-400 shrink-0">{openTime}–{closeTime}</span>
+                </div>
+                {/* Validation feedback */}
+                {(isClosedDay || (scheduledTimeOfDay && (() => {
                   const [oh, om] = openTime.split(':').map(Number);
                   const [ch, cm] = closeTime.split(':').map(Number);
-                  const mins = d.getHours() * 60 + d.getMinutes();
-                  const openMins = oh * 60 + om;
-                  const closeMins = ch * 60 + cm;
-                  const outOfHours = closeMins <= openMins
-                    ? !(mins >= openMins || mins < closeMins)
-                    : !(mins >= openMins && mins < closeMins);
-                  if (outOfHours) return (
-                    <p className="text-xs text-red-500 flex items-center gap-1">
-                      <span>⚠️</span>
-                      {language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Working hours: ${openTime} – ${closeTime}`}
+                  const [sh, sm] = scheduledTimeOfDay.split(':').map(Number);
+                  const mins = sh * 60 + sm;
+                  return !(closeMins => openMins => closeMins <= openMins ? mins >= openMins || mins < closeMins : mins >= openMins && mins < closeMins)(ch * 60 + cm)(oh * 60 + om);
+                })())) && (
+                  <div className="border-t border-gray-100 px-3 py-2 bg-red-50">
+                    <p className="text-xs text-red-500">
+                      {isClosedDay
+                        ? (language === 'ar' ? 'المتجر مغلق في هذا اليوم' : 'Closed on this day')
+                        : (language === 'ar' ? `أوقات العمل: ${openTime} – ${closeTime}` : `Hours: ${openTime} – ${closeTime}`)}
                     </p>
-                  );
-                  return (
-                    <p className="text-xs text-green-600 flex items-center gap-1">
-                      <span>✓</span>
-                      {language === 'ar' ? 'الوقت متاح' : 'Time available'}
-                    </p>
-                  );
-                })()}
+                  </div>
+                )}
+                {scheduledTime && isScheduledTimeValid(scheduledTime) && (
+                  <div className="border-t border-gray-100 px-3 py-2 bg-green-50">
+                    <p className="text-xs text-green-600">✓ {language === 'ar' ? 'الوقت متاح' : 'Time available'}</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
