@@ -64,7 +64,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; show_in_related?: boolean | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; show_in_related?: boolean | null; option_price_overrides?: Record<string, Record<string, number>> | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
 type OptRow = { id: string; item_id: string; name: string; name_ar: string; choices: string[]; choices_ar: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -96,6 +96,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
             : undefined,
           tags: item.tags ?? [],
           show_in_related: item.show_in_related ?? true,
+          option_price_overrides: item.option_price_overrides ?? undefined,
           active: item.active,
           in_stock: item.in_stock,
           updated_at: item.updated_at,
