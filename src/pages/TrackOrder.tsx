@@ -74,6 +74,28 @@ export const TrackOrder = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Subscribe to live status updates for all loaded orders
+  useEffect(() => {
+    if (!orders || orders.length === 0) return;
+    const ids = orders.map((o) => o.id);
+    const channel = supabase
+      .channel('track-orders-status')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'orders' },
+        (payload) => {
+          const updated = payload.new as { id: string; status: string };
+          if (ids.includes(updated.id)) {
+            setOrders((prev) =>
+              prev ? prev.map((o) => o.id === updated.id ? { ...o, status: updated.status } : o) : prev
+            );
+          }
+        }
+      )
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [orders?.map((o) => o.id).join()]);
+
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = phone.trim();
