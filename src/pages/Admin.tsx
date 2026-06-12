@@ -977,15 +977,31 @@ function SettingsTab() {
           type="button"
           onClick={() => setForceState(force_closed ? 'open' : force_open ? 'auto' : 'closed')}
           className={`text-sm px-4 py-2 rounded-lg font-semibold transition whitespace-nowrap ${
-            force_closed
-              ? 'bg-red-500 text-white hover:bg-red-600'
-              : force_open
-                ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            force_closed ? 'bg-red-500 text-white hover:bg-red-600' : force_open ? 'bg-emerald-500 text-white hover:bg-emerald-600' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
         >
           {force_closed ? t('store_closed_label') as string : force_open ? t('store_open') as string : 'Auto'}
         </button>
+      </div>
+
+      {/* WhatsApp Number */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
+        <h2 className="text-base font-bold text-gray-800">{t('whatsapp_heading') as string}</h2>
+        <p className="text-xs text-gray-500">{t('whatsapp_hint') as string}</p>
+        <div className="flex gap-2 items-end">
+          <div className="flex-1 flex flex-col gap-1">
+            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('number_label') as string}</label>
+            <input type="tel" value={waNumber} onChange={(e) => setWaNumber(e.target.value.replace(/\D/g, ''))}
+              placeholder="9613502022"
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
+          </div>
+          <button type="button" disabled={waSaving}
+            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); toast(t('toast_wa_saved') as string); } catch { setWaError(t('failed_save') as string); toast(t('toast_failed_save') as string, 'error'); } finally { setWaSaving(false); } }}
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
+            {waSaving ? t('saving') as string : t('save_btn') as string}
+          </button>
+        </div>
+        {waError && <p className="text-xs text-red-600">{waError}</p>}
       </div>
 
       {/* Opening Hours */}
@@ -1030,26 +1046,6 @@ function SettingsTab() {
         )}
       </div>
 
-      {/* WhatsApp Number */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
-        <h2 className="text-base font-bold text-gray-800">{t('whatsapp_heading') as string}</h2>
-        <p className="text-xs text-gray-500">{t('whatsapp_hint') as string}</p>
-        <div className="flex gap-2 items-end">
-          <div className="flex-1 flex flex-col gap-1">
-            <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('number_label') as string}</label>
-            <input type="tel" value={waNumber} onChange={(e) => setWaNumber(e.target.value.replace(/\D/g, ''))}
-              placeholder="9613502022"
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
-          </div>
-          <button type="button" disabled={waSaving}
-            onClick={async () => { setWaSaving(true); setWaError(''); try { await updateConfig({ whatsapp_number: waNumber }); toast(t('toast_wa_saved') as string); } catch { setWaError(t('failed_save') as string); toast(t('toast_failed_save') as string, 'error'); } finally { setWaSaving(false); } }}
-            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
-            {waSaving ? t('saving') as string : t('save_btn') as string}
-          </button>
-        </div>
-        {waError && <p className="text-xs text-red-600">{waError}</p>}
-      </div>
-
       {/* Discount */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-4">
         <div>
@@ -1064,59 +1060,40 @@ function SettingsTab() {
         <div className="flex gap-2 items-end">
           <div className="flex flex-col gap-1 flex-1">
             <label className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{t('discount_label') as string}</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              step="1"
-              value={discountPct}
+            <input type="number" min="0" max="100" step="1" value={discountPct}
               onChange={(e) => setDiscountPct(Math.min(100, Math.max(0, Number(e.target.value))))}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full"
-            />
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 w-full" />
           </div>
-          <button
-            type="button"
-            disabled={discountSaving}
-            onClick={async () => {
-              setDiscountSaving(true);
-              try {
-                await updateConfig({ discount_percentage: discountPct });
-                toast(t('toast_discount_saved') as string);
-              } catch {
-                toast(t('toast_failed_save') as string, 'error');
-              } finally {
-                setDiscountSaving(false);
-              }
-            }}
-            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
-          >
+          <button type="button" disabled={discountSaving}
+            onClick={async () => { setDiscountSaving(true); try { await updateConfig({ discount_percentage: discountPct }); toast(t('toast_discount_saved') as string); } catch { toast(t('toast_failed_save') as string, 'error'); } finally { setDiscountSaving(false); } }}
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50">
             {discountSaving ? t('saving') as string : t('save_discount') as string}
           </button>
         </div>
       </div>
 
-      {/* Hide items without image */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 flex flex-col gap-3">
-        <h2 className="text-base font-bold text-gray-800">{t('hide_no_image_heading') as string}</h2>
-        <div className="flex items-start justify-between gap-4">
-          <p className="text-sm text-gray-500">{t('hide_no_image_desc') as string}</p>
-          <button type="button" dir="ltr"
-            onClick={async () => {
-              const next = !hideNoImage;
-              setHideNoImage(next);
-              try {
-                await updateConfig({ hide_items_without_image: next });
-                toast(t('toast_hide_no_image_saved') as string);
-              } catch {
-                setHideNoImage(!next);
-                toast(t('toast_upload_failed') as string, 'error');
-              }
-            }}
-            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${hideNoImage ? 'bg-primary-600' : 'bg-gray-300'}`}
-            aria-pressed={hideNoImage}>
-            <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hideNoImage ? 'translate-x-6' : 'translate-x-1'}`} />
-          </button>
+      {/* Hide items without image — full width */}
+      <div className="lg:col-span-2 bg-white border border-gray-200 rounded-xl p-5 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-base font-bold text-gray-800">{t('hide_no_image_heading') as string}</h2>
+          <p className="text-sm text-gray-500 mt-0.5">{t('hide_no_image_desc') as string}</p>
         </div>
+        <button type="button" dir="ltr"
+          onClick={async () => {
+            const next = !hideNoImage;
+            setHideNoImage(next);
+            try {
+              await updateConfig({ hide_items_without_image: next });
+              toast(t('toast_hide_no_image_saved') as string);
+            } catch {
+              setHideNoImage(!next);
+              toast(t('toast_upload_failed') as string, 'error');
+            }
+          }}
+          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none ${hideNoImage ? 'bg-primary-600' : 'bg-gray-300'}`}
+          aria-pressed={hideNoImage}>
+          <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${hideNoImage ? 'translate-x-6' : 'translate-x-1'}`} />
+        </button>
       </div>
 
       </div>{/* end 2-col grid */}
