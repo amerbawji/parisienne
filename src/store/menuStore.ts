@@ -8,6 +8,7 @@ export interface MenuOption {
   choices: string[];
   choices_ar?: string[];
   price_additions?: Record<string, number>;
+  is_price_override?: boolean;
 }
 
 export interface Preset {
@@ -30,6 +31,7 @@ export interface MenuItem {
   presets?: Preset[];
   tags?: string[];
   show_in_related?: boolean;
+  option_price_overrides?: Record<string, Record<string, number>>;
   active?: boolean;
   in_stock?: boolean;
   updated_at?: string;
@@ -164,6 +166,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       min_quantity: item.min_quantity ?? null, description_en: item.description_en ?? '',
       description_ar: item.description_ar ?? '', image_url: item.image ?? '',
       presets: item.presets ?? [], sort_order, active: true, in_stock: true,
+      option_price_overrides: item.option_price_overrides ?? null,
       ...(item.tags?.length ? { tags: item.tags } : {}),
     });
     if (ie) throw ie;
@@ -178,7 +181,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
 
   updateItem: async (categoryId, itemId, updates) => {
     const now = new Date().toISOString();
-    const { options, image, tags, show_in_related, ...rest } = updates;
+    const { options, image, tags, show_in_related, option_price_overrides, ...rest } = updates;
     if (tags !== undefined || show_in_related !== undefined) {
       // Run separately so a missing DB column doesn't break the main save.
       supabase.from('items').update({
@@ -201,6 +204,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       ...(rest.presets       !== undefined && { presets: rest.presets }),
       ...(rest.active        !== undefined && { active: rest.active }),
       ...(rest.in_stock      !== undefined && { in_stock: rest.in_stock }),
+      ...('option_price_overrides' in updates && { option_price_overrides: option_price_overrides ?? null }),
       updated_at: now,
     }).eq('id', itemId);
     if (ie) throw ie;

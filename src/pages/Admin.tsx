@@ -468,6 +468,9 @@ function OptionsEditor({
       return { ...o, price_additions: pa };
     }));
 
+  const toggleIsPriceOverride = (i: number) =>
+    onChange(options.map((o, idx) => idx === i ? { ...o, is_price_override: !o.is_price_override } : o));
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
@@ -506,6 +509,17 @@ function OptionsEditor({
               {t('remove_btn') as string}
             </button>
           </div>
+          <div className="flex items-center gap-2 pl-2">
+            <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={!!opt.is_price_override}
+                onChange={() => toggleIsPriceOverride(i)}
+                className="rounded border-gray-300 text-primary-600 focus:ring-primary-300"
+              />
+              Sets item price
+            </label>
+          </div>
           <div className="flex flex-col gap-1.5 pl-2">
             {opt.choices.map((choice, ci) => (
               <div key={ci} className="grid grid-cols-[1fr_1fr_4rem_1.5rem] gap-1.5 items-center">
@@ -528,7 +542,7 @@ function OptionsEditor({
                   type="number"
                   step="0.01"
                   value={opt.price_additions?.[choice] ?? ''}
-                  placeholder={t('price_placeholder') as string}
+                  placeholder={opt.is_price_override ? 'Full price' : (t('price_placeholder') as string)}
                   onChange={(e) => updatePriceAddition(i, choice, e.target.value)}
                   className="min-w-0 border border-gray-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary-300"
                 />
@@ -650,6 +664,21 @@ interface ItemFormProps {
   onCancel: () => void;
 }
 
+function buildInitialFormItem(initial: MenuItem): MenuItem {
+  if (!initial.option_price_overrides) return initial;
+  const overrides = initial.option_price_overrides;
+  return {
+    ...initial,
+    options: (initial.options ?? []).map((opt) => {
+      const optOverrides = overrides[opt.name];
+      if (optOverrides) {
+        return { ...opt, is_price_override: true, price_additions: optOverrides };
+      }
+      return opt;
+    }),
+  };
+}
+
 function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
   const draftKey = `admin_item_draft_${initial.id || 'new'}`;
   const [form, setForm] = useState<MenuItem>(() => {
@@ -657,7 +686,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
       const s = localStorage.getItem(draftKey);
       if (s) return JSON.parse(s) as MenuItem;
     } catch { /* ignore */ }
-    return initial;
+    return buildInitialFormItem(initial);
   });
   const [draftRestored, setDraftRestored] = useState(() => {
     try { return !!localStorage.getItem(draftKey); } catch { return false; }
@@ -687,7 +716,15 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
     if (!form.name_en.trim() || !form.name_ar.trim()) return;
     if (!descValid) return;
     if (!optionsValid) return;
-    onSave(form);
+    const overrideOpts = (form.options ?? []).filter((o) => o.is_price_override);
+    const option_price_overrides = overrideOpts.length > 0
+      ? Object.fromEntries(overrideOpts.map((o) => [o.name, o.price_additions ?? {}]))
+      : undefined;
+    const cleanedOptions = (form.options ?? []).map((o) =>
+      o.is_price_override ? { ...o, price_additions: {}, is_price_override: undefined } : o
+    );
+    const hasOverrides = overrideOpts.length > 0;
+    onSave({ ...form, options: cleanedOptions, option_price_overrides, ...(hasOverrides ? { price: 0 } : {}) });
     try { localStorage.removeItem(draftKey); } catch {}
   };
 
@@ -707,7 +744,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
       {draftRestored && (
         <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-700">
           <span>{t('draft_restored') as string}</span>
-          <button type="button" onClick={() => { setForm(initial); try { localStorage.removeItem(draftKey); } catch {} setDraftRestored(false); }} className="text-amber-600 hover:text-amber-800 font-semibold ml-2">
+          <button type="button" onClick={() => { setForm(buildInitialFormItem(initial)); try { localStorage.removeItem(draftKey); } catch {} setDraftRestored(false); }} className="text-amber-600 hover:text-amber-800 font-semibold ml-2">
             {t('cancel_btn') as string}
           </button>
         </div>
