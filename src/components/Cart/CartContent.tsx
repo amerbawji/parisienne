@@ -361,13 +361,28 @@ export const CartContent = () => {
     setTrackingLoading(true);
     const { data } = await supabase
       .from('orders')
-      .select('id,created_at,status,service_type,items,total')
+      .select('id,created_at,status,service_type,order_number,items,total')
       .eq('customer_phone', customerPhone.trim())
       .order('created_at', { ascending: false })
       .limit(20);
     setTrackingOrders((data as typeof trackingOrders) ?? []);
     setTrackingLoading(false);
   };
+
+  useEffect(() => {
+    if (!showTracking || trackingOrders.length === 0) return;
+    const ids = trackingOrders.map((o) => o.id);
+    const channel = supabase
+      .channel('cart-tracking-status')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders' }, (payload) => {
+        const updated = payload.new as { id: string; status: string };
+        if (ids.includes(updated.id)) {
+          setTrackingOrders((prev) => prev.map((o) => o.id === updated.id ? { ...o, status: updated.status } : o));
+        }
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [showTracking, trackingOrders.map((o) => o.id).join()]);
 
   if (placedOrder) {
     const trackUrl = placedOrder.customerPhone && placedOrder.orderNumber
@@ -471,10 +486,7 @@ export const CartContent = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={language === 'ar' ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
             </svg>
           </button>
-          <h2 className="text-base font-bold text-gray-900 flex-1">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
-          <button type="button" onClick={openTracking} className="text-xs text-primary-600 font-medium hover:underline shrink-0">
-            {language === 'ar' ? 'تحديث' : 'Refresh'}
-          </button>
+          <h2 className="text-base font-bold text-gray-900">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
