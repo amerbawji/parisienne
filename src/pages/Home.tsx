@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback, memo } from 'react';
 import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-horizontal-logo.svg';
@@ -14,6 +14,21 @@ import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 import { InstallPrompt } from '../components/UI/InstallPrompt';
+
+const CategoryBannerImage = memo(({ src, alt }: { src: string; alt: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="relative w-full h-full">
+      {!loaded && <div className="absolute inset-0 bg-gray-300 animate-pulse" />}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        className={`w-full h-full object-cover object-center transition-all duration-500 sm:group-hover:scale-105 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+      />
+    </div>
+  );
+});
 
 const to12h = (time: string) => {
   const [h, m] = time.split(':').map(Number);
@@ -525,12 +540,9 @@ export const Home = () => {
                         aria-expanded={isOpen}
                       >
                         <div className="relative h-48 w-full overflow-hidden">
-                          <img
+                          <CategoryBannerImage
                             src={category.image}
                             alt={language === 'ar' ? category.name_ar : category.name_en}
-                            className="w-full h-full object-cover object-center transition-transform duration-500 sm:group-hover:scale-105"
-                            loading="lazy"
-                            decoding="async"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                             <h2 className="text-3xl font-bold text-white drop-shadow-md">
