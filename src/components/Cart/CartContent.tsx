@@ -215,7 +215,7 @@ export const CartContent = () => {
       return;
     }
     if (timing === 'scheduled' && !isScheduledTimeValid(scheduledTime)) {
-      setError(language === 'ar' ? 'المتجر مغلق في هذا الوقت. اختر وقتاً آخر.' : 'Store is closed at the selected time. Please choose another time.');
+      setError(language === 'ar' ? `الوقت المختار خارج ساعات العمل (${openTime} – ${closeTime}).` : `That time is outside our working hours (${openTime} – ${closeTime}).`);
       return;
     }
     if (timing === 'now' && !storeIsOpen) {
@@ -676,9 +676,10 @@ export const CartContent = () => {
       
       <div className="bg-white px-4 py-3 border-t border-gray-100 mt-auto safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         {error && (
-          <div className="mb-2 text-xs text-red-500 bg-red-50 px-3 py-2 rounded-lg flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
-            {error}
+          <div className="mb-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2.5 flex items-start gap-2.5">
+            <span className="text-base leading-none mt-0.5">⚠️</span>
+            <p className="flex-1 text-sm text-red-700 leading-snug">{error}</p>
+            <button type="button" onClick={() => setError('')} className="text-red-400 hover:text-red-600 shrink-0 mt-0.5 text-base leading-none">✕</button>
           </div>
         )}
 
