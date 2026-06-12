@@ -632,13 +632,7 @@ export const CartContent = () => {
                   <span className="text-[11px] text-gray-400 shrink-0">{openTime}–{closeTime}</span>
                 </div>
                 {/* Validation feedback */}
-                {(isClosedDay || (scheduledTimeOfDay && (() => {
-                  const [oh, om] = openTime.split(':').map(Number);
-                  const [ch, cm] = closeTime.split(':').map(Number);
-                  const [sh, sm] = scheduledTimeOfDay.split(':').map(Number);
-                  const mins = sh * 60 + sm;
-                  return !(closeMins => openMins => closeMins <= openMins ? mins >= openMins || mins < closeMins : mins >= openMins && mins < closeMins)(ch * 60 + cm)(oh * 60 + om);
-                })())) && (
+                {(isClosedDay || (scheduledTimeOfDay && !isScheduledTimeValid(scheduledTime))) && (
                   <div className="border-t border-gray-100 px-3 py-2 bg-red-50">
                     <p className="text-xs text-red-500">
                       {isClosedDay
