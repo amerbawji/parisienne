@@ -372,20 +372,10 @@ export const TrackOrder = () => {
                         </div>
                       )}
 
-                      {/* Total + Reorder */}
-                      <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-3 text-sm font-bold text-gray-900">
-                        <div className="flex items-center gap-1">
-                          <span className="text-gray-500 font-normal">{isAr ? 'المجموع' : 'Total'}</span>
-                          <span className="ms-1">${Number(order.total).toFixed(2)}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleReorder(order)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition hover:opacity-90 active:scale-95"
-                          style={{ background: '#25568c' }}
-                        >
-                          🔁 {isAr ? 'أعد الطلب' : 'Reorder'}
-                        </button>
+                      {/* Total */}
+                      <div className="pt-2 border-t border-gray-100 flex items-center gap-1 text-sm font-bold text-gray-900">
+                        <span className="text-gray-500 font-normal">{isAr ? 'المجموع' : 'Total'}</span>
+                        <span className="ms-1">${Number(order.total).toFixed(2)}</span>
                       </div>
                     </div>
                   </div>

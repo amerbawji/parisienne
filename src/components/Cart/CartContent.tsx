@@ -465,51 +465,6 @@ export const CartContent = () => {
         </div>
 
 
-        {lastOrderItems.length > 0 && (
-          <div className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              {language === 'ar' ? 'طلبك السابق' : 'Your last order'}
-            </p>
-            <ul className="space-y-1 mb-3">
-              {lastOrderItems.slice(0, 4).map((item) => (
-                <li key={item.instanceId} className="flex items-center justify-between text-sm">
-                  <span className="text-gray-700 truncate flex-1 min-w-0">
-                    {(language === 'ar' ? item.name_ar : item.name_en) || item.name}
-                  </span>
-                  <span className="text-gray-500 shrink-0 ms-2">x{item.quantity}</span>
-                </li>
-              ))}
-              {lastOrderItems.length > 4 && (
-                <li className="text-xs text-gray-400">
-                  {language === 'ar' ? `+${lastOrderItems.length - 4} أكثر` : `+${lastOrderItems.length - 4} more`}
-                </li>
-              )}
-            </ul>
-            <Button
-              onClick={() => {
-                lastOrderItems.forEach((item) => {
-                  const liveItem = allMenuItems.find((i) => i.id === item.id);
-                  addItem({
-                    id: item.id,
-                    name: item.name,
-                    name_en: item.name_en,
-                    name_ar: item.name_ar,
-                    image: liveItem?.image || item.image,
-                    price: item.price,
-                    selectedOptions: item.selectedOptions,
-                    instructions: item.instructions,
-                    step: item.step,
-                    minQuantity: item.minQuantity,
-                    quantity: item.quantity,
-                  });
-                });
-              }}
-              className="w-full"
-            >
-              {language === 'ar' ? 'أعد الطلب' : 'Order Again'}
-            </Button>
-          </div>
-        )}
       </div>
     );
   }
