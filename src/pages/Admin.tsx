@@ -2234,8 +2234,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     for (const [name, item] of editMap) {
       if (!origMap.has(name)) newNotes.push({ type: 'added', name, qty: item.quantity, at: now });
     }
-    // Replace (not append) so customer sees only the net result of the last edit
-    const admin_notes = newNotes.length > 0 ? newNotes : (order.admin_notes ?? []);
+    const admin_notes = [...(order.admin_notes ?? []), ...newNotes];
     const updates = { ...editData, items: editItems, total: editTotal, admin_notes };
     const { error } = await supabase.from('orders').update(updates).eq('id', order.id);
     if (error) {
