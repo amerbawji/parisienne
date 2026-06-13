@@ -9,6 +9,7 @@ interface LastOrderState {
   orderNumber: number | null;
   saveOrder: (items: CartItem[], phone?: string, orderNumber?: number | null) => void;
   clearLastOrder: () => void;
+  clearTracking: () => void;
 }
 
 export const useLastOrderStore = create<LastOrderState>()(
@@ -21,6 +22,7 @@ export const useLastOrderStore = create<LastOrderState>()(
       saveOrder: (items, phone, orderNumber) =>
         set({ items, savedAt: new Date().toISOString(), phone: phone ?? null, orderNumber: orderNumber ?? null }),
       clearLastOrder: () => set({ items: [], savedAt: null, phone: null, orderNumber: null }),
+      clearTracking: () => set({ phone: null, orderNumber: null }),
     }),
     { name: 'last-order-storage' }
   )

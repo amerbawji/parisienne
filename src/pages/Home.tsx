@@ -68,13 +68,16 @@ export const Home = () => {
   const removeItem = useCartStore((state) => state.removeItem);
   const lastOrderPhone = useLastOrderStore((s) => s.phone);
   const lastOrderNumber = useLastOrderStore((s) => s.orderNumber);
+  const clearTracking = useLastOrderStore((s) => s.clearTracking);
   const { language, t } = useLanguageStore();
   const navigate = useNavigate();
 
-  const [trackingInfo, setTrackingInfo] = useState<{ status: string; orderNumber: number | null; orderCount: number } | null>(null);
+  const [trackingInfo, setTrackingInfo] = useState<{ status: string; orderNumber: number | null; orderCount: number; allDelivered: boolean } | null>(null);
 
   useEffect(() => {
     if (!lastOrderPhone) return;
+    const DONE = ['delivered', 'cancelled'];
+
     supabase
       .from('orders')
       .select('status, order_number')
@@ -83,17 +86,29 @@ export const Home = () => {
       .limit(20)
       .then(({ data }) => {
         if (!data || data.length === 0) return;
-        setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
+        const active = data.find((o) => !DONE.includes(o.status));
+        const display = active ?? data[0];
+        const allDelivered = data.every((o) => DONE.includes(o.status));
+        setTrackingInfo({ status: display.status, orderNumber: display.order_number ?? null, orderCount: data.length, allDelivered });
       });
 
     const channel = supabase
       .channel(`home-tracking-${lastOrderPhone}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: `customer_phone=eq.${lastOrderPhone}` },
-        (payload) => {
-          const updated = payload.new as { status: string; order_number: number | null };
-          if (updated.status) {
-            setTrackingInfo((prev) => prev ? { ...prev, status: updated.status, orderNumber: updated.order_number ?? prev.orderNumber } : prev);
-          }
+        () => {
+          supabase
+            .from('orders')
+            .select('status, order_number')
+            .eq('customer_phone', lastOrderPhone)
+            .order('created_at', { ascending: false })
+            .limit(20)
+            .then(({ data }) => {
+              if (!data || data.length === 0) return;
+              const active = data.find((o) => !DONE.includes(o.status));
+              const display = active ?? data[0];
+              const allDelivered = data.every((o) => DONE.includes(o.status));
+              setTrackingInfo({ status: display.status, orderNumber: display.order_number ?? null, orderCount: data.length, allDelivered });
+            });
         })
       .subscribe();
 
@@ -388,14 +403,12 @@ export const Home = () => {
             : `/track?phone=${encodeURIComponent(lastOrderPhone)}`
           : '/track';
         return (
-          <button
-            type="button"
-            onClick={() => navigate(trackUrl)}
-            className="w-full bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+          <div
+            className="w-full bg-white border-b border-gray-100"
             dir={language === 'ar' ? 'rtl' : 'ltr'}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
+              <button type="button" onClick={() => navigate(trackUrl)} className="flex items-center gap-2 min-w-0 flex-1 hover:opacity-80 transition text-left">
                 <span className="text-lg shrink-0">{si.icon}</span>
                 <div className="min-w-0">
                   <p className="text-sm font-semibold text-gray-900">
@@ -407,12 +420,23 @@ export const Home = () => {
                     {language === 'ar' ? si.ar : si.en}
                   </p>
                 </div>
-              </div>
-              <span className="shrink-0 text-xs font-semibold text-primary-600">
-                {language === 'ar' ? 'تتبع ←' : 'Track →'}
-              </span>
+              </button>
+              {trackingInfo.allDelivered ? (
+                <button
+                  type="button"
+                  onClick={clearTracking}
+                  className="shrink-0 p-1 text-gray-400 hover:text-gray-700 transition"
+                  aria-label="Dismiss"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </button>
+              ) : (
+                <button type="button" onClick={() => navigate(trackUrl)} className="shrink-0 text-xs font-semibold text-primary-600 hover:opacity-80 transition">
+                  {language === 'ar' ? 'تتبع ←' : 'Track →'}
+                </button>
+              )}
             </div>
-          </button>
+          </div>
         );
       })()}
 
