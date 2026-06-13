@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
