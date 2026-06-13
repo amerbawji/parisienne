@@ -104,22 +104,28 @@ export const TrackOrder = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Subscribe to live status updates for all loaded orders
+  // Subscribe to live updates for all loaded orders
   useEffect(() => {
     if (!orders || orders.length === 0) return;
     const ids = orders.map((o) => o.id);
+    const channelName = `track-orders-${ids.join('-')}`;
     const channel = supabase
-      .channel('track-orders-status')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'orders' },
         (payload) => {
           const updated = payload.new as TrackOrder;
-          if (ids.includes(updated.id)) {
-            setOrders((prev) =>
-              prev ? prev.map((o) => o.id === updated.id ? { ...o, status: updated.status, items: updated.items, total: updated.total, admin_notes: updated.admin_notes } : o) : prev
-            );
-          }
+          if (!ids.includes(updated.id)) return;
+          setOrders((prev) =>
+            prev
+              ? prev.map((o) =>
+                  o.id === updated.id
+                    ? { ...o, status: updated.status ?? o.status, items: updated.items ?? o.items, total: updated.total ?? o.total, admin_notes: updated.admin_notes ?? o.admin_notes }
+                    : o
+                )
+              : prev
+          );
         }
       )
       .subscribe();
