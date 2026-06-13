@@ -160,6 +160,9 @@ const adminDict = {
     customer_discount_none: 'No discount',
     toast_order_saved: 'Order updated',
     toast_discount_customer_saved: 'Discount saved',
+    add_item_to_order: 'Add item…',
+    remove_item_btn: 'Remove',
+    toast_items_saved: 'Order items updated',
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
@@ -268,6 +271,9 @@ const adminDict = {
     customer_discount_none: 'لا يوجد خصم',
     toast_order_saved: 'تم تحديث الطلب',
     toast_discount_customer_saved: 'تم حفظ الخصم',
+    add_item_to_order: 'أضف صنفاً…',
+    remove_item_btn: 'إزالة',
+    toast_items_saved: 'تم تحديث أصناف الطلب',
   },
 } as const;
 
@@ -2162,6 +2168,8 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
   const { t } = useAdminT();
   const toast = useToast();
+  const allCategories = useMenuStore(s => s.categories);
+  const allMenuItems = useMemo(() => allCategories.flatMap(c => (c.items ?? []).filter(i => i.active !== false)), [allCategories]);
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({
     delivery_area: order.delivery_area ?? '',
@@ -2173,13 +2181,40 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     customer_phone: order.customer_phone ?? '',
     scheduled_time: order.scheduled_time ?? '',
   });
+  const [editItems, setEditItems] = useState<OrderItem[]>(order.items);
+  const [itemSearch, setItemSearch] = useState('');
   const [saving, setSaving] = useState(false);
+
+  const deliveryFee = order.service_type === 'delivery' ? 1.5 : 0;
+  const editItemsTotal = editItems.reduce((s, i) => s + i.price * i.quantity, 0);
+  const editTotal = parseFloat((editItemsTotal + deliveryFee).toFixed(2));
+
+  const setItemQty = (idx: number, qty: number) => {
+    if (qty < 1) return;
+    setEditItems(prev => prev.map((item, i) => i === idx ? { ...item, quantity: qty } : item));
+  };
+  const removeItem = (idx: number) => setEditItems(prev => prev.filter((_, i) => i !== idx));
+  const addMenuItemToOrder = (menuItem: MenuItem) => {
+    setEditItems(prev => {
+      const existing = prev.findIndex(i => i.name_en === menuItem.name_en);
+      if (existing >= 0) return prev.map((item, i) => i === existing ? { ...item, quantity: item.quantity + 1 } : item);
+      return [...prev, { name_en: menuItem.name_en, name_ar: menuItem.name_ar, quantity: 1, price: menuItem.price, unit: menuItem.unit, selected_options: {} }];
+    });
+    setItemSearch('');
+  };
+
+  const filteredMenuItems = useMemo(() => {
+    const q = itemSearch.trim().toLowerCase();
+    if (!q) return [];
+    return allMenuItems.filter(i => i.name_en.toLowerCase().includes(q) || i.name_ar.includes(q)).slice(0, 6);
+  }, [allMenuItems, itemSearch]);
 
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await supabase.from('orders').update(editData).eq('id', order.id);
+    const updates = { ...editData, items: editItems, total: editTotal };
+    const { error } = await supabase.from('orders').update(updates).eq('id', order.id);
     if (!error) {
-      onSaveOrder(order.id, editData);
+      onSaveOrder(order.id, updates);
       toast(t('toast_order_saved') as string);
     }
     setSaving(false);
@@ -2237,6 +2272,8 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                     customer_phone: order.customer_phone ?? '',
                     scheduled_time: order.scheduled_time ?? '',
                   });
+                  setEditItems([...order.items]);
+                  setItemSearch('');
                   setEditing(true);
                 }}
                 className="ml-auto p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
@@ -2333,26 +2370,80 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
           )}
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('items_label') as string}</p>
-            <div className="space-y-2">
-              {order.items.map((item, i) => (
-                <div key={i} className="flex items-start justify-between gap-2 text-sm">
-                  <div className="flex-1 min-w-0">
-                    <span className="font-medium text-gray-900">{item.name_en}</span>
-                    {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
-                    {item.selected_options && Object.keys(item.selected_options).length > 0 && (
-                      <div className="text-xs text-gray-500 mt-0.5">{Object.entries(item.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}</div>
-                    )}
-                  </div>
-                  <div className="text-right shrink-0">
-                    <span className="text-gray-500">×{item.quantity}</span>
-                    <span className="ml-2 font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
-                  </div>
+            {editing ? (
+              <>
+                <div className="space-y-2">
+                  {editItems.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 text-sm">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium text-gray-900">{item.name_en}</span>
+                        {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
+                        <span className="block text-xs text-gray-500">${item.price.toFixed(2)} each</span>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button type="button" onClick={() => setItemQty(i, item.quantity - 1)}
+                          className="w-6 h-6 rounded border border-gray-200 text-gray-600 hover:bg-gray-100 flex items-center justify-center font-bold text-base leading-none">−</button>
+                        <span className="w-6 text-center font-semibold">{item.quantity}</span>
+                        <button type="button" onClick={() => setItemQty(i, item.quantity + 1)}
+                          className="w-6 h-6 rounded border border-gray-200 text-gray-600 hover:bg-gray-100 flex items-center justify-center font-bold text-base leading-none">+</button>
+                        <button type="button" onClick={() => removeItem(i)} title={t('remove_item_btn') as string}
+                          className="w-6 h-6 rounded text-red-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center ml-1 transition">
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                      </div>
+                      <span className="text-right text-xs font-semibold text-gray-700 shrink-0 w-14">${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
-              <span>{t('total_label') as string}</span><span>${Number(order.total).toFixed(2)}</span>
-            </div>
+                <div className="mt-3 relative">
+                  <input
+                    type="text"
+                    value={itemSearch}
+                    onChange={e => setItemSearch(e.target.value)}
+                    placeholder={t('add_item_to_order') as string}
+                    className="w-full text-sm border border-dashed border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
+                  />
+                  {filteredMenuItems.length > 0 && (
+                    <div className="absolute z-10 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+                      {filteredMenuItems.map(mi => (
+                        <button key={mi.id} type="button" onClick={() => addMenuItemToOrder(mi)}
+                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-primary-50 transition text-left">
+                          <span className="font-medium text-gray-900">{mi.name_en}</span>
+                          <span className="text-gray-500 shrink-0 ml-2">${mi.price.toFixed(2)}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
+                  <span>{t('total_label') as string}</span>
+                  <span>${editTotal.toFixed(2)}</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-2">
+                  {order.items.map((item, i) => (
+                    <div key={i} className="flex items-start justify-between gap-2 text-sm">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium text-gray-900">{item.name_en}</span>
+                        {item.name_ar && <span className="text-gray-400 text-xs ml-1">· {item.name_ar}</span>}
+                        {item.selected_options && Object.keys(item.selected_options).length > 0 && (
+                          <div className="text-xs text-gray-500 mt-0.5">{Object.entries(item.selected_options).map(([k, v]) => `${k}: ${v}`).join(' · ')}</div>
+                        )}
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-gray-500">×{item.quantity}</span>
+                        <span className="ml-2 font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
+                  <span>{t('total_label') as string}</span><span>${Number(order.total).toFixed(2)}</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
