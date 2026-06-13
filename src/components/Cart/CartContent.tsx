@@ -13,7 +13,6 @@ import { cn } from '../../utils/cn';
 import { supabase } from '../../lib/supabase';
 import { useStoreConfigStore } from '../../store/storeConfigStore';
 import { useLastOrderStore } from '../../store/lastOrderStore';
-import { useMenuStore } from '../../store/menuStore';
 
 const OptionButton = ({ 
   selected, 
