@@ -75,20 +75,29 @@ export const Home = () => {
 
   useEffect(() => {
     if (!lastOrderPhone) return;
-    const fetchStatus = () =>
-      supabase
-        .from('orders')
-        .select('status, order_number')
-        .eq('customer_phone', lastOrderPhone)
-        .order('created_at', { ascending: false })
-        .limit(20)
-        .then(({ data }) => {
-          if (!data || data.length === 0) return;
-          setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
-        });
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 10000);
-    return () => clearInterval(interval);
+    supabase
+      .from('orders')
+      .select('status, order_number')
+      .eq('customer_phone', lastOrderPhone)
+      .order('created_at', { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
+      });
+
+    const channel = supabase
+      .channel(`home-tracking-${lastOrderPhone}`)
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: `customer_phone=eq.${lastOrderPhone}` },
+        (payload) => {
+          const updated = payload.new as { status: string; order_number: number | null };
+          if (updated.status) {
+            setTrackingInfo((prev) => prev ? { ...prev, status: updated.status, orderNumber: updated.order_number ?? prev.orderNumber } : prev);
+          }
+        })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [lastOrderPhone]);
   const totalItems = useMemo(
     () =>
