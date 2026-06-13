@@ -2282,14 +2282,16 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
           <div className="flex items-center gap-2 flex-wrap">
             {!editing && <>
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('status_label') as string}</span>
-              {Object.entries(STATUS_LABELS).map(([key, val]) => (
+              {Object.entries(STATUS_LABELS)
+                .filter(([key]) => order.status === 'delivered' ? key === 'cancelled' : true)
+                .map(([key, val]) => (
                 <button key={key} type="button" disabled={updatingStatus === order.id} onClick={() => onUpdateStatus(order.id, key)}
                   className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}>
                   {t(`status_${key}` as any) as string}
                 </button>
               ))}
             </>}
-            {!editing && (
+            {!editing && order.status !== 'delivered' && (
               <button
                 type="button"
                 title={t('edit_order_btn') as string}
