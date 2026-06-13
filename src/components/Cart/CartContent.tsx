@@ -100,7 +100,7 @@ export const CartContent = () => {
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
   const [placedOrderStatus, setPlacedOrderStatus] = useState('new');
   const [showTracking, setShowTracking] = useState(false);
-  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; order_number: number | null; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
+  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; order_number: number | null; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number; admin_notes: { type: 'added' | 'removed' | 'qty_changed'; name: string; qty?: number; from?: number; to?: number; at: string }[] | null }[]>([]);
   const [trackingLoading, setTrackingLoading] = useState(false);
 
   useEffect(() => {
@@ -536,6 +536,25 @@ export const CartContent = () => {
                           <span className="text-gray-400 shrink-0 text-xs">×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                       ))}
+                      {order.admin_notes && order.admin_notes.length > 0 && (
+                        <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2 flex flex-col gap-1 mt-1">
+                          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
+                            {language === 'ar' ? 'تعديلات من المتجر' : 'Updated by store'}
+                          </p>
+                          {order.admin_notes.map((note, i) => {
+                            let msg = '';
+                            if (note.type === 'added') msg = language === 'ar' ? `تمت إضافة: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}` : `Added: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}`;
+                            else if (note.type === 'removed') msg = language === 'ar' ? `تمت إزالة: ${note.name}` : `Removed: ${note.name}`;
+                            else if (note.type === 'qty_changed') msg = language === 'ar' ? `تعديل الكمية: ${note.name} من ${note.from} إلى ${note.to}` : `Qty changed: ${note.name} — ${note.from} → ${note.to}`;
+                            return (
+                              <div key={i} className="flex items-start gap-1.5 text-xs text-amber-800">
+                                <span className="shrink-0">•</span>
+                                <span>{msg}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                       <div className="pt-1.5 mt-0.5 border-t border-gray-100 flex items-center justify-between">
                         <span className="text-sm font-bold text-gray-900">${Number(order.total).toFixed(2)}</span>
                         <button
