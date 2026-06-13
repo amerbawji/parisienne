@@ -131,6 +131,29 @@ export const TrackOrder = () => {
     return () => { channels.forEach((c) => supabase.removeChannel(c)); };
   }, [orders?.map((o) => o.id).join()]);
 
+  // Polling fallback — silently refreshes order data every 8s in case realtime misses an event
+  useEffect(() => {
+    if (!orders || orders.length === 0 || !phone) return;
+    const ids = orders.map((o) => o.id);
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('id,status,items,total,admin_notes')
+        .in('id', ids);
+      if (data) {
+        setOrders((prev) =>
+          prev
+            ? prev.map((o) => {
+                const fresh = (data as TrackOrder[]).find((d) => d.id === o.id);
+                return fresh ? { ...o, status: fresh.status, items: fresh.items, total: fresh.total, admin_notes: fresh.admin_notes } : o;
+              })
+            : prev
+        );
+      }
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [orders?.map((o) => o.id).join(), phone]);
+
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone.trim() || !orderNum.trim()) return;
