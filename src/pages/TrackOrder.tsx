@@ -108,12 +108,11 @@ export const TrackOrder = () => {
   useEffect(() => {
     if (!orders || orders.length === 0) return;
     const ids = orders.map((o) => o.id);
-    const channelName = `track-orders-${ids[0]}`;
     const channel = supabase
-      .channel(channelName)
+      .channel(`track-orders-${Date.now()}`)
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=in.(${ids.join(',')})` },
+        { event: 'UPDATE', schema: 'public', table: 'orders' },
         (payload) => {
           const updated = payload.new as TrackOrder;
           if (!ids.includes(updated.id)) return;
