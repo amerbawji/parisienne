@@ -104,31 +104,31 @@ export const TrackOrder = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Subscribe to live updates for all loaded orders
+  // One subscription per order — mirrors the pattern used in CartContent that works
   useEffect(() => {
     if (!orders || orders.length === 0) return;
-    const ids = orders.map((o) => o.id);
-    const channel = supabase
-      .channel(`track-orders-${Date.now()}`)
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'orders' },
-        (payload) => {
-          const updated = payload.new as TrackOrder;
-          if (!ids.includes(updated.id)) return;
-          setOrders((prev) =>
-            prev
-              ? prev.map((o) =>
-                  o.id === updated.id
-                    ? { ...o, status: updated.status ?? o.status, items: updated.items ?? o.items, total: updated.total ?? o.total, admin_notes: updated.admin_notes ?? o.admin_notes }
-                    : o
-                )
-              : prev
-          );
-        }
-      )
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    const channels = orders.map((o) =>
+      supabase
+        .channel(`track-order-${o.id}`)
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${o.id}` },
+          (payload) => {
+            const updated = payload.new as TrackOrder;
+            setOrders((prev) =>
+              prev
+                ? prev.map((order) =>
+                    order.id === updated.id
+                      ? { ...order, status: updated.status ?? order.status, items: updated.items ?? order.items, total: updated.total ?? order.total, admin_notes: updated.admin_notes ?? order.admin_notes }
+                      : order
+                  )
+                : prev
+            );
+          }
+        )
+        .subscribe()
+    );
+    return () => { channels.forEach((c) => supabase.removeChannel(c)); };
   }, [orders?.map((o) => o.id).join()]);
 
   const handleTrack = (e: React.FormEvent) => {
