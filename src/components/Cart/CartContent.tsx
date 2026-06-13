@@ -812,12 +812,6 @@ export const CartContent = () => {
                   <span className="font-semibold">-${discountAmount.toFixed(2)}</span>
                 </div>
               )}
-              {customerDiscountPct > 0 && (
-                <div className="flex items-baseline gap-1.5 text-xs text-green-600 font-medium">
-                  <span>{language === 'ar' ? `خصم خاص (${customerDiscountPct}%)` : `Special discount (${customerDiscountPct}%)`}</span>
-                  <span className="font-semibold">-${customerDiscountAmount.toFixed(2)}</span>
-                </div>
-              )}
               {serviceType === 'delivery' && (
                 <div className="flex items-baseline gap-1.5 text-xs text-gray-400">
                   <span>{t('delivery_charge')}</span>
