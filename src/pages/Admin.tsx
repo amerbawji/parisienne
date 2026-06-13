@@ -2227,13 +2227,14 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   );
 }
 
-function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSeen }: {
+function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSeen, isAdmin }: {
   orders: Order[];
   loading: boolean;
   onUpdateStatus: (id: string, status: string) => void;
   onRefresh: () => void;
   toast: ShowToast;
   onMarkSeen: (id: string) => void;
+  isAdmin: boolean;
 }) {
   const { t } = useAdminT();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -2345,7 +2346,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
           { label: t('today_orders') as string, value: todayOrders.length, sub: t('orders_placed_today') as string, color: 'text-primary-600' },
-          { label: t('today_revenue') as string, value: `$${todayRevenue.toFixed(2)}`, sub: t('from_today_orders') as string, color: 'text-green-600' },
+          ...(isAdmin ? [{ label: t('today_revenue') as string, value: `$${todayRevenue.toFixed(2)}`, sub: t('from_today_orders') as string, color: 'text-green-600' }] : []),
           { label: t('needs_attention') as string, value: pending, sub: t('new_confirmed') as string, color: pending > 0 ? 'text-amber-600' : 'text-gray-400' },
           { label: t('delivered_today') as string, value: deliveredToday, sub: t('completed_today') as string, color: 'text-emerald-600' },
         ].map(({ label, value, sub, color }) => (
@@ -2741,7 +2742,7 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} isAdmin={isAdmin} />}
         {tab === 'customers' && <CustomersTab orders={orders} />}
         {tab === 'menu' && <MenuTab />}
         {tab === 'settings' && <SettingsTab isAdmin={isAdmin} session={session} />}
