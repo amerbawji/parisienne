@@ -2192,6 +2192,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     scheduled_time: order.scheduled_time ?? '',
   });
   const [editItems, setEditItems] = useState<OrderItem[]>(order.items);
+  const origItemsRef = useRef<OrderItem[]>(order.items);
   const [itemSearch, setItemSearch] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -2223,7 +2224,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     setSaving(true);
     const now = new Date().toISOString();
     const newNotes: AdminNote[] = [];
-    const origMap = new Map(order.items.map(i => [i.name_en, i]));
+    const origMap = new Map(origItemsRef.current.map(i => [i.name_en, i]));
     const editMap = new Map(editItems.map(i => [i.name_en, i]));
     for (const [name, orig] of origMap) {
       const updated = editMap.get(name);
@@ -2303,6 +2304,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                     customer_phone: order.customer_phone ?? '',
                     scheduled_time: order.scheduled_time ?? '',
                   });
+                  origItemsRef.current = [...order.items];
                   setEditItems([...order.items]);
                   setItemSearch('');
                   setEditing(true);
@@ -2473,6 +2475,18 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                 <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between text-sm font-bold">
                   <span>{t('total_label') as string}</span><span>${Number(order.total).toFixed(2)}</span>
                 </div>
+                {order.admin_notes && order.admin_notes.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col gap-1">
+                    <p className="text-xs font-semibold text-purple-600 uppercase tracking-wide">{t('last_edited') as string}</p>
+                    {order.admin_notes.map((note, i) => {
+                      let msg = '';
+                      if (note.type === 'added') msg = `Added: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}`;
+                      else if (note.type === 'removed') msg = `Removed: ${note.name}`;
+                      else if (note.type === 'qty_changed') msg = `Qty: ${note.name} ${note.from} → ${note.to}`;
+                      return <p key={i} className="text-xs text-gray-500">• {msg}</p>;
+                    })}
+                  </div>
+                )}
               </>
             )}
           </div>
