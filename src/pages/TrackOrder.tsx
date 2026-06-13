@@ -22,6 +22,15 @@ interface TrackItem {
   selected_options: Record<string, string>;
 }
 
+interface AdminNote {
+  type: 'added' | 'removed' | 'qty_changed';
+  name: string;
+  qty?: number;
+  from?: number;
+  to?: number;
+  at: string;
+}
+
 interface TrackOrder {
   id: string;
   created_at: string;
@@ -33,6 +42,7 @@ interface TrackOrder {
   timing: string | null;
   scheduled_time: string | null;
   order_number: number | null;
+  admin_notes: AdminNote[] | null;
 }
 
 export const TrackOrder = () => {
@@ -104,10 +114,10 @@ export const TrackOrder = () => {
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'orders' },
         (payload) => {
-          const updated = payload.new as { id: string; status: string };
+          const updated = payload.new as TrackOrder;
           if (ids.includes(updated.id)) {
             setOrders((prev) =>
-              prev ? prev.map((o) => o.id === updated.id ? { ...o, status: updated.status } : o) : prev
+              prev ? prev.map((o) => o.id === updated.id ? { ...o, status: updated.status, items: updated.items, total: updated.total, admin_notes: updated.admin_notes } : o) : prev
             );
           }
         }
@@ -344,6 +354,27 @@ export const TrackOrder = () => {
                           </div>
                         ))}
                       </div>
+
+                      {/* Store changes */}
+                      {order.admin_notes && order.admin_notes.length > 0 && (
+                        <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex flex-col gap-1.5">
+                          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
+                            {isAr ? 'تعديلات من المتجر' : 'Updated by store'}
+                          </p>
+                          {order.admin_notes.map((note, i) => {
+                            let msg = '';
+                            if (note.type === 'added') msg = isAr ? `تمت إضافة: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}` : `Added: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}`;
+                            else if (note.type === 'removed') msg = isAr ? `تمت إزالة: ${note.name}` : `Removed: ${note.name}`;
+                            else if (note.type === 'qty_changed') msg = isAr ? `تعديل الكمية: ${note.name} من ${note.from} إلى ${note.to}` : `Qty changed: ${note.name} — ${note.from} → ${note.to}`;
+                            return (
+                              <div key={i} className="flex items-start gap-1.5 text-xs text-amber-800">
+                                <span className="mt-0.5 shrink-0">•</span>
+                                <span>{msg}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
 
                       {/* Total + Reorder */}
                       <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-3 text-sm font-bold text-gray-900">

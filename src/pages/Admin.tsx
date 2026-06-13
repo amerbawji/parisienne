@@ -2145,6 +2145,16 @@ interface Order {
   status: string;
   seen_at: string | null;
   order_number: number | null;
+  admin_notes: AdminNote[] | null;
+}
+
+interface AdminNote {
+  type: 'added' | 'removed' | 'qty_changed';
+  name: string;
+  qty?: number;
+  from?: number;
+  to?: number;
+  at: string;
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -2211,7 +2221,20 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
 
   const handleSave = async () => {
     setSaving(true);
-    const updates = { ...editData, items: editItems, total: editTotal };
+    const now = new Date().toISOString();
+    const newNotes: AdminNote[] = [];
+    const origMap = new Map(order.items.map(i => [i.name_en, i]));
+    const editMap = new Map(editItems.map(i => [i.name_en, i]));
+    for (const [name, orig] of origMap) {
+      const updated = editMap.get(name);
+      if (!updated) newNotes.push({ type: 'removed', name, at: now });
+      else if (updated.quantity !== orig.quantity) newNotes.push({ type: 'qty_changed', name, from: orig.quantity, to: updated.quantity, at: now });
+    }
+    for (const [name, item] of editMap) {
+      if (!origMap.has(name)) newNotes.push({ type: 'added', name, qty: item.quantity, at: now });
+    }
+    const admin_notes = [...(order.admin_notes ?? []), ...newNotes];
+    const updates = { ...editData, items: editItems, total: editTotal, admin_notes };
     const { error } = await supabase.from('orders').update(updates).eq('id', order.id);
     if (!error) {
       onSaveOrder(order.id, updates);
@@ -2250,13 +2273,15 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
       {expanded && (
         <div className="border-t border-gray-100 px-4 py-4 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('status_label') as string}</span>
-            {Object.entries(STATUS_LABELS).map(([key, val]) => (
-              <button key={key} type="button" disabled={updatingStatus === order.id} onClick={() => onUpdateStatus(order.id, key)}
-                className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}>
-                {t(`status_${key}` as any) as string}
-              </button>
-            ))}
+            {!editing && <>
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('status_label') as string}</span>
+              {Object.entries(STATUS_LABELS).map(([key, val]) => (
+                <button key={key} type="button" disabled={updatingStatus === order.id} onClick={() => onUpdateStatus(order.id, key)}
+                  className={`text-xs px-3 py-1 rounded-full font-semibold border transition ${order.status === key ? val.color + ' border-transparent' : 'bg-white text-gray-500 border-gray-200 hover:border-gray-400'}`}>
+                  {t(`status_${key}` as any) as string}
+                </button>
+              ))}
+            </>}
             {!editing && (
               <button
                 type="button"

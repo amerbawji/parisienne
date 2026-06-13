@@ -103,6 +103,7 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE orders ADD COLUMN seen_at TIMESTAMPTZ;
 -- CREATE SEQUENCE order_number_seq START 1001;
 -- ALTER TABLE orders ADD COLUMN order_number INTEGER NOT NULL DEFAULT nextval('order_number_seq');
+-- ALTER TABLE orders ADD COLUMN admin_notes JSONB NOT NULL DEFAULT '[]';
 -- CREATE TABLE customers (
 --   phone TEXT PRIMARY KEY,
 --   name_override TEXT,
