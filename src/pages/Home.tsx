@@ -14,6 +14,8 @@ import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 import { InstallPrompt } from '../components/UI/InstallPrompt';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const CategoryBannerImage = memo(({ src, alt }: { src: string; alt: string }) => {
   const [loaded, setLoaded] = useState(false);
@@ -66,7 +68,26 @@ export const Home = () => {
   const toggleCart = useCartStore((state) => state.toggleCart);
   const removeItem = useCartStore((state) => state.removeItem);
   const lastOrder = useLastOrderStore((s) => s.items);
+  const lastOrderPhone = useLastOrderStore((s) => s.phone);
+  const lastOrderNumber = useLastOrderStore((s) => s.orderNumber);
   const { language, t } = useLanguageStore();
+  const navigate = useNavigate();
+
+  const [trackingInfo, setTrackingInfo] = useState<{ status: string; orderNumber: number | null; orderCount: number } | null>(null);
+
+  useEffect(() => {
+    if (!lastOrderPhone) return;
+    supabase
+      .from('orders')
+      .select('status, order_number')
+      .eq('customer_phone', lastOrderPhone)
+      .order('created_at', { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
+      });
+  }, [lastOrderPhone]);
   const totalItems = useMemo(
     () =>
       cartItems.reduce((total, item) => {
@@ -340,54 +361,50 @@ export const Home = () => {
         </div>
       )}
 
-      {/* Order again banner */}
-      {lastOrder.length > 0 && cartItems.length === 0 && (
-        <div className="bg-white border-b border-gray-100" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <ArrowPathIcon className="h-4 w-4 text-primary-600 shrink-0" />
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-gray-900">
-                  {language === 'ar' ? 'طلبك السابق' : 'Your last order'}
-                </p>
-                <p className="text-xs text-gray-500 truncate">
-                  {lastOrder.slice(0, 3).map((i) => (language === 'ar' ? i.name_ar : i.name_en) || i.name).join(language === 'ar' ? '، ' : ', ')}
-                  {lastOrder.length > 3 && (language === 'ar' ? ` وأكثر...` : ` +${lastOrder.length - 3} more`)}
-                </p>
+      {/* Order tracking banner */}
+      {trackingInfo && cartItems.length === 0 && (() => {
+        const STATUS_LABELS: Record<string, { en: string; ar: string; color: string; icon: string }> = {
+          new:       { en: 'Order received',  ar: 'تم استلام طلبك',  color: 'text-blue-700 bg-blue-50',    icon: '🕐' },
+          confirmed: { en: 'Confirmed',        ar: 'تم تأكيد طلبك',  color: 'text-yellow-700 bg-yellow-50', icon: '✅' },
+          preparing: { en: 'Being prepared',   ar: 'يتم التحضير',    color: 'text-orange-700 bg-orange-50', icon: '👨‍🍳' },
+          ready:     { en: 'Ready for pickup', ar: 'جاهز للاستلام',  color: 'text-purple-700 bg-purple-50', icon: '🎁' },
+          delivered: { en: 'Delivered',        ar: 'تم التوصيل',     color: 'text-green-700 bg-green-50',   icon: '🎉' },
+          cancelled: { en: 'Cancelled',        ar: 'تم الإلغاء',     color: 'text-red-700 bg-red-50',       icon: '❌' },
+        };
+        const si = STATUS_LABELS[trackingInfo.status] ?? { en: trackingInfo.status, ar: trackingInfo.status, color: 'text-gray-600 bg-gray-50', icon: '•' };
+        const trackUrl = lastOrderPhone
+          ? trackingInfo.orderCount === 1 && lastOrderNumber
+            ? `/track?phone=${encodeURIComponent(lastOrderPhone)}&order=${lastOrderNumber}`
+            : `/track?phone=${encodeURIComponent(lastOrderPhone)}`
+          : '/track';
+        return (
+          <button
+            type="button"
+            onClick={() => navigate(trackUrl)}
+            className="w-full bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors text-left"
+            dir={language === 'ar' ? 'rtl' : 'ltr'}
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-lg shrink-0">{si.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-gray-900">
+                    {trackingInfo.orderNumber != null
+                      ? `${language === 'ar' ? 'طلب' : 'Order'} #${trackingInfo.orderNumber}`
+                      : (language === 'ar' ? 'آخر طلب' : 'Latest order')}
+                  </p>
+                  <p className={`text-xs font-medium px-1.5 py-0.5 rounded-full inline-block mt-0.5 ${si.color}`}>
+                    {language === 'ar' ? si.ar : si.en}
+                  </p>
+                </div>
               </div>
+              <span className="shrink-0 text-xs font-semibold text-primary-600">
+                {language === 'ar' ? 'تتبع ←' : 'Track →'}
+              </span>
             </div>
-            <button
-              onClick={() => {
-                lastOrder.forEach((item) => {
-                  const liveItem = storeCategories
-                    .flatMap((c) => c.items)
-                    .find((i) => i.id === item.id);
-                  const livePrice = liveItem
-                    ? Math.round(liveItem.price * (1 - discountPct / 100) * 100) / 100
-                    : item.price;
-                  addCartItem({
-                    id: item.id,
-                    name: item.name,
-                    name_en: item.name_en,
-                    name_ar: item.name_ar,
-                    image: liveItem?.image || item.image,
-                    price: livePrice,
-                    selectedOptions: item.selectedOptions,
-                    instructions: item.instructions,
-                    step: item.step,
-                    minQuantity: item.minQuantity,
-                    quantity: item.quantity,
-                  });
-                });
-                toggleCart();
-              }}
-              className="shrink-0 text-xs font-semibold px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              {language === 'ar' ? 'أعد الطلب' : 'Order again'}
-            </button>
-          </div>
-        </div>
-      )}
+          </button>
+        );
+      })()}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         {menuLoading ? (

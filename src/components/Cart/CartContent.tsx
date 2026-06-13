@@ -317,7 +317,7 @@ export const CartContent = () => {
     if (orderError) console.error('[Order save failed]', orderError);
 
     if (link && !waWindow) window.location.href = link;
-    saveLastOrder(snapshot);
+    saveLastOrder(snapshot, customerPhone || undefined, (insertData as { id: string; order_number: number } | null)?.order_number ?? null);
     clearCart();
 
     setPlacedOrder({
