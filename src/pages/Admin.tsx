@@ -2233,16 +2233,14 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     for (const [name, item] of editMap) {
       if (!origMap.has(name)) newNotes.push({ type: 'added', name, qty: item.quantity, at: now });
     }
-    // Save core fields first — this must succeed regardless of admin_notes column
-    const coreUpdates = { ...editData, items: editItems, total: editTotal };
-    const { error } = await supabase.from('orders').update(coreUpdates).eq('id', order.id);
-    if (error) { setSaving(false); return; }
-
-    // Try to append admin_notes separately — fails gracefully if column not yet migrated
     const admin_notes = [...(order.admin_notes ?? []), ...newNotes];
-    await supabase.from('orders').update({ admin_notes }).eq('id', order.id);
-
-    const updates = { ...coreUpdates, admin_notes };
+    const updates = { ...editData, items: editItems, total: editTotal, admin_notes };
+    const { error } = await supabase.from('orders').update(updates).eq('id', order.id);
+    if (error) {
+      toast(error.message, 'error');
+      setSaving(false);
+      return;
+    }
     onSaveOrder(order.id, updates);
     toast(t('toast_order_saved') as string);
     setSaving(false);
@@ -2267,6 +2265,9 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
             </span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${badge.color}`}>{badge.label}</span>
             <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 capitalize">{order.service_type}</span>
+            {order.admin_notes && order.admin_notes.length > 0 && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-semibold">{t('last_edited') as string}</span>
+            )}
           </div>
           <p className="text-xs text-gray-500 mt-0.5">
             {[order.customer_name, order.customer_phone, `${order.items.length} item${order.items.length !== 1 ? 's' : ''}`, `$${Number(order.total).toFixed(2)}`].filter(Boolean).join(' · ')}
