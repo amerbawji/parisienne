@@ -75,16 +75,20 @@ export const Home = () => {
 
   useEffect(() => {
     if (!lastOrderPhone) return;
-    supabase
-      .from('orders')
-      .select('status, order_number')
-      .eq('customer_phone', lastOrderPhone)
-      .order('created_at', { ascending: false })
-      .limit(20)
-      .then(({ data }) => {
-        if (!data || data.length === 0) return;
-        setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
-      });
+    const fetchStatus = () =>
+      supabase
+        .from('orders')
+        .select('status, order_number')
+        .eq('customer_phone', lastOrderPhone)
+        .order('created_at', { ascending: false })
+        .limit(20)
+        .then(({ data }) => {
+          if (!data || data.length === 0) return;
+          setTrackingInfo({ status: data[0].status, orderNumber: data[0].order_number ?? null, orderCount: data.length });
+        });
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 10000);
+    return () => clearInterval(interval);
   }, [lastOrderPhone]);
   const totalItems = useMemo(
     () =>
