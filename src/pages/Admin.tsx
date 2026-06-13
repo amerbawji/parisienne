@@ -2703,7 +2703,10 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
       {/* Top nav */}
       <header className="bg-primary-600 text-white shadow-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
-          <h1 className="text-sm sm:text-base font-bold tracking-wide truncate">{t('admin_panel') as string}</h1>
+          <div className="flex flex-col leading-tight min-w-0">
+            <h1 className="text-sm sm:text-base font-bold tracking-wide truncate">{t('admin_panel') as string}</h1>
+            <span className="text-xs text-white/70 truncate capitalize">{session.username}</span>
+          </div>
           <div className="flex items-center gap-1.5 shrink-0">
             <button type="button" onClick={toggleLang}
               className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
