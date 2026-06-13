@@ -104,6 +104,21 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- CREATE SEQUENCE order_number_seq START 1001;
 -- ALTER TABLE orders ADD COLUMN order_number INTEGER NOT NULL DEFAULT nextval('order_number_seq');
 
+-- Admin users table
+-- CREATE TABLE admin_users (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   username TEXT UNIQUE NOT NULL,
+--   password_hash TEXT NOT NULL,
+--   role TEXT NOT NULL DEFAULT 'staff',
+--   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+-- );
+-- ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
+-- CREATE POLICY "public_all" ON admin_users FOR ALL USING (true) WITH CHECK (true);
+--
+-- Seed the first admin (password: parisienne2025):
+-- INSERT INTO admin_users (username, password_hash, role)
+-- VALUES ('admin', encode(sha256('parisienne2025'::bytea), 'hex'), 'admin');
+
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
 -- Then add this policy in Storage → menu-images → Policies:

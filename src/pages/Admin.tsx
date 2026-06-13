@@ -143,6 +143,15 @@ const adminDict = {
     customer_last_order: 'Last order',
     customer_order_history: 'Order history',
     no_phone: 'No phone',
+    users_heading: 'Team',
+    user_username: 'Username',
+    user_password: 'Password',
+    user_role: 'Role',
+    user_add: 'Add User',
+    user_role_admin: 'Admin',
+    user_role_staff: 'Staff',
+    toast_user_created: 'User created',
+    toast_user_deleted: 'User removed',
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
@@ -234,6 +243,15 @@ const adminDict = {
     customer_last_order: 'آخر طلب',
     customer_order_history: 'سجل الطلبات',
     no_phone: 'بدون هاتف',
+    users_heading: 'الفريق',
+    user_username: 'اسم المستخدم',
+    user_password: 'كلمة المرور',
+    user_role: 'الدور',
+    user_add: 'إضافة مستخدم',
+    user_role_admin: 'مسؤول',
+    user_role_staff: 'موظف',
+    toast_user_created: 'تم إنشاء المستخدم',
+    toast_user_deleted: 'تم حذف المستخدم',
   },
 } as const;
 
@@ -249,8 +267,19 @@ function AdminLangProvider({ children }: { children: React.ReactNode }) {
   return <AdminLangContext.Provider value={{ lang, t, isRtl: lang === 'ar', toggle }}>{children}</AdminLangContext.Provider>;
 }
 
-const ADMIN_PASSWORD = 'parisienne2025';
-const SESSION_KEY = 'parisienne_admin_auth';
+const SESSION_KEY = 'parisienne_admin_session';
+
+async function hashPassword(pw: string): Promise<string> {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function getSession(): { username: string; role: string } | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
 
 // ─── Empty item factory ──────────────────────────────────────────────────────
 
@@ -940,7 +969,7 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-function SettingsTab() {
+function SettingsTab({ isAdmin, session }: { isAdmin: boolean; session: { username: string; role: string } }) {
   const { enabled, image, setEnabled, setImage } = usePromoStore();
   const { open_time, close_time, closed_days, whatsapp_number, whatsapp_enabled, discount_percentage, hide_items_without_image, loading: configLoading, fetchConfig, updateConfig } = useStoreConfigStore();
   const { force_closed, force_open, setForceState } = useStoreConfigStore();
@@ -960,6 +989,46 @@ function SettingsTab() {
   const [discountPct, setDiscountPct] = useState(discount_percentage);
   const [discountSaving, setDiscountSaving] = useState(false);
   const [hideNoImage, setHideNoImage] = useState(hide_items_without_image);
+
+  // ── Users state (admin only) ──
+  const [adminUsers, setAdminUsers] = useState<{ id: string; username: string; role: string }[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newRole, setNewRole] = useState<'admin' | 'staff'>('staff');
+  const [userSaving, setUserSaving] = useState(false);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    setUsersLoading(true);
+    supabase.from('admin_users').select('id,username,role').order('created_at')
+      .then(({ data }) => { setAdminUsers(data ?? []); setUsersLoading(false); });
+  }, [isAdmin]);
+
+  const handleCreateUser = async () => {
+    if (!newUsername.trim() || !newPassword.trim()) return;
+    setUserSaving(true);
+    const hash = await hashPassword(newPassword);
+    const { data, error } = await supabase.from('admin_users')
+      .insert({ username: newUsername.trim(), password_hash: hash, role: newRole })
+      .select('id,username,role').single();
+    setUserSaving(false);
+    if (!error && data) {
+      setAdminUsers(prev => [...prev, data]);
+      setNewUsername('');
+      setNewPassword('');
+      setNewRole('staff');
+      toast(t('toast_user_created') as string);
+    } else {
+      toast(t('toast_failed_save') as string, 'error');
+    }
+  };
+
+  const handleDeleteUser = async (id: string) => {
+    await supabase.from('admin_users').delete().eq('id', id);
+    setAdminUsers(prev => prev.filter(u => u.id !== id));
+    toast(t('toast_user_deleted') as string);
+  };
 
   useEffect(() => {
     fetchConfig().then(() => {
@@ -1207,6 +1276,80 @@ function SettingsTab() {
         </div>
         <input type="file" accept="image/*" ref={fileRef} onChange={handleFile} className="hidden" />
       </div>
+
+      {/* ── Card 4: Team / Users (admin only) ── */}
+      {isAdmin && (
+        <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100">
+            <p className="text-sm font-semibold text-gray-800">{t('users_heading') as string}</p>
+          </div>
+
+          {/* User list */}
+          <div className="px-5 py-3 flex flex-col gap-2">
+            {usersLoading ? (
+              <p className="text-xs text-gray-400 py-2">Loading…</p>
+            ) : adminUsers.length === 0 ? (
+              <p className="text-xs text-gray-400 py-2">No users.</p>
+            ) : (
+              adminUsers.map(u => (
+                <div key={u.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-100 last:border-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-sm font-medium text-gray-800 truncate">{u.username}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${u.role === 'admin' ? 'bg-primary-100 text-primary-700' : 'bg-gray-100 text-gray-600'}`}>
+                      {u.role === 'admin' ? t('user_role_admin') as string : t('user_role_staff') as string}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={u.username === session.username}
+                    onClick={() => handleDeleteUser(u.id)}
+                    className="text-xs px-2 py-1 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
+                  >
+                    {t('delete_btn') as string}
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Create user form */}
+          <div className="px-5 py-4 border-t border-gray-100 flex flex-col gap-3">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('user_add') as string}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input
+                type="text"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                placeholder={t('user_username') as string}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+              />
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder={t('user_password') as string}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+              />
+              <select
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value as 'admin' | 'staff')}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white"
+              >
+                <option value="staff">{t('user_role_staff') as string}</option>
+                <option value="admin">{t('user_role_admin') as string}</option>
+              </select>
+            </div>
+            <button
+              type="button"
+              disabled={userSaving || !newUsername.trim() || !newPassword.trim()}
+              onClick={handleCreateUser}
+              className="self-start px-4 py-2 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition disabled:opacity-50"
+            >
+              {userSaving ? t('saving') as string : t('user_add') as string}
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
@@ -1888,43 +2031,70 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
   );
 }
 
-// ─── Password Gate ────────────────────────────────────────────────────────────
+// ─── Login Gate ───────────────────────────────────────────────────────────────
 
-function PasswordGate({ onSuccess }: { onSuccess: () => void }) {
+function LoginGate({ onSuccess }: { onSuccess: (session: { username: string; role: string }) => void }) {
+  const { t } = useAdminT();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { t, isRtl, toggle: toggleLang } = useAdminT();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      onSuccess();
+    setLoading(true);
+    setError('');
+    const hash = await hashPassword(password);
+    const { data } = await supabase
+      .from('admin_users')
+      .select('role')
+      .eq('username', username.trim())
+      .eq('password_hash', hash)
+      .single();
+    setLoading(false);
+    if (data) {
+      const session = { username: username.trim(), role: data.role as string };
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+      onSuccess(session);
     } else {
       setError(t('wrong_password') as string);
-      setPassword('');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4" dir={isRtl ? 'rtl' : 'ltr'}>
-      <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8 w-full max-w-sm flex flex-col gap-6">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 w-full max-w-sm flex flex-col gap-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-primary-600">{t('admin_panel') as string}</h1>
+          <h1 className="text-xl font-bold text-gray-900">Parisienne</h1>
           <p className="text-sm text-gray-500 mt-1">{t('enter_password') as string}</p>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input type="password" value={password} onChange={(e) => { setPassword(e.target.value); setError(''); }}
-            placeholder={t('password_placeholder') as string} autoFocus
-            className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400" />
-          {error && <p className="text-xs text-red-600">{error}</p>}
-          <button type="submit" className="w-full py-2.5 bg-primary-600 text-white text-sm font-semibold rounded-lg hover:bg-primary-700 transition">
-            {t('log_in') as string}
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <input
+            type="text"
+            autoComplete="username"
+            value={username}
+            onChange={(e) => { setUsername(e.target.value); setError(''); }}
+            placeholder="Username"
+            autoFocus
+            className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+          />
+          <input
+            type="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value); setError(''); }}
+            placeholder={t('password_placeholder') as string}
+            className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
+          />
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading || !username.trim() || !password}
+            className="mt-1 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition disabled:opacity-50"
+          >
+            {loading ? '...' : t('log_in') as string}
           </button>
         </form>
-        <button type="button" onClick={toggleLang} className="text-xs text-gray-400 hover:text-gray-600 self-center">
-          {t('lang_toggle') as string}
-        </button>
       </div>
     </div>
   );
@@ -1968,14 +2138,14 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   onToggle: () => void;
   onUpdateStatus: (id: string, status: string) => void;
   updatingStatus: string | null;
-  onMarkSeen: (id: string, currentStatus: string) => void;
+  onMarkSeen: (id: string) => void;
 }) {
   const date = new Date(order.created_at);
   const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
   const { t } = useAdminT();
   return (
     <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${!order.seen_at ? 'border-amber-300' : 'border-gray-200'}`}>
-      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id, order.status); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
+      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             {!order.seen_at && (
@@ -2063,7 +2233,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
   onUpdateStatus: (id: string, status: string) => void;
   onRefresh: () => void;
   toast: ShowToast;
-  onMarkSeen: (id: string, currentStatus: string) => void;
+  onMarkSeen: (id: string) => void;
 }) {
   const { t } = useAdminT();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -2096,7 +2266,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
     setUpdatingStatus(id);
     await supabase.from('orders').update({ status }).eq('id', id);
     onUpdateStatus(id, status);
-    onMarkSeen(id, '');
+    onMarkSeen(id);
     setUpdatingStatus(null);
     toast((t('toast_order_status') as (s: string) => string)(STATUS_LABELS[status]?.label ?? status));
   };
@@ -2434,13 +2604,33 @@ function OrderNotification({ order, onDismiss }: { order: Order; onDismiss: () =
 
 type Tab = 'orders' | 'customers' | 'menu' | 'settings';
 
-function AdminShell() {
-  const [tab, setTab] = useState<Tab>('orders');
+const ALL_TABS: { key: Tab; labelKey: keyof AdminDict }[] = [
+  { key: 'orders', labelKey: 'tab_orders' },
+  { key: 'customers', labelKey: 'tab_customers' },
+  { key: 'menu', labelKey: 'tab_menu' },
+  { key: 'settings', labelKey: 'tab_settings' },
+];
+const STAFF_TABS: Tab[] = ['orders', 'customers'];
+
+function AdminShell({ session, onLogout }: { session: { username: string; role: string }; onLogout: () => void }) {
+  const isAdmin = session.role === 'admin';
+  const visibleTabs = isAdmin ? ALL_TABS : ALL_TABS.filter(tb => STAFF_TABS.includes(tb.key));
+  const [tab, setTab] = useState<Tab>(() => {
+    const defaultTab: Tab = 'orders';
+    return defaultTab;
+  });
   const toast = useToast();
   const { t, isRtl, toggle: toggleLang } = useAdminT();
   const fetchMenu = useMenuStore((s) => s.fetchMenu);
   const fetchPromo = usePromoStore((s) => s.fetchPromo);
   const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
+
+  // If current tab is not visible for this role, reset to orders
+  useEffect(() => {
+    if (!visibleTabs.some(tb => tb.key === tab)) {
+      setTab('orders');
+    }
+  }, [isAdmin]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Orders state (lives here so realtime persists across tab switches) ──
   const [orders, setOrders] = useState<Order[]>([]);
@@ -2487,19 +2677,17 @@ function AdminShell() {
     setOrders((prev) => prev.map((o) => o.id === id ? { ...o, status } : o));
   };
 
-  const handleMarkSeen = useCallback(async (id: string, currentStatus: string) => {
+  const handleMarkSeen = useCallback(async (id: string) => {
     const now = new Date().toISOString();
-    const updates: Record<string, string> = { seen_at: now };
-    if (currentStatus === 'new') updates.status = 'confirmed';
-    await supabase.from('orders').update(updates).eq('id', id);
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, ...updates } : o));
+    await supabase.from('orders').update({ seen_at: now }).eq('id', id);
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, seen_at: now } : o));
   }, []);
 
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
   const handleLogout = () => {
     sessionStorage.removeItem(SESSION_KEY);
-    window.location.reload();
+    onLogout();
   };
 
   const handleTabChange = (key: Tab) => {
@@ -2507,12 +2695,7 @@ function AdminShell() {
     setTab(key);
   };
 
-  const tabs: { key: Tab; label: string }[] = [
-    { key: 'orders', label: t('tab_orders') as string },
-    { key: 'customers', label: t('tab_customers') as string },
-    { key: 'menu', label: t('tab_menu') as string },
-    { key: 'settings', label: t('tab_settings') as string },
-  ];
+  const tabs = visibleTabs.map(tb => ({ key: tb.key, label: t(tb.labelKey) as string }));
 
   return (
     <div className="min-h-screen bg-gray-50" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -2561,7 +2744,7 @@ function AdminShell() {
         {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} />}
         {tab === 'customers' && <CustomersTab orders={orders} />}
         {tab === 'menu' && <MenuTab />}
-        {tab === 'settings' && <SettingsTab />}
+        {tab === 'settings' && <SettingsTab isAdmin={isAdmin} session={session} />}
       </main>
 
       {/* Live order notifications — bottom right */}
@@ -2577,10 +2760,8 @@ function AdminShell() {
 // ─── Page Export ──────────────────────────────────────────────────────────────
 
 export const Admin = () => {
-  const [authed, setAuthed] = useState(
-    () => sessionStorage.getItem(SESSION_KEY) === '1'
-  );
+  const [session, setSession] = useState<{ username: string; role: string } | null>(getSession);
 
-  if (!authed) return <AdminLangProvider><PasswordGate onSuccess={() => setAuthed(true)} /></AdminLangProvider>;
-  return <AdminLangProvider><ToastProvider><AdminShell /></ToastProvider></AdminLangProvider>;
+  if (!session) return <AdminLangProvider><LoginGate onSuccess={(s) => setSession(s)} /></AdminLangProvider>;
+  return <AdminLangProvider><ToastProvider><AdminShell session={session} onLogout={() => setSession(null)} /></ToastProvider></AdminLangProvider>;
 };
