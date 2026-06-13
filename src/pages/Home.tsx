@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback, memo } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-horizontal-logo.svg';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
@@ -63,11 +63,9 @@ export const Home = () => {
   const [activeCatId, setActiveCatId] = useState<string | null>(null);
   const [headerHeight, setHeaderHeight] = useState(80);
   const cartItems = useCartStore((state) => state.items);
-  const addCartItem = useCartStore((state) => state.addItem);
   const storeCategories = useMenuStore((state) => state.categories);
   const toggleCart = useCartStore((state) => state.toggleCart);
   const removeItem = useCartStore((state) => state.removeItem);
-  const lastOrder = useLastOrderStore((s) => s.items);
   const lastOrderPhone = useLastOrderStore((s) => s.phone);
   const lastOrderNumber = useLastOrderStore((s) => s.orderNumber);
   const { language, t } = useLanguageStore();
@@ -109,7 +107,6 @@ export const Home = () => {
     [storeCategories]
   );
   const hideItemsWithoutImage = useStoreConfigStore((s) => s.hide_items_without_image);
-  const discountPct = useStoreConfigStore((s) => s.discount_percentage);
 
   const filteredCategories = useMemo(
     () => {
