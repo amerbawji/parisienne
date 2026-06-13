@@ -361,10 +361,6 @@ export const CartContent = () => {
     cancelled: { label: 'Cancelled',        labelAr: 'تم الإلغاء',      color: 'bg-red-50 text-red-700 border-red-200',        icon: '❌' },
   };
 
-  const openTracking = () => {
-    setCartOpen(false);
-    navigate(customerPhone.trim() ? `/track?phone=${encodeURIComponent(customerPhone.trim())}` : '/track');
-  };
 
   if (placedOrder) {
     const trackUrl = placedOrder.customerPhone && placedOrder.orderNumber
@@ -468,19 +464,6 @@ export const CartContent = () => {
           <Button onClick={() => setCartOpen(false)}>{t('start_shopping')}</Button>
         </div>
 
-        {customerPhone && (
-          <button
-            type="button"
-            onClick={openTracking}
-            className="w-full flex items-center justify-between gap-3 bg-primary-50 border border-primary-100 rounded-xl px-4 py-3 hover:bg-primary-100 transition"
-          >
-            <div className="text-start">
-              <p className="text-sm font-semibold text-primary-800">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</p>
-              <p className="text-xs text-primary-600 mt-0.5">{language === 'ar' ? 'تحقق من حالة طلباتك السابقة' : 'Check the status of your past orders'}</p>
-            </div>
-            <span className="text-primary-600 text-lg shrink-0">📦</span>
-          </button>
-        )}
 
         {lastOrderItems.length > 0 && (
           <div className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4">
