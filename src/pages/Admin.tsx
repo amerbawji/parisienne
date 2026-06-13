@@ -2235,6 +2235,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                     delivery_details: order.delivery_details ?? '',
                     customer_name: order.customer_name ?? '',
                     customer_phone: order.customer_phone ?? '',
+                    scheduled_time: order.scheduled_time ?? '',
                   });
                   setEditing(true);
                 }}
