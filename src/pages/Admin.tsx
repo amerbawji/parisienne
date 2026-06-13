@@ -2430,7 +2430,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                     </div>
                   ))}
                 </div>
-                <div className="mt-3 relative">
+                <div className="mt-3">
                   <input
                     type="text"
                     value={itemSearch}
@@ -2439,10 +2439,10 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                     className="w-full text-sm border border-dashed border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
                   />
                   {filteredMenuItems.length > 0 && (
-                    <div className="absolute z-10 left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+                    <div className="mt-1 bg-white border border-gray-200 rounded-lg overflow-hidden">
                       {filteredMenuItems.map(mi => (
                         <button key={mi.id} type="button" onClick={() => addMenuItemToOrder(mi)}
-                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-primary-50 transition text-left">
+                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-primary-50 transition text-left border-b border-gray-100 last:border-0">
                           <span className="font-medium text-gray-900">{mi.name_en}</span>
                           <span className="text-gray-500 shrink-0 ml-2">${mi.price.toFixed(2)}</span>
                         </button>
