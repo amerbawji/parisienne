@@ -73,10 +73,7 @@ export const TrackOrder = () => {
         .eq('customer_phone', p)
         .order('created_at', { ascending: false })
         .limit(20);
-      if (data) {
-        console.log('[track] poll data admin_notes:', data.map(o => ({ id: o.id, admin_notes: o.admin_notes })));
-        setOrders(data as TrackOrder[]);
-      }
+      if (data) setOrders(data as TrackOrder[]);
     }, 5000);
   };
 
@@ -112,7 +109,6 @@ export const TrackOrder = () => {
       setError(isAr ? 'حدث خطأ. يرجى المحاولة مجدداً.' : 'Something went wrong. Please try again.');
       return;
     }
-    console.log('[track] initial fetch admin_notes:', (data ?? []).map((o: any) => ({ id: o.id, admin_notes: o.admin_notes })));
     verifiedPhone.current = p.trim();
     setOrders((data as TrackOrder[]) ?? []);
     startPolling(p.trim());
@@ -355,8 +351,6 @@ export const TrackOrder = () => {
                         ))}
                       </div>
 
-                      {/* DEBUG — remove after fix */}
-                      <div className="text-red-500 text-xs break-all">dbg:{JSON.stringify(order.admin_notes)}</div>
                       {/* Store changes */}
                       {order.admin_notes && order.admin_notes.length > 0 && (
                         <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2.5 flex flex-col gap-1.5">
