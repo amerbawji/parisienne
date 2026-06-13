@@ -61,12 +61,29 @@ export const TrackOrder = () => {
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
+  const verifiedPhone = useRef('');
+  const pollInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startPolling = (p: string) => {
+    if (pollInterval.current) clearInterval(pollInterval.current);
+    pollInterval.current = setInterval(async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('customer_phone', p)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      if (data) setOrders(data as TrackOrder[]);
+    }, 5000);
+  };
+
+  useEffect(() => { return () => { if (pollInterval.current) clearInterval(pollInterval.current); }; }, []);
+
   const fetchOrders = async (p: string, num: string) => {
     setLoading(true);
     setError(null);
     setSubmitted(true);
 
-    // Verify phone + order number match before revealing any orders
     const { data: verifyData } = await supabase
       .from('orders')
       .select('id')
@@ -81,7 +98,6 @@ export const TrackOrder = () => {
       return;
     }
 
-    // Verified — load all orders for this phone
     const { data, error: fetchError } = await supabase
       .from('orders')
       .select('*')
@@ -93,7 +109,9 @@ export const TrackOrder = () => {
       setError(isAr ? 'حدث خطأ. يرجى المحاولة مجدداً.' : 'Something went wrong. Please try again.');
       return;
     }
+    verifiedPhone.current = p.trim();
     setOrders((data as TrackOrder[]) ?? []);
+    startPolling(p.trim());
   };
 
   // Auto-fetch if both params pre-filled from URL
@@ -103,56 +121,6 @@ export const TrackOrder = () => {
     if (prePhone && preOrder) fetchOrders(prePhone, preOrder);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // One subscription per order — mirrors the pattern used in CartContent that works
-  useEffect(() => {
-    if (!orders || orders.length === 0) return;
-    const channels = orders.map((o) =>
-      supabase
-        .channel(`track-order-${o.id}`)
-        .on(
-          'postgres_changes',
-          { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${o.id}` },
-          (payload) => {
-            const updated = payload.new as TrackOrder;
-            setOrders((prev) =>
-              prev
-                ? prev.map((order) =>
-                    order.id === updated.id
-                      ? { ...order, status: updated.status ?? order.status, items: updated.items ?? order.items, total: updated.total ?? order.total, admin_notes: updated.admin_notes ?? order.admin_notes }
-                      : order
-                  )
-                : prev
-            );
-          }
-        )
-        .subscribe()
-    );
-    return () => { channels.forEach((c) => supabase.removeChannel(c)); };
-  }, [orders?.map((o) => o.id).join()]);
-
-  // Polling fallback — silently refreshes order data every 8s in case realtime misses an event
-  useEffect(() => {
-    if (!orders || orders.length === 0 || !phone) return;
-    const ids = orders.map((o) => o.id);
-    const interval = setInterval(async () => {
-      const { data } = await supabase
-        .from('orders')
-        .select('id,status,items,total,admin_notes')
-        .in('id', ids);
-      if (data) {
-        setOrders((prev) =>
-          prev
-            ? prev.map((o) => {
-                const fresh = (data as TrackOrder[]).find((d) => d.id === o.id);
-                return fresh ? { ...o, status: fresh.status, items: fresh.items, total: fresh.total, admin_notes: fresh.admin_notes } : o;
-              })
-            : prev
-        );
-      }
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [orders?.map((o) => o.id).join(), phone]);
 
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
