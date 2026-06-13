@@ -103,6 +103,14 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE orders ADD COLUMN seen_at TIMESTAMPTZ;
 -- CREATE SEQUENCE order_number_seq START 1001;
 -- ALTER TABLE orders ADD COLUMN order_number INTEGER NOT NULL DEFAULT nextval('order_number_seq');
+-- CREATE TABLE customers (
+--   phone TEXT PRIMARY KEY,
+--   name_override TEXT,
+--   discount_percentage INTEGER NOT NULL DEFAULT 0,
+--   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+-- );
+-- ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
+-- CREATE POLICY "public_all" ON customers FOR ALL USING (true) WITH CHECK (true);
 
 -- Admin users table
 -- CREATE TABLE admin_users (

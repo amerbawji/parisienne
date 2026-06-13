@@ -152,6 +152,14 @@ const adminDict = {
     user_role_staff: 'Staff',
     toast_user_created: 'User created',
     toast_user_deleted: 'User removed',
+    edit_order_btn: 'Edit',
+    save_order_btn: 'Save',
+    cancel_order_btn: 'Cancel',
+    customer_discount_label: 'Special Discount',
+    customer_discount_pct: (n: number) => `${n}% off`,
+    customer_discount_none: 'No discount',
+    toast_order_saved: 'Order updated',
+    toast_discount_customer_saved: 'Discount saved',
   },
   ar: {
     admin_panel: 'لوحة التحكم', back_to_menu: '→ القائمة', log_out: 'خروج', lang_toggle: 'English',
@@ -252,6 +260,14 @@ const adminDict = {
     user_role_staff: 'موظف',
     toast_user_created: 'تم إنشاء المستخدم',
     toast_user_deleted: 'تم حذف المستخدم',
+    edit_order_btn: 'تعديل',
+    save_order_btn: 'حفظ',
+    cancel_order_btn: 'إلغاء',
+    customer_discount_label: 'خصم خاص',
+    customer_discount_pct: (n: number) => `${n}% خصم`,
+    customer_discount_none: 'لا يوجد خصم',
+    toast_order_saved: 'تم تحديث الطلب',
+    toast_discount_customer_saved: 'تم حفظ الخصم',
   },
 } as const;
 
@@ -2132,17 +2148,44 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700' },
 };
 
-function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, onMarkSeen }: {
+function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, onMarkSeen, isAdmin, onSaveOrder }: {
   order: Order;
   expanded: boolean;
   onToggle: () => void;
   onUpdateStatus: (id: string, status: string) => void;
   updatingStatus: string | null;
   onMarkSeen: (id: string) => void;
+  isAdmin: boolean;
+  onSaveOrder: (id: string, updates: Partial<Order>) => void;
 }) {
   const date = new Date(order.created_at);
   const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
   const { t } = useAdminT();
+  const toast = useToast();
+  const [editing, setEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    delivery_area: order.delivery_area ?? '',
+    delivery_street: order.delivery_street ?? '',
+    delivery_building: order.delivery_building ?? '',
+    delivery_floor: order.delivery_floor ?? '',
+    delivery_details: order.delivery_details ?? '',
+    customer_name: order.customer_name ?? '',
+    customer_phone: order.customer_phone ?? '',
+    scheduled_time: order.scheduled_time ?? '',
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    const { error } = await supabase.from('orders').update(editData).eq('id', order.id);
+    if (!error) {
+      onSaveOrder(order.id, editData);
+      toast(t('toast_order_saved') as string);
+    }
+    setSaving(false);
+    setEditing(false);
+  };
+
   return (
     <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${!order.seen_at ? 'border-amber-300' : 'border-gray-200'}`}>
       <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
@@ -2179,25 +2222,114 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
                 {t(`status_${key}` as any) as string}
               </button>
             ))}
+            {!editing && (
+              <button
+                type="button"
+                title={t('edit_order_btn') as string}
+                onClick={() => {
+                  setEditData({
+                    delivery_area: order.delivery_area ?? '',
+                    delivery_street: order.delivery_street ?? '',
+                    delivery_building: order.delivery_building ?? '',
+                    delivery_floor: order.delivery_floor ?? '',
+                    delivery_details: order.delivery_details ?? '',
+                    customer_name: order.customer_name ?? '',
+                    customer_phone: order.customer_phone ?? '',
+                  });
+                  setEditing(true);
+                }}
+                className="ml-auto p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.071-6.071a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2.414A2 2 0 019.586 12.414L9 13z" />
+                </svg>
+              </button>
+            )}
           </div>
-          {(order.customer_name || order.customer_phone) && (
-            <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-              {order.customer_name  && <span><span className="text-gray-500">{t('name_label') as string} </span><span className="font-medium">{order.customer_name}</span></span>}
-              {order.customer_phone && <span><span className="text-gray-500">{t('phone_label') as string} </span><span className="font-medium">{order.customer_phone}</span></span>}
+
+          {editing ? (
+            <div className="space-y-3">
+              {isAdmin && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('name_label') as string}</label>
+                    <input type="text" value={editData.customer_name} onChange={(e) => setEditData(d => ({ ...d, customer_name: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('phone_label') as string}</label>
+                    <input type="tel" value={editData.customer_phone} onChange={(e) => setEditData(d => ({ ...d, customer_phone: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                </>
+              )}
+              {order.service_type === 'delivery' && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('area_label') as string}</label>
+                    <input type="text" value={editData.delivery_area} onChange={(e) => setEditData(d => ({ ...d, delivery_area: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('street_label') as string}</label>
+                    <input type="text" value={editData.delivery_street} onChange={(e) => setEditData(d => ({ ...d, delivery_street: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('building_label') as string}</label>
+                    <input type="text" value={editData.delivery_building} onChange={(e) => setEditData(d => ({ ...d, delivery_building: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('floor_label') as string}</label>
+                    <input type="text" value={editData.delivery_floor} onChange={(e) => setEditData(d => ({ ...d, delivery_floor: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('details_label') as string}</label>
+                    <input type="text" value={editData.delivery_details} onChange={(e) => setEditData(d => ({ ...d, delivery_details: e.target.value }))}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+                  </div>
+                </>
+              )}
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{t('scheduled_label') as string}</label>
+                <input type="datetime-local" value={editData.scheduled_time} onChange={(e) => setEditData(d => ({ ...d, scheduled_time: e.target.value }))}
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300" />
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button type="button" onClick={handleSave} disabled={saving}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 disabled:opacity-50 transition">
+                  {saving ? t('saving') as string : t('save_order_btn') as string}
+                </button>
+                <button type="button" onClick={() => setEditing(false)}
+                  className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition">
+                  {t('cancel_order_btn') as string}
+                </button>
+              </div>
             </div>
+          ) : (
+            <>
+              {(order.customer_name || order.customer_phone) && (
+                <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                  {order.customer_name  && <span><span className="text-gray-500">{t('name_label') as string} </span><span className="font-medium">{order.customer_name}</span></span>}
+                  {order.customer_phone && <span><span className="text-gray-500">{t('phone_label') as string} </span><span className="font-medium">{order.customer_phone}</span></span>}
+                </div>
+              )}
+              <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
+                {order.service_type === 'delivery' && (<>
+                  {order.delivery_area    && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('area_label') as string}</span><span className="font-medium">{order.delivery_area}</span></div>}
+                  {order.delivery_street  && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('street_label') as string}</span><span className="font-medium">{order.delivery_street}</span></div>}
+                  {order.delivery_building && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('building_label') as string}</span><span className="font-medium">{order.delivery_building}</span></div>}
+                  {order.delivery_floor   && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('floor_label') as string}</span><span className="font-medium">{order.delivery_floor}</span></div>}
+                  {order.delivery_details && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('details_label') as string}</span><span className="font-medium">{order.delivery_details}</span></div>}
+                  {order.location_url     && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('location_label') as string}</span><a href={order.location_url} target="_blank" rel="noreferrer" className="text-primary-600 underline font-medium">{t('open_map') as string}</a></div>}
+                </>)}
+                {order.scheduled_time && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('scheduled_label') as string}</span><span className="font-medium">{order.scheduled_time}</span></div>}
+                {order.payment_method && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('payment_label') as string}</span><span className="font-medium capitalize">{order.payment_method}</span></div>}
+              </div>
+            </>
           )}
-          <div className="flex flex-wrap gap-x-8 gap-y-1 text-sm">
-            {order.service_type === 'delivery' && (<>
-              {order.delivery_area    && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('area_label') as string}</span><span className="font-medium">{order.delivery_area}</span></div>}
-              {order.delivery_street  && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('street_label') as string}</span><span className="font-medium">{order.delivery_street}</span></div>}
-              {order.delivery_building && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('building_label') as string}</span><span className="font-medium">{order.delivery_building}</span></div>}
-              {order.delivery_floor   && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('floor_label') as string}</span><span className="font-medium">{order.delivery_floor}</span></div>}
-              {order.delivery_details && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('details_label') as string}</span><span className="font-medium">{order.delivery_details}</span></div>}
-              {order.location_url     && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('location_label') as string}</span><a href={order.location_url} target="_blank" rel="noreferrer" className="text-primary-600 underline font-medium">{t('open_map') as string}</a></div>}
-            </>)}
-            {order.timing === 'scheduled' && order.scheduled_time && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('scheduled_label') as string}</span><span className="font-medium">{order.scheduled_time}</span></div>}
-            {order.payment_method && <div className="flex gap-2"><span className="text-gray-500 shrink-0">{t('payment_label') as string}</span><span className="font-medium capitalize">{order.payment_method}</span></div>}
-          </div>
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('items_label') as string}</p>
             <div className="space-y-2">
@@ -2227,7 +2359,7 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   );
 }
 
-function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSeen, isAdmin }: {
+function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSeen, isAdmin, onSaveOrder }: {
   orders: Order[];
   loading: boolean;
   onUpdateStatus: (id: string, status: string) => void;
@@ -2235,6 +2367,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
   toast: ShowToast;
   onMarkSeen: (id: string) => void;
   isAdmin: boolean;
+  onSaveOrder: (id: string, updates: Partial<Order>) => void;
 }) {
   const { t } = useAdminT();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -2431,7 +2564,8 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
                 : list.map((order) => (
                     <OrderCard key={order.id} order={order} expanded={expanded === order.id}
                       onToggle={() => setExpanded(expanded === order.id ? null : order.id)}
-                      onUpdateStatus={handleUpdateStatus} updatingStatus={updatingStatus} onMarkSeen={onMarkSeen} />
+                      onUpdateStatus={handleUpdateStatus} updatingStatus={updatingStatus} onMarkSeen={onMarkSeen}
+                      isAdmin={isAdmin} onSaveOrder={onSaveOrder} />
                   ))
               }
             </div>
@@ -2445,10 +2579,23 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
 
 // ─── Customers Tab ────────────────────────────────────────────────────────────
 
-function CustomersTab({ orders }: { orders: Order[] }) {
+interface CustomerProfile { phone: string; name_override: string | null; discount_percentage: number; }
+
+function CustomersTab({ orders, isAdmin }: { orders: Order[]; isAdmin: boolean }) {
   const { t } = useAdminT();
+  const toast = useToast();
   const [search, setSearch] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [profiles, setProfiles] = useState<Map<string, CustomerProfile>>(new Map());
+  const [editingDiscount, setEditingDiscount] = useState<string | null>(null);
+  const [discountInput, setDiscountInput] = useState('');
+  const [savingDiscount, setSavingDiscount] = useState(false);
+
+  useEffect(() => {
+    supabase.from('customers').select('*').then(({ data }) => {
+      if (data) setProfiles(new Map((data as CustomerProfile[]).map(p => [p.phone, p])));
+    });
+  }, []);
 
   const customers = useMemo(() => {
     const map = new Map<string, { phone: string; name: string; orders: Order[] }>();
@@ -2517,8 +2664,9 @@ function CustomersTab({ orders }: { orders: Order[] }) {
                   {(customer.name || customer.phone || '?')[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-800 truncate">
+                  <p className="text-sm font-semibold text-gray-800 truncate flex items-center gap-2">
                     {customer.name || <span className="text-gray-400 italic">{t('no_phone') as string}</span>}
+                    {(() => { const disc = profiles.get(customer.phone)?.discount_percentage ?? 0; return disc > 0 ? <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-green-100 text-green-700">{(t('customer_discount_pct') as (n: number) => string)(disc)}</span> : null; })()}
                   </p>
                   <p className="text-xs text-gray-500 truncate">{customer.phone || '—'}</p>
                 </div>
@@ -2536,32 +2684,110 @@ function CustomersTab({ orders }: { orders: Order[] }) {
               </button>
 
               {isExpanded && (
-                <div className="border-t border-gray-100 px-4 py-3">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('customer_order_history') as string}</p>
-                  <div className="flex flex-col gap-2">
-                    {customer.orders.map((order) => {
-                      const d = new Date(order.created_at);
-                      const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
-                      return (
-                        <div key={order.id} className="flex items-center gap-3 text-sm py-2 border-b border-gray-50 last:border-0">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs text-gray-500">
-                              {d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                              {' · '}
-                              {d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-                              {' · '}
-                              <span className="capitalize">{order.service_type}</span>
-                            </p>
-                            <p className="text-xs text-gray-400 mt-0.5 truncate">
-                              {(order.items as { name_en?: string; name?: string }[]).map((i) => i.name_en || i.name || '').join(', ')}
-                            </p>
+                <div className="border-t border-gray-100 px-4 py-3 space-y-4">
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('customer_order_history') as string}</p>
+                    <div className="flex flex-col gap-2">
+                      {customer.orders.map((order) => {
+                        const d = new Date(order.created_at);
+                        const badge = STATUS_LABELS[order.status] ?? { label: order.status, color: 'bg-gray-100 text-gray-600' };
+                        return (
+                          <div key={order.id} className="flex items-center gap-3 text-sm py-2 border-b border-gray-50 last:border-0">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-gray-500">
+                                {d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                {' · '}
+                                {d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                {' · '}
+                                <span className="capitalize">{order.service_type}</span>
+                              </p>
+                              <p className="text-xs text-gray-400 mt-0.5 truncate">
+                                {(order.items as { name_en?: string; name?: string }[]).map((i) => i.name_en || i.name || '').join(', ')}
+                              </p>
+                            </div>
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-semibold shrink-0 ${badge.color}`}>{badge.label}</span>
+                            <span className="text-sm font-bold text-gray-800 shrink-0">${Number(order.total).toFixed(2)}</span>
                           </div>
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-semibold shrink-0 ${badge.color}`}>{badge.label}</span>
-                          <span className="text-sm font-bold text-gray-800 shrink-0">${Number(order.total).toFixed(2)}</span>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
+
+                  {isAdmin && customer.phone && (
+                    <div className="border-t border-gray-100 pt-3">
+                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{t('customer_discount_label') as string}</p>
+                      {editingDiscount === customer.phone ? (
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={discountInput}
+                            onChange={(e) => setDiscountInput(e.target.value)}
+                            className="w-20 text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-300"
+                          />
+                          <span className="text-sm text-gray-500">%</span>
+                          <button
+                            type="button"
+                            disabled={savingDiscount}
+                            onClick={async () => {
+                              setSavingDiscount(true);
+                              const { error } = await supabase.from('customers').upsert({
+                                phone: customer.phone,
+                                discount_percentage: Number(discountInput),
+                                updated_at: new Date().toISOString(),
+                              });
+                              if (!error) {
+                                setProfiles(prev => {
+                                  const next = new Map(prev);
+                                  const existing = next.get(customer.phone) ?? { phone: customer.phone, name_override: null, discount_percentage: 0 };
+                                  next.set(customer.phone, { ...existing, discount_percentage: Number(discountInput) });
+                                  return next;
+                                });
+                                toast(t('toast_discount_customer_saved') as string);
+                              }
+                              setSavingDiscount(false);
+                              setEditingDiscount(null);
+                            }}
+                            className="text-xs px-3 py-1.5 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 disabled:opacity-50 transition"
+                          >
+                            {savingDiscount ? t('saving') as string : t('save_order_btn') as string}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingDiscount(null)}
+                            className="text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition"
+                          >
+                            {t('cancel_order_btn') as string}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm text-gray-700">
+                            {(() => {
+                              const disc = profiles.get(customer.phone)?.discount_percentage ?? 0;
+                              return disc > 0
+                                ? <span className="font-semibold text-green-700">{(t('customer_discount_pct') as (n: number) => string)(disc)}</span>
+                                : <span className="text-gray-400">{t('customer_discount_none') as string}</span>;
+                            })()}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDiscountInput(String(profiles.get(customer.phone)?.discount_percentage ?? 0));
+                              setEditingDiscount(customer.phone);
+                            }}
+                            className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition"
+                            title={t('edit_order_btn') as string}
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.071-6.071a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2.414A2 2 0 019.586 12.414L9 13z" />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -2684,6 +2910,10 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
     setOrders(prev => prev.map(o => o.id === id ? { ...o, seen_at: now } : o));
   }, []);
 
+  const handleSaveOrder = useCallback((id: string, updates: Partial<Order>) => {
+    setOrders(prev => prev.map(o => o.id === id ? { ...o, ...updates } : o));
+  }, []);
+
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
   const handleLogout = () => {
@@ -2745,8 +2975,8 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
 
       {/* Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} isAdmin={isAdmin} />}
-        {tab === 'customers' && <CustomersTab orders={orders} />}
+        {tab === 'orders' && <OrdersTab orders={orders} loading={ordersLoading} onUpdateStatus={handleUpdateStatus} onRefresh={refreshOrders} toast={toast} onMarkSeen={handleMarkSeen} isAdmin={isAdmin} onSaveOrder={handleSaveOrder} />}
+        {tab === 'customers' && <CustomersTab orders={orders} isAdmin={isAdmin} />}
         {tab === 'menu' && <MenuTab />}
         {tab === 'settings' && <SettingsTab isAdmin={isAdmin} session={session} />}
       </main>

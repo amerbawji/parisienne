@@ -57,11 +57,14 @@ export const CartContent = () => {
   const hasWeightBasedItem = items.some((item) => (item.step ?? 1) < 1 || (item.minQuantity ?? 1) < 1);
 
   const [serviceType, setServiceType] = useState<'takeaway' | 'delivery'>('delivery');
+  const [customerDiscountPct, setCustomerDiscountPct] = useState(0);
   const itemsTotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const deliveryFee = serviceType === 'delivery' ? 1.5 : 0;
-  const totalPrice = itemsTotal + deliveryFee;
   const originalSubtotal = discountPct > 0 ? itemsTotal / (1 - discountPct / 100) : itemsTotal;
   const discountAmount = originalSubtotal - itemsTotal;
+  const customerDiscountAmount = customerDiscountPct > 0 ? itemsTotal * customerDiscountPct / 100 : 0;
+  const finalItemsTotal = itemsTotal - customerDiscountAmount;
+  const totalPrice = finalItemsTotal + deliveryFee;
   const [timing, setTiming] = useState<'now' | 'scheduled'>(() => storeIsOpen ? 'now' : 'scheduled');
   const [scheduledDate, setScheduledDate] = useState('');
   const [scheduledTimeOfDay, setScheduledTimeOfDay] = useState('');
@@ -99,6 +102,12 @@ export const CartContent = () => {
   const [showTracking, setShowTracking] = useState(false);
   const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; order_number: number | null; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number }[]>([]);
   const [trackingLoading, setTrackingLoading] = useState(false);
+
+  useEffect(() => {
+    if (!customerPhone || customerPhone.length < 5) { setCustomerDiscountPct(0); return; }
+    supabase.from('customers').select('discount_percentage').eq('phone', customerPhone).maybeSingle()
+      .then(({ data }) => setCustomerDiscountPct(data?.discount_percentage ?? 0));
+  }, [customerPhone]);
 
   useEffect(() => {
     if (!storeIsOpen && timing === 'now') setTiming('scheduled');
@@ -306,7 +315,7 @@ export const CartContent = () => {
         unit: (item as unknown as Record<string, unknown>).step && ((item as unknown as Record<string, unknown>).step as number) < 1 ? 'kg' : 'piece',
         selected_options: item.selectedOptions || {},
       })),
-      total: totalPrice,
+      total: finalItemsTotal + deliveryFee,
     }).select('id, order_number').single();
     if (orderError) console.error('[Order save failed]', orderError);
 
@@ -318,7 +327,7 @@ export const CartContent = () => {
       id: insertData?.id ?? null,
       orderNumber: (insertData as { id: string; order_number: number } | null)?.order_number ?? null,
       items: snapshot,
-      total: totalPrice,
+      total: finalItemsTotal + deliveryFee,
       serviceType,
       customerName,
       customerPhone,
@@ -962,6 +971,12 @@ export const CartContent = () => {
                 <div className="flex items-baseline gap-1.5 text-xs text-emerald-600 font-medium">
                   <span>-{discountPct}%</span>
                   <span className="font-semibold">-${discountAmount.toFixed(2)}</span>
+                </div>
+              )}
+              {customerDiscountPct > 0 && (
+                <div className="flex items-baseline gap-1.5 text-xs text-green-600 font-medium">
+                  <span>{language === 'ar' ? `خصم خاص (${customerDiscountPct}%)` : `Special discount (${customerDiscountPct}%)`}</span>
+                  <span className="font-semibold">-${customerDiscountAmount.toFixed(2)}</span>
                 </div>
               )}
               {serviceType === 'delivery' && (
