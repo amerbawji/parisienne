@@ -2187,11 +2187,11 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
   };
 
   return (
-    <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${!order.seen_at ? 'border-amber-300' : 'border-gray-200'}`}>
-      <button type="button" onClick={() => { if (!order.seen_at) onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
+    <div className={`bg-white rounded-xl border overflow-hidden shadow-sm ${order.status === 'new' ? 'border-amber-300' : 'border-gray-200'}`}>
+      <button type="button" onClick={() => { onMarkSeen(order.id); onToggle(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 transition">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            {!order.seen_at && (
+            {order.status === 'new' && (
               <span className="relative flex h-2.5 w-2.5 shrink-0">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
