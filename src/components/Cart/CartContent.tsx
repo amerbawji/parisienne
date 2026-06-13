@@ -251,6 +251,16 @@ export const CartContent = () => {
     setConfirmCountdown(null);
     setIsSubmitting(true);
 
+    // Re-fetch customer discount at submit time to avoid race condition
+    let finalCustomerDiscountPct = customerDiscountPct;
+    if (customerPhone.trim().length >= 5) {
+      const { data: cust } = await supabase.from('customers').select('discount_percentage').eq('phone', customerPhone.trim()).maybeSingle();
+      finalCustomerDiscountPct = cust?.discount_percentage ?? 0;
+      if (finalCustomerDiscountPct !== customerDiscountPct) setCustomerDiscountPct(finalCustomerDiscountPct);
+    }
+    const confirmedItemsTotal = itemsTotal - (finalCustomerDiscountPct > 0 ? itemsTotal * finalCustomerDiscountPct / 100 : 0);
+    const confirmedTotal = confirmedItemsTotal + deliveryFee;
+
     const details = {
       serviceType,
       timing,
@@ -307,7 +317,7 @@ export const CartContent = () => {
         unit: (item as unknown as Record<string, unknown>).step && ((item as unknown as Record<string, unknown>).step as number) < 1 ? 'kg' : 'piece',
         selected_options: item.selectedOptions || {},
       })),
-      total: finalItemsTotal + deliveryFee,
+      total: confirmedTotal,
     }).select('id, order_number').single();
     if (orderError) console.error('[Order save failed]', orderError);
 
@@ -319,7 +329,7 @@ export const CartContent = () => {
       id: insertData?.id ?? null,
       orderNumber: (insertData as { id: string; order_number: number } | null)?.order_number ?? null,
       items: snapshot,
-      total: finalItemsTotal + deliveryFee,
+      total: confirmedTotal,
       serviceType,
       customerName,
       customerPhone,
