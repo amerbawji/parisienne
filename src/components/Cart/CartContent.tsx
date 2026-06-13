@@ -99,9 +99,6 @@ export const CartContent = () => {
   }
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
   const [placedOrderStatus, setPlacedOrderStatus] = useState('new');
-  const [showTracking, setShowTracking] = useState(false);
-  const [trackingOrders, setTrackingOrders] = useState<{ id: string; created_at: string; status: string; service_type: string; order_number: number | null; items: { name_en: string; name_ar: string; quantity: number; price: number; unit: string; selected_options: Record<string, string> }[]; total: number; admin_notes: { type: 'added' | 'removed' | 'qty_changed'; name: string; qty?: number; from?: number; to?: number; at: string }[] | null }[]>([]);
-  const [trackingLoading, setTrackingLoading] = useState(false);
 
   useEffect(() => {
     if (!customerPhone || customerPhone.length < 5) { setCustomerDiscountPct(0); return; }
@@ -364,34 +361,10 @@ export const CartContent = () => {
     cancelled: { label: 'Cancelled',        labelAr: 'تم الإلغاء',      color: 'bg-red-50 text-red-700 border-red-200',        icon: '❌' },
   };
 
-  const openTracking = async () => {
-    setShowTracking(true);
-    if (!customerPhone.trim()) return;
-    setTrackingLoading(true);
-    const { data } = await supabase
-      .from('orders')
-      .select('id,created_at,status,service_type,order_number,items,total')
-      .eq('customer_phone', customerPhone.trim())
-      .order('created_at', { ascending: false })
-      .limit(20);
-    setTrackingOrders((data as typeof trackingOrders) ?? []);
-    setTrackingLoading(false);
+  const openTracking = () => {
+    setCartOpen(false);
+    navigate(customerPhone.trim() ? `/track?phone=${encodeURIComponent(customerPhone.trim())}` : '/track');
   };
-
-  useEffect(() => {
-    if (!showTracking || trackingOrders.length === 0) return;
-    const ids = trackingOrders.map((o) => o.id);
-    const channel = supabase
-      .channel('cart-tracking-status')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders' }, (payload) => {
-        const updated = payload.new as { id: string; status: string };
-        if (ids.includes(updated.id)) {
-          setTrackingOrders((prev) => prev.map((o) => o.id === updated.id ? { ...o, status: updated.status } : o));
-        }
-      })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, [showTracking, trackingOrders.map((o) => o.id).join()]);
 
   if (placedOrder) {
     const trackUrl = placedOrder.customerPhone && placedOrder.orderNumber
@@ -480,102 +453,6 @@ export const CartContent = () => {
           >
             {language === 'ar' ? 'متابعة التسوق' : 'Continue shopping'}
           </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (showTracking) {
-    return (
-      <div className="flex flex-col h-full bg-white">
-        {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
-          <button type="button" onClick={() => setShowTracking(false)} className="text-gray-500 hover:text-gray-800 transition p-1 -ml-1">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={language === 'ar' ? 'M9 5l7 7-7 7' : 'M15 19l-7-7 7-7'} />
-            </svg>
-          </button>
-          <h2 className="text-base font-bold text-gray-900">{language === 'ar' ? 'تتبع طلباتك' : 'Track your orders'}</h2>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-4 py-4">
-          {trackingLoading ? (
-            <div className="flex justify-center py-16">
-              <div className="w-8 h-8 border-4 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
-            </div>
-          ) : trackingOrders.length === 0 ? (
-            <div className="flex flex-col items-center gap-3 py-16 text-center">
-              <span className="text-4xl">🔍</span>
-              <p className="text-gray-500 text-sm">{language === 'ar' ? 'لا توجد طلبات مرتبطة بهذا الرقم.' : 'No orders found for this number.'}</p>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {trackingOrders.map((order) => {
-                const si = TRACKING_STATUS[order.status] ?? { label: order.status, labelAr: order.status, color: 'bg-gray-50 text-gray-600 border-gray-200', icon: '•' };
-                const orderDate = new Date(order.created_at);
-                return (
-                  <div key={order.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-                    <div className="px-3 py-2.5 flex items-center justify-between gap-2 border-b border-gray-100">
-                      <div className="flex flex-col">
-                        {order.order_number != null && <span className="text-xs font-bold text-primary-600">#{order.order_number}</span>}
-                        <span className="text-xs text-gray-500">
-                          {orderDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                          {' · '}{orderDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      </div>
-                      <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full border ${si.color}`}>
-                        {si.icon} {language === 'ar' ? si.labelAr : si.label}
-                      </span>
-                    </div>
-                    <div className="px-3 py-2.5 flex flex-col gap-1.5">
-                      {order.items.map((item, i) => (
-                        <div key={i} className="flex items-center justify-between gap-2 text-sm">
-                          <span className="text-gray-800 flex-1 min-w-0 truncate">
-                            {(language === 'ar' ? item.name_ar : item.name_en) || item.name_en}
-                          </span>
-                          <span className="text-gray-400 shrink-0 text-xs">×{item.quantity} · ${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      ))}
-                      {order.admin_notes && order.admin_notes.length > 0 && (
-                        <div className="bg-amber-50 border border-amber-100 rounded-xl px-3 py-2 flex flex-col gap-1 mt-1">
-                          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
-                            {language === 'ar' ? 'تعديلات من المتجر' : 'Updated by store'}
-                          </p>
-                          {order.admin_notes.map((note, i) => {
-                            let msg = '';
-                            if (note.type === 'added') msg = language === 'ar' ? `تمت إضافة: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}` : `Added: ${note.name}${note.qty && note.qty > 1 ? ` ×${note.qty}` : ''}`;
-                            else if (note.type === 'removed') msg = language === 'ar' ? `تمت إزالة: ${note.name}` : `Removed: ${note.name}`;
-                            else if (note.type === 'qty_changed') msg = language === 'ar' ? `تعديل الكمية: ${note.name} من ${note.from} إلى ${note.to}` : `Qty changed: ${note.name} — ${note.from} → ${note.to}`;
-                            return (
-                              <div key={i} className="flex items-start gap-1.5 text-xs text-amber-800">
-                                <span className="shrink-0">•</span>
-                                <span>{msg}</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                      <div className="pt-1.5 mt-0.5 border-t border-gray-100 flex items-center justify-between">
-                        <span className="text-sm font-bold text-gray-900">${Number(order.total).toFixed(2)}</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            order.items.forEach((item) => {
-                              addItem({ id: crypto.randomUUID(), name: item.name_en || item.name_ar, name_en: item.name_en, name_ar: item.name_ar, price: item.price, quantity: item.quantity, unit: item.unit, selectedOptions: item.selected_options });
-                            });
-                            setShowTracking(false);
-                          }}
-                          className="text-xs font-semibold px-3 py-1.5 rounded-lg text-white bg-primary-600 hover:bg-primary-700 transition"
-                        >
-                          🔁 {language === 'ar' ? 'أعد الطلب' : 'Reorder'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
         </div>
       </div>
     );
