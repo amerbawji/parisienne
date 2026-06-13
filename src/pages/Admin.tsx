@@ -2233,13 +2233,18 @@ function OrderCard({ order, expanded, onToggle, onUpdateStatus, updatingStatus, 
     for (const [name, item] of editMap) {
       if (!origMap.has(name)) newNotes.push({ type: 'added', name, qty: item.quantity, at: now });
     }
+    // Save core fields first — this must succeed regardless of admin_notes column
+    const coreUpdates = { ...editData, items: editItems, total: editTotal };
+    const { error } = await supabase.from('orders').update(coreUpdates).eq('id', order.id);
+    if (error) { setSaving(false); return; }
+
+    // Try to append admin_notes separately — fails gracefully if column not yet migrated
     const admin_notes = [...(order.admin_notes ?? []), ...newNotes];
-    const updates = { ...editData, items: editItems, total: editTotal, admin_notes };
-    const { error } = await supabase.from('orders').update(updates).eq('id', order.id);
-    if (!error) {
-      onSaveOrder(order.id, updates);
-      toast(t('toast_order_saved') as string);
-    }
+    await supabase.from('orders').update({ admin_notes }).eq('id', order.id);
+
+    const updates = { ...coreUpdates, admin_notes };
+    onSaveOrder(order.id, updates);
+    toast(t('toast_order_saved') as string);
     setSaving(false);
     setEditing(false);
   };
