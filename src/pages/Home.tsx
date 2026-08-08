@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback, memo } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-horizontal-logo.svg';
 import { to12h } from '../utils/time';
@@ -266,18 +266,9 @@ export const Home = () => {
       <header ref={headerRef} className="bg-white shadow-sm sticky top-0 z-40" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] gap-3 sm:gap-4 sm:items-center">
           <div className="flex items-center justify-between w-full sm:w-auto">
-            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-              <div className="h-8 sm:h-10 lg:h-12">
+            <div className="flex items-center gap-2 shrink-0">
+              <Link to="/" aria-label={language === 'ar' ? 'الصفحة الرئيسية' : 'Home'} className="h-8 sm:h-10 lg:h-12 transition-opacity hover:opacity-75">
                 <img src={logo} alt="Parisienne Logo" className="h-full w-auto object-contain" />
-              </div>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 hover:text-primary-700 transition-colors whitespace-nowrap"
-              >
-                {language === 'ar'
-                  ? <ArrowRightIcon className="h-4 w-4" />
-                  : <ArrowLeftIcon className="h-4 w-4" />}
-                <span>{language === 'ar' ? 'الموقع' : 'Website'}</span>
               </Link>
             </div>
             <LanguageToggle className="sm:hidden" />
@@ -581,7 +572,7 @@ export const Home = () => {
                       key={category.id}
                       ref={(el) => { categoryRefs.current[category.id] = el; }}
                       className={cn(
-                        'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group transition-all duration-300',
+                        'bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden group transition-all duration-300',
                         isOpen && 'md:col-span-2'
                       )}
                     >
@@ -598,7 +589,7 @@ export const Home = () => {
                             src={category.image}
                             alt={language === 'ar' ? category.name_ar : category.name_en}
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(5,15,33,0.9)_0%,rgba(5,15,33,0.25)_45%,transparent_72%)] flex items-end p-6 transition-opacity duration-500 sm:group-hover:opacity-90">
                             <h2 className="text-3xl font-bold text-white drop-shadow-md">
                               {language === 'ar' ? category.name_ar : category.name_en}
                             </h2>

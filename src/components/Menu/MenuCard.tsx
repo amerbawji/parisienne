@@ -229,6 +229,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
               className={`object-cover object-center w-full h-full transition-opacity duration-200 ${expandedImgLoaded ? 'opacity-100' : 'opacity-0'} ${!inStock ? 'grayscale' : ''}`}
             />}
             {(!imageUrl || !expandedImgLoaded) && <div className="absolute inset-0 bg-gray-200 animate-pulse" />}
+            {imageUrl && <div className={`absolute inset-0 pointer-events-none ${'bg-[linear-gradient(to_top,rgba(5,15,33,0.9)_0%,rgba(5,15,33,0.25)_45%,transparent_72%)]'}`} />}
             {!inStock && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                 <span className="bg-white/90 text-gray-700 text-xs font-bold px-3 py-1 rounded-full shadow">{language === 'ar' ? 'غير متوفر' : 'Out of stock'}</span>

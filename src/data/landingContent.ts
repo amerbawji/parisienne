@@ -39,20 +39,28 @@ export const STATS: Pair[] = [
   { en: ['Ras Beirut', 'Qoreitem'], ar: ['رأس بيروت', 'قريطم'] },
 ];
 
-export const VALUES: Pair[] = [
+export interface Value extends Pair {
+  img: string;
+}
+
+export const VALUES: Value[] = [
   {
+    img: '/landing/chicken.jpg',
     en: ['Cut In-House', 'The meat on your plate was cut at our own counter that morning. No middlemen, no mystery.'],
     ar: ['لحم من ملحمتنا', 'اللحم الذي تأكله قُطّع على طاولتنا في الصباح نفسه — بلا وسطاء ولا مفاجآت.'],
   },
   {
+    img: '/landing/grilled.jpg',
     en: ['Fire & Charcoal', 'Grilled over real charcoal — the flavour nothing else gives you.'],
     ar: ['نار وفحم', 'المشاوي على الفحم فقط. الطعم الذي لا يمنحه أي شيء آخر.'],
   },
   {
+    img: '/landing/appetizers.jpg',
     en: ['Family Recipes', 'Traditional Lebanese cooking with no shortcuts and no powdered mixes.'],
     ar: ['وصفات العائلة', 'وصفات لبنانية تقليدية، دون اختصارات ودون مساحيق جاهزة.'],
   },
   {
+    img: '/landing/plates.jpg',
     en: ['Fast & Honest', "Clear prices, realistic timings, and an order that arrives exactly as you asked."],
     ar: ['سريع وصادق', 'أسعار واضحة، أوقات واقعية، وطلب يصل كما طلبته تماماً.'],
   },
@@ -122,7 +130,6 @@ export const COPY: Record<Lang, Record<string, string>> = {
     howTitle: "Three steps and it's on its way",
     howSub: 'No apps, no accounts. Choose, send, enjoy.',
     ctaStart: 'Start Your Order',
-    badge: 'Ready in minutes',
 
     visitEyebrow: 'Visit',
     visitTitle: 'Come in, or send it over',
@@ -175,7 +182,6 @@ export const COPY: Record<Lang, Record<string, string>> = {
     howTitle: 'ثلاث خطوات وطلبك في الطريق',
     howSub: 'لا تطبيقات، لا حسابات. اختر، أرسل، استلم.',
     ctaStart: 'ابدأ طلبك',
-    badge: 'جاهز خلال دقائق',
 
     visitEyebrow: 'زورونا',
     visitTitle: 'تعال، أو أرسل طلبك',

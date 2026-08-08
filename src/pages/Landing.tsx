@@ -219,6 +219,9 @@ export function Landing() {
             <div className="vgrid">
               {VALUES.map((v, i) => (
                 <div className={`v rv${i ? ` d${i}` : ''}`} key={v.en[0]}>
+                  <div className="v-media">
+                    <img src={v.img} alt={v[language][0]} loading="lazy" />
+                  </div>
                   <span className="num">{String(i + 1).padStart(2, '0')}</span>
                   <h3>{v[language][0]}</h3>
                   <p>{v[language][1]}</p>
@@ -257,7 +260,6 @@ export function Landing() {
             </div>
             <div className="split-media rv d2">
               <img src="/landing/sandwiches.jpg" alt="" loading="lazy" />
-              <span className="badge">{c.badge}</span>
             </div>
           </div>
         </section>
