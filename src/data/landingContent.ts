@@ -73,6 +73,12 @@ export const STEPS: Pair[] = [
   },
 ];
 
+/** Indexed by JS `Date.getDay()` — 0 is Sunday — to match `closed_days`. */
+export const DAY_NAMES: Record<Lang, string[]> = {
+  en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  ar: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],
+};
+
 /** Words in the scrolling gold ticker under the hero. */
 export const TICKER: Record<Lang, string[]> = {
   en: ['Charcoal Grills', "Lahm b'Aajin", 'Tabbouleh', 'Fattoush', 'Shish Taouk', 'Kafta', 'Hummus', 'Sandwiches', 'Mezze', 'Butchers Since 1930'],

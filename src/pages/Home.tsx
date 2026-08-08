@@ -1,7 +1,8 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, useCallback, memo } from 'react';
-import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ShoppingBagIcon, MagnifyingGlassIcon, PhoneIcon, MapPinIcon, ClockIcon, XMarkIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import logo from '../assets/malhame-horizontal-logo.svg';
+import { to12h } from '../utils/time';
 import { MenuCard, type MenuItem } from '../components/Menu/MenuCard';
 import { useCartStore } from '../store/cartStore';
 import { useLanguageStore } from '../store/languageStore';
@@ -14,7 +15,7 @@ import { cn } from '../utils/cn';
 import { CartSheet } from '../components/Cart/CartSheet';
 import { LanguageToggle } from '../components/UI/LanguageToggle';
 import { InstallPrompt } from '../components/UI/InstallPrompt';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 const CategoryBannerImage = memo(({ src, alt }: { src: string; alt: string }) => {
@@ -31,13 +32,6 @@ const CategoryBannerImage = memo(({ src, alt }: { src: string; alt: string }) =>
     </div>
   );
 });
-
-const to12h = (time: string) => {
-  const [h, m] = time.split(':').map(Number);
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const hour = h % 12 || 12;
-  return `${hour}:${String(m).padStart(2, '0')} ${ampm}`;
-};
 
 export const Home = () => {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
@@ -272,10 +266,19 @@ export const Home = () => {
       <header ref={headerRef} className="bg-white shadow-sm sticky top-0 z-40" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 grid grid-cols-1 sm:grid-cols-[auto_minmax(0,1fr)_auto] gap-3 sm:gap-4 sm:items-center">
           <div className="flex items-center justify-between w-full sm:w-auto">
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <div className="h-8 sm:h-10 lg:h-12">
                 <img src={logo} alt="Parisienne Logo" className="h-full w-auto object-contain" />
               </div>
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1 text-xs sm:text-sm text-gray-500 hover:text-primary-700 transition-colors whitespace-nowrap"
+              >
+                {language === 'ar'
+                  ? <ArrowRightIcon className="h-4 w-4" />
+                  : <ArrowLeftIcon className="h-4 w-4" />}
+                <span>{language === 'ar' ? 'الموقع' : 'Website'}</span>
+              </Link>
             </div>
             <LanguageToggle className="sm:hidden" />
           </div>

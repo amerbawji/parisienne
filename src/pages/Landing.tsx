@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
+import { useStoreConfigStore } from '../store/storeConfigStore';
+import { to12h } from '../utils/time';
+import logo from '../assets/malhame-horizontal-logo.svg';
 import {
   CATEGORIES,
+  DAY_NAMES,
   COPY,
   STATS,
   STEPS,
@@ -25,6 +29,23 @@ export function Landing() {
   const language = useLanguageStore((s) => s.language);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
   const c = COPY[language];
+
+  // Opening hours come from the same store_config row the menu reads.
+  const openTime = useStoreConfigStore((s) => s.open_time);
+  const closeTime = useStoreConfigStore((s) => s.close_time);
+  const closedDays = useStoreConfigStore((s) => s.closed_days);
+  const fetchConfig = useStoreConfigStore((s) => s.fetchConfig);
+
+  useEffect(() => {
+    fetchConfig();
+  }, [fetchConfig]);
+
+  const hours = `${to12h(openTime)} – ${to12h(closeTime)}`;
+  const closedLabel = closedDays.length
+    ? `${language === 'ar' ? 'مغلق' : 'Closed'}: ${closedDays
+        .map((d) => DAY_NAMES[language][d])
+        .join(language === 'ar' ? '، ' : ', ')}`
+    : '';
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -81,8 +102,7 @@ export function Landing() {
       <header className={`lp-header${scrolled ? ' solid' : ''}`}>
         <div className="wrap bar">
           <a className="brand" href="#top">
-            <span className="mark">P</span>
-            <span className="bname">{c.brand}</span>
+            <img src={logo} alt="Boucherie &amp; Grill Parisienne" className="brand-logo" />
           </a>
           <nav>
             <a className="nl" href="#menu">{c.navMenu}</a>
@@ -257,7 +277,15 @@ export function Landing() {
               </div>
               <div className="vcard rv d1">
                 <h3>{c.infoHoursT}</h3>
-                <p dangerouslySetInnerHTML={html(c.infoHours)} />
+                <p>
+                  {hours}
+                  {closedLabel && (
+                    <>
+                      <br />
+                      <span className="lp-dim">{closedLabel}</span>
+                    </>
+                  )}
+                </p>
               </div>
               <div className="vcard rv d2">
                 <h3>{c.infoPhoneT}</h3>
