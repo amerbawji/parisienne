@@ -91,6 +91,7 @@ export const CartContent = () => {
     serviceType: 'takeaway' | 'delivery';
     customerName: string;
     customerPhone: string;
+    discountPct: number;
   }
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
   const [placedOrderStatus, setPlacedOrderStatus] = useState('new');
@@ -333,6 +334,7 @@ export const CartContent = () => {
       serviceType,
       customerName,
       customerPhone,
+      discountPct: finalCustomerDiscountPct,
     });
     setIsSubmitting(false);
   };
@@ -418,10 +420,28 @@ export const CartContent = () => {
                 </div>
               </div>
             ))}
-            <div className="mt-1 pt-2 border-t border-gray-200 flex justify-between text-sm font-bold text-gray-900">
-              <span>{language === 'ar' ? 'المجموع' : 'Total'}</span>
-              <span>${placedOrder.total.toFixed(2)}</span>
-            </div>
+            {placedOrder.discountPct > 0 && (() => {
+              const base = placedOrder.items.reduce((s, i) => s + i.price * i.quantity, 0);
+              const discAmt = base * placedOrder.discountPct / 100;
+              return (
+                <div className="mt-1 pt-2 border-t border-gray-200 flex flex-col gap-1">
+                  <div className="flex justify-between text-xs text-emerald-600 font-medium">
+                    <span>{language === 'ar' ? `خصم خاص ${placedOrder.discountPct}%` : `Special discount (${placedOrder.discountPct}%)`}</span>
+                    <span>-${discAmt.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm font-bold text-gray-900">
+                    <span>{language === 'ar' ? 'المجموع' : 'Total'}</span>
+                    <span>${placedOrder.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              );
+            })()}
+            {placedOrder.discountPct === 0 && (
+              <div className="mt-1 pt-2 border-t border-gray-200 flex justify-between text-sm font-bold text-gray-900">
+                <span>{language === 'ar' ? 'المجموع' : 'Total'}</span>
+                <span>${placedOrder.total.toFixed(2)}</span>
+              </div>
+            )}
           </div>
 
           {/* Track link */}
@@ -449,7 +469,7 @@ export const CartContent = () => {
         {/* Footer */}
         <div className="px-4 py-4 border-t border-gray-100">
           <Button
-            onClick={() => { setCartOpen(false); navigate('/'); setPlacedOrder(null); }}
+            onClick={() => { setCartOpen(false); navigate('/menu'); setPlacedOrder(null); }}
             className="w-full"
           >
             {language === 'ar' ? 'متابعة التسوق' : 'Continue shopping'}

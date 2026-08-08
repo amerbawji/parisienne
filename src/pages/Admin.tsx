@@ -2615,7 +2615,7 @@ function OrdersTab({ orders, loading, onUpdateStatus, onRefresh, toast, onMarkSe
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className={`grid grid-cols-2 gap-2 ${isAdmin ? 'sm:grid-cols-4' : 'sm:grid-cols-3'}`}>
         {[
           { label: t('today_orders') as string, value: todayOrders.length, sub: t('orders_placed_today') as string, color: 'text-primary-600' },
           ...(isAdmin ? [{ label: t('today_revenue') as string, value: `$${todayRevenue.toFixed(2)}`, sub: t('from_today_orders') as string, color: 'text-green-600' }] : []),
@@ -2737,24 +2737,27 @@ function CustomersTab({ orders, isAdmin }: { orders: Order[]; isAdmin: boolean }
   }, []);
 
   const customers = useMemo(() => {
-    const map = new Map<string, { phone: string; name: string; orders: Order[] }>();
+    const map = new Map<string, { phone: string; orders: Order[] }>();
     for (const order of orders) {
       const key = order.customer_phone?.trim() || `__noPhone__${order.customer_name || order.id}`;
       if (!map.has(key)) {
-        map.set(key, { phone: order.customer_phone || '', name: order.customer_name || '', orders: [] });
+        map.set(key, { phone: order.customer_phone || '', orders: [] });
       }
-      const entry = map.get(key)!;
-      if (order.customer_name && !entry.name) entry.name = order.customer_name;
-      entry.orders.push(order);
+      map.get(key)!.orders.push(order);
     }
     type CustomerEntry = { phone: string; name: string; orders: Order[]; totalSpent: number; lastOrder: string };
     return Array.from(map.values())
-      .map((c): CustomerEntry => ({
-        ...c,
-        orders: c.orders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
-        totalSpent: c.orders.reduce((s, o) => s + Number(o.total), 0),
-        lastOrder: c.orders.reduce((latest, o) => o.created_at > latest ? o.created_at : latest, ''),
-      }))
+      .map((c): CustomerEntry => {
+        const sorted = c.orders.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        const firstName = [...sorted].reverse().find((o) => o.customer_name)?.customer_name || '';
+        return {
+          ...c,
+          name: firstName,
+          orders: sorted,
+          totalSpent: sorted.reduce((s, o) => s + Number(o.total), 0),
+          lastOrder: sorted.reduce((latest, o) => o.created_at > latest ? o.created_at : latest, ''),
+        };
+      })
       .sort((a, b) => new Date(b.lastOrder).getTime() - new Date(a.lastOrder).getTime());
   }, [orders]);
 
@@ -3081,7 +3084,7 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
               className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
               {t('lang_toggle') as string}
             </button>
-            <a href="/" className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
+            <a href="/menu" className="text-xs px-2 sm:px-3 py-1.5 border border-white/30 rounded-lg hover:bg-white/10 transition whitespace-nowrap">
               {t('back_to_menu') as string}
             </a>
             <button type="button" onClick={handleLogout}

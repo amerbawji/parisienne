@@ -12,13 +12,13 @@ export default defineConfig({
       manifest: {
         name: 'Parisienne',
         short_name: 'Parisienne',
-        description: 'Order fresh meats and more from Parisienne',
+        description: 'Order fresh meats and more from Boucherie & Grill Parisienne',
         theme_color: '#0c2345',
         background_color: '#0c2345',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
-        start_url: '/',
+        start_url: '/menu',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
