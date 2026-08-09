@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguageStore } from '../store/languageStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
@@ -95,10 +95,28 @@ export function Landing() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Animate in-page jumps (#menu, #story, …) instead of teleporting.
+  const handleAnchorClick = (e: MouseEvent<HTMLDivElement>) => {
+    const link = (e.target as HTMLElement).closest('a[href^="#"]');
+    if (!link) return;
+
+    const id = link.getAttribute('href')!.slice(1);
+    const target = id === 'top' ? document.body : document.getElementById(id);
+    if (!target) return;
+
+    e.preventDefault();
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    } else {
+      target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    }
+  };
+
   const ticker = [...TICKER[language], ...TICKER[language]];
 
   return (
-    <div className="lp" ref={rootRef}>
+    <div className="lp" ref={rootRef} onClick={handleAnchorClick}>
       <header className={`lp-header${scrolled ? ' solid' : ''}`}>
         <div className="wrap bar">
           <a className="brand" href="#top">

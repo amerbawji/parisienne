@@ -36,7 +36,7 @@ export interface Pair {
 export const STATS: Pair[] = [
   { en: ['1930', 'Established'], ar: ['١٩٣٠', 'سنة التأسيس'] },
   { en: ['Family-run', 'Since day one'], ar: ['عائلية', 'إدارة منذ البداية'] },
-  { en: ['Ras Beirut', 'Qoreitem'], ar: ['رأس بيروت', 'قريطم'] },
+  { en: ['Ras Beirut', 'Sakyet Al Janzir'], ar: ['رأس بيروت', 'ساقية الجنزير'] },
 ];
 
 export interface Value extends Pair {
@@ -135,7 +135,7 @@ export const COPY: Record<Lang, Record<string, string>> = {
     visitTitle: 'Come in, or send it over',
     visitSub: 'The table is ready — and WhatsApp is always open.',
     infoAddrT: 'Address',
-    infoAddr: 'Georges Zouein Street, Qoreitem<br>Ras Beirut, Lebanon',
+    infoAddr: 'Georges Zouein Street, Sakyet Al Janzir<br>Ras Beirut, Lebanon',
     infoHoursT: 'Opening Hours',
     infoHours: 'Open daily<br><span class="lp-dim">Message us on WhatsApp to check</span>',
     infoPhoneT: 'WhatsApp',
@@ -187,7 +187,7 @@ export const COPY: Record<Lang, Record<string, string>> = {
     visitTitle: 'تعال، أو أرسل طلبك',
     visitSub: 'الطاولة جاهزة — وواتساب مفتوح دائماً.',
     infoAddrT: 'العنوان',
-    infoAddr: 'شارع جورج زوين، قريطم<br>رأس بيروت، لبنان',
+    infoAddr: 'شارع جورج زوين، ساقية الجنزير<br>رأس بيروت، لبنان',
     infoHoursT: 'أوقات الدوام',
     infoHours: 'مفتوح يومياً<br><span class="lp-dim">راسلنا على واتساب للتأكد</span>',
     infoPhoneT: 'واتساب',
@@ -201,5 +201,5 @@ export const COPY: Record<Lang, Record<string, string>> = {
 };
 
 /** Shown in the Visit section, the footer, and the floating button. */
-export const WHATSAPP_NUMBER = '9613502022';
-export const WHATSAPP_DISPLAY = '+961 3 502 022';
+export const WHATSAPP_NUMBER = '96171129798';
+export const WHATSAPP_DISPLAY = '+961 71 129 798';

@@ -34,6 +34,9 @@
 .lp ::selection { background: var(--gold); color: var(--navy-deep); }
 .lp .lp-dim { opacity: 0.6; }
 
+.lp section[id],
+.lp div[id] { scroll-margin-top: clamp(70px, 9vh, 90px); }
+
 .lp .wrap { max-width: var(--lp-max); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
 
 /* ── display type ─────────────────────────────────────────────── */
