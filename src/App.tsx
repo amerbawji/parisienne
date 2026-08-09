@@ -22,15 +22,18 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        {/* The menu is the front door. The landing page stays built and
+            reachable at /landing, but nothing links to it. */}
+        <Route path="/" element={<Home />} />
+        <Route path="/menu" element={<Home />} />
         <Route
-          path="/"
+          path="/landing"
           element={
             <Suspense fallback={<div style={{ minHeight: '100vh', background: '#050f21' }} />}>
               <Landing />
             </Suspense>
           }
         />
-        <Route path="/menu" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/track" element={<TrackOrder />} />
