@@ -142,7 +142,7 @@ export function Landing() {
         {/* hero */}
         <div className="hero">
           <div className="hero-bg">
-            <img src="/landing/grilled.jpg" alt="" fetchPriority="high" />
+            <img src="/categories/grilled.jpg" alt="" fetchPriority="high" />
           </div>
           <div className="grain" />
           <div className="hero-in">
@@ -277,7 +277,7 @@ export function Landing() {
               </div>
             </div>
             <div className="split-media rv d2">
-              <img src="/landing/sandwiches.jpg" alt="" loading="lazy" />
+              <img src="/categories/sandwiches.jpg" alt="" loading="lazy" />
             </div>
           </div>
         </section>
@@ -322,7 +322,7 @@ export function Landing() {
         {/* closer */}
         <div className="closer">
           <div className="closer-bg">
-            <img src="/landing/lahm-b-aajin.jpg" alt="" loading="lazy" />
+            <img src="/categories/lahm b aajin.jpg" alt="" loading="lazy" />
           </div>
           <div className="grain" />
           <div className="closer-in wrap">

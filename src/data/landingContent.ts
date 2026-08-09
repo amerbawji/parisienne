@@ -18,14 +18,14 @@ export interface Category {
   ar: string;
 }
 
-/** Images live in `public/landing/`. Use at least 1200px on the long edge. */
+/** Images live in `public/categories/`, shared with the menu. Use 1200px+ on the long edge. */
 export const CATEGORIES: Category[] = [
-  { img: '/landing/grilled.jpg', cls: 't-feature', en: 'Charcoal Grills', ar: 'مشاوي على الفحم' },
-  { img: '/landing/sandwiches.jpg', cls: 't-tall', en: 'Sandwiches', ar: 'سندويشات' },
-  { img: '/landing/lahm-b-aajin.jpg', cls: 't-tall', en: "Lahm b'Aajin", ar: 'لحم بعجين' },
-  { img: '/landing/chicken.jpg', cls: 't-wide', en: 'Chicken', ar: 'دجاج' },
-  { img: '/landing/appetizers.jpg', cls: 't-sm', en: 'Mezze', ar: 'مقبلات' },
-  { img: '/landing/plates.jpg', cls: 't-sm', en: 'Plates', ar: 'صحون' },
+  { img: '/categories/grilled.jpg', cls: 't-feature', en: 'Charcoal Grills', ar: 'مشاوي على الفحم' },
+  { img: '/categories/sandwiches.jpg', cls: 't-tall', en: 'Sandwiches', ar: 'سندويشات' },
+  { img: '/categories/lahm b aajin.jpg', cls: 't-tall', en: "Lahm b'Aajin", ar: 'لحم بعجين' },
+  { img: '/categories/chicken.jpg', cls: 't-wide', en: 'Chicken', ar: 'دجاج' },
+  { img: '/categories/appetizers.jpg', cls: 't-sm', en: 'Mezze', ar: 'مقبلات' },
+  { img: '/categories/plates.jpg', cls: 't-sm', en: 'Plates', ar: 'صحون' },
 ];
 
 export interface Pair {
@@ -45,22 +45,22 @@ export interface Value extends Pair {
 
 export const VALUES: Value[] = [
   {
-    img: '/landing/chicken.jpg',
+    img: '/categories/chicken.jpg',
     en: ['Cut In-House', 'The meat on your plate was cut at our own counter that morning. No middlemen, no mystery.'],
     ar: ['لحم من ملحمتنا', 'اللحم الذي تأكله قُطّع على طاولتنا في الصباح نفسه — بلا وسطاء ولا مفاجآت.'],
   },
   {
-    img: '/landing/grilled.jpg',
+    img: '/categories/grilled.jpg',
     en: ['Fire & Charcoal', 'Grilled over real charcoal — the flavour nothing else gives you.'],
     ar: ['نار وفحم', 'المشاوي على الفحم فقط. الطعم الذي لا يمنحه أي شيء آخر.'],
   },
   {
-    img: '/landing/appetizers.jpg',
+    img: '/categories/appetizers.jpg',
     en: ['Family Recipes', 'Traditional Lebanese cooking with no shortcuts and no powdered mixes.'],
     ar: ['وصفات العائلة', 'وصفات لبنانية تقليدية، دون اختصارات ودون مساحيق جاهزة.'],
   },
   {
-    img: '/landing/plates.jpg',
+    img: '/categories/plates.jpg',
     en: ['Fast & Honest', "Clear prices, realistic timings, and an order that arrives exactly as you asked."],
     ar: ['سريع وصادق', 'أسعار واضحة، أوقات واقعية، وطلب يصل كما طلبته تماماً.'],
   },
