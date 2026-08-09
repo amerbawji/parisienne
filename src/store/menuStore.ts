@@ -16,6 +16,38 @@ export interface Preset {
   ar: string;
 }
 
+/** One of the things that comes on a build-your-own plate. */
+export interface PlateComponent {
+  id: string;
+  en: string;
+  ar: string;
+  /** false pins it to the plate — the customer can't take it off. */
+  removable?: boolean;
+}
+
+/** A skewer the customer can add any number of. Price is per skewer. */
+export interface PlateSkewer {
+  id: string;
+  en: string;
+  ar: string;
+  price: number;
+  max?: number;
+}
+
+/**
+ * Turns an item into a build-your-own plate. The plate's price is the sum of
+ * the chosen skewers — the included components and swaps don't change it.
+ */
+export interface PlateBuilderConfig {
+  /** On the plate by default; each can be taken off unless removable is false. */
+  includes: PlateComponent[];
+  /** Extras the customer can put on instead of what they removed. */
+  swaps: PlateComponent[];
+  skewers: PlateSkewer[];
+  /** Skewers required before the plate can be added. Defaults to 1. */
+  min_skewers?: number;
+}
+
 export interface MenuItem {
   id: string;
   name_en: string;
@@ -32,6 +64,7 @@ export interface MenuItem {
   tags?: string[];
   show_in_related?: boolean;
   option_price_overrides?: Record<string, Record<string, number>>;
+  builder?: PlateBuilderConfig;
   active?: boolean;
   in_stock?: boolean;
   updated_at?: string;
@@ -66,7 +99,7 @@ interface MenuStore {
 }
 
 type CatRow = { id: string; name_en: string; name_ar: string; image_url: string; active: boolean; sort_order: number; updated_at?: string };
-type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; show_in_related?: boolean | null; option_price_overrides?: Record<string, Record<string, number>> | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
+type ItemRow = { id: string; category_id: string; name_en: string; name_ar: string; price: number; unit: string; weight_step: number | null; min_quantity: number | null; description_en: string; description_ar: string; image_url: string; presets: (Preset | string)[]; tags?: string[] | null; show_in_related?: boolean | null; option_price_overrides?: Record<string, Record<string, number>> | null; builder?: PlateBuilderConfig | null; sort_order: number; active: boolean; in_stock: boolean; updated_at?: string };
 type OptRow = { id: string; item_id: string; name: string; name_ar: string; choices: string[]; choices_ar: string[]; price_additions: Record<string, number>; sort_order: number };
 
 function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Category[] {
@@ -99,6 +132,7 @@ function rowsToCategories(cats: CatRow[], items: ItemRow[], opts: OptRow[]): Cat
           tags: item.tags ?? [],
           show_in_related: item.show_in_related ?? true,
           option_price_overrides: item.option_price_overrides ?? undefined,
+          builder: item.builder ?? undefined,
           active: item.active,
           in_stock: item.in_stock,
           updated_at: item.updated_at,
@@ -167,6 +201,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       description_ar: item.description_ar ?? '', image_url: item.image ?? '',
       presets: item.presets ?? [], sort_order, active: true, in_stock: true,
       option_price_overrides: item.option_price_overrides ?? null,
+      ...(item.builder ? { builder: item.builder } : {}),
       ...(item.tags?.length ? { tags: item.tags } : {}),
     });
     if (ie) throw ie;
@@ -205,6 +240,7 @@ export const useMenuStore = create<MenuStore>((set, get) => ({
       ...(rest.active        !== undefined && { active: rest.active }),
       ...(rest.in_stock      !== undefined && { in_stock: rest.in_stock }),
       ...('option_price_overrides' in updates && { option_price_overrides: option_price_overrides ?? null }),
+      ...('builder' in rest && { builder: rest.builder ?? null }),
       updated_at: now,
     }).eq('id', itemId);
     if (ie) throw ie;

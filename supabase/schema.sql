@@ -22,6 +22,7 @@ CREATE TABLE items (
   description_ar  TEXT NOT NULL DEFAULT '',
   image_url       TEXT NOT NULL DEFAULT '',
   presets         JSONB NOT NULL DEFAULT '[]',
+  builder         JSONB,   -- build-your-own-plate config; NULL for normal items
   sort_order      INTEGER NOT NULL DEFAULT 0,
   active          BOOLEAN NOT NULL DEFAULT true,
   in_stock        BOOLEAN NOT NULL DEFAULT true
@@ -98,6 +99,7 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE items      ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
 -- ALTER TABLE store_config ADD COLUMN discount_percentage INTEGER NOT NULL DEFAULT 0;
 -- ALTER TABLE store_config ADD COLUMN whatsapp_enabled BOOLEAN NOT NULL DEFAULT true;
+-- ALTER TABLE items ADD COLUMN builder JSONB;   -- build-your-own plate
 -- ALTER TABLE item_options ADD COLUMN name_ar TEXT NOT NULL DEFAULT '';
 -- ALTER TABLE item_options ADD COLUMN choices_ar JSONB NOT NULL DEFAULT '[]';
 -- ALTER TABLE orders ADD COLUMN seen_at TIMESTAMPTZ;

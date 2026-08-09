@@ -7,6 +7,14 @@ import { Button } from '../UI/Button';
 import { QuantitySelector } from '../UI/QuantitySelector';
 import { type TranslationKey } from '../../data/translations';
 import { type Preset } from '../../store/menuStore';
+import { PlateBuilder } from './PlateBuilder';
+import {
+  describePlate,
+  emptyPlateSelection,
+  platePrice,
+  totalSkewers,
+  type PlateSelection,
+} from '../../utils/plate';
 
 const BADGE_CONFIG: Record<string, { en: string; ar: string; className: string }> = {
   new:         { en: '✦ New',         ar: '✦ جديد',          className: 'bg-blue-500 text-white' },
@@ -27,6 +35,7 @@ export interface MenuItem {
   weight_step?: number;
   min_quantity?: number;
   options?: { name: string; name_ar?: string; choices: string[]; choices_ar?: string[]; price_additions?: Record<string, number> }[];
+  builder?: import('../../store/menuStore').PlateBuilderConfig;
   option_price_overrides?: Record<string, Record<string, number>>;
   presets?: Preset[];
   tags?: string[];
@@ -61,6 +70,12 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
   const totalQuantity = cartInstances.reduce((acc, i) => acc + i.quantity, 0);
 
   const [pendingOptions, setPendingOptions] = useState<Record<string, string>>({});
+  const [plate, setPlate] = useState<PlateSelection>(emptyPlateSelection);
+
+  const builder = item.builder;
+  const minSkewers = builder?.min_skewers ?? 1;
+  const skewerCount = totalSkewers(plate);
+  const plateReady = !builder || skewerCount >= minSkewers;
   
   const step = item.weight_step || 1;
   const minQuantity = item.unit === 'kg' && step < 1 && (!item.min_quantity || item.min_quantity >= 1)
@@ -72,6 +87,9 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
   const [pendingQuantity, setPendingQuantity] = useState(minQuantity);
 
   const getUnitPrice = (): number | null => {
+    // A build-your-own plate is priced purely from the skewers on it.
+    if (builder) return plateReady ? platePrice(builder, plate) : null;
+
     const overrides = item.option_price_overrides;
     if (overrides) {
       let matchedPrice: number | null = null;
@@ -98,6 +116,14 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
     if (unitPrice === null || discountedUnitPrice === null) return;
 
     const selectedOptionsAr: Record<string, string> = {};
+    let selectedOptions = pendingOptions;
+
+    if (builder) {
+      const described = describePlate(builder, plate);
+      selectedOptions = described.en;
+      Object.assign(selectedOptionsAr, described.ar);
+    }
+
     if (item.options) {
       Object.entries(pendingOptions).forEach(([optName, choice]) => {
         const opt = item.options!.find((o) => o.name === optName);
@@ -117,7 +143,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
       image: item.image,
       unit: item.unit,
       price: discountedUnitPrice,
-      selectedOptions: pendingOptions,
+      selectedOptions,
       selectedOptionsAr,
       instructions: pendingInstructions,
       step,
@@ -126,6 +152,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
     });
     onItemAdded?.({ instanceId, itemName: language === 'ar' ? item.name_ar : item.name_en });
     setPendingOptions({});
+    setPlate(emptyPlateSelection());
     setPendingInstructions('');
     setPendingQuantity(minQuantity);
     if (expanded) onToggle();
@@ -158,7 +185,7 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
 
   const presets = item.presets || [];
   const imageUrl = item.image || null;
-  const quickAddEnabled = !item.option_price_overrides;
+  const quickAddEnabled = !item.option_price_overrides && !builder;
   const inStock = item.in_stock !== false;
 
   const displayName = language === 'ar' ? item.name_ar : item.name_en;
@@ -268,6 +295,16 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
             {displayDesc && <p className="text-gray-600 text-sm mb-3 line-clamp-3">{displayDesc}</p>}
 
             <div className="mt-auto space-y-3">
+              {builder && (
+                <PlateBuilder
+                  config={builder}
+                  value={plate}
+                  onChange={setPlate}
+                  language={language}
+                  discountPct={discountPct}
+                />
+              )}
+
               {item.options && item.options.length > 0 && (
                 <div className="space-y-2">
                   {item.options.map((opt) => (
@@ -364,6 +401,14 @@ const MenuCardComponent = ({ item, expanded, onToggle, onItemAdded, relatedItems
                   <div className={`absolute top-0 bottom-1 end-0 w-8 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none`} />
                   </div>
                 </div>
+              )}
+
+              {builder && !plateReady && (
+                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                  {language === 'ar'
+                    ? `اختر ${minSkewers} سيخ على الأقل للمتابعة`
+                    : `Choose at least ${minSkewers} skewer${minSkewers > 1 ? 's' : ''} to continue`}
+                </p>
               )}
 
               {unitPrice === null && item.option_price_overrides && (

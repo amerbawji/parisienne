@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo, createContext, useContext, type ChangeEvent } from 'react';
-import { useMenuStore, type Category, type MenuItem, type MenuOption, type Preset } from '../store/menuStore';
+import { useMenuStore, type Category, type MenuItem, type MenuOption, type Preset, type PlateBuilderConfig, type PlateComponent, type PlateSkewer } from '../store/menuStore';
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
 import { useLanguageStore } from '../store/languageStore';
@@ -711,7 +711,207 @@ function PresetsEditor({
   );
 }
 
+
+// ─── Build-your-own Plate Editor ─────────────────────────────────────────────
+
+const slug = (s: string) =>
+  s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || `c${Date.now()}`;
+
+const EMPTY_BUILDER: PlateBuilderConfig = { includes: [], swaps: [], skewers: [], min_skewers: 1 };
+
+function PlateBuilderEditor({
+  builder,
+  onChange,
+}: {
+  builder?: PlateBuilderConfig;
+  onChange: (b: PlateBuilderConfig | undefined) => void;
+}) {
+  const enabled = !!builder;
+  const cfg = builder ?? EMPTY_BUILDER;
+
+  const patch = (updates: Partial<PlateBuilderConfig>) => onChange({ ...cfg, ...updates });
+
+  const rowInput = 'flex-1 min-w-0 text-sm px-2 py-1.5 border border-gray-200 rounded focus:ring-1 focus:ring-primary-500 outline-none';
+
+  const componentRows = (
+    list: PlateComponent[],
+    key: 'includes' | 'swaps',
+    label: string,
+    hint: string
+  ) => (
+    <div className="flex flex-col gap-2">
+      <div>
+        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{label}</span>
+        <p className="text-[11px] text-gray-400">{hint}</p>
+      </div>
+      {list.map((c, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input
+            className={rowInput}
+            placeholder="English"
+            value={c.en}
+            onChange={(e) => {
+              const next = [...list];
+              next[i] = { ...c, en: e.target.value, id: c.id || slug(e.target.value) };
+              patch({ [key]: next } as Partial<PlateBuilderConfig>);
+            }}
+          />
+          <input
+            className={rowInput}
+            dir="rtl"
+            placeholder="عربي"
+            value={c.ar}
+            onChange={(e) => {
+              const next = [...list];
+              next[i] = { ...c, ar: e.target.value };
+              patch({ [key]: next } as Partial<PlateBuilderConfig>);
+            }}
+          />
+          {key === 'includes' && (
+            <label className="flex items-center gap-1 text-[11px] text-gray-500 whitespace-nowrap">
+              <input
+                type="checkbox"
+                checked={c.removable !== false}
+                onChange={(e) => {
+                  const next = [...list];
+                  next[i] = { ...c, removable: e.target.checked };
+                  patch({ includes: next });
+                }}
+              />
+              removable
+            </label>
+          )}
+          <button
+            type="button"
+            onClick={() => patch({ [key]: list.filter((_, x) => x !== i) } as Partial<PlateBuilderConfig>)}
+            className="text-red-500 hover:text-red-700 text-sm px-1"
+            aria-label="Remove"
+          >
+            ✕
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => patch({ [key]: [...list, { id: '', en: '', ar: '', ...(key === 'includes' ? { removable: true } : {}) }] } as Partial<PlateBuilderConfig>)}
+        className="self-start text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition"
+      >
+        + Add
+      </button>
+    </div>
+  );
+
+  return (
+    <div className="flex flex-col gap-4 border border-gray-200 rounded-xl p-3 bg-gray-50/60">
+      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+        <input
+          type="checkbox"
+          checked={enabled}
+          onChange={(e) => onChange(e.target.checked ? EMPTY_BUILDER : undefined)}
+        />
+        Build-your-own plate
+      </label>
+      <p className="text-[11px] text-gray-500 -mt-3">
+        The plate's price is the sum of the skewers chosen. Removing or swapping the
+        included items never changes the price, and the item's own price field is ignored.
+      </p>
+
+      {enabled && (
+        <>
+          <div className="flex flex-col gap-2">
+            <div>
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Skewers</span>
+              <p className="text-[11px] text-gray-400">Price is per skewer. Max is optional.</p>
+            </div>
+            {cfg.skewers.map((sk: PlateSkewer, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input
+                  className={rowInput}
+                  placeholder="English"
+                  value={sk.en}
+                  onChange={(e) => {
+                    const next = [...cfg.skewers];
+                    next[i] = { ...sk, en: e.target.value, id: sk.id || slug(e.target.value) };
+                    patch({ skewers: next });
+                  }}
+                />
+                <input
+                  className={rowInput}
+                  dir="rtl"
+                  placeholder="عربي"
+                  value={sk.ar}
+                  onChange={(e) => {
+                    const next = [...cfg.skewers];
+                    next[i] = { ...sk, ar: e.target.value };
+                    patch({ skewers: next });
+                  }}
+                />
+                <input
+                  className="w-20 text-sm px-2 py-1.5 border border-gray-200 rounded focus:ring-1 focus:ring-primary-500 outline-none"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="$"
+                  value={sk.price}
+                  onChange={(e) => {
+                    const next = [...cfg.skewers];
+                    next[i] = { ...sk, price: Number(e.target.value) || 0 };
+                    patch({ skewers: next });
+                  }}
+                />
+                <input
+                  className="w-16 text-sm px-2 py-1.5 border border-gray-200 rounded focus:ring-1 focus:ring-primary-500 outline-none"
+                  type="number"
+                  min="1"
+                  placeholder="max"
+                  value={sk.max ?? ''}
+                  onChange={(e) => {
+                    const next = [...cfg.skewers];
+                    const v = Number(e.target.value);
+                    next[i] = { ...sk, max: v > 0 ? v : undefined };
+                    patch({ skewers: next });
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => patch({ skewers: cfg.skewers.filter((_, x) => x !== i) })}
+                  className="text-red-500 hover:text-red-700 text-sm px-1"
+                  aria-label="Remove"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => patch({ skewers: [...cfg.skewers, { id: '', en: '', ar: '', price: 0 }] })}
+              className="self-start text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded border border-gray-200 transition"
+            >
+              + Add skewer
+            </button>
+          </div>
+
+          {componentRows(cfg.includes, 'includes', 'Comes with', 'On the plate by default. Untick "removable" to pin it.')}
+          {componentRows(cfg.swaps, 'swaps', 'Add instead', 'Alternatives the customer can put on. Free.')}
+
+          <label className="flex items-center gap-2 text-xs text-gray-600">
+            Minimum skewers before the plate can be ordered
+            <input
+              className="w-16 text-sm px-2 py-1.5 border border-gray-200 rounded focus:ring-1 focus:ring-primary-500 outline-none"
+              type="number"
+              min="0"
+              value={cfg.min_skewers ?? 1}
+              onChange={(e) => patch({ min_skewers: Math.max(0, Number(e.target.value) || 0) })}
+            />
+          </label>
+        </>
+      )}
+    </div>
+  );
+}
+
 // ─── Item Form ───────────────────────────────────────────────────────────────
+
 
 interface ItemFormProps {
   initial: MenuItem;
@@ -901,6 +1101,11 @@ function ItemForm({ initial, onSave, onCancel }: ItemFormProps) {
       <PresetsEditor
         presets={form.presets ?? []}
         onChange={(p) => set('presets', p)}
+      />
+
+      <PlateBuilderEditor
+        builder={form.builder}
+        onChange={(b) => set('builder', b)}
       />
 
       <div className="flex flex-col gap-2">
