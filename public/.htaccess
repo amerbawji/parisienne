@@ -1,9 +1,12 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Force HTTPS
-  RewriteCond %{HTTPS} off
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # Force HTTPS: disabled until the domain has a valid SSL certificate
+  # (cPanel > SSL/TLS Status > AutoSSL). Right now HTTPS serves an invalid cert,
+  # so this would send every visitor to a browser security warning.
+  # Uncomment once https://www.grillparisienne.com loads without a warning.
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # SPA Routing (Redirect to index.html if file/dir not found)
   RewriteCond %{REQUEST_FILENAME} !-f

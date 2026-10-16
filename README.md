@@ -97,4 +97,12 @@ npm run preview    # preview production build
 
 ## Deployment
 
-Deployed to **Vercel** with auto-deploy on push to `master`. Set the environment variables in the Vercel project settings.
+The live site (`grillparisienne.com`) is on cPanel and deploys from this repo. cPanel only copies files, it doesn't build, so the build is committed:
+
+1. `npm run build` (needs `.env.local` with the Supabase variables)
+2. Commit the updated `dist/` with your changes and push to `master`
+3. cPanel → Git Version Control → Manage → **Update from Remote**, then **Deploy HEAD Commit**
+
+`.cpanel.yml` copies `dist/` (including `.htaccess`) into `public_html`.
+
+Vercel also auto-deploys on push to `master`; its environment variables are set in the Vercel project settings.

@@ -1,9 +1,11 @@
 ---
 deployment:
   tasks:
-    # Replace 'username' with your cPanel username and 'public_html' with your target directory
     - export DEPLOYPATH=/home/grillpar/public_html/
-    
-    # Copy build artifacts to deployment path
-    # Note: Ensure you run 'npm run build' locally and commit the 'dist' folder
-    - /bin/cp -R dist/* $DEPLOYPATH
+
+    # Keep a one-time copy of whatever .htaccess was there before our first deploy
+    - /bin/cp -n ${DEPLOYPATH}.htaccess ${DEPLOYPATH}.htaccess.pre-deploy 2>/dev/null || true
+
+    # dist/ is built locally and committed (cPanel only copies, it doesn't build).
+    # dist/. rather than dist/* so hidden files like .htaccess are copied too.
+    - /bin/cp -R dist/. $DEPLOYPATH
