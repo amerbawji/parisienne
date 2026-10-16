@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boucherie &amp; Grill Parisienne — ملحمة ومشاوي الباريسية</title>
+<meta name="description" content="Boucherie &amp; Grill Parisienne — a Ras Beirut butchery and charcoal grill. Meat cut in-house, grilled to order. Delivery, pickup, or dine in.">
+<meta name="theme-color" content="#06142a">
+<link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon-180x180.png">
+<meta property="og:title" content="Boucherie &amp; Grill Parisienne — ملحمة ومشاوي الباريسية">
+<meta property="og:description" content="A Ras Beirut butchery and charcoal grill. Cut in-house, grilled to order.">
+<meta property="og:image" content="images/grilled.jpg">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500;600&family=Amiri:wght@400;700&family=Almarai:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   EDIT THREE THINGS AND YOU'RE DONE — see landing/README.md
+   1. ORDER_URL   (script block at the bottom)
+   2. Phone       (search: 9613502022)
+   3. Address + hours  (search: [أضف)
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  --ink:#0a1628;
+  --navy:#0c2345;
+  --navy-deep:#050f21;
+  --gold:#e9b85e;
+  --gold-soft:#f3d68c;
+  --gold-deep:#c99a35;
+  --paper:#faf7f1;
+  --paper-2:#f3ede2;
+  --muted:#6b7688;
+  --line:rgba(10,22,40,.10);
+  --line-gold:rgba(233,184,94,.24);
+  --shadow:0 24px 60px -20px rgba(10,22,40,.28);
+  --max:1240px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Almarai","Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400; line-height:1.65; letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+html[lang="en"] body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+img{display:block; max-width:100%}
+a{color:inherit; text-decoration:none}
+button{font:inherit; cursor:pointer; border:none; background:none; color:inherit}
+::selection{background:var(--gold); color:var(--navy-deep)}
+
+.wrap{max-width:var(--max); margin:0 auto; padding:0 clamp(20px,5vw,48px)}
+
+/* ── display type ───────────────────────────────────────────── */
+.display{
+  font-family:"Amiri","Cormorant Garamond",Georgia,serif;
+  font-weight:400; line-height:1.08; letter-spacing:-.02em;
+}
+html[lang="en"] .display{
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:300; letter-spacing:-.025em;
+}
+.eyebrow{
+  font-family:"Inter",sans-serif; font-size:.7rem; font-weight:500;
+  letter-spacing:.32em; text-transform:uppercase; color:var(--gold-deep);
+}
+.eyebrow.on-dark{color:var(--gold)}
+
+/* ── reveal on scroll ───────────────────────────────────────── */
+.rv{opacity:0; transform:translateY(28px); transition:opacity .9s var(--ease), transform .9s var(--ease)}
+.rv.in{opacity:1; transform:none}
+.rv.d1{transition-delay:.08s} .rv.d2{transition-delay:.16s}
+.rv.d3{transition-delay:.24s} .rv.d4{transition-delay:.32s}
+@media(prefers-reduced-motion:reduce){
+  .rv{opacity:1; transform:none; transition:none}
+  html{scroll-behavior:auto}
+}
+
+/* ── header ─────────────────────────────────────────────────── */
+header{
+  position:fixed; inset-inline:0; top:0; z-index:100;
+  transition:background .45s var(--ease), backdrop-filter .45s var(--ease), border-color .45s var(--ease);
+  border-bottom:1px solid transparent;
+}
+header.solid{
+  background:rgba(5,15,33,.82); backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%); border-bottom-color:var(--line-gold);
+}
+.bar{display:flex; align-items:center; gap:clamp(16px,3vw,36px); height:clamp(66px,8vh,82px)}
+.brand{display:flex; align-items:baseline; gap:10px; color:#fff}
+.brand .mark{
+  font-family:"Cormorant Garamond",Georgia,serif; font-size:1.55rem; font-weight:600;
+  color:var(--gold); line-height:1;
+}
+.brand .name{
+  font-size:.72rem; font-weight:500; letter-spacing:.3em; text-transform:uppercase;
+  font-family:"Inter",sans-serif; opacity:.9;
+}
+nav{margin-inline-start:auto; display:flex; align-items:center; gap:clamp(14px,2.4vw,30px)}
+nav a.nl{
+  position:relative; color:rgba(255,255,255,.82); font-size:.86rem; font-weight:400; padding:4px 0;
+}
+nav a.nl::after{
+  content:""; position:absolute; inset-inline:0; bottom:0; height:1px; background:var(--gold);
+  transform:scaleX(0); transform-origin:inline-start; transition:transform .4s var(--ease);
+}
+nav a.nl:hover{color:#fff}
+nav a.nl:hover::after{transform:scaleX(1)}
+.lang{
+  border:1px solid var(--line-gold); color:var(--gold); border-radius:999px;
+  padding:7px 16px; font-size:.76rem; font-weight:500; letter-spacing:.06em;
+  font-family:"Inter",sans-serif; transition:background .3s var(--ease), color .3s var(--ease);
+}
+.lang:hover{background:var(--gold); color:var(--navy-deep)}
+.nav-order{
+  background:var(--gold); color:var(--navy-deep); border-radius:999px;
+  padding:9px 20px; font-size:.82rem; font-weight:600;
+  transition:background .3s var(--ease), transform .3s var(--ease);
+}
+.nav-order:hover{background:var(--gold-soft); transform:translateY(-1px)}
+@media(max-width:900px){ nav a.nl{display:none} }
+@media(max-width:520px){ .nav-order{display:none} .brand .name{display:none} }
+
+/* ── hero ───────────────────────────────────────────────────── */
+.hero{position:relative; min-height:100svh; display:flex; align-items:center; overflow:hidden}
+.hero-bg{position:absolute; inset:0; z-index:0}
+.hero-bg img{
+  width:100%; height:100%; object-fit:cover; object-position:center 42%;
+  transform:scale(1.08); animation:drift 26s var(--ease) forwards;
+}
+@keyframes drift{to{transform:scale(1)}}
+.hero-bg::after{
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(to bottom, rgba(5,15,33,.86) 0%, rgba(5,15,33,.56) 38%, rgba(5,15,33,.92) 100%),
+    radial-gradient(120% 80% at 50% 0%, transparent 30%, rgba(5,15,33,.7) 100%);
+}
+.grain{
+  position:absolute; inset:0; z-index:1; opacity:.16; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+.hero-in{position:relative; z-index:2; width:100%; color:#fff; padding:110px 0 70px}
+.hero-in .eyebrow{display:block; margin-bottom:22px}
+.hero h1{
+  font-size:clamp(2.9rem,8.5vw,6.6rem); margin-bottom:26px; max-width:15ch;
+}
+.hero h1 em{font-style:italic; color:var(--gold-soft)}
+html[lang="ar"] .hero h1 em{font-style:normal; color:var(--gold-soft)}
+.hero p.lede{
+  max-width:52ch; font-size:clamp(1rem,1.6vw,1.15rem); font-weight:300;
+  color:rgba(255,255,255,.8); margin-bottom:40px;
+}
+.hero-cta{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
+
+/* buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  padding:16px 34px; border-radius:999px; font-size:.92rem; font-weight:600;
+  font-family:"Inter",sans-serif; letter-spacing:.01em;
+  transition:transform .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease), color .35s var(--ease);
+  white-space:nowrap;
+}
+html[lang="ar"] .btn{font-family:"Almarai",sans-serif; font-weight:700}
+.btn-gold{background:var(--gold); color:var(--navy-deep); box-shadow:0 12px 34px -12px rgba(233,184,94,.65)}
+.btn-gold:hover{background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 18px 44px -14px rgba(233,184,94,.75)}
+.btn-line{border:1px solid rgba(255,255,255,.32); color:#fff}
+.btn-line:hover{background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.5); transform:translateY(-2px)}
+.btn-navy{background:var(--navy-deep); color:#fff}
+.btn-navy:hover{background:var(--navy); transform:translateY(-2px)}
+.btn .arw{transition:transform .35s var(--ease)}
+html[dir="rtl"] .btn .arw{transform:scaleX(-1)}
+.btn:hover .arw{transform:translateX(4px)}
+html[dir="rtl"] .btn:hover .arw{transform:scaleX(-1) translateX(4px)}
+
+.scroll-hint{
+  position:absolute; z-index:2; bottom:30px; inset-inline-start:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:9px;
+  color:rgba(255,255,255,.5); font-size:.65rem; letter-spacing:.26em; text-transform:uppercase;
+  font-family:"Inter",sans-serif;
+}
+html[dir="rtl"] .scroll-hint{transform:translateX(50%)}
+.scroll-hint i{display:block; width:1px; height:42px; background:linear-gradient(var(--gold),transparent); animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3; transform:scaleY(.6)}50%{opacity:1; transform:scaleY(1)}}
+@media(max-height:700px){ .scroll-hint{display:none} }
+
+/* ── marquee ────────────────────────────────────────────────── */
+.marquee{
+  background:var(--navy-deep); color:var(--gold); overflow:hidden;
+  border-block:1px solid var(--line-gold); padding:17px 0;
+}
+.mq-track{display:flex; gap:0; width:max-content; animation:slide 42s linear infinite}
+html[dir="rtl"] .mq-track{animation-direction:reverse}
+@keyframes slide{to{transform:translateX(-50%)}}
+.mq-track span{
+  padding:0 30px; font-size:.78rem; letter-spacing:.24em; text-transform:uppercase;
+  font-family:"Inter",sans-serif; font-weight:500; white-space:nowrap; opacity:.85;
+}
+html[lang="ar"] .mq-track span{font-family:"Almarai",sans-serif; letter-spacing:.12em; font-size:.85rem}
+.mq-track span::after{content:"✦"; margin-inline-start:30px; opacity:.45}
+.marquee:hover .mq-track{animation-play-state:paused}
+
+/* ── heritage story ─────────────────────────────────────────── */
+.story{background:var(--paper); position:relative; overflow:hidden}
+.story::before{
+  content:""; position:absolute; inset-inline-start:-8%; top:-10%; width:46%; aspect-ratio:1;
+  background:radial-gradient(circle, rgba(233,184,94,.16) 0%, transparent 68%); pointer-events:none;
+}
+.story-grid{
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(28px,6vw,84px);
+  align-items:start; position:relative; z-index:1;
+}
+@media(max-width:820px){ .story-grid{grid-template-columns:1fr; gap:26px} }
+.year{
+  font-family:"Cormorant Garamond",Georgia,serif; font-weight:300; line-height:.82;
+  font-size:clamp(5rem,15vw,12rem); color:var(--navy); letter-spacing:-.04em;
+  display:block; position:relative;
+}
+.year small{
+  display:block; font-family:"Inter",sans-serif; font-size:.68rem; font-weight:500;
+  letter-spacing:.3em; text-transform:uppercase; color:var(--gold-deep);
+  margin-top:16px; padding-top:16px; border-top:1px solid var(--line);
+}
+html[lang="ar"] .year small{letter-spacing:.12em; font-family:"Almarai",sans-serif}
+.story-body h2{font-size:clamp(1.8rem,4.2vw,2.9rem); margin-bottom:24px; max-width:20ch}
+.story-body p{
+  color:var(--muted); font-weight:300; font-size:clamp(1rem,1.4vw,1.1rem);
+  max-width:56ch; margin-bottom:18px;
+}
+.story-body p strong{color:var(--ink); font-weight:600}
+.stats{
+  display:flex; flex-wrap:wrap; gap:clamp(20px,4vw,52px);
+  margin-top:38px; padding-top:30px; border-top:1px solid var(--line);
+}
+.stat .k{
+  display:block; font-family:"Cormorant Garamond",Georgia,serif; font-size:clamp(1.6rem,3vw,2.2rem);
+  color:var(--navy); line-height:1.1; margin-bottom:4px;
+}
+html[lang="ar"] .stat .k{font-family:"Amiri",serif}
+.stat .l{
+  font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-deep);
+  font-family:"Inter",sans-serif; font-weight:500;
+}
+html[lang="ar"] .stat .l{letter-spacing:.08em; font-family:"Almarai",sans-serif}
+
+/* ── section shell ──────────────────────────────────────────── */
+section{padding:clamp(70px,11vw,140px) 0; position:relative}
+.sec-head{max-width:640px; margin-bottom:clamp(38px,5vw,64px)}
+.sec-head.center{margin-inline:auto; text-align:center}
+.sec-head .eyebrow{display:block; margin-bottom:16px}
+.sec-head h2{font-size:clamp(2rem,5vw,3.4rem); margin-bottom:18px}
+.sec-head p{color:var(--muted); font-size:1.03rem; font-weight:300; max-width:50ch}
+.sec-head.center p{margin-inline:auto}
+
+/* ── bento gallery ──────────────────────────────────────────── */
+.bento{
+  display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:clamp(150px,19vw,215px); gap:14px;
+}
+.tile{
+  position:relative; overflow:hidden; border-radius:20px; background:var(--navy);
+  box-shadow:var(--shadow); isolation:isolate;
+}
+.tile img{
+  width:100%; height:100%; object-fit:cover;
+  transition:transform 1s var(--ease), filter .7s var(--ease);
+  filter:saturate(1.02);
+}
+.tile::after{
+  content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to top, rgba(5,15,33,.9) 0%, rgba(5,15,33,.25) 45%, transparent 72%);
+  transition:opacity .6s var(--ease);
+}
+.tile:hover img{transform:scale(1.07)}
+.tile:hover::after{opacity:.78}
+.tile .cap{
+  position:absolute; z-index:2; inset-inline:0; bottom:0; padding:clamp(16px,2vw,26px);
+  display:flex; align-items:flex-end; justify-content:space-between; gap:12px; color:#fff;
+}
+.tile .cap h3{font-size:clamp(1.05rem,1.7vw,1.5rem); font-weight:600; letter-spacing:-.01em; line-height:1.25}
+html[lang="en"] .tile .cap h3{font-family:"Cormorant Garamond",Georgia,serif; font-weight:600; font-size:clamp(1.25rem,2vw,1.75rem)}
+.tile .cap .go{
+  flex:none; width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.4);
+  display:grid; place-items:center; font-size:.85rem;
+  transition:background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+}
+.tile:hover .cap .go{background:var(--gold); border-color:var(--gold); color:var(--navy-deep)}
+html[dir="rtl"] .tile .cap .go{transform:scaleX(-1)}
+.t-feature{grid-column:span 2; grid-row:span 2}
+.t-tall{grid-column:span 1; grid-row:span 2}
+.t-wide{grid-column:span 2; grid-row:span 1}
+.t-sm{grid-column:span 1; grid-row:span 1}
+@media(max-width:860px){
+  .bento{grid-template-columns:repeat(2,1fr); grid-auto-rows:clamp(140px,30vw,180px); gap:11px}
+  .t-feature{grid-column:span 2; grid-row:span 2}
+  .t-tall{grid-column:span 1; grid-row:span 2}
+  .t-wide{grid-column:span 2; grid-row:span 1}
+}
+
+/* ── values (editorial numbered list) ───────────────────────── */
+.values{background:var(--paper-2)}
+.vgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:clamp(28px,4vw,56px)}
+.v{padding-top:26px; border-top:1px solid var(--line); position:relative}
+.v::before{
+  content:""; position:absolute; top:-1px; inset-inline-start:0; width:44px; height:2px;
+  background:var(--gold); transition:width .7s var(--ease);
+}
+.v:hover::before{width:100%}
+.v .num{
+  font-family:"Cormorant Garamond",Georgia,serif; font-size:.95rem; color:var(--gold-deep);
+  letter-spacing:.16em; display:block; margin-bottom:14px;
+}
+.v h3{font-size:1.22rem; font-weight:600; margin-bottom:10px; letter-spacing:-.015em}
+html[lang="en"] .v h3{font-family:"Cormorant Garamond",Georgia,serif; font-size:1.55rem; font-weight:600}
+.v p{color:var(--muted); font-size:.96rem; font-weight:300}
+
+/* ── split feature ──────────────────────────────────────────── */
+.split{display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(30px,6vw,80px); align-items:center}
+@media(max-width:880px){ .split{grid-template-columns:1fr} }
+.split-media{
+  position:relative; border-radius:24px; overflow:hidden; aspect-ratio:4/5; box-shadow:var(--shadow);
+}
+.split-media img{width:100%; height:100%; object-fit:cover}
+.split-media .badge{
+  position:absolute; inset-inline-end:20px; top:20px; background:rgba(5,15,33,.72);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line-gold); color:var(--gold); border-radius:999px;
+  padding:9px 18px; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+  font-family:"Inter",sans-serif;
+}
+html[lang="ar"] .split-media .badge{letter-spacing:.06em; font-family:"Almarai",sans-serif}
+.steps{list-style:none; margin-top:34px}
+.steps li{display:flex; gap:18px; padding:18px 0; border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:none}
+.steps .n{
+  flex:none; width:38px; height:38px; border-radius:50%; background:var(--navy-deep); color:var(--gold);
+  display:grid; place-items:center; font-size:.85rem; font-weight:600; font-family:"Inter",sans-serif;
+}
+.steps h4{font-size:1rem; font-weight:600; margin-bottom:3px}
+.steps p{color:var(--muted); font-size:.92rem; font-weight:300; line-height:1.55}
+
+/* ── visit (dark) ───────────────────────────────────────────── */
+.visit{background:var(--navy-deep); color:#fff; overflow:hidden}
+.visit::before{
+  content:""; position:absolute; inset-inline-end:-14%; top:-24%; width:58%; aspect-ratio:1;
+  background:radial-gradient(circle, rgba(233,184,94,.14) 0%, transparent 66%); pointer-events:none;
+}
+.visit .sec-head h2{color:#fff}
+.visit .sec-head p{color:rgba(255,255,255,.62)}
+.vinfo{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:clamp(26px,4vw,48px); position:relative; z-index:1}
+.vcard{border-top:1px solid var(--line-gold); padding-top:24px}
+.vcard h3{
+  font-size:.7rem; letter-spacing:.26em; text-transform:uppercase; color:var(--gold);
+  margin-bottom:14px; font-family:"Inter",sans-serif; font-weight:500;
+}
+html[lang="ar"] .vcard h3{letter-spacing:.1em; font-family:"Almarai",sans-serif}
+.vcard p{color:rgba(255,255,255,.8); font-weight:300; font-size:1rem}
+.vcard a{border-bottom:1px solid var(--line-gold); transition:color .3s var(--ease), border-color .3s var(--ease)}
+.vcard a:hover{color:var(--gold); border-color:var(--gold)}
+
+/* ── closing cta ────────────────────────────────────────────── */
+.closer{
+  position:relative; text-align:center; color:#fff; overflow:hidden;
+  padding:clamp(84px,13vw,150px) 0;
+}
+.closer-bg{position:absolute; inset:0; z-index:0}
+.closer-bg img{width:100%; height:100%; object-fit:cover}
+.closer-bg::after{content:""; position:absolute; inset:0; background:rgba(5,15,33,.84)}
+.closer-in{position:relative; z-index:2}
+.closer h2{font-size:clamp(2.1rem,5.6vw,4rem); margin-bottom:18px; max-width:18ch; margin-inline:auto}
+.closer p{color:rgba(255,255,255,.72); font-weight:300; margin-bottom:36px; max-width:44ch; margin-inline:auto}
+
+/* ── footer ─────────────────────────────────────────────────── */
+footer{background:var(--navy-deep); color:rgba(255,255,255,.42); padding:34px 0; border-top:1px solid var(--line-gold)}
+.frow{display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:.84rem}
+footer a:hover{color:var(--gold)}
+
+/* ── whatsapp fab ───────────────────────────────────────────── */
+.fab{
+  position:fixed; inset-inline-end:20px; bottom:20px; z-index:120;
+  width:56px; height:56px; border-radius:50%; background:#25d366;
+  display:grid; place-items:center; box-shadow:0 14px 34px -8px rgba(37,211,102,.6);
+  transition:transform .4s var(--ease); opacity:0; pointer-events:none;
+}
+.fab.show{opacity:1; pointer-events:auto}
+.fab:hover{transform:scale(1.08)}
+.fab svg{width:29px; height:29px; fill:#fff}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <span class="mark">P</span>
+      <span class="name" data-i18n="brand">Parisienne</span>
+    </a>
+    <nav>
+      <a class="nl" href="#menu" data-i18n="navMenu">Menu</a>
+      <a class="nl" href="#story" data-i18n="navWhy">Story</a>
+      <a class="nl" href="#visit" data-i18n="navVisit">Visit</a>
+      <button class="lang" id="langBtn" type="button">عربي</button>
+      <a class="nav-order order" href="#" data-i18n="navOrder">Order Now</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ── hero ─────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-bg"><img src="images/grilled.jpg" alt="" fetchpriority="high"></div>
+    <div class="grain"></div>
+    <div class="hero-in">
+      <div class="wrap">
+        <span class="eyebrow on-dark rv" data-i18n="eyebrow">Boucherie &amp; Grill · Ras Beirut · Est. 1930</span>
+        <h1 class="display rv d1" data-i18n-html="heroTitle">From our block,<br>straight to the <em>charcoal</em></h1>
+        <p class="lede rv d2" data-i18n="heroSub">A butchery first, a grill second. We cut the meat ourselves and fire it over charcoal — sandwiches, lahm b'aajin and mezze alongside. Delivery, pickup, or eat in.</p>
+        <div class="hero-cta rv d3">
+          <a class="btn btn-gold order" href="#"><span data-i18n="ctaOrder">Order Now</span><span class="arw">→</span></a>
+          <a class="btn btn-line" href="#menu" data-i18n="ctaMenu">Browse the Menu</a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint"><span data-i18n="scroll">Scroll</span><i></i></div>
+  </div>
+
+  <!-- ── marquee ──────────────────────────────────────────── -->
+  <div class="marquee"><div class="mq-track" id="mqTrack"></div></div>
+
+  <!-- ── heritage ─────────────────────────────────────────── -->
+  <section id="story" class="story">
+    <div class="wrap story-grid">
+      <div class="rv">
+        <span class="year">1930<small data-i18n="yearLabel">Established</small></span>
+      </div>
+      <div class="story-body rv d1">
+        <span class="eyebrow" data-i18n="storyEyebrow">Our Story</span>
+        <h2 class="display" style="margin-top:16px" data-i18n="storyTitle">Behind the same counter since 1930</h2>
+        <p data-i18n-html="storyP1">Parisienne opened as a <strong>boucherie in Ras Beirut in 1930</strong>. The city around it has changed almost beyond recognition. The counter has not.</p>
+        <p data-i18n-html="storyP2">It is still run by the same family, and still works the way a butcher's shop is meant to: whole cuts broken down in-house, trimmed to order, and grilled over charcoal a few steps from where they were cut.</p>
+        <div class="stats" id="stats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── menu bento ───────────────────────────────────────── -->
+  <section id="menu">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow" data-i18n="menuEyebrow">The Menu</span>
+        <h2 class="display" data-i18n="menuTitle">What we bring to the table</h2>
+        <p data-i18n="menuSub">From charcoal grills to cold mezze. Browse the full range and prices in our ordering app.</p>
+      </div>
+      <div class="bento rv d1" id="bento"></div>
+      <div style="margin-top:44px" class="rv d2">
+        <a class="btn btn-navy order" href="#"><span data-i18n="ctaFullMenu">See the Full Menu</span><span class="arw">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── values ───────────────────────────────────────────── -->
+  <section id="values" class="values">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow" data-i18n="whyEyebrow">About Us</span>
+        <h2 class="display" data-i18n="whyTitle">Butchers first, cooks second</h2>
+      </div>
+      <div class="vgrid" id="vgrid"></div>
+    </div>
+  </section>
+
+  <!-- ── how to order ─────────────────────────────────────── -->
+  <section id="how">
+    <div class="wrap split">
+      <div class="rv">
+        <span class="eyebrow" data-i18n="howEyebrow">Ordering</span>
+        <h2 class="display" style="font-size:clamp(1.9rem,4.4vw,3rem); margin:16px 0 14px" data-i18n="howTitle">Three steps and it's on its way</h2>
+        <p style="color:var(--muted); font-weight:300" data-i18n="howSub">No apps, no accounts. Choose, send, enjoy.</p>
+        <ol class="steps" id="steps"></ol>
+        <div style="margin-top:30px">
+          <a class="btn btn-gold order" href="#"><span data-i18n="ctaStart">Start Your Order</span><span class="arw">→</span></a>
+        </div>
+      </div>
+      <div class="split-media rv d2">
+        <img src="images/sandwiches.jpg" alt="" loading="lazy">
+        <span class="badge" data-i18n="badge">Ready in minutes</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── visit ────────────────────────────────────────────── -->
+  <section id="visit" class="visit">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow on-dark" data-i18n="visitEyebrow">Visit</span>
+        <h2 class="display" data-i18n="visitTitle">Come in, or send it over</h2>
+        <p data-i18n="visitSub">The table is ready — and WhatsApp is always open.</p>
+      </div>
+      <div class="vinfo">
+        <div class="vcard rv">
+          <h3 data-i18n="infoAddrT">Address</h3>
+          <p data-i18n-html="infoAddr">Georges Zouein Street, Qoreitem<br>Ras Beirut, Lebanon</p>
+        </div>
+        <div class="vcard rv d1">
+          <h3 data-i18n="infoHoursT">Opening Hours</h3>
+          <p data-i18n-html="infoHours">Open daily<br><span style="opacity:.6">Message us on WhatsApp to check</span></p>
+        </div>
+        <div class="vcard rv d2">
+          <h3 data-i18n="infoPhoneT">WhatsApp</h3>
+          <p><a href="https://wa.me/9613502022" dir="ltr" target="_blank" rel="noopener">+961 3 502 022</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── closer ───────────────────────────────────────────── -->
+  <div class="closer">
+    <div class="closer-bg"><img src="images/lahm-b-aajin.jpg" alt="" loading="lazy"></div>
+    <div class="grain"></div>
+    <div class="closer-in wrap">
+      <h2 class="display rv" data-i18n="closerTitle">Hungry? We're one tap away</h2>
+      <p class="rv d1" data-i18n="closerSub">Order online and get instant confirmation on WhatsApp.</p>
+      <div class="rv d2">
+        <a class="btn btn-gold order" href="#"><span data-i18n="ctaOrder2">Order Now</span><span class="arw">→</span></a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span data-i18n="footL">© <span id="yr"></span> Parisienne</span>
+    <a href="https://wa.me/9613502022" dir="ltr" target="_blank" rel="noopener">+961 3 502 022</a>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="https://wa.me/9613502022" aria-label="WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.2s-.7 1-.9 1.2c-.2.2-.3.2-.6.1s-1.3-.5-2.4-1.5c-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.1-.2.2-.3.3-.5s0-.4 0-.6c-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.1 1.3 3.3c.2.2 2.3 3.5 5.5 4.9.8.3 1.4.5 1.8.7.8.2 1.5.2 2 .1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+</a>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   1) YOUR ORDERING APP URL — every "Order" button points here
+   ═══════════════════════════════════════════════════════════════ */
+var ORDER_URL = "https://order.grillparisienne.com";
+
+/* ── category tiles (image must exist in images/) ───────────── */
+var CATS = [
+  { img:"images/grilled.jpg",      cls:"t-feature", ar:"مشاوي على الفحم", en:"Charcoal Grills" },
+  { img:"images/sandwiches.jpg",   cls:"t-tall",    ar:"سندويشات",        en:"Sandwiches" },
+  { img:"images/lahm-b-aajin.jpg", cls:"t-tall",    ar:"لحم بعجين",       en:"Lahm b'Aajin" },
+  { img:"images/chicken.jpg",      cls:"t-wide",    ar:"دجاج",            en:"Chicken" },
+  { img:"images/appetizers.jpg",   cls:"t-sm",      ar:"مقبلات",          en:"Mezze" },
+  { img:"images/plates.jpg",       cls:"t-sm",      ar:"صحون",            en:"Plates" }
+];
+
+var VALUES = [
+  { ar:["لحم من ملحمتنا","اللحم الذي تأكله قُطّع على طاولتنا في الصباح نفسه — بلا وسطاء ولا مفاجآت."],
+    en:["Cut In-House","The meat on your plate was cut at our own counter that morning. No middlemen, no mystery."] },
+  { ar:["نار وفحم","المشاوي على الفحم فقط. الطعم الذي لا يمنحه أي شيء آخر."],
+    en:["Fire & Charcoal","Grilled over real charcoal — the flavour nothing else gives you."] },
+  { ar:["وصفات العائلة","وصفات لبنانية تقليدية، دون اختصارات ودون مساحيق جاهزة."],
+    en:["Family Recipes","Traditional Lebanese cooking with no shortcuts and no powdered mixes."] },
+  { ar:["سريع وصادق","أسعار واضحة، أوقات واقعية، وطلب يصل كما طلبته تماماً."],
+    en:["Fast & Honest","Clear prices, realistic timings, and an order that arrives exactly as you asked."] }
+];
+
+var STEPS = [
+  { ar:["اختر أطباقك","تصفّح القائمة وخصّص كل صنف كما تحب."],
+    en:["Pick your dishes","Browse the menu and customise each item the way you like it."] },
+  { ar:["أرسل عبر واتساب","بنقرة واحدة يصل الطلب إلينا — بدون تسجيل أو تطبيق."],
+    en:["Send on WhatsApp","One tap sends it straight to us — no sign-up, no app to install."] },
+  { ar:["توصيل أو استلام","نؤكّد الطلب ونجهّزه للتوصيل أو للاستلام من المطعم."],
+    en:["Delivery or pickup","We confirm, cook, and get it to your door — or have it waiting for you."] }
+];
+
+var STATS = [
+  { ar:["١٩٣٠","سنة التأسيس"],      en:["1930","Established"] },
+  { ar:["عائلية","إدارة منذ البداية"], en:["Family-run","Since day one"] },
+  { ar:["رأس بيروت","قريطم"],        en:["Ras Beirut","Qoreitem"] }
+];
+
+var MQ = {
+  ar:["مشاوي على الفحم","لحم بعجين","تبولة","فتوش","شيش طاووق","كفتة","حمّص","سندويشات","مقبلات","ملحمة منذ ١٩٣٠"],
+  en:["Charcoal Grills","Lahm b'Aajin","Tabbouleh","Fattoush","Shish Taouk","Kafta","Hummus","Sandwiches","Mezze","Butchers Since 1930"]
+};
+
+var T = {
+  ar:{
+    brand:"الباريسية", navMenu:"القائمة", navWhy:"حكايتنا", navVisit:"زورونا", navOrder:"اطلب الآن",
+    eyebrow:"ملحمة ومشاوي الباريسية · رأس بيروت · منذ ١٩٣٠",
+    heroTitle:"من ملحمتنا<br>إلى <em>الفحم</em> مباشرة",
+    heroSub:"ملحمة قبل أن نكون مشاوي. نقطّع اللحم بأيدينا ونشويه على الفحم — إلى جانب السندويشات ولحم بعجين والمقبلات. توصيل، استلام، أو تناول في المحل.",
+    ctaOrder:"اطلب الآن", ctaMenu:"تصفّح القائمة", scroll:"مرّر",
+    yearLabel:"سنة التأسيس", storyEyebrow:"حكايتنا",
+    storyTitle:"خلف الطاولة نفسها منذ ١٩٣٠",
+    storyP1:"فتحت الباريسية أبوابها <strong>كملحمة في رأس بيروت عام ١٩٣٠</strong>. تغيّرت المدينة من حولها حتى كادت لا تُعرف. أما الطاولة فبقيت كما هي.",
+    storyP2:"لا تزال العائلة نفسها تديرها، ولا يزال العمل يجري كما ينبغي في أي ملحمة: لحم يُقطَّع في المحل، ويُنظَّف حسب الطلب، ويُشوى على الفحم على بُعد خطوات من حيث قُطِّع.",
+    menuEyebrow:"القائمة", menuTitle:"ما نقدّمه على الطاولة",
+    menuSub:"كل ما يخرج من على الفحم، إضافة إلى السندويشات والمقبلات والصحون الباردة. القائمة الكاملة والأسعار في تطبيق الطلب.",
+    ctaFullMenu:"شاهد القائمة الكاملة",
+    whyEyebrow:"عن المطعم", whyTitle:"لحّامون أولاً، طبّاخون ثانياً",
+    howEyebrow:"الطلب", howTitle:"ثلاث خطوات وطلبك في الطريق",
+    howSub:"لا تطبيقات، لا حسابات. اختر، أرسل، استلم.",
+    ctaStart:"ابدأ طلبك", badge:"جاهز خلال دقائق",
+    visitEyebrow:"زورونا", visitTitle:"تعال، أو أرسل طلبك", visitSub:"الطاولة جاهزة — وواتساب مفتوح دائماً.",
+    infoAddrT:"العنوان", infoAddr:"شارع جورج زوين، قريطم<br>رأس بيروت، لبنان",
+    infoHoursT:"أوقات الدوام", infoHours:"مفتوح يومياً<br><span style='opacity:.6'>راسلنا على واتساب للتأكد</span>",
+    infoPhoneT:"واتساب",
+    closerTitle:"جائع؟ نحن على بعد نقرة", closerSub:"اطلب أونلاين واحصل على تأكيد فوري عبر واتساب.",
+    ctaOrder2:"اطلب الآن",
+    footL:"© YEAR ملحمة ومشاوي الباريسية · منذ ١٩٣٠",
+    swap:"English"
+  },
+  en:{
+    brand:"Parisienne", navMenu:"Menu", navWhy:"Story", navVisit:"Visit", navOrder:"Order Now",
+    eyebrow:"Boucherie & Grill · Ras Beirut · Est. 1930",
+    heroTitle:"From our block,<br>straight to the <em>charcoal</em>",
+    heroSub:"A butchery first, a grill second. We cut the meat ourselves and fire it over charcoal — sandwiches, lahm b'aajin and mezze alongside. Delivery, pickup, or eat in.",
+    ctaOrder:"Order Now", ctaMenu:"Browse the Menu", scroll:"Scroll",
+    yearLabel:"Established", storyEyebrow:"Our Story",
+    storyTitle:"Behind the same counter since 1930",
+    storyP1:"Parisienne opened as a <strong>boucherie in Ras Beirut in 1930</strong>. The city around it has changed almost beyond recognition. The counter has not.",
+    storyP2:"It is still run by the same family, and still works the way a butcher's shop is meant to: whole cuts broken down in-house, trimmed to order, and grilled over charcoal a few steps from where they were cut.",
+    menuEyebrow:"The Menu", menuTitle:"What we bring to the table",
+    menuSub:"Everything off the charcoal, plus sandwiches, mezze and cold plates. Full range and prices live in the ordering app.",
+    ctaFullMenu:"See the Full Menu",
+    whyEyebrow:"About Us", whyTitle:"Butchers first, cooks second",
+    howEyebrow:"Ordering", howTitle:"Three steps and it's on its way",
+    howSub:"No apps, no accounts. Choose, send, enjoy.",
+    ctaStart:"Start Your Order", badge:"Ready in minutes",
+    visitEyebrow:"Visit", visitTitle:"Come in, or send it over", visitSub:"The table is ready — and WhatsApp is always open.",
+    infoAddrT:"Address", infoAddr:"Georges Zouein Street, Qoreitem<br>Ras Beirut, Lebanon",
+    infoHoursT:"Opening Hours", infoHours:"Open daily<br><span style='opacity:.6'>Message us on WhatsApp to check</span>",
+    infoPhoneT:"WhatsApp",
+    closerTitle:"Hungry? We're one tap away", closerSub:"Order online and get instant confirmation on WhatsApp.",
+    ctaOrder2:"Order Now",
+    footL:"© YEAR Boucherie & Grill Parisienne · Est. 1930",
+    swap:"عربي"
+  }
+};
+
+var lang = "en";
+var year = new Date().getFullYear();
+var io = null;
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function render(){
+  var t = T[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    var k = el.getAttribute("data-i18n");
+    if (t[k] !== undefined) el.innerHTML = esc(t[k]).replace("YEAR", year);
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){
+    var k = el.getAttribute("data-i18n-html");
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.getElementById("langBtn").textContent = t.swap;
+
+  /* bento tiles */
+  document.getElementById("bento").innerHTML = CATS.map(function(c){
+    return '<a class="tile ' + c.cls + '" href="' + ORDER_URL + '" target="_blank" rel="noopener">' +
+      '<img src="' + c.img + '" alt="' + esc(c[lang]) + '" loading="lazy">' +
+      '<span class="cap"><h3>' + esc(c[lang]) + '</h3><span class="go">→</span></span></a>';
+  }).join("");
+
+  /* values */
+  document.getElementById("vgrid").innerHTML = VALUES.map(function(v, i){
+    return '<div class="v rv' + (i ? ' d' + i : '') + '">' +
+      '<span class="num">' + String(i + 1).padStart(2, "0") + '</span>' +
+      '<h3>' + esc(v[lang][0]) + '</h3><p>' + esc(v[lang][1]) + '</p></div>';
+  }).join("");
+
+  /* heritage stats */
+  document.getElementById("stats").innerHTML = STATS.map(function(st){
+    return '<div class="stat"><span class="k">' + esc(st[lang][0]) + '</span>' +
+      '<span class="l">' + esc(st[lang][1]) + '</span></div>';
+  }).join("");
+
+  /* steps */
+  document.getElementById("steps").innerHTML = STEPS.map(function(s, i){
+    return '<li><span class="n">' + (i + 1) + '</span><div>' +
+      '<h4>' + esc(s[lang][0]) + '</h4><p>' + esc(s[lang][1]) + '</p></div></li>';
+  }).join("");
+
+  /* marquee — duplicated once for a seamless 50% loop */
+  var words = MQ[lang].map(function(w){ return "<span>" + esc(w) + "</span>"; }).join("");
+  document.getElementById("mqTrack").innerHTML = words + words;
+
+  /* order links */
+  document.querySelectorAll("a.order").forEach(function(a){
+    a.href = ORDER_URL; a.target = "_blank"; a.rel = "noopener";
+  });
+
+  observe();
+}
+
+/* reveal-on-scroll */
+function observe(){
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll(".rv").forEach(function(el){ el.classList.add("in"); });
+    return;
+  }
+  if (io) io.disconnect();
+  io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:"0px 0px -8% 0px" });
+  document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+}
+
+/* header + fab on scroll */
+var hdr = document.getElementById("hdr"), fab = document.getElementById("fab"), ticking = false;
+function onScroll(){
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(function(){
+    var y = window.scrollY;
+    hdr.classList.toggle("solid", y > 40);
+    fab.classList.toggle("show", y > 500);
+    ticking = false;
+  });
+}
+window.addEventListener("scroll", onScroll, { passive:true });
+
+document.getElementById("langBtn").addEventListener("click", function(){
+  lang = (lang === "ar") ? "en" : "ar";
+  render();
+});
+
+render();
+onScroll();
+</script>
+</body>
+</html>
