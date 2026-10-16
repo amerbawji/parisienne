@@ -9,3 +9,7 @@ deployment:
     # dist/ is built locally and committed (cPanel only copies, it doesn't build).
     # dist/. rather than dist/* so hidden files like .htaccess are copied too.
     - /bin/cp -R dist/. $DEPLOYPATH
+
+    # Keep the free Supabase project from pausing: ping it every 3 days at 09:00.
+    # Replaced (never duplicated) on each deploy; shows up under cPanel > Cron Jobs.
+    - (crontab -l 2>/dev/null | grep -v supabase-keepalive; echo "0 9 */3 * * /bin/sh $(pwd)/scripts/supabase-keepalive.sh >> $HOME/supabase-keepalive.log 2>&1") | crontab - || true

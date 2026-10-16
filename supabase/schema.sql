@@ -46,7 +46,9 @@ CREATE TABLE promo_config (
 INSERT INTO promo_config (id, enabled, image_url) VALUES (1, true, '/promo-ramadan.jpg');
 
 -- ─── Row Level Security ────────────────────────────────────────────────────────
--- Public read + write via anon key (admin password enforced on the frontend).
+-- These open "public_all" policies are only the original setup. On any real
+-- project, run security-1-prepare.sql then security-2-lockdown.sql, which replace
+-- them with public-read / staff-write rules tied to Supabase Auth logins.
 
 ALTER TABLE categories   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE items        ENABLE ROW LEVEL SECURITY;
@@ -115,25 +117,21 @@ CREATE POLICY "public_all" ON store_config FOR ALL USING (true) WITH CHECK (true
 -- ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 -- CREATE POLICY "public_all" ON customers FOR ALL USING (true) WITH CHECK (true);
 
--- Admin users table
+-- Admin users table (logins are Supabase Auth accounts; see security-1-prepare.sql)
 -- CREATE TABLE admin_users (
 --   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 --   username TEXT UNIQUE NOT NULL,
---   password_hash TEXT NOT NULL,
+--   password_hash TEXT NOT NULL,   -- dropped by security-2-lockdown.sql
 --   role TEXT NOT NULL DEFAULT 'staff',
 --   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 -- );
 -- ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
--- CREATE POLICY "public_all" ON admin_users FOR ALL USING (true) WITH CHECK (true);
---
--- Seed the first admin (password: parisienne2025):
--- INSERT INTO admin_users (username, password_hash, role)
--- VALUES ('admin', encode(sha256('parisienne2025'::bytea), 'hex'), 'admin');
 
 -- ─── Storage ───────────────────────────────────────────────────────────────────
 -- Run this in the Supabase dashboard: Storage → New bucket → name: menu-images → Public: ON
 -- Then add this policy in Storage → menu-images → Policies:
 --
+--   (security-2-lockdown.sql replaces these with admin-only uploads)
 --   Policy name : public_all
 --   Allowed operation : ALL
 --   Target roles : anon, authenticated

@@ -5,6 +5,14 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+// A throwaway client for creating team accounts, so signing up a new user
+// doesn't replace the signed-in admin's session.
+export function createSignUpClient() {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false, storageKey: 'parisienne-signup' },
+  });
+}
+
 export const IMAGES_BUCKET = 'menu-images';
 
 export async function uploadImage(file: File, path: string): Promise<string> {

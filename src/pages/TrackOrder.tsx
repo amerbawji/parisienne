@@ -56,7 +56,7 @@ export const TrackOrder = () => {
 
   const urlPhone = searchParams.get('phone') ?? '';
   const urlOrder = searchParams.get('order') ?? '';
-  const preFilled = !!urlPhone;
+  const preFilled = !!urlPhone && !!urlOrder;
 
   const [phone, setPhone] = useState(urlPhone);
   const [orderNum, setOrderNum] = useState(urlOrder);
@@ -67,15 +67,14 @@ export const TrackOrder = () => {
 
   const pollInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const startPolling = (p: string) => {
+  // Orders for a phone, only if that phone placed the given order number
+  const lookupOrders = (p: string, num: number) =>
+    supabase.rpc('track_orders', { p_phone: p, p_order_number: num });
+
+  const startPolling = (p: string, num: number) => {
     if (pollInterval.current) clearInterval(pollInterval.current);
     pollInterval.current = setInterval(async () => {
-      const { data } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('customer_phone', p)
-        .order('created_at', { ascending: false })
-        .limit(20);
+      const { data } = await lookupOrders(p, num);
       if (data) setOrders(data as TrackOrder[]);
     }, 5000);
   };
@@ -87,26 +86,10 @@ export const TrackOrder = () => {
     setError(null);
     setSubmitted(true);
 
-    // Verify: if order number provided, check it matches; otherwise just check phone has orders
-    if (num.trim()) {
-      const { data: verifyData } = await supabase
-        .from('orders').select('id')
-        .eq('customer_phone', p.trim())
-        .eq('order_number', Number(num.trim()))
-        .single();
-      if (!verifyData) {
-        setLoading(false);
-        setError(isAr ? 'لم نتمكن من إيجاد طلب بهذه المعلومات.' : "We couldn't find an order with those details.");
-        setOrders(null);
-        return;
-      }
-    }
-
-    const { data, error: fetchError } = await supabase
-      .from('orders').select('*')
-      .eq('customer_phone', p.trim())
-      .order('created_at', { ascending: false })
-      .limit(20);
+    const orderNumber = Number(num.trim());
+    const { data, error: fetchError } = Number.isInteger(orderNumber)
+      ? await lookupOrders(p.trim(), orderNumber)
+      : { data: null, error: null };
     setLoading(false);
     if (fetchError || !data || data.length === 0) {
       setError(isAr ? 'لم نتمكن من إيجاد طلب بهذه المعلومات.' : "We couldn't find an order with those details.");
@@ -114,11 +97,11 @@ export const TrackOrder = () => {
       return;
     }
     setOrders(data as TrackOrder[]);
-    startPolling(p.trim());
+    startPolling(p.trim(), orderNumber);
   };
 
   useEffect(() => {
-    if (urlPhone) fetchOrders(urlPhone, urlOrder);
+    if (urlPhone && urlOrder) fetchOrders(urlPhone, urlOrder);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

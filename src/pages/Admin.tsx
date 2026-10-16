@@ -3,7 +3,7 @@ import { useMenuStore, type Category, type MenuItem, type MenuOption, type Prese
 import { usePromoStore } from '../store/promoStore';
 import { useStoreConfigStore } from '../store/storeConfigStore';
 import { useLanguageStore } from '../store/languageStore';
-import { uploadImage, supabase } from '../lib/supabase';
+import { uploadImage, supabase, createSignUpClient } from '../lib/supabase';
 
 // ─── Unsaved changes flag ─────────────────────────────────────────────────────
 let _adminHasUnsaved = false;
@@ -112,9 +112,10 @@ const adminDict = {
     number_label: 'Number', save_btn: 'Save',
     promo_popup: 'Promo Popup', enable_promo: 'Enable promo popup',
     current_image: 'Current Image', upload_new_image: 'Upload New Image', reset_default: 'Reset to Default',
-    enter_password: 'Enter the admin password to continue',
+    enter_password: 'Log in with your team account to continue',
     password_placeholder: 'Password', log_in: 'Log In',
-    wrong_password: 'Incorrect password. Please try again.',
+    wrong_password: 'Incorrect email or password. Please try again.',
+    not_team_member: 'This account has no access to the admin panel.',
     toast_cat_added: 'Category added', toast_cat_saved: 'Category saved',
     toast_cat_hidden: 'Category hidden', toast_cat_visible: 'Category visible',
     toast_item_added: 'Item added', toast_item_saved: 'Item saved',
@@ -144,7 +145,7 @@ const adminDict = {
     customer_order_history: 'Order history',
     no_phone: 'No phone',
     users_heading: 'Team',
-    user_username: 'Username',
+    user_email: 'Email',
     user_password: 'Password',
     user_role: 'Role',
     user_add: 'Add User',
@@ -223,9 +224,10 @@ const adminDict = {
     number_label: 'الرقم', save_btn: 'حفظ',
     promo_popup: 'نافذة العرض', enable_promo: 'تفعيل نافذة العرض',
     current_image: 'الصورة الحالية', upload_new_image: 'رفع صورة جديدة', reset_default: 'إعادة للافتراضي',
-    enter_password: 'أدخل كلمة المرور للمتابعة',
+    enter_password: 'سجّل الدخول بحساب الفريق للمتابعة',
     password_placeholder: 'كلمة المرور', log_in: 'دخول',
-    wrong_password: 'كلمة المرور خاطئة. حاول مرة أخرى.',
+    wrong_password: 'البريد الإلكتروني أو كلمة المرور خاطئة. حاول مرة أخرى.',
+    not_team_member: 'هذا الحساب لا يملك صلاحية الدخول إلى لوحة الإدارة.',
     toast_cat_added: 'تمت إضافة الفئة', toast_cat_saved: 'تم حفظ الفئة',
     toast_cat_hidden: 'تم إخفاء الفئة', toast_cat_visible: 'الفئة مرئية',
     toast_item_added: 'تمت إضافة الصنف', toast_item_saved: 'تم حفظ الصنف',
@@ -255,7 +257,7 @@ const adminDict = {
     customer_order_history: 'سجل الطلبات',
     no_phone: 'بدون هاتف',
     users_heading: 'الفريق',
-    user_username: 'اسم المستخدم',
+    user_email: 'البريد الإلكتروني',
     user_password: 'كلمة المرور',
     user_role: 'الدور',
     user_add: 'إضافة مستخدم',
@@ -289,18 +291,13 @@ function AdminLangProvider({ children }: { children: React.ReactNode }) {
   return <AdminLangContext.Provider value={{ lang, t, isRtl: lang === 'ar', toggle }}>{children}</AdminLangContext.Provider>;
 }
 
-const SESSION_KEY = 'parisienne_admin_session';
-
-async function hashPassword(pw: string): Promise<string> {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-function getSession(): { username: string; role: string } | null {
-  try {
-    const raw = sessionStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
+// Signed-in Supabase Auth user + their team role. Accounts without an
+// admin_users row can authenticate but get no access (enforced by RLS too).
+async function loadTeamSession(): Promise<{ username: string; role: string } | null> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return null;
+  const { data } = await supabase.from('admin_users').select('role').eq('user_id', session.user.id).maybeSingle();
+  return data ? { username: session.user.email ?? '', role: data.role as string } : null;
 }
 
 // ─── Empty item factory ──────────────────────────────────────────────────────
@@ -1228,20 +1225,27 @@ function SettingsTab({ isAdmin, session }: { isAdmin: boolean; session: { userna
   useEffect(() => {
     if (!isAdmin) return;
     setUsersLoading(true);
-    supabase.from('admin_users').select('id,username,role').order('created_at')
+    supabase.from('admin_users').select('id,username,role').not('user_id', 'is', null).order('created_at')
       .then(({ data }) => { setAdminUsers(data ?? []); setUsersLoading(false); });
   }, [isAdmin]);
 
   const handleCreateUser = async () => {
     if (!newUsername.trim() || !newPassword.trim()) return;
     setUserSaving(true);
-    const hash = await hashPassword(newPassword);
-    const { data, error } = await supabase.from('admin_users')
-      .insert({ username: newUsername.trim(), password_hash: hash, role: newRole })
-      .select('id,username,role').single();
+    const email = newUsername.trim().toLowerCase();
+    // Create the login, then grant the role. An email that already has a login
+    // (e.g. a removed team member) is just re-granted; its old password stays.
+    const { error: signUpError } = await createSignUpClient().auth.signUp({ email, password: newPassword });
+    if (signUpError && !/already registered/i.test(signUpError.message)) {
+      setUserSaving(false);
+      toast(signUpError.message, 'error');
+      return;
+    }
+    const { data, error } = await supabase.rpc('add_staff', { p_email: email, p_role: newRole }).single();
     setUserSaving(false);
     if (!error && data) {
-      setAdminUsers(prev => [...prev, data]);
+      const added = data as { id: string; username: string; role: string };
+      setAdminUsers(prev => [...prev.filter(u => u.id !== added.id), added]);
       setNewUsername('');
       setNewPassword('');
       setNewRole('staff');
@@ -1544,10 +1548,10 @@ function SettingsTab({ isAdmin, session }: { isAdmin: boolean; session: { userna
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{t('user_add') as string}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               <input
-                type="text"
+                type="email"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
-                placeholder={t('user_username') as string}
+                placeholder={t('user_email') as string}
                 className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
               />
               <input
@@ -2262,7 +2266,7 @@ function QuickImageChange({ image, onImage }: { image: string; onImage: (url: st
 
 function LoginGate({ onSuccess }: { onSuccess: (session: { username: string; role: string }) => void }) {
   const { t } = useAdminT();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -2271,20 +2275,19 @@ function LoginGate({ onSuccess }: { onSuccess: (session: { username: string; rol
     e.preventDefault();
     setLoading(true);
     setError('');
-    const hash = await hashPassword(password);
-    const { data } = await supabase
-      .from('admin_users')
-      .select('role')
-      .eq('username', username.trim())
-      .eq('password_hash', hash)
-      .single();
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (signInError) {
+      setLoading(false);
+      setError(t('wrong_password') as string);
+      return;
+    }
+    const session = await loadTeamSession();
     setLoading(false);
-    if (data) {
-      const session = { username: username.trim(), role: data.role as string };
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    if (session) {
       onSuccess(session);
     } else {
-      setError(t('wrong_password') as string);
+      await supabase.auth.signOut();
+      setError(t('not_team_member') as string);
     }
   };
 
@@ -2297,11 +2300,11 @@ function LoginGate({ onSuccess }: { onSuccess: (session: { username: string; rol
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <input
-            type="text"
+            type="email"
             autoComplete="username"
-            value={username}
-            onChange={(e) => { setUsername(e.target.value); setError(''); }}
-            placeholder="Username"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); setError(''); }}
+            placeholder={t('user_email') as string}
             autoFocus
             className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
           />
@@ -2316,7 +2319,7 @@ function LoginGate({ onSuccess }: { onSuccess: (session: { username: string; rol
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
-            disabled={loading || !username.trim() || !password}
+            disabled={loading || !email.trim() || !password}
             className="mt-1 py-2.5 rounded-xl bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition disabled:opacity-50"
           >
             {loading ? '...' : t('log_in') as string}
@@ -3263,8 +3266,8 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
 
   const dismissNotification = (id: string) => setNotifications((prev) => prev.filter((n) => n.id !== id));
 
-  const handleLogout = () => {
-    sessionStorage.removeItem(SESSION_KEY);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     onLogout();
   };
 
@@ -3341,8 +3344,18 @@ function AdminShell({ session, onLogout }: { session: { username: string; role: 
 // ─── Page Export ──────────────────────────────────────────────────────────────
 
 export const Admin = () => {
-  const [session, setSession] = useState<{ username: string; role: string } | null>(getSession);
+  // undefined while the stored login is being checked
+  const [session, setSession] = useState<{ username: string; role: string } | null | undefined>(undefined);
 
+  useEffect(() => {
+    loadTeamSession().then(setSession);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') setSession(null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (session === undefined) return null;
   if (!session) return <AdminLangProvider><LoginGate onSuccess={(s) => setSession(s)} /></AdminLangProvider>;
   return <AdminLangProvider><ToastProvider><AdminShell session={session} onLogout={() => setSession(null)} /></ToastProvider></AdminLangProvider>;
 };

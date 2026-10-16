@@ -98,8 +98,8 @@ export const CartContent = () => {
 
   useEffect(() => {
     if (!customerPhone || customerPhone.length < 5) { setCustomerDiscountPct(0); return; }
-    supabase.from('customers').select('discount_percentage').eq('phone', customerPhone).maybeSingle()
-      .then(({ data }) => setCustomerDiscountPct(data?.discount_percentage ?? 0));
+    supabase.rpc('customer_discount', { p_phone: customerPhone })
+      .then(({ data }) => setCustomerDiscountPct((data as number | null) ?? 0));
   }, [customerPhone]);
 
   useEffect(() => {
@@ -109,16 +109,13 @@ export const CartContent = () => {
   useEffect(() => {
     if (!placedOrder?.id) return;
     setPlacedOrderStatus('new');
-    // Fetch current status in case it already changed
-    supabase.from('orders').select('status').eq('id', placedOrder.id).single()
-      .then(({ data }) => { if (data) setPlacedOrderStatus(data.status); });
-    // Subscribe to live status updates
-    const channel = supabase
-      .channel(`placed-order-${placedOrder.id}`)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${placedOrder.id}` },
-        (payload) => { setPlacedOrderStatus((payload.new as { status: string }).status); })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    // Poll the status: the orders table isn't readable by customers, so no realtime here
+    const id = placedOrder.id;
+    const refresh = () => supabase.rpc('order_status', { p_id: id })
+      .then(({ data }) => { if (data) setPlacedOrderStatus(data as string); });
+    refresh();
+    const timer = setInterval(refresh, 5000);
+    return () => clearInterval(timer);
   }, [placedOrder?.id]);
 
   const isScheduledTimeValid = (value: string): boolean => {
@@ -255,8 +252,8 @@ export const CartContent = () => {
     // Re-fetch customer discount at submit time to avoid race condition
     let finalCustomerDiscountPct = customerDiscountPct;
     if (customerPhone.trim().length >= 5) {
-      const { data: cust } = await supabase.from('customers').select('discount_percentage').eq('phone', customerPhone.trim()).maybeSingle();
-      finalCustomerDiscountPct = cust?.discount_percentage ?? 0;
+      const { data: discount } = await supabase.rpc('customer_discount', { p_phone: customerPhone.trim() });
+      finalCustomerDiscountPct = (discount as number | null) ?? 0;
       if (finalCustomerDiscountPct !== customerDiscountPct) setCustomerDiscountPct(finalCustomerDiscountPct);
     }
     const confirmedItemsTotal = itemsTotal - (finalCustomerDiscountPct > 0 ? itemsTotal * finalCustomerDiscountPct / 100 : 0);
@@ -297,7 +294,7 @@ export const CartContent = () => {
 
     const snapshot = [...items];
 
-    const { data: insertData, error: orderError } = await supabase.from('orders').insert({
+    const { data: insertData, error: orderError } = await supabase.rpc('place_order', { p_order: {
       customer_name: customerName || null,
       customer_phone: customerPhone || null,
       service_type: serviceType,
@@ -319,16 +316,17 @@ export const CartContent = () => {
         selected_options: item.selectedOptions || {},
       })),
       total: confirmedTotal,
-    }).select('id, order_number').single();
+    } }).single();
     if (orderError) console.error('[Order save failed]', orderError);
+    const placed = insertData as { id: string; order_number: number } | null;
 
     if (link && !waWindow) window.location.href = link;
-    saveLastOrder(snapshot, customerPhone || undefined, (insertData as { id: string; order_number: number } | null)?.order_number ?? null);
+    saveLastOrder(snapshot, customerPhone || undefined, placed?.order_number ?? null);
     clearCart();
 
     setPlacedOrder({
-      id: insertData?.id ?? null,
-      orderNumber: (insertData as { id: string; order_number: number } | null)?.order_number ?? null,
+      id: placed?.id ?? null,
+      orderNumber: placed?.order_number ?? null,
       items: snapshot,
       total: confirmedTotal,
       serviceType,

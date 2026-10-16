@@ -105,4 +105,18 @@ The live site (`grillparisienne.com`) is on cPanel and deploys from this repo. c
 
 `.cpanel.yml` copies `dist/` (including `.htaccess`) into `public_html`.
 
+Each deploy also installs a cron job (visible under cPanel → Cron Jobs) that runs `scripts/supabase-keepalive.sh` every 3 days, so the free Supabase project doesn't pause from inactivity. It logs one line per run to `~/supabase-keepalive.log` on the server.
+
 Vercel also auto-deploys on push to `master`; its environment variables are set in the Vercel project settings.
+
+## Admin accounts and database access
+
+Admin logins are Supabase Auth accounts (email + password). An account only gets into `/admin` if it has a row in `admin_users` with role `admin` (everything) or `staff` (Orders and Customers tabs). The database enforces this through row-level security, not just the UI:
+
+- Anyone can read the menu, categories, options, promo and store settings. Only admins can change them or upload menu images.
+- Only signed-in staff can read or update orders and customers.
+- Customers place and track orders through database functions (`place_order`, `track_orders`, `order_status`, `customer_discount`), so they never read the orders table directly.
+
+Admins add team members from **Settings → Team** (email, password, role). For that to work without an email confirmation step, turn off **Authentication → Sign In / Providers → Email → Confirm email** in Supabase. Removing someone from the team revokes their access; their login can be deleted under Authentication → Users.
+
+The rules live in `supabase/security-1-prepare.sql` and `supabase/security-2-lockdown.sql`.

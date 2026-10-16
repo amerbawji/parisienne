@@ -69,45 +69,25 @@ export const Home = () => {
   const [trackingInfo, setTrackingInfo] = useState<{ status: string; orderNumber: number | null; orderCount: number; allDelivered: boolean } | null>(null);
 
   useEffect(() => {
-    if (!lastOrderPhone) return;
+    if (!lastOrderPhone || lastOrderNumber == null) return;
     const DONE = ['delivered', 'cancelled'];
 
-    supabase
-      .from('orders')
-      .select('status, order_number')
-      .eq('customer_phone', lastOrderPhone)
-      .order('created_at', { ascending: false })
-      .limit(20)
+    // Poll: orders aren't readable by customers, so there's no realtime feed to subscribe to
+    const refresh = () => supabase
+      .rpc('track_orders', { p_phone: lastOrderPhone, p_order_number: lastOrderNumber })
       .then(({ data }) => {
-        if (!data || data.length === 0) return;
-        const active = data.find((o) => !DONE.includes(o.status));
-        const display = active ?? data[0];
-        const allDelivered = data.every((o) => DONE.includes(o.status));
-        setTrackingInfo({ status: display.status, orderNumber: display.order_number ?? null, orderCount: data.length, allDelivered });
+        const orders = data as { status: string; order_number: number | null }[] | null;
+        if (!orders || orders.length === 0) return;
+        const active = orders.find((o) => !DONE.includes(o.status));
+        const display = active ?? orders[0];
+        const allDelivered = orders.every((o) => DONE.includes(o.status));
+        setTrackingInfo({ status: display.status, orderNumber: display.order_number ?? null, orderCount: orders.length, allDelivered });
       });
 
-    const channel = supabase
-      .channel(`home-tracking-${lastOrderPhone}`)
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'orders', filter: `customer_phone=eq.${lastOrderPhone}` },
-        () => {
-          supabase
-            .from('orders')
-            .select('status, order_number')
-            .eq('customer_phone', lastOrderPhone)
-            .order('created_at', { ascending: false })
-            .limit(20)
-            .then(({ data }) => {
-              if (!data || data.length === 0) return;
-              const active = data.find((o) => !DONE.includes(o.status));
-              const display = active ?? data[0];
-              const allDelivered = data.every((o) => DONE.includes(o.status));
-              setTrackingInfo({ status: display.status, orderNumber: display.order_number ?? null, orderCount: data.length, allDelivered });
-            });
-        })
-      .subscribe();
-
-    return () => { supabase.removeChannel(channel); };
-  }, [lastOrderPhone]);
+    refresh();
+    const timer = setInterval(refresh, 15000);
+    return () => clearInterval(timer);
+  }, [lastOrderPhone, lastOrderNumber]);
   const totalItems = useMemo(
     () =>
       cartItems.reduce((total, item) => {
